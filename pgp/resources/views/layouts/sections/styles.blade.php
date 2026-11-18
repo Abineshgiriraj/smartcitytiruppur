@@ -39,4 +39,4 @@
 <!-- Page Styles -->
 @yield('page-style')
 <!-- Smart City Tiruppur municipal admin theme (loaded after legacy CSS) -->
-<link rel="stylesheet" href="{{ asset('assets/css/tiruppur-admin.css') }}" />
+<link rel="stylesheet" href="{{ asset('public/assets/css/tiruppur-admin.css') }}" />
