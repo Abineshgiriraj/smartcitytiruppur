@@ -21,108 +21,7 @@
         $main_screens = user_main_screen();
     @endphp
 
-    <style>
-        .layout-menu ul{ margin:0px 0px 20px 10px; border-radius: 10px;box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;}
-        a {
-            text-decoration: none !important;
-        }
-
-        /* Sidebar base (expanded by default) */
-        .collapsible-sidebar {
-            width: 280px;
-            transition: width 0.3s ease;
-            overflow: hidden;
-            position: relative;
-            z-index: 1000;
-          
-        }
-
-        /* Collapsed state */
-        .collapsible-sidebar.collapsed {
-            width: 60px;
-        }
-
-        /* Hide text when collapsed */
-        .collapsible-sidebar.collapsed .menu-link div {
-            opacity: 0;
-            white-space: nowrap;
-            pointer-events: none;
-        }
-
-        /* Show text when expanded */
-        .collapsible-sidebar .menu-link div {
-            opacity: 1;
-            margin-left: 10px;
-            transition: opacity 0.2s ease;
-        }
-
-        /* Logo handling */
-        .collapsible-sidebar .logo-icon {
-            display: none;
-        }
-        .collapsible-sidebar.collapsed .logo-icon {
-            display: block;
-            width: 40px;
-            height: auto;
-        }
-
-        .collapsible-sidebar .logo-full {
-            display: block;
-            max-height: 40px;
-        }
-        .collapsible-sidebar.collapsed .logo-full {
-            display: none;
-        }
-
-        .collapsible-sidebar .logo-container {
-            padding: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Toggle button styling */
-        #sidebar-toggle {
-            background: #2f3640;
-            color: #fff;
-            border: none;
-            padding: 6px 10px;
-            cursor: pointer;
-            border-radius: 4px;
-            font-size: 18px;
-        }
-
-        /* Tooltip styling */
-        .menu-link[title] {
-            position: relative;
-        }
-
-        .menu-link[title]::after {
-            content: attr(title);
-            position: absolute;
-            left: 100%;
-            top: 50%;
-            transform: translateY(-50%);
-            background: #333;
-            color: #fff;
-            white-space: nowrap;
-            padding: 4px 8px;
-            border-radius: 4px;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s ease;
-            margin-left: 8px;
-            font-size: 12px;
-        }
-
-        .collapsible-sidebar.collapsed .menu-link:hover::after {
-            opacity: 1;
-        }
-        .layout-page {
-  margin-left: 80px; /* Adjust to actual sidebar width (e.g., 250px) */
-  transition: margin-left 0.3s ease;
-}
-    </style>
+    
 
     <ul class="menu-inner">
         {{-- Static Dashboard Link --}}
@@ -189,7 +88,7 @@
     const toggleBtn = document.getElementById('sidebar-toggle');
 
     // Toggle collapse/expand
-    toggleBtn.addEventListener('click', function () {
+    if (toggleBtn) toggleBtn.addEventListener('click', function () {
         sidebar.classList.toggle('collapsed');
         if (sidebar.classList.contains('collapsed')) {
             localStorage.setItem('sidebarState', 'collapsed');
