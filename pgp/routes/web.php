@@ -145,7 +145,7 @@ Route::get('home', [LoginBasic::class, 'index'])->name('home.index');
 Route::get('/authlogin', [LoginBasic::class, 'index'])->name('authlogin');
 
 // Route::resource( 'login', LoginBasic::class );
-Route::get('/login', [LoginBasic::class, 'store'])->name('login');
+Route::post('/login', [LoginBasic::class, 'store'])->name('login');
 
 Route::get('/userlogin', [PassUserLoginController::class, 'store'])->name('userlogin');
 Route::get('PassUser', [PassUserLoginController::class, 'index'])->name('PassUser.index');
