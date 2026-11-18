@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Tiruppur City Municipal Corporation emblem">
+  <circle cx="60" cy="60" r="57" fill="#ffffff" stroke="#0d7bad" stroke-width="5"/>
+  <circle cx="60" cy="60" r="45" fill="#eef8fc" stroke="#159bd7" stroke-width="2"/>
+  <path d="M30 72h60v9H30zM37 50h46v22H37zM45 39h30l8 11H37z" fill="#159bd7"/>
+  <path d="M45 56h7v16h-7zm12 0h7v16h-7zm12 0h7v16h-7z" fill="#fff"/>
+  <text x="60" y="96" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" font-weight="700" fill="#0d7bad">TCMC</text>
+</svg>

@@ -1,0 +1,9 @@
+@import "~bootstrap/scss/bootstrap";
+.btn-float {
+    text-align: end;
+    margin-top: 25px;
+}
+form.fomr-new h6 {
+    margin-bottom: 0px;
+    line-height: 23px;
+}

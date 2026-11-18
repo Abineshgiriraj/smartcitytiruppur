@@ -1,0 +1,63 @@
+@extends('layouts/contentNavbarLayout')
+
+@section('title', 'Tables - Basic Tables')
+
+<script src="https://cdn.datatables.net/2.0.7/js/dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css">
+
+<!-- Add jQuery JavaScript -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<!-- Our Employee table initialization code -->
+<script>
+$(document).ready(function() {
+    $('#employeesTable').DataTable();
+});
+</script>
+
+<style>
+/* btn style */
+.btn-right {
+    float: right;
+}
+</style>
+
+@section('content')
+
+<div class="row mb-3">
+    <div class="col-sm-6">
+
+        <h4 class="py-3 mb-4">
+            <span class="text-muted fw-light">Common Module /</span> School
+        </h4>
+    </div>
+    <div class="col-sm-6">
+        <button class="btn btn-primary btn-right" onclick="window.location.href='{{ url('/zone_add') }}'"
+            type="button">
+            <i class="i-Add"></i> Add New
+        </button>
+    </div>
+</div>
+<div class="container">
+    <!-- <h1 class="mt-4">Employee Directory</h1> -->
+    <table id="employeesTable" class="table table-striped nowrap" style="width:100%">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>School Name</th>
+                <th>Remarks</th>
+                <!-- <th>Action</th> -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>Govt. higher sec. school</td>
+                <td>school location</td>
+                <!-- <td>Hired On</td> -->
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+@endsection

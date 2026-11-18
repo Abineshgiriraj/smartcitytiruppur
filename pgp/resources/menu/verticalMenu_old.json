@@ -1,0 +1,453 @@
+{
+  "menu": [
+    {
+      "url": "/dashboard",
+      "name": "Dashboard",
+      "icon": "menu-icon tf-icons bx bx-home-circle",
+      "slug": "dashboard"
+    },
+    {
+      "url": "/form/layouts-vertical",
+      "name": "Admin",
+      "icon": "menu-icon tf-icons bx bx bx-user",
+      "slug": "entry",
+      "submenu": [
+        {
+          "url": "/usertype",
+          "name": "User Type",
+          "slug": "User Type"
+        },
+        {
+          "url": "/mainuserscreen",
+          "name": "Main User Screen",
+          "slug": "Main User Screen"
+        },
+        {
+          "url": "/userscreen",
+          "name": "User Screen",
+          "slug": "User Screen"
+        },
+        {
+          "url": "/usercreation",
+          "name": "User Creation",
+          "slug": "User Creation"
+        },
+        {
+          "url": "/userpermission",
+          "name": "User Permission",
+          "slug": "User Permission"
+        }
+      ]
+    },
+    {
+      "url": "/form/layouts-vertical",
+      "name": "Settings",
+      "icon": "menu-icon tf-icons bx bx bxs-cog",
+      "slug": "common",
+      "submenu": [
+        {
+          "url": "/academic_year_creation_list",
+          "name": "Academic Creation",
+          "slug": "Academic Creation"
+        },
+        {
+          "url": "/center_name_list",
+          "name": "Port Issue Center",
+          "slug": "Port Issue Center"
+        },
+        {
+          "url": "/harbour_permit_category",
+          "name": "Port Category",
+          "slug": "Port Category"
+        },
+        {
+          "url": "/port_area_access",
+          "name": "Port Area of Access",
+          "slug": "Port Area of Access"
+        },
+        {
+          "url": "/employee_designation",
+          "name": "Employees Desgination",
+          "slug": "Employees Desgination"
+        },
+        {
+          "url": "/department",
+          "name": "Port Department",
+          "slug": "Port Department"
+        },
+        {
+          "url": "/company_creation",
+          "name": "Company Type Creation",
+          "slug": "Company Type Creation"
+        },
+        {
+          "url": "/cargo_creation",
+          "name": "Cargo Creation",
+          "slug": "Cargo Creation"
+        },
+        {
+          "url": "/vehicle_creation",
+          "name": "Vehicle Creation",
+          "slug": "Vehicle Creation"
+        },
+        {
+          "url": "/access_gate",
+          "name": "Access Gate",
+          "slug": "Access Gate"
+        },
+        {
+          "url": "/rate_master",
+          "name": "Rate Master",
+          "slug": "Rate Master"
+        },
+        {
+          "url": "/person_type",
+          "name": "Person Type",
+          "slug": "Person Type"
+        },
+        {
+          "url": "/document_master",
+          "name": "Document Master",
+          "slug": "Document Master"
+        }
+      ]
+    },
+    {
+      "url": "/form/layouts-vertical",
+      "name": "User Firms",
+      "icon": "menu-icon tf-icons bx bx bxs-buildings",
+      "slug": "entry",
+      "submenu": [
+        {
+          "url": "/firms_registration_list",
+          "name": "Firms Registration",
+          "slug": "Firms Registration"
+        },
+        {
+          "url": "/person_registration",
+          "name": "Person Registration",
+          "slug": "Person Registration"
+        },
+        {
+          "url": "/vehicle_registration",
+          "name": "Vehicle Registration",
+          "slug": "Vehicle Registration"
+        }
+      ]
+    },
+    {
+      "url": "/form/layouts-vertical",
+      "name": "Port Employees",
+      "icon": "menu-icon tf-icons bx bx bxs-group",
+      "slug": "entry",
+      "submenu": [
+        {
+          "url": "/employee_registration",
+          "name": "Employee Registration",
+          "slug": "Employee Registration"
+        },
+        {
+          "url": "/port_vehicle_registration",
+          "name": "Port Vehicle Registration",
+          "slug": "Port Vehicle Registration"
+        }
+      ]
+    },
+    {
+      "url": "/form/layouts-vertical",
+      "name": "Online Registration",
+      "icon": "menu-icon tf-icons bx bx bx-globe",
+      "slug": "entry",
+      "submenu": [
+        {
+          "url": "/user_registration",
+          "name": "User Registration",
+          "slug": "User Registration"
+        },
+        {
+          "url": "/online_vehicle_registration",
+          "name": "Online Vehicle Registration",
+          "slug": "Online Vehicle Registration"
+        }
+      ]
+    },
+    {
+      "url": "/form/layouts-vertical",
+      "name": "Authentication",
+      "icon": "menu-icon tf-icons bx bx bx-user-check",
+      "slug": "entry",
+      "submenu": [
+        {
+          "url": "/firm_authentication",
+          "name": "Firm Authentication",
+          "slug": "Firm Authentication"
+        },
+        {
+          "url": "/person_authentication",
+          "name": "Person Authentication",
+          "slug": "Person Authentication"
+        },
+        {
+          "url": "/user_authentication",
+          "name": "User Authentication",
+          "slug": "User Authentication"
+        },
+        {
+          "url": "/vehicle_authentication",
+          "name": "Vehicle Authentication",
+          "slug": "Vehicle Authentication"
+        },
+        {
+          "url": "/port_vehicle_authentication",
+          "name": "Port Vehicle Authentication",
+          "slug": "Port Vehicle Authentication"
+        },
+        {
+          "url": "/online_vehicle_authentication",
+          "name": "Online Vehicle Authentication",
+          "slug": "Online Vehicle Authentication"
+        },
+        {
+          "url": "/payment_wallet",
+          "name": "Payment Wallet",
+          "slug": "Payment Wallet"
+        },
+        {
+          "url": "/rfid_id_issues",
+          "name": "ID card & RFID Issues",
+          "slug": "ID card & RFID Issues"
+        },
+        {
+          "url": "/verified_approved",
+          "name": "Account Activated",
+          "slug": "Account Activated"
+        },
+        {
+          "url": "/rfid_issues",
+          "name": "RFID Issues",
+          "slug": "RFID Issues"
+        },
+        {
+          "url": "/rate_master_approval",
+          "name": "Rate Master Approval",
+          "slug": "Rate Master Approval"
+        }
+      ]
+    },
+    {
+      "url": "/form/layouts-vertical",
+      "name": "Penalty Fee Entry",
+      "icon": "menu-icon tf-icons bx bx bxs-bank",
+      "slug": "entry",
+      "submenu": [
+        {
+          "url": "/person_penality_check",
+          "name": "Person Penalty Check",
+          "slug": "Person Penalty Check"
+        },
+        {
+          "url": "/vehicle_penality_check",
+          "name": "Vehicle Penalty Check",
+          "slug": "Vehicle Penalty Check"
+        },
+        {
+          "url": "/office_authorization",
+          "name": "Officer Authorization",
+          "slug": "Officer Authorization"
+        },
+        {
+          "url": "/pass_penalty_fee",
+          "name": "Pass Penalty Fee",
+          "slug": "Pass Penalty Fee"
+        }
+      ]
+    },
+    {
+      "url": "/form/layouts-vertical",
+      "name": "Access IN/OUT",
+      "icon": "menu-icon tf-icons bx bx bx-universal-access",
+      "slug": "entry",
+      "submenu": [
+        {
+          "url": "/person_access_center",
+          "name": "Person Access Center",
+          "slug": "Person Access Center"
+        },
+        {
+          "url": "/vehicle_access_center",
+          "name": "Vehicle Access Center",
+          "slug": "Vehicle Access Center"
+        }
+      ]
+    },
+    {
+      "url": "/form/layouts-vertical",
+      "name": "Port Operation System",
+      "icon": "menu-icon tf-icons bx bx bxs-ship",
+      "slug": "entry",
+      "submenu": [
+        {
+          "url": "/import_export_application",
+          "name": "Import Export Application",
+          "slug": "Import Export Application"
+        },
+        {
+          "url": "/cargo_admission",
+          "name": "Cargo Admission & Delivery Screen",
+          "slug": "Cargo Admission & Delivery Screen"
+        },
+        {
+          "url": "/cargo_handling",
+          "name": "Cargo Handling",
+          "slug": "Cargo Handling"
+        },
+        {
+          "url": "/weighment_entry",
+          "name": "Weighment entry",
+          "slug": "Weighment entry"
+        },
+        {
+          "url": "/customs_permission_entry",
+          "name": "Customs Permission entry",
+          "slug": "Customs Permission entry"
+        },
+        {
+          "url": "/cargo_details",
+          "name": "Cargo details in gate entry",
+          "slug": "Cargo details in gate entry"
+        },
+        {
+          "url": "/new_cargo",
+          "name": "Cargo Export/Import Registration",
+          "slug": "Cargo Export/Import Registration"
+        },
+        {
+          "url": "/assign_cargo",
+          "name": "Assign Cargo",
+          "slug": "Assign Cargo"
+        },
+        {
+          "url": "/container_list",
+          "name": "Container Import/Export Registration",
+          "slug": "Container Import/Export Registration"
+        },
+        {
+          "url": "/pass_entry",
+          "name": "Pass Request From Port",
+          "slug": "Pass Request From Port"
+        }
+      ]
+    },
+    {
+      "url": "/form/layouts-vertical",
+      "name": "Pass",
+      "icon": "menu-icon tf-icons bx bx bxs-ship",
+      "slug": "entry",
+      "submenu": [
+        {
+          "url": "/pass_request_from_agent",
+          "name": "Pass Request From Agent",
+          "slug": "Pass Request From Agent"
+        },
+        {
+          "url": "/pass_extend",
+          "name": "Pass Extend",
+          "slug": "Pass Extend"
+        },
+        {
+          "url": "/view_pass_extend",
+          "name": "View Pass Extend",
+          "slug": "Pass Extend"
+        },
+        {
+          "url": "/card_request",
+          "name": "Card Request For Pre Owned",
+          "slug": "Pass Extend"
+        }
+      ]
+    },
+    {
+      "url": "/form/layouts-vertical",
+      "name": "Complaint",
+      "icon": "menu-icon tf-icons bx bx bxs-ship",
+      "slug": "entry",
+      "submenu": [
+        {
+          "url": "/person_complaint_registration",
+          "name": "Person Complaint Registration",
+          "slug": "Person Complaint Registration"
+        },
+        {
+          "url": "/person_complaint_approval",
+          "name": "Person Complaint Approval",
+          "slug": "Person Complaint Approval"
+        },
+        {
+          "url": "/vehicle_complaint_release",
+          "name": "Person Complaint Release",
+          "slug": "Person Complaint Release"
+        },
+        {
+          "url": "/vehicle_complaint_registration",
+          "name": "Vehicle Complaint Registration",
+          "slug": "Vehicle Complaint Registration"
+        },
+        {
+          "url": "/vehicle_complaint_approval",
+          "name": "Vehicle Complaint Approval",
+          "slug": "Vehicle Complaint Approval"
+        },
+        {
+          "url": "/vehicle_complaint_release",
+          "name": "Vehicle Complaint Release",
+          "slug": "Vehicle Complaint Release"
+        },
+        {
+          "url": "/firm_user_complaint_registration",
+          "name": "Firm User Complaint Registration",
+          "slug": "Firm User Complaint Registration"
+        },
+        {
+          "url": "/firm_user_complaint_approval",
+          "name": "Firm User Complaint Approval",
+          "slug": "Firm User Complaint Approval"
+        },
+        {
+          "url": "/firm_user_complaint_release",
+          "name": "Firm User Complaint Release",
+          "slug": "Firm User Complaint Release"
+        },
+        {
+          "url": "/equipment_complaint_registration",
+          "name": "Equipment Complaint Registration",
+          "slug": "Equipment Complaint Registration"
+        },
+        {
+          "url": "/equipment_complaint_approval",
+          "name": "Equipment Complaint Approval",
+          "slug": "Equipment Complaint Approval"
+        },
+        {
+          "url": "/equipment_complaint_release",
+          "name": "Equipment Complaint Release",
+          "slug": "Equipment Complaint Release"
+        },
+        {
+          "url": "/material_complaint_approval",
+          "name": "Material Complaint Approval",
+          "slug": "Material Complaint Approval"
+        },
+        {
+          "url": "/material_complaint_release",
+          "name": "Material Complaint Release",
+          "slug": "Material Complaint Release"
+        },
+        {
+          "url": "/material_complaint_registration",
+          "name": "Material Complaint Registration",
+          "slug": "Material Complaint Registration"
+        }
+      ]
+    }
+  ]
+}

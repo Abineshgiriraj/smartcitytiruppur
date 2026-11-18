@@ -1,0 +1,175 @@
+{
+  "menu": [
+    {
+      "url": "/dashboard",
+      "name": "Dashboard",
+      "icon": "menu-icon tf-icons bx bx-home-circle",
+      "slug": "dashboard"
+    },
+    {
+      "url": "/form/layouts-vertical",
+      "name": "Master",
+      "icon": "menu-icon tf-icons bx bx bx-user",
+      "slug": "common",
+      "submenu": [
+        {
+          "url": "/academic_year_creation_list",
+          "name": "Academic Creation",
+          "slug": "Academic Creation"
+        },
+        {
+          "url": "/zone",
+          "name": "Zone",
+          "slug": "zone"
+        },
+        {
+          "url": "/district",
+          "name": "District",
+          "slug": "district"
+        },
+        {
+          "url": "/taluk_creation",
+          "name": "Taluk Creation",
+          "slug": "Taluk Creation"
+        },
+        {
+          "url": "/school",
+          "name": "School",
+          "slug": "school"
+        },
+        {
+          "url": "/standard_list",
+          "name": "Standard",
+          "slug": "Standard"
+        },
+        {
+          "url": "/category_list",
+          "name": "Category Creation",
+          "slug": "Category Creation"
+        },
+        {
+          "url": "/designation_list",
+          "name": "Designation",
+          "slug": "Designation"
+        },
+        {
+          "url": "/staff",
+          "name": "Staff Creation",
+          "slug": "employee"
+        },
+        {
+          "url": "/student_list",
+          "name": "Student Creation",
+          "slug": "student"
+        },
+        {
+          "url": "/biometric_list",
+          "name": "Bio-Metric Device",
+          "slug": "biometric"
+        }
+      ]
+    },
+    {
+      "url": "/form/layouts-vertical",
+      "name": "Attendance Main Module",
+      "icon": "menu-icon tf-icons bx bx-list-check",
+      "slug": "entry",
+      "submenu": [
+        {
+          "url": "/biometric_emp_list",
+          "name": "Bio-Metric Employee List",
+          "slug": "biometricemp"
+        },
+        {
+          "url": "/category_user_assign_list",
+          "name": "Category User Assign",
+          "slug": "category_user_assign"
+        },
+        {
+          "url": "/category_controller_user_list",
+          "name": "Category  Controller User ",
+          "slug": "category_controller_user"
+        }
+      ]
+    },
+    {
+      "url": "/form/layouts-vertical",
+      "name": "Report",
+      "icon": "menu-icon tf-icons bx bx-file",
+      "slug": "entry",
+      "submenu": [
+        {
+          "url": "/student_report",
+          "name": "Student Report",
+          "slug": "student"
+        },
+        {
+          "url": "/staff_report",
+          "name": "Staff Report",
+          "slug": "student"
+        },
+        {
+          "url": "/school_report",
+          "name": "School Report",
+          "slug": "student"
+        },
+        {
+          "url": "/form/layouts-vertical",
+          "name": "Daily Report",
+          "icon": "",
+          "slug": "entry",
+          "submenu": [
+            {
+              "url": "/breakfast_report",
+              "name": "BreakFast Meal    ",
+              "slug": "student"
+            },
+            {
+              "url": "/attendance_report",
+              "name": "Forenoon Attendance    ",
+              "slug": "student"
+            },
+            {
+              "url": "/meal_report",
+              "name": "Noon Meal     ",
+              "slug": "student"
+            },
+            {
+              "url": "/afternoon_report",
+              "name": "Afternoon Attendance    ",
+              "slug": "student"
+            }
+          ]
+        },
+        {
+          "url": "/form/layouts-vertical",
+          "name": "Monthly Report",
+          "icon": "",
+          "slug": "entry",
+          "submenu": [
+            {
+              "url": "/monthly_bf_report",
+              "name": "BreakFast Meal   ",
+              "slug": "student"
+            },
+            {
+              "url": "/monthly_fn_report",
+              "name": "Forenoon Attendance    ",
+              "slug": "student"
+            },
+            {
+              "url": "/monthly_meal_report",
+              "name": "Noon Meal     ",
+              "slug": "student"
+            },
+            {
+              "url": "/monthly_af_report",
+              "name": "Afternoon Attendance    ",
+              "slug": "student"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

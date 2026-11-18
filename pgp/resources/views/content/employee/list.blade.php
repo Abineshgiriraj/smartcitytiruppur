@@ -1,0 +1,178 @@
+@extends('layouts/contentNavbarLayout')
+
+@section('title', 'Tables - Basic Tables')
+
+<style>
+/* btn style */
+.btn-right {
+    float: right;
+}
+</style>
+
+@section('content')
+
+<div class="row mb-3 page-hed">
+    <div class="col-sm-6">
+
+        <h4 class="">
+            <span class="text-muted fw-light">Entry Form /</span> Staff Creation
+        </h4>
+    </div>
+    <div class="col-sm-6">
+        <button class="btn btn-primary btn-right" onclick="window.location.href='{{ url('/emp_add') }}'" type="button">
+            <i class="i-Add"></i> Add New
+        </button>
+    </div>
+</div>
+
+<!-- Responsive Datatable -->
+<div class="card">
+    <div class="card-body">
+    <div class="card-datatable table-responsive">
+        <table class="dt-responsive table border-top" id="example">
+            <thead>
+                <tr>
+                    <!-- <th></th> -->
+                    <th>First name</th>
+                    <th>Last name</th>
+                    <th>Position</th>
+                    <th>Office</th>
+                    <th>Age</th>
+                    <th>Start date</th>
+                    <th>Salary</th>
+                    <th>Extn.</th>
+                    <th>E-mail</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <!-- <th></th> -->
+                    <td>Tiger</td>
+                    <td>Nixon</td>
+                    <td>System Architect</td>
+                    <td>Edinburgh</td>
+                    <td>61</td>
+                    <td>2011-04-25</td>
+                    <td>$320,800</td>
+                    <td>5421</td>
+                    <td>t.nixon@datatables.net</td>
+                </tr>
+                <tr>
+                    <td>Garrett</td>
+                    <td>Winters</td>
+                    <td>Accountant</td>
+                    <td>Tokyo</td>
+                    <td>63</td>
+                    <td>2011-07-25</td>
+                    <td>$170,750</td>
+                    <td>8422</td>
+                    <td>g.winters@datatables.net</td>
+                </tr>
+                <tr>
+                    <td>Ashton</td>
+                    <td>Cox</td>
+                    <td>Junior Technical Author</td>
+                    <td>San Francisco</td>
+                    <td>66</td>
+                    <td>2009-01-12</td>
+                    <td>$86,000</td>
+                    <td>1562</td>
+                    <td>a.cox@datatables.net</td>
+                </tr>
+                <tr>
+                    <td>Cedric</td>
+                    <td>Kelly</td>
+                    <td>Senior Javascript Developer</td>
+                    <td>Edinburgh</td>
+                    <td>22</td>
+                    <td>2012-03-29</td>
+                    <td>$433,060</td>
+                    <td>6224</td>
+                    <td>c.kelly@datatables.net</td>
+                </tr>
+                <tr>
+                    <td>Airi</td>
+                    <td>Satou</td>
+                    <td>Accountant</td>
+                    <td>Tokyo</td>
+                    <td>33</td>
+                    <td>2008-11-28</td>
+                    <td>$162,700</td>
+                    <td>5407</td>
+                    <td>a.satou@datatables.net</td>
+                </tr>
+                <tr>
+                    <td>Brielle</td>
+                    <td>Williamson</td>
+                    <td>Integration Specialist</td>
+                    <td>New York</td>
+                    <td>61</td>
+                    <td>2012-12-02</td>
+                    <td>$372,000</td>
+                    <td>4804</td>
+                    <td>b.williamson@datatables.net</td>
+                </tr>
+                <tr>
+                    <td>Herrod</td>
+                    <td>Chandler</td>
+                    <td>Sales Assistant</td>
+                    <td>San Francisco</td>
+                    <td>59</td>
+                    <td>2012-08-06</td>
+                    <td>$137,500</td>
+                    <td>9608</td>
+                    <td>h.chandler@datatables.net</td>
+                </tr>
+                <tr>
+                    <td>Rhona</td>
+                    <td>Davidson</td>
+                    <td>Integration Specialist</td>
+                    <td>Tokyo</td>
+                    <td>55</td>
+                    <td>2010-10-14</td>
+                    <td>$327,900</td>
+                    <td>6200</td>
+                    <td>r.davidson@datatables.net</td>
+                </tr>
+                <tr>
+                    <td>Colleen</td>
+                    <td>Hurst</td>
+                    <td>Javascript Developer</td>
+                    <td>San Francisco</td>
+                    <td>39</td>
+                    <td>2009-09-15</td>
+                    <td>$205,500</td>
+                    <td>2360</td>
+                    <td>c.hurst@datatables.net</td>
+                </tr>
+
+
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+<!--/ Responsive Datatable -->
+
+
+<link rel="stylesheet" href="{{ asset('public/assets/css/bootstrap.min.css') }}" />
+<link rel="stylesheet" href="{{ asset('public/assets/css/dataTables.bootstrap5.css') }}" />
+<link rel="stylesheet" href="{{ asset('public/assets/css/responsive.bootstrap.min.css') }}" />
+<link rel="stylesheet" href="{{ asset('public/assets/css/core.css') }}" />
+
+<script src="{{ asset('public/assets/js/jquery-3.7.1.js') }}"></script>
+<script src="{{ asset('public/assets/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('public/assets/js/dataTables.js') }}"></script>
+<script src="{{ asset('public/assets/js/dataTables.bootstrap5.js') }}"></script>
+<script src="{{ asset('public/assets/js/dataTables.responsive.js') }}"></script>
+<script src="{{ asset('public/assets/js/responsive.bootstrap5.js') }}"></script>
+
+<script type="text/javascript" class="init">
+new DataTable('#example', {
+    responsive: true
+});
+</script>
+
+<!-- </div> -->
+
+@endsection

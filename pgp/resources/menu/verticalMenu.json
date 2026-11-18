@@ -1,0 +1,464 @@
+{
+  "menu": [
+    {
+      "url": "/dashboard",
+      "name": "Dashboard",
+      "icon": "menu-icon tf-icons bx bx-home-circle",
+      "slug": "dashboard",
+      "roles": [
+        "66eaeaf79982060867"
+      ]
+    },
+    {
+      "url": "/Centerdashboard",
+      "name": "Dashboard",
+      "icon": "menu-icon tf-icons bx bx-home-circle",
+      "slug": "dashboard",
+      "roles": [
+        "670f5205cc28b44056"
+      ]
+    },
+    {
+      "url": "/Gatedashboard",
+      "name": "Dashboard",
+      "icon": "menu-icon tf-icons bx bx-home-circle",
+      "slug": "dashboard",
+      "roles": [
+        "670f52142fb6532995"
+      ]
+    },
+    {
+      "url": "/form/layouts-vertical",
+      "name": "Admin",
+      "icon": "menu-icon tf-icons bx bx bx-user",
+      "slug": "entry",
+      "roles": [
+        "66eaeaf79982060867"
+      ],
+      "submenu": [
+        {
+          "url": "/usertype",
+          "name": "User Type",
+          "slug": "User Type",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        },
+        {
+          "url": "/mainuserscreen",
+          "name": "Main User Screen",
+          "slug": "Main User Screen",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        },
+        {
+          "url": "/userscreen",
+          "name": "User Screen",
+          "slug": "User Screen",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        },
+        {
+          "url": "/usercreation",
+          "name": "User Creation",
+          "slug": "User Creation",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        },
+        {
+          "url": "/userpermission",
+          "name": "User Permission",
+          "slug": "User Permission",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        }
+      ]
+    },
+    {
+      "url": "/form/layouts-vertical",
+      "name": "Settings",
+      "icon": "menu-icon tf-icons bx bx bxs-cog",
+      "slug": "common",
+      "roles": [
+        "66eaeaf79982060867"
+      ],
+      "submenu": [
+        {
+          "url": "/academic_year_creation_list",
+          "name": "Academic Creation",
+          "slug": "Academic Creation",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        },
+        {
+          "url": "/center_name_list",
+          "name": "Port Issue Center",
+          "slug": "Port Issue Center",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        },
+        {
+          "url": "/harbour_permit_category",
+          "name": "Port Category",
+          "slug": "Port Category",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        },
+        {
+          "url": "/port_area_access",
+          "name": "Port Area of Access",
+          "slug": "Port Area of Access",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        },
+        {
+          "url": "/employee_designation",
+          "name": "Employees Desgination",
+          "slug": "Employees Desgination",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        },
+        {
+          "url": "/department",
+          "name": "Port Department",
+          "slug": "Port Department",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        },
+        {
+          "url": "/company_creation",
+          "name": "Company Creation",
+          "slug": "Company Creation",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        },
+        {
+          "url": "/cargo_creation",
+          "name": "Cargo Creation",
+          "slug": "Cargo Creation",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        },
+        {
+          "url": "/vehicle_creation",
+          "name": "Vehicle Creation",
+          "slug": "Vehicle Creation",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        },
+        {
+          "url": "/access_gate",
+          "name": "Access Gate",
+          "slug": "Access Gate",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        },
+        {
+          "url": "/rate_master",
+          "name": "Rate Master",
+          "slug": "Rate Master",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        },
+        {
+          "url": "/person_type",
+          "name": "Person Type",
+          "slug": "Person Type",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        },
+        {
+          "url": "/document_master",
+          "name": "Document Master",
+          "slug": "Document Master",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        },
+        {
+          "url": "/complaint_type_list",
+          "name": "Complaint Type",
+          "slug": "Complaint Type",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        }
+      ]
+    },
+    {
+      "url": "/form/layouts-vertical",
+      "name": "Registration",
+      "icon": "menu-icon tf-icons bx bx bxs-buildings",
+      "slug": "register",
+      "roles": [
+        "66eaeaf79982060867"
+      ],
+      "submenu": [
+        {
+          "url": "/firms_registration_list",
+          "name": "Firms/Agent ",
+          "slug": "Firms/Agent",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        },
+        {
+          "url": "/person_registration",
+          "name": "Person/Driver",
+          "slug": "Person/Driver",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        },
+        {
+          "url": "/vehicle_registration",
+          "name": "Vehicle/Equipments",
+          "slug": "Vehicle/Equipments",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        },
+        {
+          "url": "/new_cargo",
+          "name": "Cargo/Container",
+          "slug": "Cargo/Container",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        }
+      ]
+    },
+    {
+      "url": "/form/layouts-vertical",
+      "name": "Port EMP/Vehicle",
+      "icon": "menu-icon tf-icons bx bxs-truck",
+      "slug": "entry",
+      "roles": [
+        "66eaeaf79982060867"
+      ],
+      "submenu": [
+        {
+          "url": "/employee_registration",
+          "name": "Employee",
+          "slug": "Employee",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        },
+        {
+          "url": "/port_vehicle_registration",
+          "name": "Vehicle",
+          "slug": "Vehicle",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        }
+      ]
+    },
+    {
+      "url": "/form/layouts-vertical",
+      "name": "HEP Approvals",
+      "icon": "menu-icon tf-icons bx  bx-check-circle",
+      "slug": "entry",
+      "roles": [
+        "66eaeaf79982060867"
+      ],
+      "submenu": [
+        {
+          "url": "/firm_authentication",
+          "name": "Firms/Agent",
+          "slug": "Firms/Agent",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        },
+        {
+          "url": "/person_authentication",
+          "name": "Person/Driver",
+          "slug": "Person/Driver",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        },
+        {
+          "url": "/vehicle_authentication",
+          "name": "Vehicle/Equipments",
+          "slug": "Vehicle/Equipments",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        },
+        {
+          "url": "/cargo_authentication",
+          "name": "Cargo/Container",
+          "slug": "Cargo/Container",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        },
+        {
+          "url": "/employee_authentication",
+          "name": "Port Employee",
+          "slug": "Port Employee",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        },
+        {
+          "url": "/port_vehicle_authentication",
+          "name": "Port Vehicle",
+          "slug": "Port Vehicle",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        },
+        {
+          "url": "/rate_master_approval",
+          "name": "Rate Master",
+          "slug": "Rate Master",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        }
+      ]
+    },
+    {
+      "url": "/form/layouts-vertical",
+      "name": "Cargo/Container Track",
+      "icon": "menu-icon tf-icons bx bxs-truck",
+      "slug": "entry",
+      "roles": [
+        "66eaeaf79982060867"
+      ],
+      "submenu": [
+        {
+          "url": "/rfid_issues",
+          "name": "Cargo/Container Weighment",
+          "slug": "Cargo/Container Weighment",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        },
+        {
+          "url": "/rfid_issues",
+          "name": "Cargo/Container Stock List",
+          "slug": "Cargo/Container Stock List",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        }
+      ]
+    },
+    {
+      "url": "/form/layouts-vertical",
+      "name": "Issue Center",
+      "icon": "menu-icon tf-icons bx bxs-log-in-circle",
+      "slug": "entry",
+      "roles": [
+        "66eaeaf79982060867",
+        "670f5205cc28b44056"
+      ],
+      "submenu": [
+        {
+          "url": "/pass_entry",
+          "name": "Pass Issue",
+          "slug": "Pass Issue",
+          "roles": [
+            "66eaeaf79982060867",
+            "670f5205cc28b44056"
+          ]
+        },
+        {
+          "url": "/payment_wallet",
+          "name": "Payment Wallet",
+          "slug": "Payment Wallet",
+          "roles": [
+            "66eaeaf79982060867",
+            "670f5205cc28b44056"
+          ]
+        }
+      ]
+    },
+    {
+      "url": "/form/layouts-vertical",
+      "name": "HEP Gate Entry",
+      "icon": "menu-icon tf-icons bx bx-no-entry",
+      "slug": "entry",
+      "roles": [
+        "66eaeaf79982060867",
+        "670f52142fb6532995"
+      ],
+      "submenu": [
+        {
+          "url": "/AccessIn",
+          "name": "Access Gate IN",
+          "slug": "Access Gate IN",
+          "roles": [
+            "66eaeaf79982060867",
+            "670f52142fb6532995"
+          ]
+        },
+        {
+          "url": "/AccessOut",
+          "name": "Access Gate OUT",
+          "slug": "Access Gate OUT",
+          "roles": [
+            "66eaeaf79982060867",
+            "670f52142fb6532995"
+          ]
+        }
+      ]
+    },
+    {
+      "url": "/form/layouts-vertical",
+      "name": "Complaints",
+      "icon": "menu-icon tf-icons bx bx-comment-detail",
+      "slug": "entry",
+      "roles": [
+        "66eaeaf79982060867"
+      ],
+      "submenu": [
+        {
+          "url": "/vehicle_complaint_registration_list",
+          "name": "Registration",
+          "slug": "Registration",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        },
+        {
+          "url": "/person_complaint_approval",
+          "name": "Approval",
+          "slug": "Approval",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        },
+        {
+          "url": "/vehicle_complaint_release",
+          "name": "Release",
+          "slug": "Release",
+          "roles": [
+            "66eaeaf79982060867"
+          ]
+        }
+      ]
+    }
+  ]
+}

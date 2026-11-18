@@ -1,0 +1,14 @@
+﻿.env
+.env.*
+!.env.example
+pgp.zip
+pgp/vendor/
+pgp/node_modules/
+pgp/storage/logs/
+pgp/bootstrap/cache/*.php
+storage/
+vendor/
+node_modules/
+*.log
+*.pem
+*.key
