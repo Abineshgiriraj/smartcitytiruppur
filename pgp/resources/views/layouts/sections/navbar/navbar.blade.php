@@ -80,19 +80,18 @@ $navbarDetached = ($navbarDetached ?? '');
                         <a>A/C Year: {{session('acc_year')}}</a>
                     </li>
                     @endif
-                    <li class="nav-item lh-1 me-3">
-                        <label class="form-label" style="text-align: center;">
-                        <center><strong style="margin-bottom: 10px; color:#000"> VENKAT M - SFID093</strong></center> 
-                        <center><span class="mt-3" style="padding-top: 10px;">(Service Engineer)</span></center>
-                    </label>
+                    <li class="nav-item lh-1 me-3 d-none d-md-block">
+                        <div class="tcmc-staff-details">
+                            <strong>{{ session('staff_name') ?: 'Municipal Staff' }}</strong>
+                            <small>{{ session('UserTypeName') ?: 'Staff Portal' }}</small>
+                        </div>
                     </li>
                     <!-- User -->
                     <li class="nav-item navbar-dropdown dropdown-user dropdown">
                         <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);"
                             data-bs-toggle="dropdown" id="dropdownProfileToggle">
                             <div class="avatar avatar-online">
-                                <img src="{{ asset('public/assets/img/avatars/1.png') }}" alt
-                                    class="w-px-40 h-auto rounded-circle">
+                                <span class="tcmc-avatar" aria-label="Staff profile">{{ strtoupper(substr(trim(session('staff_name') ?: 'S'), 0, 1)) }}</span>
                             </div>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" id="profileDropdown"
@@ -102,8 +101,7 @@ $navbarDetached = ($navbarDetached ?? '');
                                     <div class="d-flex">
                                         <div class="flex-shrink-0 me-3">
                                             <div class="avatar avatar-online">
-                                                <img src="{{ asset('public/assets/img/avatars/1.png') }}" alt
-                                                    class="w-px-40 h-auto rounded-circle">
+                                                <span class="tcmc-avatar" aria-label="Staff profile">{{ strtoupper(substr(trim(session('staff_name') ?: 'S'), 0, 1)) }}</span>
                                             </div>
                                         </div>
                                         <div class="flex-grow-1">
