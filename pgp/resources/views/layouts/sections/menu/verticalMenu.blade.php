@@ -40,11 +40,14 @@
                     $menu_main_name = $main_value->screen_name;
                     $menu_main_icon = $main_value->icon;
                     $screen_sections = user_screen_names($section_unique_id);
-                    $has_submenu = !empty($screen_sections);
+                    $has_submenu = collect($screen_sections)->contains(function ($submenu) use ($screens) {
+                        return in_array($submenu->unique_id, $screens);
+                    });
                 @endphp
 
+                @if ($has_submenu)
                 <li class="menu-item">
-                    <a href="javascript:void(0);" class="menu-link {{ $has_submenu ? 'menu-toggle' : '' }} menu_main"
+                    <a href="javascript:void(0);" class="menu-link menu-toggle menu_main" aria-expanded="false"
                        title="{{ __($menu_main_name) }}">
                         @if (!empty($menu_main_icon))
                             <i class="menu-icon {{ $menu_main_icon }}"></i>
@@ -67,38 +70,9 @@
                         </ul>
                     @endif
                 </li>
+                @endif
             @endif
         @endforeach
     </ul>
 </aside>
 
-<script>
-    // Submenu toggle
-    document.querySelectorAll('.menu-toggle').forEach(toggle => {
-        toggle.addEventListener('click', function () {
-            const submenu = this.nextElementSibling;
-            if (submenu && submenu.classList.contains('menu-sub')) {
-                submenu.style.display = submenu.style.display === 'none' || submenu.style.display === '' ? 'block' : 'none';
-            }
-        });
-    });
-
-    // Sidebar toggle button
-    const sidebar = document.getElementById('layout-menu');
-    const toggleBtn = document.getElementById('sidebar-toggle');
-
-    // Toggle collapse/expand
-    if (toggleBtn) toggleBtn.addEventListener('click', function () {
-        sidebar.classList.toggle('collapsed');
-        if (sidebar.classList.contains('collapsed')) {
-            localStorage.setItem('sidebarState', 'collapsed');
-        } else {
-            localStorage.setItem('sidebarState', 'expanded');
-        }
-    });
-
-    // Restore state on page load
-    if (localStorage.getItem('sidebarState') === 'collapsed') {
-        sidebar.classList.add('collapsed');
-    }
-</script>
