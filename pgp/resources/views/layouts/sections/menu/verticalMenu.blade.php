@@ -3,10 +3,10 @@
     <div class="app-brand demo logo-container">
         <a href="{{ url('/dashboard') }}" class="app-brand-link d-flex align-items-center">
             <!-- Small icon logo -->
-            <span class="logo-icon tcmc-logo-symbol" aria-hidden="true">T</span>
+            <img src="{{ asset('public/assets/img/favicon/logo-icon.png') }}" class="logo-icon">
 
             <!-- Full text logo -->
-            <span class="logo-full tcmc-brand-name">Tiruppur <small>City Corporation</small></span>
+            <img src="{{ asset('public/assets/img/favicon/logo-full.png') }}" class="logo-full">
         </a>
 
        
