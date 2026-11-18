@@ -63,6 +63,25 @@ return [
             ]) : [],
         ],
 
+        // Read the existing Smart City database without moving data or changing PGP models.
+        // Separate connection: the two applications have incompatible table definitions.
+        'smartcity' => [
+            'driver' => 'mysql',
+            'host' => env('SMARTCITY_DB_HOST', env('DB_HOST', '127.0.0.1')),
+            'port' => env('SMARTCITY_DB_PORT', env('DB_PORT', '3306')),
+            'database' => env('SMARTCITY_DB_DATABASE', 'smartcitytiruppur'),
+            'username' => env('SMARTCITY_DB_USERNAME', env('DB_USERNAME', 'root')),
+            'password' => env('SMARTCITY_DB_PASSWORD', env('DB_PASSWORD', '')),
+            'unix_socket' => '',
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => [],
+        ],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),
