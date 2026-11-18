@@ -1,0 +1,29 @@
+/* Smart City Tiruppur — shared PGP administration skin.
+   Keeps existing Blade forms, data tables and actions functional. */
+:root { --tcmc-blue:#159bd7; --tcmc-blue-dark:#0d7bad; --tcmc-ink:#141414; --tcmc-panel:#1c1c1c; --tcmc-muted:#64748b; }
+body { font-family: "Segoe UI", Arial, sans-serif !important; background:#f5f7f9; color:#18222b; }
+.layout-wrapper .layout-menu { background:#171b20 !important; border-right:1px solid #2e353d; }
+.layout-menu .app-brand { border-bottom:1px solid rgba(255,255,255,.10); }
+.layout-menu .menu-inner { padding-top:12px; }
+.layout-menu .menu-inner .menu-link,
+.layout-menu .menu-inner .menu-link i { color:#d6e0ea !important; }
+.layout-menu .menu-inner .menu-item.active > .menu-link,
+.layout-menu .menu-inner .menu-link:hover { background:rgba(21,155,215,.17) !important; color:#fff !important; border-left:3px solid var(--tcmc-blue); }
+.layout-navbar { background:#fff !important; border-bottom:3px solid var(--tcmc-blue); box-shadow:0 2px 14px rgba(20,29,40,.07) !important; }
+.layout-page { background:#f5f7f9; }
+.card { border:1px solid #e4eaf0; border-radius:9px; box-shadow:0 5px 24px rgba(28,42,56,.05) !important; }
+.card-header { color:#142a38; font-weight:700; }
+.btn-primary, .bg-primary, .nav-pills .nav-link.active { background-color:var(--tcmc-blue-dark) !important; border-color:var(--tcmc-blue-dark) !important; }
+.text-primary { color:var(--tcmc-blue-dark) !important; }
+.table thead th, table thead th { background:#e5f3fb !important; color:#20445b; font-weight:700; }
+.table tbody tr:hover { background:#f1f9fd; }
+.form-control:focus, .form-select:focus { border-color:var(--tcmc-blue); box-shadow:0 0 0 .18rem rgba(21,155,215,.14); }
+.tcmc-staff-details { display:flex; flex-direction:column; line-height:1.25; text-align:right; }
+.tcmc-staff-details strong { color:#203748; font-size:13px; }
+.tcmc-staff-details small { color:var(--tcmc-muted); font-size:11px; }
+.tcmc-avatar { width:40px; height:40px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; background:#0d7bad; color:#fff; font-size:18px; font-weight:700; border:2px solid #e0f3fc; }
+.tcmc-logo-symbol { background:#159bd7; color:#fff; width:36px; height:36px; border-radius:8px; display:inline-flex !important; align-items:center; justify-content:center; font-size:22px; font-weight:800; }
+.tcmc-brand-name { display:flex !important; flex-direction:column; color:#fff; font-size:17px; font-weight:750; letter-spacing:.2px; line-height:1.12; }
+.tcmc-brand-name small { font-size:10px; color:#9bdaf5; text-transform:uppercase; letter-spacing:1.1px; }
+.collapsible-sidebar.collapsed .tcmc-brand-name { display:none !important; }
+@media(max-width:991.98px) { .tcmc-staff-details { display:none; } }
