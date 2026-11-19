@@ -1,178 +1,379 @@
 <?php
 declare(strict_types=1);
+
 /**
- * escalate-complaints.php
+ * Smart City Tiruppur complaint escalation processor.
  *
- * Run on a schedule (e.g. hourly via cron):
- *   php /path/to/smartcitytiruppur/escalate-complaints.php
+ * Preview (no writes):
+ *   php escalate-complaints.php --dry-run
+ *   php escalate-complaints.php --dry-run --complaint-id=8
  *
- * Additive only — does not change existing page behaviour.
- * Uses complaints.assigned_officer_id, complaint_assignments,
- * and complaint_status_history exactly as new-complaint.php /
- * complaint-view.php already do for normal (re)assignment, so
- * every existing page keeps working without modification.
+ * Execute only after reviewing the preview and confirming the target database:
+ *   php escalate-complaints.php --execute --expect-db=smartcitytiruppur --complaint-id=8
+ *   php escalate-complaints.php --execute --expect-db=smartcitytiruppur
+ *
+ * Staff, officer mappings and escalation rules come exclusively from the
+ * configured Smart City database. Nothing is read or imported from PGP.
  */
+if (PHP_SAPI !== 'cli') {
+    http_response_code(403);
+    exit('CLI execution only.');
+}
+
 require_once __DIR__ . '/includes/bootstrap.php';
 
+$args = array_slice($argv, 1);
+$execute = false;
+$requestedId = null;
+$expectedDb = null;
+
+foreach ($args as $arg) {
+    if ($arg === '--help') {
+        echo "Usage:\n";
+        echo "  php escalate-complaints.php --dry-run [--complaint-id=ID]\n";
+        echo "  php escalate-complaints.php --execute --expect-db=DATABASE [--complaint-id=ID]\n";
+        exit(0);
+    }
+    if ($arg === '--dry-run') {
+        continue;
+    }
+    if ($arg === '--execute') {
+        $execute = true;
+        continue;
+    }
+    if (preg_match('/^--complaint-id=([1-9][0-9]*)$/D', $arg, $matches)) {
+        $requestedId = (int) $matches[1];
+        continue;
+    }
+    if (preg_match('/^--expect-db=([a-zA-Z0-9_]+)$/D', $arg, $matches)) {
+        $expectedDb = $matches[1];
+        continue;
+    }
+    fwrite(STDERR, "Unknown or invalid argument: {$arg}\n");
+    exit(2);
+}
+
+if ($execute && $expectedDb === null) {
+    fwrite(STDERR, "Execution requires --expect-db=DATABASE. Run --dry-run first.\n");
+    exit(2);
+}
+
 $pdo = db();
+$actualDb = (string) $pdo->query('SELECT DATABASE()')->fetchColumn();
+if ($actualDb === '') {
+    fwrite(STDERR, "No database selected.\n");
+    exit(2);
+}
+if ($expectedDb !== null && $actualDb !== $expectedDb) {
+    fwrite(STDERR, "Database mismatch: connected to {$actualDb}, expected {$expectedDb}. Nothing changed.\n");
+    exit(2);
+}
 
-// Every open complaint that has escalation rules defined either in
-// department_allocations (ward-level multi-stage) or escalation_officer_levels.
-$openComplaints = $pdo->query(
-    "SELECT c.id, c.department_id, c.category_id, c.zone_id, c.ward_id, c.status, c.created_at
-     FROM complaints c
-     WHERE c.is_deleted = 0
-       AND c.status NOT IN ('Resolved','Closed','Rejected')
-       AND (
-           EXISTS (
-               SELECT 1 FROM department_allocations da
-               WHERE da.department_id = c.department_id
-                 AND da.category_id = c.category_id
-                 AND da.zone_id = c.zone_id
-                 AND da.ward_id = c.ward_id
-                 AND da.is_active = 1
-           )
-           OR EXISTS (
-               SELECT 1 FROM escalation_officer_levels el
-               WHERE el.category_id = c.category_id AND el.is_active = 1
-           )
-       )"
-)->fetchAll();
+// Keep the CLI's timestamps consistent with config/app.php (Asia/Kolkata).
+// This changes only the current connection's time zone.
+$pdo->exec("SET SESSION time_zone = '+05:30'");
 
-$escalatedCount = 0;
+/**
+ * Return a non-mutating escalation decision for one complaint.
+ * Complaint row must be read from the configured Smart City connection.
+ */
+function escalationDecision(PDO $pdo, array $complaint, DateTimeImmutable $now, bool $nullableLevelId): array
+{
+    $skip = static function (string $reason): array {
+        return ['ready' => false, 'reason' => $reason];
+    };
 
-foreach ($openComplaints as $complaint) {
-    $complaintId  = (int)$complaint['id'];
-    $departmentId = (int)$complaint['department_id'];
-    $categoryId   = (int)$complaint['category_id'];
-    $zoneId       = (int)$complaint['zone_id'];
-    $wardId       = (int)$complaint['ward_id'];
+    if ((int) ($complaint['assigned_officer_id'] ?? 0) <= 0) {
+        return $skip('UNASSIGNED: requires initial officer allocation, not escalation');
+    }
 
-    // Current level = highest level_no already escalated to, else level 1
-    // (level 1 is the complaint's original assignment at creation time).
-    $levelStmt = $pdo->prepare(
+    if (in_array($complaint['status'], ['Resolved', 'Closed', 'Rejected'], true)
+        || (int) $complaint['is_deleted'] !== 0) {
+        return $skip('NOT_OPEN');
+    }
+
+    $history = $pdo->prepare(
         'SELECT level_no, escalated_at FROM complaint_escalations
-         WHERE complaint_id = ? ORDER BY level_no DESC LIMIT 1'
+         WHERE complaint_id = ? ORDER BY escalated_at DESC, id DESC LIMIT 1'
     );
-    $levelStmt->execute([$complaintId]);
-    $lastEscalation = $levelStmt->fetch();
+    $history->execute([(int) $complaint['id']]);
+    $last = $history->fetch(PDO::FETCH_ASSOC);
+    $currentLevel = $last ? (int) $last['level_no'] : 1;
 
-    $currentLevel = $lastEscalation ? (int)$lastEscalation['level_no'] : 1;
-    $sinceTime    = $lastEscalation ? $lastEscalation['escalated_at'] : $complaint['created_at'];
+    if ($currentLevel < 1) {
+        return $skip('INVALID_CURRENT_LEVEL');
+    }
 
-    // Check SLA days at current stage: department_allocations first, then escalation_officer_levels
-    $currentDays = null;
-    $allocCurStmt = $pdo->prepare(
-        'SELECT escalation_days FROM department_allocations
-         WHERE department_id = ? AND category_id = ? AND zone_id = ? AND ward_id = ?
-           AND stage_no = ? AND is_active = 1
-         LIMIT 1'
+    $locationParams = [
+        (int) $complaint['department_id'],
+        (int) $complaint['category_id'],
+        (int) $complaint['zone_id'],
+        (int) $complaint['ward_id'],
+    ];
+
+    // Ward/department-specific PGP-style stage rule takes precedence if configured.
+    $currentRule = $pdo->prepare(
+        'SELECT escalation_days AS days FROM department_allocations
+         WHERE department_id = ? AND category_id = ? AND zone_id = ?
+           AND ward_id = ? AND stage_no = ? AND is_active = 1 LIMIT 1'
     );
-    $allocCurStmt->execute([$departmentId, $categoryId, $zoneId, $wardId, $currentLevel]);
-    $allocCurRow = $allocCurStmt->fetch();
-    if ($allocCurRow) {
-        $currentDays = (int)$allocCurRow['escalation_days'];
-    } else {
-        $currentLevelStmt = $pdo->prepare(
-            'SELECT id, escalation_period_days FROM escalation_officer_levels
-             WHERE category_id = ? AND level_no = ? AND is_active = 1'
+    $currentRule->execute(array_merge($locationParams, [$currentLevel]));
+    $period = $currentRule->fetch(PDO::FETCH_ASSOC);
+
+    if (!$period) {
+        $currentRule = $pdo->prepare(
+            'SELECT escalation_period_days AS days FROM escalation_officer_levels
+             WHERE category_id = ? AND level_no = ? AND is_active = 1 LIMIT 1'
         );
-        $currentLevelStmt->execute([$categoryId, $currentLevel]);
-        $currentLevelRow = $currentLevelStmt->fetch();
-        if ($currentLevelRow) {
-            $currentDays = (int)$currentLevelRow['escalation_period_days'];
-        }
+        $currentRule->execute([(int) $complaint['category_id'], $currentLevel]);
+        $period = $currentRule->fetch(PDO::FETCH_ASSOC);
     }
 
-    if ($currentDays === null || $currentDays <= 0) {
-        continue; // no SLA configured for this level — skip
+    if (!$period || (int) $period['days'] <= 0) {
+        return $skip('NO_ACTIVE_CURRENT_STAGE_RULE');
     }
 
-    $deadline = strtotime($sinceTime) + ($currentDays * 86400);
-    if (time() < $deadline) {
-        continue; // still within SLA for this level
-    }
-
-    // Overdue — find the next stage officer: department_allocations first, then escalation_officer_levels
-    $nextLevel = null;
-    $nextEscalationLevelId = null;
-
-    $allocNextStmt = $pdo->prepare(
-        'SELECT da.stage_no AS level_no, da.officer_id, da.escalation_days,
-                COALESCE(o.designation, o.officer_name) AS designation
-         FROM department_allocations da
-         JOIN officers o ON o.id = da.officer_id AND o.is_active = 1
-         WHERE da.department_id = ? AND da.category_id = ? AND da.zone_id = ? AND da.ward_id = ?
-           AND da.stage_no = ? AND da.is_active = 1
-         LIMIT 1'
-    );
-    $allocNextStmt->execute([$departmentId, $categoryId, $zoneId, $wardId, $currentLevel + 1]);
-    $allocNext = $allocNextStmt->fetch();
-
-    if ($allocNext) {
-        $nextLevel = $allocNext;
-    } else {
-        $nextLevelStmt = $pdo->prepare(
-            'SELECT id, level_no, officer_id, designation, escalation_period_days AS escalation_days
-             FROM escalation_officer_levels
-             WHERE category_id = ? AND level_no = ? AND is_active = 1'
-        );
-        $nextLevelStmt->execute([$categoryId, $currentLevel + 1]);
-        $eolNext = $nextLevelStmt->fetch();
-        if ($eolNext) {
-            $nextLevel = $eolNext;
-            $nextEscalationLevelId = (int)$eolNext['id'];
-        }
-    }
-
-    if (!$nextLevel) {
-        continue; // already at the highest configured level — nothing further to do
-    }
-
-    $pdo->beginTransaction();
     try {
-        // 1. Reassign the complaint (same column every other page already reads).
-        $nextDueAt = date('Y-m-d H:i:s', time() + ((int)($nextLevel['escalation_days'] ?? 3) * 86400));
-        $pdo->prepare('UPDATE complaints SET assigned_officer_id = ?, due_at = ? WHERE id = ?')
-            ->execute([(int)$nextLevel['officer_id'], $nextDueAt, $complaintId]);
+        // Honor the existing category/assignment deadline. Older code could
+        // escalate after 3 days even when due_at was 7 or 34 days ahead.
+        if (!empty($complaint['due_at'])) {
+            $deadline = new DateTimeImmutable((string) $complaint['due_at']);
+        } else {
+            $start = $last ? $last['escalated_at'] : $complaint['created_at'];
+            $deadline = (new DateTimeImmutable((string) $start))
+                ->modify('+' . (int) $period['days'] . ' days');
+        }
+    } catch (Throwable $error) {
+        return $skip('INVALID_DEADLINE');
+    }
 
-        // 2. Close out the previous assignment row, open a new one —
-        //    exactly the pattern complaint_assignments already exists for.
-        $pdo->prepare(
-            'UPDATE complaint_assignments SET is_current = 0, unassigned_at = NOW()
-             WHERE complaint_id = ? AND is_current = 1'
-        )->execute([$complaintId]);
+    if ($deadline > $now) {
+        return $skip('WITHIN_SLA: due ' . $deadline->format('Y-m-d H:i:s'));
+    }
 
-        $pdo->prepare(
-            'INSERT INTO complaint_assignments (complaint_id, officer_id, assigned_by, assigned_at, is_current)
-             VALUES (?, ?, NULL, NOW(), 1)'
-        )->execute([$complaintId, (int)$nextLevel['officer_id']]);
+    $nextNumber = $currentLevel + 1;
+    $nextAllocation = $pdo->prepare(
+        "SELECT da.stage_no AS level_no, da.officer_id,
+                da.escalation_days AS days,
+                COALESCE(NULLIF(o.designation, ''), o.officer_name) AS label
+         FROM department_allocations da
+         INNER JOIN officers o ON o.id = da.officer_id AND o.is_active = 1
+         WHERE da.department_id = ? AND da.category_id = ? AND da.zone_id = ?
+           AND da.ward_id = ? AND da.stage_no = ? AND da.is_active = 1 LIMIT 1"
+    );
+    $nextAllocation->execute(array_merge($locationParams, [$nextNumber]));
+    $next = $nextAllocation->fetch(PDO::FETCH_ASSOC);
+    $levelId = null;
+    $ruleSource = 'department_allocations';
 
-        // 3. Log it in the existing status-history timeline citizens already see
-        //    on complaint-view.php / complaint-status.php.
-        $pdo->prepare(
-            'INSERT INTO complaint_status_history (complaint_id, old_status, new_status, remarks, changed_by, changed_at)
-             VALUES (?, ?, ?, ?, NULL, NOW())'
-        )->execute([
-            $complaintId,
-            $complaint['status'],
-            $complaint['status'],
-            'Auto-escalated to Stage ' . $nextLevel['level_no'] . ' (' . $nextLevel['designation'] . ') — SLA exceeded at previous stage.',
-        ]);
+    if ($next) {
+        // Only link an escalation_level_id when it describes the SAME officer.
+        // Otherwise it is null, which requires the compatible nullable schema.
+        $linked = $pdo->prepare(
+            'SELECT id FROM escalation_officer_levels
+             WHERE category_id = ? AND level_no = ? AND officer_id = ? AND is_active = 1 LIMIT 1'
+        );
+        $linked->execute([(int) $complaint['category_id'], $nextNumber, (int) $next['officer_id']]);
+        $matchedLevel = $linked->fetchColumn();
+        $levelId = $matchedLevel === false ? null : (int) $matchedLevel;
+    } else {
+        $nextRule = $pdo->prepare(
+            'SELECT el.id, el.level_no, el.officer_id, el.escalation_period_days AS days,
+                    el.designation AS label
+             FROM escalation_officer_levels el
+             INNER JOIN officers o ON o.id = el.officer_id AND o.is_active = 1
+             WHERE el.category_id = ? AND el.level_no = ? AND el.is_active = 1 LIMIT 1'
+        );
+        $nextRule->execute([(int) $complaint['category_id'], $nextNumber]);
+        $next = $nextRule->fetch(PDO::FETCH_ASSOC);
+        $ruleSource = 'escalation_officer_levels';
+        if ($next) {
+            $levelId = (int) $next['id'];
+        }
+    }
 
-        // 4. Record the escalation itself.
-        $pdo->prepare(
-            'INSERT INTO complaint_escalations (complaint_id, escalation_level_id, level_no, officer_id, escalated_at)
-             VALUES (?, ?, ?, ?, NOW())'
-        )->execute([$complaintId, $nextEscalationLevelId, (int)$nextLevel['level_no'], (int)$nextLevel['officer_id']]);
+    if (!$next) {
+        return $skip('NO_ACTIVE_NEXT_STAGE_OFFICER');
+    }
 
-        $pdo->commit();
-        $escalatedCount++;
-    } catch (Throwable $e) {
-        $pdo->rollBack();
-        log_message('Escalation failed for complaint ' . $complaintId . ': ' . $e->getMessage());
+    if ((int) $next['officer_id'] === (int) $complaint['assigned_officer_id']) {
+        return $skip('SAME_OFFICER_AT_NEXT_STAGE: mapping requires review');
+    }
+
+    if ((int) $next['days'] <= 0) {
+        return $skip('INVALID_NEXT_STAGE_PERIOD');
+    }
+
+    if ($levelId === null && !$nullableLevelId) {
+        return $skip('SCHEMA_REQUIRES_NULLABLE_ESCALATION_LEVEL_ID');
+    }
+
+    return [
+        'ready' => true,
+        'reason' => 'ELIGIBLE',
+        'current_level' => $currentLevel,
+        'next_level' => (int) $next['level_no'],
+        'next_officer_id' => (int) $next['officer_id'],
+        'next_period_days' => (int) $next['days'],
+        'next_label' => (string) $next['label'],
+        'level_id' => $levelId,
+        'rule_source' => $ruleSource,
+        'deadline' => $deadline->format('Y-m-d H:i:s'),
+    ];
+}
+
+$levelColumn = $pdo->query("SHOW COLUMNS FROM complaint_escalations LIKE 'escalation_level_id'")
+    ->fetch(PDO::FETCH_ASSOC);
+if (!$levelColumn) {
+    fwrite(STDERR, "Missing complaint_escalations.escalation_level_id column.\n");
+    exit(2);
+}
+$nullableLevelId = strtoupper((string) $levelColumn['Null']) === 'YES';
+
+$sql = "SELECT id, reference_no, status, is_deleted, assigned_officer_id,
+               department_id, category_id, zone_id, ward_id, created_at, due_at
+        FROM complaints WHERE is_deleted = 0
+          AND status NOT IN ('Resolved', 'Closed', 'Rejected')";
+$params = [];
+if ($requestedId !== null) {
+    $sql .= ' AND id = ?';
+    $params[] = $requestedId;
+}
+$sql .= ' ORDER BY id ASC';
+$stmt = $pdo->prepare($sql);
+$stmt->execute($params);
+$complaints = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+echo ($execute ? '[EXECUTE]' : '[DRY RUN]') . " database={$actualDb}, complaints=" . count($complaints) . PHP_EOL;
+
+$locked = false;
+if ($execute) {
+    // MySQL named lock prevents two scheduled jobs from escalating the same
+    // complaint concurrently. SELECT ... FOR UPDATE below also protects rows.
+    $getLock = $pdo->query("SELECT GET_LOCK('smartcity_tiruppur_escalations', 0)")->fetchColumn();
+    if ((int) $getLock !== 1) {
+        fwrite(STDERR, "Another escalation job is active. Nothing changed.\n");
+        exit(2);
+    }
+    $locked = true;
+}
+
+$eligible = 0;
+$applied = 0;
+$failed = 0;
+
+try {
+    foreach ($complaints as $complaint) {
+        $now = new DateTimeImmutable('now');
+
+        if (!$execute) {
+            $decision = escalationDecision($pdo, $complaint, $now, $nullableLevelId);
+            if (!$decision['ready']) {
+                echo "[SKIP] #{$complaint['id']} {$complaint['reference_no']}: {$decision['reason']}\n";
+                continue;
+            }
+            $eligible++;
+            echo "[WOULD ESCALATE] #{$complaint['id']} {$complaint['reference_no']} "
+                . "L{$decision['current_level']} -> L{$decision['next_level']}, "
+                . "officer={$decision['next_officer_id']}, source={$decision['rule_source']}, "
+                . "deadline={$decision['deadline']}\n";
+            continue;
+        }
+
+        try {
+            $pdo->beginTransaction();
+
+            // Re-fetch under row lock; a citizen/officer may have resolved or
+            // reassigned the complaint since the candidate list was retrieved.
+            $rowStmt = $pdo->prepare(
+                'SELECT id, reference_no, status, is_deleted, assigned_officer_id,
+                        department_id, category_id, zone_id, ward_id, created_at, due_at
+                 FROM complaints WHERE id = ? FOR UPDATE'
+            );
+            $rowStmt->execute([(int) $complaint['id']]);
+            $fresh = $rowStmt->fetch(PDO::FETCH_ASSOC);
+            if (!$fresh) {
+                $pdo->rollBack();
+                continue;
+            }
+
+            $now = new DateTimeImmutable('now');
+            $decision = escalationDecision($pdo, $fresh, $now, $nullableLevelId);
+            if (!$decision['ready']) {
+                $pdo->rollBack();
+                echo "[SKIP] #{$fresh['id']} {$fresh['reference_no']}: {$decision['reason']}\n";
+                continue;
+            }
+
+            $eligible++;
+            $at = $now->format('Y-m-d H:i:s');
+            $nextDueAt = $now->modify('+' . $decision['next_period_days'] . ' days')
+                ->format('Y-m-d H:i:s');
+
+            $update = $pdo->prepare(
+                'UPDATE complaints SET assigned_officer_id = ?, due_at = ?, updated_at = ?
+                 WHERE id = ?'
+            );
+            $update->execute([$decision['next_officer_id'], $nextDueAt, $at, (int) $fresh['id']]);
+
+            $close = $pdo->prepare(
+                'UPDATE complaint_assignments SET is_current = 0, unassigned_at = ?
+                 WHERE complaint_id = ? AND is_current = 1'
+            );
+            $close->execute([$at, (int) $fresh['id']]);
+
+            $add = $pdo->prepare(
+                'INSERT INTO complaint_assignments
+                 (complaint_id, officer_id, assigned_by, assigned_at, is_current)
+                 VALUES (?, ?, NULL, ?, 1)'
+            );
+            $add->execute([(int) $fresh['id'], $decision['next_officer_id'], $at]);
+
+            // Retain the workflow status, but make the escalation visible to citizens.
+            $note = sprintf(
+                'Auto-escalated to Stage %d (%s) after SLA deadline %s.',
+                $decision['next_level'], $decision['next_label'], $decision['deadline']
+            );
+            $history = $pdo->prepare(
+                'INSERT INTO complaint_status_history
+                 (complaint_id, old_status, new_status, remarks, changed_by, changed_at)
+                 VALUES (?, ?, ?, ?, NULL, ?)'
+            );
+            $history->execute([
+                (int) $fresh['id'], $fresh['status'], $fresh['status'], $note, $at,
+            ]);
+
+            $escalation = $pdo->prepare(
+                'INSERT INTO complaint_escalations
+                 (complaint_id, escalation_level_id, level_no, officer_id, escalated_at)
+                 VALUES (?, ?, ?, ?, ?)'
+            );
+            $escalation->execute([
+                (int) $fresh['id'], $decision['level_id'], $decision['next_level'],
+                $decision['next_officer_id'], $at,
+            ]);
+
+            $pdo->commit();
+            $applied++;
+            echo "[ESCALATED] #{$fresh['id']} {$fresh['reference_no']} "
+                . "to level {$decision['next_level']} officer {$decision['next_officer_id']}\n";
+        } catch (Throwable $error) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+            $failed++;
+            log_message('Escalation failed for complaint ' . $complaint['id'] . ': ' . $error->getMessage());
+            fwrite(STDERR, "[ERROR] #{$complaint['id']}: {$error->getMessage()}\n");
+        }
+    }
+} finally {
+    if ($locked) {
+        $pdo->query("SELECT RELEASE_LOCK('smartcity_tiruppur_escalations')");
     }
 }
 
-log_message("Escalation run complete: {$escalatedCount} complaint(s) escalated.");
-echo "{$escalatedCount} complaint(s) escalated." . PHP_EOL;
+echo ($execute
+    ? "Escalation complete: {$applied} applied, {$failed} errors.\n"
+    : "Preview complete: {$eligible} eligible, no database changes.\n");
+
+exit($failed === 0 ? 0 : 1);
