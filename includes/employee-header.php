@@ -1,56 +1,83 @@
 <?php
 declare(strict_types=1);
-
 $user = require_login();
-$pageTitle = $pageTitle ?? 'Employee Portal';
+$pageTitle = $pageTitle ?? 'Administration';
 $flashes = consume_flashes();
+$isAdmin = in_array($user['role'], ['Super Admin', 'Admin'], true);
+$isManager = in_array($user['role'], ['Super Admin', 'Admin', 'Commissioner', 'Department Head'], true);
+$path = (string)(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?: '');
+$currentPage = basename($path);
+$menuGroups = [
+    'Workspace' => [
+        ['dashboard.php', 'Overview', 'bi-grid-1x2-fill', true],
+        ['complaints.php', 'Complaint Inbox', 'bi-inboxes', true],
+        ['reports.php', 'Reports & Analytics', 'bi-bar-chart-line', true],
+        ['feedback.php', 'Citizen Feedback', 'bi-chat-left-text', true],
+    ],
+    'Management' => [
+        ['officers.php', 'Officer Directory', 'bi-people', $isManager],
+        ['escalation.php', 'Escalation Monitor', 'bi-diagram-3', $isManager],
+        ['masters.php?section=allocations', 'Allocation Rules', 'bi-bezier2', $isAdmin],
+        ['masters.php', 'Master Data', 'bi-sliders', $isAdmin],
+        ['users.php', 'Users & Roles', 'bi-person-gear', $isAdmin],
+    ],
+];
 ?>
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?php echo e($pageTitle); ?> | <?php echo e(APP_NAME); ?></title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="<?php echo e(url('assets/css/style.css?v=20260806b')); ?>" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title><?php echo e($pageTitle); ?> | <?php echo e(APP_NAME); ?></title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="<?php echo e(url('assets/css/style.css?v=20260806b')); ?>" rel="stylesheet">
+  <link href="<?php echo e(url('assets/css/admin.css?v=20261119a')); ?>" rel="stylesheet">
 </head>
-<body class="employee-body">
-<nav class="navbar navbar-expand-lg navbar-dark employee-navbar">
-    <div class="container-fluid px-lg-4">
-        <a class="navbar-brand employee-brand" href="<?php echo e(url('employee/dashboard.php')); ?>">
-            <img src="<?php echo e(url('assets/images/trippurlogo.png')); ?>" alt="Tiruppur Corporation">
-            <span>Smart City Tiruppur</span>
-            <img src="<?php echo e(url('assets/images/smartcitylogo.png')); ?>" alt="Smart City Tiruppur">
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#employeeNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="employeeNav">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link" href="<?php echo e(url('employee/dashboard.php')); ?>">Dashboard</a></li>
-                <li class="nav-item"><a class="nav-link" href="<?php echo e(url('employee/complaints.php')); ?>">Complaints</a></li>
-                <li class="nav-item"><a class="nav-link" href="<?php echo e(url('employee/reports.php')); ?>">Reports</a></li>
-                <li class="nav-item"><a class="nav-link" href="<?php echo e(url('employee/feedback.php')); ?>">Feedback</a></li>
-                <?php if (in_array($user['role'], ['Super Admin', 'Admin'], true)): ?>
-                    <li class="nav-item"><a class="nav-link" href="<?php echo e(url('employee/masters.php')); ?>">Masters</a></li>
-                    <li class="nav-item"><a class="nav-link" href="<?php echo e(url('employee/users.php')); ?>">Users</a></li>
-                <?php endif; ?>
-            </ul>
-            <div class="d-flex align-items-center gap-3 text-white">
-                <span class="small"><?php echo e($user['full_name']); ?> (<?php echo e($user['role']); ?>)</span>
-                <a class="btn btn-sm btn-outline-light" href="<?php echo e(url('employee/logout.php')); ?>">Logout</a>
-            </div>
+<body class="employee-body admin-body">
+<div class="admin-layout">
+  <div class="admin-overlay" id="adminOverlay"></div>
+  <aside class="admin-sidebar" id="adminSidebar" aria-label="Administration navigation">
+    <a class="admin-brand" href="<?php echo e(url('employee/dashboard.php')); ?>">
+      <img src="<?php echo e(url('assets/images/trippurlogo.png')); ?>" alt="Tiruppur Corporation">
+      <span><strong>TIRUPPUR</strong><small>City Corporation</small></span>
+    </a>
+    <div class="admin-suite"><span class="admin-suite-dot"></span> Grievance Administration</div>
+    <nav class="admin-menu">
+      <?php foreach ($menuGroups as $groupName => $items): ?>
+        <div class="admin-menu-heading"><?php echo e($groupName); ?></div>
+        <?php foreach ($items as [$target, $label, $icon, $visible]): ?>
+          <?php if (!$visible) continue; ?>
+          <?php $baseTarget = explode('?', $target, 2)[0]; $active = $currentPage === $baseTarget
+            && ($baseTarget !== 'masters.php' || (str_contains($target, '?') ? ($_GET['section'] ?? '') === 'allocations' : ($_GET['section'] ?? '') !== 'allocations')); ?>
+          <a class="admin-menu-link<?php echo $active ? ' is-active' : ''; ?>"
+             href="<?php echo e(url('employee/' . $target)); ?>"<?php echo $active ? ' aria-current="page"' : ''; ?>>
+            <i class="bi <?php echo e($icon); ?>" aria-hidden="true"></i><span><?php echo e($label); ?></span>
+          </a>
+        <?php endforeach; ?>
+      <?php endforeach; ?>
+    </nav>
+    <div class="admin-sidebar-bottom">
+      <span class="admin-avatar"><?php echo e(strtoupper(substr(trim((string)$user['full_name']), 0, 1))); ?></span>
+      <div class="admin-account"><strong><?php echo e($user['full_name']); ?></strong><small><?php echo e($user['role']); ?></small></div>
+    </div>
+  </aside>
+  <div class="admin-main-area">
+    <header class="admin-topbar">
+      <button id="adminMenuToggle" class="admin-menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false"><i class="bi bi-list"></i></button>
+      <div class="admin-topbar-title"><span class="text-muted">Administration</span><i class="bi bi-chevron-right"></i><strong><?php echo e($pageTitle); ?></strong></div>
+      <form class="admin-quick-search" method="get" action="<?php echo e(url('employee/complaints.php')); ?>" role="search">
+        <i class="bi bi-search"></i>
+        <input name="q" aria-label="Search complaints" placeholder="Search complaints..." autocomplete="off">
+      </form>
+      <a class="admin-top-icon" href="<?php echo e(url('index.php')); ?>" title="Open public website" aria-label="Open public website"><i class="bi bi-box-arrow-up-right"></i></a>
+      <a class="admin-logout" href="<?php echo e(url('employee/logout.php')); ?>"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+    </header>
+    <main class="admin-page container-fluid">
+      <?php foreach ($flashes as $flash): ?>
+        <div class="alert alert-<?php echo e($flash['type']); ?> alert-dismissible fade show" role="alert">
+          <?php echo e($flash['message']); ?>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-    </div>
-</nav>
-
-<?php foreach ($flashes as $flash): ?>
-<div class="container-fluid px-lg-4 mt-3">
-    <div class="alert alert-<?php echo e($flash['type']); ?> alert-dismissible fade show">
-        <?php echo e($flash['message']); ?>
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-</div>
-<?php endforeach; ?>
-
-<main class="container-fluid px-lg-4 py-4">
+      <?php endforeach; ?>

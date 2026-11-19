@@ -1,6 +1,0 @@
-[22-Jul-2024 09:38:21 UTC] PHP Fatal error:  Cannot use App\Http\Controllers\school as school because the name is already in use in /home/fv0qhpr8lzrr/public_html/school_management/routes/web.php on line 59
-[22-Jul-2024 09:38:22 UTC] PHP Fatal error:  Cannot use App\Http\Controllers\school as school because the name is already in use in /home/fv0qhpr8lzrr/public_html/school_management/routes/web.php on line 59
-[22-Jul-2024 09:38:23 UTC] PHP Fatal error:  Cannot use App\Http\Controllers\school as school because the name is already in use in /home/fv0qhpr8lzrr/public_html/school_management/routes/web.php on line 59
-[22-Jul-2024 09:38:23 UTC] PHP Fatal error:  Cannot use App\Http\Controllers\school as school because the name is already in use in /home/fv0qhpr8lzrr/public_html/school_management/routes/web.php on line 59
-[22-Jul-2024 09:38:24 UTC] PHP Fatal error:  Cannot use App\Http\Controllers\school as school because the name is already in use in /home/fv0qhpr8lzrr/public_html/school_management/routes/web.php on line 59
-[22-Jul-2024 09:38:26 UTC] PHP Fatal error:  Cannot use App\Http\Controllers\school as school because the name is already in use in /home/fv0qhpr8lzrr/public_html/school_management/routes/web.php on line 59
