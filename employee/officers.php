@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__ . '/../includes/bootstrap.php';
 $user = require_roles(['Super Admin','Admin','Commissioner','Department Head']);
+require_permission('officers.view');
 $pageTitle = 'Officer Directory';
 $search = trim((string)($_GET['q'] ?? ''));
 $search = mb_substr($search, 0, 100);

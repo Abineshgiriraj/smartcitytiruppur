@@ -2,7 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__ . '/../includes/bootstrap.php';
 
-$user = require_login();
+$user = require_permission('dashboard.view');
 $pageTitle = can_manage_all_complaints($user) ? 'Corporation Overview' : 'My Dashboard';
 $where = ['c.is_deleted = 0'];
 $params = [];

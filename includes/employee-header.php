@@ -28,6 +28,7 @@ $menuGroups = [
         ['escalation.php', 'Escalation Monitor', 'bi-diagram-3', $isManager],
         ['masters.php?section=allocations', 'Allocation Rules', 'bi-bezier2', $isAdmin],
         ['master-control.php', 'Advanced Masters', 'bi-database-check', $isAdmin],
+        ['page-permissions.php', 'Role Page Mapper', 'bi-shield-lock', $isAdmin],
         ['masters.php', 'Master Data', 'bi-sliders', $isAdmin],
         ['users.php', 'Users & Roles', 'bi-person-gear', $isAdmin],
     ],
@@ -58,7 +59,25 @@ $menuGroups = [
       <?php foreach ($menuGroups as $groupName => $items): ?>
         <div class="admin-menu-heading"><?php echo e($groupName); ?></div>
         <?php foreach ($items as [$target, $label, $icon, $visible]): ?>
-          <?php if (!$visible) continue; ?>
+          <?php
+            if (!$visible) continue;
+            $routePermissions = [
+                'dashboard.php' => 'dashboard.view',
+                'complaints.php' => 'complaints.view',
+                'complaint-centre.php' => 'complaints.view',
+                'reports.php' => 'reports.view',
+                'icts-reports.php' => 'reports.view',
+                'feedback.php' => 'feedback.view',
+                'officers.php' => 'officers.view',
+                'escalation.php' => 'escalation.view',
+                'masters.php' => 'masters.view',
+                'master-control.php' => 'masters.view',
+                'users.php' => 'users.view',
+                'page-permissions.php' => 'roles.view',
+            ];
+            $routeFile = basename(explode('?', $target, 2)[0]);
+            if (isset($routePermissions[$routeFile]) && !can_access_permission($user, $routePermissions[$routeFile])) continue;
+          ?>
           <?php
             $baseTarget = basename(explode('?', $target, 2)[0]);
             $targetQuery = (string)(parse_url($target, PHP_URL_QUERY) ?: '');

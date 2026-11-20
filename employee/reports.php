@@ -2,7 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__ . '/../includes/bootstrap.php';
 
-$user = require_login();
+$user = require_permission('reports.view');
 $pageTitle = 'Complaint Reports';
 
 $fromDate = trim($_GET['from_date'] ?? date('Y-m-01'));

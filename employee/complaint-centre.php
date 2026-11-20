@@ -2,7 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__ . '/../includes/bootstrap.php';
 
-$user = require_login();
+$user = require_permission('complaints.view');
 $pageTitle = 'Complaint Management';
 $views = [
     'repeated' => ['Potential Repeated Complaints', 'bi-files', 'Same mobile, category and ward within the selected dates. Review before classifying as a repeat.'],

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__ . '/../includes/bootstrap.php';
 
-$user = require_login();
+$user = require_permission('complaints.view');
 $pageTitle = 'Complaint Details';
 $complaintId = (int)($_GET['id'] ?? $_POST['id'] ?? 0);
 
@@ -46,9 +46,10 @@ if (!can_manage_all_complaints($user)) {
     }
 }
 
-$canUpdate = $user['role'] !== 'Report User';
+$canUpdate = can_access_permission($user, 'complaints.update');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    require_permission('complaints.update');
     if (!$canUpdate) {
         http_response_code(403);
         exit('This account has read-only access.');

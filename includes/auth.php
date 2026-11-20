@@ -114,3 +114,110 @@ function can_manage_all_complaints(array $user): bool
 {
     return in_array($user['role'], ['Super Admin', 'Commissioner', 'Admin'], true);
 }
+
+
+/**
+ * Role Page Mapper: this is a restrictive layer over the existing role and
+ * department/ward checks, never a grant beyond baseline permissions.
+ */
+function permission_catalog(): array
+{
+    return [
+        'dashboard.view' => 'Overview dashboard',
+        'complaints.view' => 'Complaint inbox, detail and dashboards',
+        'complaints.update' => 'Update complaint status / assigned officer',
+        'reports.view' => 'ICTS and complaint reports / exports',
+        'feedback.view' => 'Read citizen feedback',
+        'feedback.manage' => 'Mark feedback as read',
+        'officers.view' => 'Officer directory',
+        'escalation.view' => 'Escalation monitor',
+        'masters.view' => 'Master and allocation administration (view)',
+        'masters.manage' => 'Edit master data and allocations',
+        'users.view' => 'View employee users',
+        'users.manage' => 'Create and disable employee users',
+        'designations.manage' => 'Edit verified officer designations',
+        'roles.view' => 'View role-page permission matrix',
+        'roles.manage' => 'Edit role-page permission matrix',
+    ];
+}
+
+function known_user_roles(): array
+{
+    return [
+        'Super Admin', 'Commissioner', 'Admin', 'Department Head',
+        'Zone Officer', 'Ward Officer', 'Call Centre', 'Field Officer', 'Report User',
+    ];
+}
+
+function baseline_permission(string $role, string $permission): bool
+{
+    if (!array_key_exists($permission, permission_catalog())
+        || !in_array($role, known_user_roles(), true)) return false;
+    if ($role === 'Super Admin') return true;
+    if (in_array($permission, [
+        'dashboard.view', 'complaints.view', 'reports.view',
+        'feedback.view', 'feedback.manage'
+    ], true)) return true;
+    if ($permission === 'complaints.update') return $role !== 'Report User';
+    if (in_array($permission, ['officers.view', 'escalation.view'], true)) {
+        return in_array($role, ['Admin', 'Commissioner', 'Department Head'], true);
+    }
+    if (in_array($permission, [
+        'masters.view', 'masters.manage', 'users.view',
+        'users.manage', 'designations.manage', 'roles.view',
+    ], true)) return $role === 'Admin';
+    return false;
+}
+
+/**
+ * null: no customized settings (baseline applies)
+ * ['invalid'=>true]: malformed or unavailable configuration; deny non-Super-Admin.
+ */
+function permission_matrix_state(): ?array
+{
+    static $loaded = false;
+    static $matrix = null;
+    if ($loaded) return $matrix;
+    $loaded = true;
+    try {
+        $statement = db()->prepare('SELECT setting_value FROM system_settings WHERE setting_key=? LIMIT 1');
+        $statement->execute(['role_page_permissions_v1']);
+        $raw = $statement->fetchColumn();
+        if ($raw === false) return null;
+        $data = json_decode((string)$raw, true);
+        if (!is_array($data) || ($data['version'] ?? null) !== 1
+            || !isset($data['roles']) || !is_array($data['roles'])) {
+            $matrix = ['invalid' => true];
+            return $matrix;
+        }
+        $matrix = $data;
+    } catch (Throwable $error) {
+        log_message('Permission settings could not be read: ' . $error->getMessage());
+        $matrix = ['invalid' => true];
+    }
+    return $matrix;
+}
+
+function can_access_permission(array $user, string $permission): bool
+{
+    $role = (string)($user['role'] ?? '');
+    if (!baseline_permission($role, $permission)) return false;
+    if ($role === 'Super Admin') return true;
+    $matrix = permission_matrix_state();
+    if ($matrix === null) return true;
+    if (!empty($matrix['invalid'])) return false;
+    if (!array_key_exists($role, $matrix['roles'])) return true;
+    $rules = $matrix['roles'][$role];
+    if (!is_array($rules)) return false;
+    return array_key_exists($permission, $rules) && $rules[$permission] === true;
+}
+
+function require_permission(string $permission): array
+{
+    $user = require_login();
+    if (!can_access_permission($user, $permission)) {
+        http_response_code(403);
+        exit('Permission denied for this action.');
+    }
+    return $user;
+}

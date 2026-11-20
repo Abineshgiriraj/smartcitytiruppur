@@ -3,6 +3,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../includes/bootstrap.php';
 
 $user = require_roles(['Super Admin', 'Admin']);
+require_permission('masters.view');
 $pageTitle = 'Advanced Master Management';
 $tabs = [
     'designations' => ['Designations', 'bi-person-vcard'],
@@ -16,6 +17,7 @@ $tab = (string)($_GET['tab'] ?? 'designations');
 if (!isset($tabs[$tab])) $tab = 'designations';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    require_permission('designations.manage');
     verify_csrf();
     try {
         if (($_POST['action'] ?? '') !== 'update_designation') {
@@ -264,13 +266,13 @@ include __DIR__ . '/../includes/employee-header.php';
               <td><?php echo e($row['linked_user'] ?: 'Not linked'); ?></td>
               <td><?php echo (int)$row['is_active']===1 ? 'Active' : 'Inactive'; ?></td>
               <td>
-                <form method="post" action="<?php echo e(url('employee/master-control.php?tab=designations')); ?>" class="d-flex gap-2 align-items-center">
+                <?php if (can_access_permission($user, 'designations.manage')): ?><form method="post" action="<?php echo e(url('employee/master-control.php?tab=designations')); ?>" class="d-flex gap-2 align-items-center">
                   <?php echo csrf_field(); ?>
                   <input type="hidden" name="action" value="update_designation">
                   <input type="hidden" name="officer_id" value="<?php echo (int)$row['id']; ?>">
                   <input class="form-control form-control-sm" type="text" name="designation" aria-label="Official designation" value="<?php echo e($row['designation'] ?? ''); ?>" maxlength="100" required>
                   <button class="btn btn-sm btn-outline-primary" type="submit">Save</button>
-                </form>
+                </form><?php else: ?><span class="text-muted">Read only</span><?php endif; ?>
               </td>
             </tr>
           <?php endforeach; ?>

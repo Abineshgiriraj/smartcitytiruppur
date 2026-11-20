@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__ . '/../includes/bootstrap.php';
 $user = require_roles(['Super Admin','Admin','Commissioner','Department Head']);
+require_permission('escalation.view');
 $pageTitle = 'Escalation Monitor';
 $departmentScope = $user['role'] === 'Department Head' ? (int)($user['department_id'] ?? 0) : null;
 

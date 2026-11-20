@@ -3,6 +3,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../includes/bootstrap.php';
 
 $user = require_roles(['Super Admin', 'Admin']);
+require_permission('masters.view');
 $pageTitle = 'Master Management';
 $section = $_GET['section'] ?? 'departments';
 $allowedSections = ['departments','categories','zones','wards','streets','officers','mappings','allocations','settings'];
@@ -12,6 +13,7 @@ if (!in_array($section, $allowedSections, true)) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    require_permission('masters.manage');
     verify_csrf();
 
     $action = $_POST['action'] ?? '';
