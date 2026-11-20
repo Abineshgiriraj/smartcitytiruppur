@@ -11,7 +11,8 @@ $menuGroups = [
     'Workspace' => [
         ['dashboard.php', 'Overview', 'bi-grid-1x2-fill', true],
         ['complaints.php', 'Complaint Inbox', 'bi-inboxes', true],
-        ['reports.php', 'Reports & Analytics', 'bi-bar-chart-line', true],
+        ['reports.php', 'Complaint Data Export', 'bi-file-spreadsheet', true],
+        ['icts-reports.php', 'ICTS Reports', 'bi-bar-chart-line', true],
         ['feedback.php', 'Citizen Feedback', 'bi-chat-left-text', true],
     ],
     'Management' => [
