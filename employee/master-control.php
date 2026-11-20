@@ -213,6 +213,7 @@ include __DIR__ . '/../includes/employee-header.php';
   </div>
 <?php elseif ($tab==='escalations'): ?>
   <div class="alert alert-warning border-0">
+    <a class="btn btn-outline-warning btn-sm mb-2" href="<?php echo e(url('employee/escalation-audit.php')); ?>">Open Escalation Audit</a>
     Escalation rules are for inspection only. Actual officer designations, category and department authorization must be verified
     before enabling automatic production scheduling.
   </div>

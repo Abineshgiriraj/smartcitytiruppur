@@ -10,9 +10,9 @@ $pageTitle = 'Escalation Configuration Audit';
 $departmentFilter = max(0, (int)($_GET['department_id'] ?? 0));
 $stageFilter = max(0, (int)($_GET['stage'] ?? 0));
 if ($stageFilter > 4) $stageFilter = 0;
-$issueFilter = (string)($_GET['issue'] ?? 'needs_review');
-if (!in_array($issueFilter, ['needs_review','all','designation','mapping','inactive'], true)) {
-    $issueFilter = 'needs_review';
+$issueFilter = (string)($_GET['issue'] ?? 'operational');
+if (!in_array($issueFilter, ['operational','all','designation','mapping','inactive','duplicate','template'], true)) {
+    $issueFilter = 'operational';
 }
 $search = trim((string)($_GET['q'] ?? ''));
 if (strlen($search) > 100) $search = substr($search, 0, 100);
@@ -62,38 +62,54 @@ $scanned = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $truncated = count($scanned) > $maxScan;
 if ($truncated) $scanned = array_slice($scanned, 0, $maxScan);
 
+// Detect categories that reuse the same officer at multiple escalation stages.
+$officerStageCounts = [];
+foreach ($scanned as $rule) {
+    $key = (int)$rule['category_id'] . ':' . (int)$rule['officer_id'];
+    $officerStageCounts[$key] = ($officerStageCounts[$key] ?? 0) + 1;
+}
 $totals = [
     'scanned' => count($scanned),
-    'issues' => 0,
+    'technical' => 0,
     'designation' => 0,
     'missing_title' => 0,
     'mapping' => 0,
     'inactive' => 0,
+    'duplicate' => 0,
+    'template' => 0,
     'not_linked' => 0,
 ];
 $matched = [];
 foreach ($scanned as $rule) {
-    $issues = escalation_rule_issues($rule);
-    $status = escalation_designation_check($rule['configured_role'], $rule['actual_designation']);
+    $titleStatus = escalation_designation_check($rule['configured_role'], $rule['actual_designation']);
+    $template = escalation_has_template_label((string)$rule['configured_role'], (int)$rule['level_no']);
+    $technical = escalation_technical_issues($rule);
+    $duplicate = ($officerStageCounts[(int)$rule['category_id'] . ':' . (int)$rule['officer_id']] ?? 0) > 1;
+    if ($duplicate) $technical[] = 'Same officer at multiple stages';
     $mapBad = (int)$rule['department_match'] !== 1 || (int)$rule['category_match'] !== 1;
     $inactive = (int)$rule['officer_active'] !== 1;
-    $titleBad = $status !== 'text_match';
-    $totals['issues'] += $issues ? 1 : 0;
+    $titleBad = $titleStatus !== 'text_match';
+    $totals['technical'] += $technical ? 1 : 0;
     $totals['designation'] += $titleBad ? 1 : 0;
-    $totals['missing_title'] += $status === 'missing' ? 1 : 0;
+    $totals['missing_title'] += $titleStatus === 'missing' ? 1 : 0;
     $totals['mapping'] += $mapBad ? 1 : 0;
     $totals['inactive'] += $inactive ? 1 : 0;
+    $totals['duplicate'] += $duplicate ? 1 : 0;
+    $totals['template'] += $template ? 1 : 0;
     $totals['not_linked'] += empty($rule['user_id']) ? 1 : 0;
     $show = match ($issueFilter) {
         'all' => true,
         'designation' => $titleBad,
         'mapping' => $mapBad,
         'inactive' => $inactive,
-        default => count($issues) > 0,
+        'duplicate' => $duplicate,
+        'template' => $template,
+        default => (bool)$technical,
     };
     if ($show) {
-        $rule['review_issues'] = $issues;
-        $rule['title_status'] = $status;
+        $rule['technical_issues'] = $technical;
+        $rule['title_status'] = $titleStatus;
+        $rule['template_style'] = $template;
         $matched[] = $rule;
     }
 }
@@ -110,13 +126,13 @@ if (($_GET['export'] ?? '') === 'csv') {
     if ($out === false) exit;
     fwrite($out, "\xEF\xBB\xBF");
     fputcsv($out, ['Department','Category','Category ID','Stage','Configured Role','Officer ID',
-        'Officer Name','Recorded Designation','SLA Days','Department Map','Category Map','Officer Active','Review Reasons']);
+        'Officer Name','Recorded Designation','SLA Days','Department Map','Category Map','Officer Active','Technical Issues','Title Check','Template-Style Label']);
     foreach ($matched as $row) {
         $values = [
             $row['department_name'],$row['category_name'],$row['category_id'],$row['level_no'],
             $row['configured_role'],$row['officer_id'],$row['officer_name'],$row['actual_designation'],
             $row['escalation_period_days'],$row['department_match'],$row['category_match'],
-            $row['officer_active'],implode('; ', $row['review_issues'])
+            $row['officer_active'],implode('; ', $row['technical_issues']),$row['title_status'],$row['template_style'] ? 'Yes' : 'No'
         ];
         $safe = array_map(static function ($value): string {
             $value = (string)($value ?? '');
@@ -141,18 +157,23 @@ include __DIR__ . '/../includes/employee-header.php';
   <a href="<?php echo e(url('employee/allocation-inspector.php')); ?>" class="btn btn-outline-primary">Allocation Inspector</a>
 </div>
 <div class="alert alert-warning border-0">
-  <strong>Manual authorization is still required.</strong> A green text-match or mapping check is not proof of an official
-  appointment. Configured titles may be outdated; abbreviations and authorized delegations can be flagged for review.
-  Do not activate production escalation from this report.
+  <strong>Historical seed issue:</strong> The prior database seed assigned generic stage titles and selected officers by category-map ID order.
+  An actual department roster is required to identify approved escalation officers. No officer assignment is changed by this audit.
+  Do not activate production escalation until reviewed.
+</div>
+<div class="alert alert-info border-0 small">
+  <strong>Separated checks:</strong> Technical flags (missing maps, inactive officers, invalid SLA or repeated officer)
+  are prioritized first. Designation-text differences are a separate manual review queue, not confirmed errors.
+  Even exact title matches require official verification.
 </div>
 <div class="row g-3 mb-4">
   <?php foreach ([
-      ['Scanned Stage Rules','scanned','bi-diagram-3'],
-      ['With Review Flags','issues','bi-exclamation-triangle'],
-      ['Title Needs Review','designation','bi-person-vcard'],
-      ['Missing Titles','missing_title','bi-person-x'],
+      ['Stage Rules Scanned','scanned','bi-diagram-3'],
+      ['Technical Flags','technical','bi-exclamation-triangle'],
       ['Missing Maps','mapping','bi-diagram-2'],
-      ['Inactive Officers','inactive','bi-person-dash']
+      ['Repeated Stage Officer','duplicate','bi-people'],
+      ['Title Differences','designation','bi-person-vcard'],
+      ['Template-Style Labels','template','bi-journal-text']
     ] as [$label,$key,$icon]): ?>
     <div class="col-6 col-xl-2">
       <div class="card content-card p-3 h-100">
@@ -186,8 +207,10 @@ include __DIR__ . '/../includes/employee-header.php';
       <label class="form-label small">Check</label>
       <select class="form-select" name="issue">
         <?php foreach ([
-          'needs_review'=>'Needs review','all'=>'All active rules','designation'=>'Title discrepancy',
-          'mapping'=>'Missing mapping','inactive'=>'Inactive officer'
+          'operational'=>'Technical / mapping issues','mapping'=>'Missing mapping',
+          'duplicate'=>'Repeated stage officer','inactive'=>'Inactive officer',
+          'designation'=>'Title differences','template'=>'Template-style stage labels',
+          'all'=>'All active rules'
         ] as $value=>$label): ?>
           <option value="<?php echo e($value); ?>"<?php echo $issueFilter===$value ? ' selected' : ''; ?>><?php echo e($label); ?></option>
         <?php endforeach; ?>
@@ -220,7 +243,7 @@ include __DIR__ . '/../includes/employee-header.php';
   </div>
   <div class="table-responsive">
     <table class="table table-hover align-middle mb-0">
-      <thead><tr><th>Department / Category</th><th>Stage</th><th>Configured Role</th><th>Officer / Recorded Title</th><th>SLA</th><th>Maps</th><th>Review Reasons</th></tr></thead>
+      <thead><tr><th>Department / Category</th><th>Stage</th><th>Configured Role</th><th>Officer / Recorded Title</th><th>SLA</th><th>Maps</th><th>Technical Checks / Personnel Review</th></tr></thead>
       <tbody>
         <?php if (!$rows): ?><tr><td colspan="7" class="admin-empty">No matching active stage rules.</td></tr><?php endif; ?>
         <?php foreach ($rows as $row): ?>
@@ -235,7 +258,7 @@ include __DIR__ . '/../includes/employee-header.php';
               <strong><?php echo e($row['officer_name']); ?></strong> (#<?php echo (int)$row['officer_id']; ?>)
               <div class="small text-muted"><?php echo e($row['actual_designation'] ?: 'No designation'); ?></div>
               <div class="small"><?php echo $row['title_status']==='text_match'
-                ? '<span class="text-success">Title text matches (unverified)</span>'
+                ? '<span class="text-muted">Title text matches (unverified)</span>'
                 : '<span class="text-warning">Manual title review</span>'; ?></div>
             </td>
             <td><?php echo (int)$row['escalation_period_days']; ?> d</td>
@@ -244,12 +267,18 @@ include __DIR__ . '/../includes/employee-header.php';
               <span class="badge text-bg-<?php echo (int)$row['category_match']===1 ? 'success':'warning'; ?>">Category <?php echo (int)$row['category_match']===1 ? 'mapped':'missing'; ?></span>
             </td>
             <td>
-              <?php if (!$row['review_issues']): ?>
-                <span class="text-muted small">No automatic flags. Official authority not verified.</span>
-              <?php else: ?>
-                <?php foreach ($row['review_issues'] as $issue): ?>
-                  <div class="small text-warning"><i class="bi bi-exclamation-circle me-1"></i><?php echo e($issue); ?></div>
+              <?php if ($row['technical_issues']): ?>
+                <?php foreach ($row['technical_issues'] as $issue): ?>
+                  <div class="small text-danger"><i class="bi bi-exclamation-triangle me-1"></i><?php echo e($issue); ?></div>
                 <?php endforeach; ?>
+              <?php else: ?>
+                <span class="small text-muted">No technical flags</span>
+              <?php endif; ?>
+              <?php if ($row['template_style']): ?>
+                <div class="small text-secondary">Generic template-stage label</div>
+              <?php endif; ?>
+              <?php if ($row['title_status'] !== 'text_match'): ?>
+                <div class="small text-warning">Recorded title needs review</div>
               <?php endif; ?>
             </td>
           </tr>
@@ -270,6 +299,7 @@ include __DIR__ . '/../includes/employee-header.php';
   <?php endif; ?>
   <p class="text-muted small mt-3 mb-0">
     Inspects active category-level escalation rules only, not manual ward-specific department allocations.
+    Template-style labels are indicators, not proof of record provenance; missing or differing titles require manual review.
     Missing user links do not necessarily mean a stage officer is unauthorized.
     <?php echo number_format((int)$totals['not_linked']); ?> scanned stage rules reference officers without linked portal accounts.
     No records are changed by this page.

@@ -47,3 +47,31 @@ function escalation_rule_issues(array $rule): array
     if ($designation === 'review') $issues[] = 'Designation text differs';
     return $issues;
 }
+
+
+/** Does this stage use one of the generic labels in the old bulk seed? */
+function escalation_has_template_label(string $label, int $level): bool
+{
+    $labels = [
+        1 => ['Assistant Engineer (Field Officer)'],
+        2 => ['Assistant Executive Engineer (AEE)'],
+        3 => ['Executive Engineer / Head of Department'],
+        4 => ['Superintending Engineer / City Commissioner', 'City Commissioner / Superintending Engineer'],
+    ];
+    foreach ($labels[$level] ?? [] as $known) {
+        if (strcasecmp(trim($label), $known) === 0) return true;
+    }
+    return false;
+}
+
+/** Operational configuration concerns, independent of officer job-title review. */
+function escalation_technical_issues(array $row): array
+{
+    $issues = [];
+    if (trim((string)($row['officer_name'] ?? '')) === '') $issues[] = 'Officer name missing';
+    if ((int)($row['officer_active'] ?? 0) !== 1) $issues[] = 'Inactive officer';
+    if ((int)($row['department_match'] ?? 0) !== 1) $issues[] = 'Department mapping missing';
+    if ((int)($row['category_match'] ?? 0) !== 1) $issues[] = 'Category mapping missing';
+    if ((int)($row['escalation_period_days'] ?? 0) < 1) $issues[] = 'Invalid SLA days';
+    return $issues;
+}
