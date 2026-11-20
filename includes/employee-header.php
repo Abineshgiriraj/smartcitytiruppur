@@ -10,10 +10,18 @@ $currentPage = basename($path);
 $menuGroups = [
     'Workspace' => [
         ['dashboard.php', 'Overview', 'bi-grid-1x2-fill', true],
-        ['complaints.php', 'Complaint Inbox', 'bi-inboxes', true],
         ['reports.php', 'Complaint Data Export', 'bi-file-spreadsheet', true],
         ['icts-reports.php', 'ICTS Reports', 'bi-bar-chart-line', true],
         ['feedback.php', 'Citizen Feedback', 'bi-chat-left-text', true],
+    ],
+    'Complaint Management' => [
+        ['../new-complaint.php', 'New Complaint (Public Form)', 'bi-plus-circle', true],
+        ['complaints.php', 'All Complaints', 'bi-inboxes', true],
+        ['complaint-centre.php?view=repeated', 'Potential Repeats', 'bi-files', true],
+        ['complaint-centre.php?view=completed', 'Closed Complaints', 'bi-check2-circle', true],
+        ['complaint-centre.php?view=category', 'Category Dashboard', 'bi-grid-3x3-gap', true],
+        ['complaint-centre.php?view=zone', 'Zone Dashboard', 'bi-building', true],
+        ['complaint-centre.php?view=map', 'Map / Area Coverage', 'bi-geo-alt', true],
     ],
     'Management' => [
         ['officers.php', 'Officer Directory', 'bi-people', $isManager],
@@ -50,8 +58,21 @@ $menuGroups = [
         <div class="admin-menu-heading"><?php echo e($groupName); ?></div>
         <?php foreach ($items as [$target, $label, $icon, $visible]): ?>
           <?php if (!$visible) continue; ?>
-          <?php $baseTarget = explode('?', $target, 2)[0]; $active = $currentPage === $baseTarget
-            && ($baseTarget !== 'masters.php' || (str_contains($target, '?') ? ($_GET['section'] ?? '') === 'allocations' : ($_GET['section'] ?? '') !== 'allocations')); ?>
+          <?php
+            $baseTarget = basename(explode('?', $target, 2)[0]);
+            $targetQuery = (string)(parse_url($target, PHP_URL_QUERY) ?: '');
+            parse_str($targetQuery, $targetParams);
+            $active = $currentPage === $baseTarget;
+            if ($baseTarget === 'complaint-centre.php') {
+                $active = $active && ($_GET['view'] ?? 'category') === ($targetParams['view'] ?? 'category');
+            } elseif ($baseTarget === 'masters.php') {
+                $active = $active && (
+                    isset($targetParams['section'])
+                    ? ($_GET['section'] ?? '') === $targetParams['section']
+                    : ($_GET['section'] ?? '') !== 'allocations'
+                );
+            }
+          ?>
           <a class="admin-menu-link<?php echo $active ? ' is-active' : ''; ?>"
              href="<?php echo e(url('employee/' . $target)); ?>"<?php echo $active ? ' aria-current="page"' : ''; ?>>
             <i class="bi <?php echo e($icon); ?>" aria-hidden="true"></i><span><?php echo e($label); ?></span>
