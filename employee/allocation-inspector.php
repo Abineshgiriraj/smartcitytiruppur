@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/../includes/bootstrap.php';
+require_once __DIR__ . '/../includes/escalation-quality.php';
 
 // Read-only allocation inspector. Only admins authorized to inspect master data.
 $user = require_roles(['Super Admin', 'Admin']);
@@ -186,7 +187,7 @@ include __DIR__ . '/../includes/employee-header.php';
     <h1 class="fw-bold mb-1"><i class="bi bi-diagram-3 text-primary me-2"></i>Officer Allocation Inspector</h1>
     <p>Inspect exact allocation rules, fallback officer selection and escalation responsibility before making changes.</p>
   </div>
-  <a class="btn btn-outline-secondary" href="<?php echo e(url('employee/master-control.php?tab=officers')); ?>">Advanced Masters</a>
+  <div class="d-flex gap-2 flex-wrap"><a class="btn btn-outline-warning" href="<?php echo e(url('employee/escalation-audit.php')); ?>">Escalation Audit</a><a class="btn btn-outline-secondary" href="<?php echo e(url('employee/master-control.php?tab=officers')); ?>">Advanced Masters</a></div>
 </div>
 <div class="alert alert-info border-0">
   <i class="bi bi-shield-check me-1"></i><strong>Read-only simulation:</strong>
@@ -251,11 +252,15 @@ include __DIR__ . '/../includes/employee-header.php';
   <div class="text-muted small mb-3"><?php echo e($selectedCategory['department_name'] . ' / ' . $selectedCategory['category_name']); ?>
     · <?php echo (int)$selectedCategory['sla_days']; ?> category SLA days
   </div>
+  <div class="alert alert-warning border-0 small">
+    <strong>Personnel verification required:</strong> Officer department/category mapping is not proof that an officer's
+    recorded designation matches the configured stage. "Text matches" is not an official authorization check.
+  </div>
   <div class="table-responsive">
     <table class="table table-hover align-middle">
-      <thead><tr><th>Stage</th><th>Configured Role</th><th>Assigned Officer</th><th>Verified Designation</th><th>Stage SLA</th><th>Mapping Audit</th></tr></thead>
+      <thead><tr><th>Stage</th><th>Configured Role</th><th>Assigned Officer</th><th>Recorded Designation</th><th>Title Review</th><th>Stage SLA</th><th>Mapping Audit</th></tr></thead>
       <tbody>
-        <?php if (!$stageRules): ?><tr><td colspan="6" class="text-muted">No active escalation rules for this category.</td></tr><?php endif; ?>
+        <?php if (!$stageRules): ?><tr><td colspan="7" class="text-muted">No active escalation rules for this category.</td></tr><?php endif; ?>
         <?php foreach ($stageRules as $stage): ?>
           <?php $ok = (int)$stage['officer_active']===1 && (int)$stage['department_match']===1 && (int)$stage['category_match']===1; ?>
           <tr>
@@ -263,6 +268,10 @@ include __DIR__ . '/../includes/employee-header.php';
             <td><?php echo e($stage['configured_title']); ?></td>
             <td><strong><?php echo e($stage['officer_name']); ?></strong> (#<?php echo (int)$stage['officer_id']; ?>)</td>
             <td><?php echo $stage['actual_title'] ? e($stage['actual_title']) : '<span class="text-warning">Not recorded</span>'; ?></td>
+            <?php $titleCheck=escalation_designation_check($stage['configured_title'], $stage['actual_title']); ?>
+            <td><span class="badge text-bg-<?php echo $titleCheck==='text_match' ? 'secondary' : 'warning'; ?>">
+              <?php echo $titleCheck==='text_match' ? 'Text matches (unverified)' : ($titleCheck==='missing' ? 'No recorded title' : 'Review title difference'); ?>
+            </span></td>
             <td><?php echo (int)$stage['escalation_period_days']; ?> days</td>
             <td><span class="badge text-bg-<?php echo $ok ? 'success' : 'warning'; ?>">
               <?php echo $ok ? 'Active; Dept + Category mapped' : 'Review officer/maps'; ?>
@@ -272,7 +281,7 @@ include __DIR__ . '/../includes/employee-header.php';
       </tbody>
     </table>
   </div>
-  <p class="text-muted small mb-0">Category-level escalation rules are not necessarily ward specific. Review official designations before production scheduling.</p>
+  <p class="text-muted small mb-0">Category-level escalation rules are not necessarily ward specific. Green mapping checks are independent of title reviews. Validate each officer's appointment and authority before production scheduling.</p>
 </div>
 <?php endif; ?>
 <?php if ($selectedCategory && $selectedWard): ?>

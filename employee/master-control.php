@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/../includes/bootstrap.php';
+require_once __DIR__ . '/../includes/escalation-quality.php';
 
 $user = require_roles(['Super Admin', 'Admin']);
 require_permission('masters.view');
@@ -311,7 +312,7 @@ include __DIR__ . '/../includes/employee-header.php';
           </tr><?php endforeach; ?>
         </tbody>
       <?php elseif ($tab==='escalations'): ?>
-        <thead><tr><th>Category / Department</th><th>Stage</th><th>Configured Role</th><th>Officer</th><th>Actual Designation</th><th>Days</th><th>Mapping</th><th>Active</th></tr></thead>
+        <thead><tr><th>Category / Department</th><th>Stage</th><th>Configured Role</th><th>Officer</th><th>Actual Designation</th><th>Title Check</th><th>Days</th><th>Mapping</th><th>Active</th></tr></thead>
         <tbody>
           <?php foreach ($rows as $row): ?>
             <?php $mapped=(int)$row['department_match']===1 && (int)$row['category_match']===1; ?>
@@ -321,6 +322,10 @@ include __DIR__ . '/../includes/employee-header.php';
               <td><?php echo e($row['configured_role']); ?></td>
               <td><?php echo e($row['officer_name']); ?> (#<?php echo (int)$row['officer_id']; ?>)</td>
               <td><?php echo $row['actual_designation'] ? e($row['actual_designation']) : '<span class="text-warning">Not recorded</span>'; ?></td>
+              <?php $titleCheck=escalation_designation_check($row['configured_role'], $row['actual_designation']); ?>
+              <td><span class="badge text-bg-<?php echo $titleCheck==='text_match' ? 'secondary' : 'warning'; ?>">
+                <?php echo $titleCheck==='text_match' ? 'Text matches only' : 'Manual review'; ?>
+              </span></td>
               <td><?php echo (int)$row['escalation_period_days']; ?></td>
               <td><span class="badge text-bg-<?php echo $mapped ? 'success' : 'warning'; ?>"><?php echo $mapped ? 'Dept & Category OK' : 'Review mapping'; ?></span></td>
               <td><?php echo ((int)$row['is_active']===1 && (int)$row['officer_active']===1) ? 'Yes' : 'No'; ?></td>
