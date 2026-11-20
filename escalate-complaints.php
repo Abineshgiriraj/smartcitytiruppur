@@ -21,6 +21,7 @@ if (PHP_SAPI !== 'cli') {
 }
 
 require_once __DIR__ . '/includes/bootstrap.php';
+require_once __DIR__ . '/includes/officer-authority.php';
 
 $args = array_slice($argv, 1);
 $execute = false;
@@ -69,6 +70,12 @@ if ($expectedDb !== null && $actualDb !== $expectedDb) {
     exit(2);
 }
 
+// Hard stop: never execute this incomplete authority rollout on the main DB.
+if ($execute && !preg_match('/_test$/i', $actualDb)) {
+    fwrite(STDERR, "SAFETY BLOCK: execution is restricted to an isolated *_test database until approval review.\n");
+    exit(2);
+}
+
 // Keep the CLI's timestamps consistent with config/app.php (Asia/Kolkata).
 // This changes only the current connection's time zone.
 $pdo->exec("SET SESSION time_zone = '+05:30'");
@@ -100,8 +107,30 @@ function escalationDecision(PDO $pdo, array $complaint, DateTimeImmutable $now, 
     $last = $history->fetch(PDO::FETCH_ASSOC);
     $currentLevel = $last ? (int) $last['level_no'] : 1;
 
-    if ($currentLevel < 1) {
-        return $skip('INVALID_CURRENT_LEVEL');
+    if ($currentLevel < 1) return $skip('INVALID_CURRENT_LEVEL');
+    // Department allocation supports stages 5-7; this four-stage engine does not.
+    if ($currentLevel >= 4) return $skip('NO_ACTIVE_NEXT_STAGE_OFFICER');
+
+    if (!valid_complaint_routing_context(
+        $pdo,(int)$complaint['department_id'],(int)$complaint['category_id'],
+        (int)$complaint['zone_id'],(int)$complaint['ward_id']
+    )) return $skip('INVALID_DEPARTMENT_OR_LOCATION');
+
+    if (!officer_stage_authorized(
+        $pdo,(int)$complaint['category_id'],$currentLevel,
+        (int)$complaint['assigned_officer_id'],(int)$complaint['department_id'],
+        (int)$complaint['ward_id']
+    )) return $skip('UNVERIFIED_CURRENT_STAGE_AUTHORITY');
+
+    if ($last) {
+        $lastOfficer=$pdo->prepare(
+            'SELECT officer_id FROM complaint_escalations
+             WHERE complaint_id=? ORDER BY escalated_at DESC,id DESC LIMIT 1'
+        );
+        $lastOfficer->execute([(int)$complaint['id']]);
+        if ((int)$lastOfficer->fetchColumn()!==(int)$complaint['assigned_officer_id']) {
+            return $skip('ASSIGNMENT_STAGE_MISMATCH: manual review needed');
+        }
     }
 
     $locationParams = [
@@ -199,6 +228,10 @@ function escalationDecision(PDO $pdo, array $complaint, DateTimeImmutable $now, 
     if ((int) $next['officer_id'] === (int) $complaint['assigned_officer_id']) {
         return $skip('SAME_OFFICER_AT_NEXT_STAGE: mapping requires review');
     }
+    if (!officer_stage_authorized(
+        $pdo,(int)$complaint['category_id'],$nextNumber,(int)$next['officer_id'],
+        (int)$complaint['department_id'],(int)$complaint['ward_id']
+    )) return $skip('UNVERIFIED_NEXT_STAGE_AUTHORITY');
 
     if ((int) $next['days'] <= 0) {
         return $skip('INVALID_NEXT_STAGE_PERIOD');

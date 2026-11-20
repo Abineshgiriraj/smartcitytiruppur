@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/../includes/bootstrap.php';
+require_once __DIR__ . '/../includes/officer-authority.php';
 
 $user = require_permission('complaints.view');
 $pageTitle = 'Complaint Details';
@@ -64,20 +65,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         $pdo->beginTransaction();
-        $oldStatus = $complaint['status'];
+        // Lock the current record, not stale values from the earlier page load.
+        $lock=$pdo->prepare('SELECT * FROM complaints WHERE id=? AND is_deleted=0 FOR UPDATE');
+        $lock->execute([$complaintId]);
+        $fresh=$lock->fetch(PDO::FETCH_ASSOC);
+        if (!$fresh) throw new RuntimeException('Complaint is no longer available.');
+        $oldStatus=$fresh['status'];
+        $currentOfficer=(int)($fresh['assigned_officer_id'] ?? 0);
 
         if (!in_array($newStatus, complaint_statuses(), true)) {
             throw new RuntimeException('Invalid complaint status.');
         }
 
-        if ($officerId > 0 && $officerId !== (int)$complaint['assigned_officer_id']) {
-            $pdo->prepare('UPDATE complaint_assignments SET is_current = 0 WHERE complaint_id = ?')
-                ->execute([$complaintId]);
+        if ($officerId !== $currentOfficer) {
+            if ($officerId > 0) {
+                $stage=complaint_last_stage($pdo,$complaintId);
+                if (!valid_complaint_routing_context(
+                    $pdo,(int)$fresh['department_id'],(int)$fresh['category_id'],
+                    (int)$fresh['zone_id'],(int)$fresh['ward_id']
+                ) || !officer_stage_authorized(
+                    $pdo,(int)$fresh['category_id'],$stage,$officerId,
+                    (int)$fresh['department_id'],(int)$fresh['ward_id']
+                )) throw new RuntimeException('New officer is not approved for this category and stage.');
+            }
             $pdo->prepare(
-                'INSERT INTO complaint_assignments
-                 (complaint_id, officer_id, assigned_by, assigned_at, is_current)
-                 VALUES (?, ?, ?, NOW(), 1)'
-            )->execute([$complaintId, $officerId, (int)$user['id']]);
+                'UPDATE complaint_assignments SET is_current=0,unassigned_at=NOW()
+                 WHERE complaint_id=? AND is_current=1'
+            )->execute([$complaintId]);
+            if ($officerId > 0) {
+                $pdo->prepare(
+                    'INSERT INTO complaint_assignments
+                     (complaint_id,officer_id,assigned_by,assigned_at,is_current)
+                     VALUES (?,?,?,NOW(),1)'
+                )->execute([$complaintId,$officerId,(int)$user['id']]);
+            }
         }
 
         $resolvedAt = in_array($newStatus, ['Resolved','Closed'], true) ? date('Y-m-d H:i:s') : null;
@@ -106,15 +127,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$officerStmt = db()->prepare(
-    "SELECT DISTINCT o.id, o.officer_name
-     FROM officers o
-     LEFT JOIN officer_department_map odm ON odm.officer_id = o.id
-     WHERE o.is_active = 1 AND (odm.department_id = ? OR odm.department_id IS NULL)
-     ORDER BY o.officer_name"
-);
-$officerStmt->execute([(int)$complaint['department_id']]);
-$officers = $officerStmt->fetchAll();
+// Show only approved new recipients. Keep the current officer as a separate
+// option so a status-only edit does not accidentally unassign the complaint.
+$officers=[];
+try {
+    $stage=complaint_last_stage(db(),$complaintId);
+    $approved=db()->prepare(
+        'SELECT DISTINCT o.id,o.officer_name FROM officer_stage_approvals a
+         JOIN officers o ON o.id=a.officer_id AND o.is_active=1
+         WHERE a.category_id=? AND a.stage_no=? AND a.revoked_at IS NULL
+         ORDER BY o.officer_name LIMIT 500'
+    );
+    $approved->execute([(int)$complaint['category_id'],$stage]);
+    foreach($approved->fetchAll(PDO::FETCH_ASSOC) as $candidate) {
+        if(officer_stage_authorized(
+            db(),(int)$complaint['category_id'],$stage,(int)$candidate['id'],
+            (int)$complaint['department_id'],(int)$complaint['ward_id']
+        )) $officers[]=$candidate;
+    }
+} catch(Throwable $error) { log_message('Approved recipient list unavailable: '.$error->getMessage()); }
+$currentId=(int)($complaint['assigned_officer_id'] ?? 0);
+if($currentId>0 && !in_array($currentId,array_map(static fn($o)=>(int)$o['id'],$officers),true)) {
+    $officers[]=['id'=>$currentId,'officer_name'=>
+        (string)($complaint['officer_name'] ?: 'Current officer').' (current, unverified)'];
+}
 
 $historyStmt = db()->prepare(
     'SELECT h.*, u.full_name
@@ -207,6 +243,8 @@ include __DIR__ . '/../includes/employee-header.php';
     <div class="complaint-reference-actions">
         <?php if ($canUpdate): ?>
             <h2>Update Complaint</h2>
+            <div class="alert alert-warning small">New officer assignments require verified category/stage approval.
+              Existing assignments may remain unchanged for status-only updates. No approval is generated automatically.</div>
             <form method="post" class="row g-3">
                 <?php echo csrf_field(); ?><input type="hidden" name="id" value="<?php echo $complaintId; ?>">
                 <div class="col-md-4"><label class="form-label">Assigned Officer</label><select class="form-select" name="assigned_officer_id"><option value="">Unassigned</option><?php foreach ($officers as $officer): ?><option value="<?php echo (int)$officer['id']; ?>" <?php echo (int)$complaint['assigned_officer_id'] === (int)$officer['id'] ? 'selected' : ''; ?>><?php echo e($officer['officer_name']); ?></option><?php endforeach; ?></select></div>

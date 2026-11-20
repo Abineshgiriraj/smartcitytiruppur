@@ -192,7 +192,8 @@ include __DIR__ . '/../includes/employee-header.php';
 <div class="alert alert-info border-0">
   <i class="bi bi-shield-check me-1"></i><strong>Read-only simulation:</strong>
   This tool never creates a complaint, changes an officer, saves a mapping, or runs escalation.
-  It uses the current MySQL tables and mirrors initial-assignment fallback priority.
+  It shows the historical fallback order, but final assignment now also requires
+  an explicit officer-stage approval. An unapproved preview candidate will remain unassigned.
 </div>
 <div class="row g-3 mb-4">
   <?php foreach ([
