@@ -27,6 +27,7 @@ $menuGroups = [
         ['officers.php', 'Officer Directory', 'bi-people', $isManager],
         ['escalation.php', 'Escalation Monitor', 'bi-diagram-3', $isManager],
         ['masters.php?section=allocations', 'Allocation Rules', 'bi-bezier2', $isAdmin],
+        ['master-control.php', 'Advanced Masters', 'bi-database-check', $isAdmin],
         ['masters.php', 'Master Data', 'bi-sliders', $isAdmin],
         ['users.php', 'Users & Roles', 'bi-person-gear', $isAdmin],
     ],
