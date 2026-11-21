@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+require_once __DIR__.'/officer-authority.php';
 
 function e(mixed $value): string
 {
@@ -245,6 +246,12 @@ function assign_officer_for_complaint(
         $zoneId = resolve_zone_id_for_ward($wardId);
     }
 
+    // Do not route across an invalid category/department or ward/zone pairing.
+    if (!valid_complaint_routing_context($pdo,$departmentId,$categoryId,(int)$zoneId,$wardId)) {
+        log_message("Initial assignment blocked: invalid routing context for complaint {$complaintId}");
+        return null;
+    }
+
     $officerId = null;
     $officerName = null;
     $customSlaDays = null;
@@ -347,15 +354,23 @@ function assign_officer_for_complaint(
                 $officerId = (int) $row['id'];
                 $officerName = (string) $row['officer_name'];
                 $allocationSource = $sourceLabel;
-                if (isset($row['sla_days']) && (int) $row['sla_days'] > 0) {
-                    $customSlaDays = (int) $row['sla_days'];
-                }
+                // Generic category-level seeded SLA is unverified. Keep the
+                // complaint's original category deadline unless an exact
+                // administrator-reviewed ward rule supplied its own SLA.
+                // Do not override due_at from the legacy generated stage label.
                 break;
             }
         }
     }
 
     if ($officerId === null) {
+        log_message("Initial assignment pending: no mapped officer for complaint {$complaintId}");
+        return null;
+    }
+    // Old seed maps 286 categories to a Commissioner as Stage 1.
+    // A candidate must be explicitly approved, not merely active or mapped.
+    if (!officer_stage_authorized($pdo,$categoryId,1,$officerId,$departmentId,$wardId)) {
+        log_message("Initial assignment blocked: unapproved Stage 1 officer {$officerId} for complaint {$complaintId}");
         return null;
     }
 

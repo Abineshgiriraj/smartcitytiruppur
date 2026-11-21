@@ -3,10 +3,12 @@ declare(strict_types=1);
 require_once __DIR__ . '/../includes/bootstrap.php';
 
 $currentUser = require_roles(['Super Admin', 'Admin']);
+require_permission('users.view');
 $pageTitle = 'User Management';
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    require_permission('users.manage');
     verify_csrf();
     $action = $_POST['action'] ?? '';
 

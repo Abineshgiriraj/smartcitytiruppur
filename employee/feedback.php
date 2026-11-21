@@ -2,10 +2,11 @@
 declare(strict_types=1);
 require_once __DIR__ . '/../includes/bootstrap.php';
 
-$user = require_login();
+$user = require_permission('feedback.view');
 $pageTitle = 'Citizen Feedback';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    require_permission('feedback.manage');
     verify_csrf();
     $feedbackId = (int)($_POST['feedback_id'] ?? 0);
 
@@ -42,7 +43,7 @@ include __DIR__ . '/../includes/employee-header.php';
                         <td style="min-width:300px"><?php echo nl2br(e($row['feedback_text'])); ?></td>
                         <td><?php echo (int)$row['is_read'] ? 'Read' : 'Unread'; ?></td>
                         <td>
-                            <?php if (!(int)$row['is_read']): ?>
+                            <?php if (!(int)$row['is_read'] && can_access_permission($user, 'feedback.manage')): ?>
                                 <form method="post"><?php echo csrf_field(); ?><input type="hidden" name="feedback_id" value="<?php echo (int)$row['id']; ?>"><button class="btn btn-sm btn-outline-success">Mark Read</button></form>
                             <?php endif; ?>
                         </td>

@@ -39,32 +39,13 @@ CREATE TABLE IF NOT EXISTS `complaint_escalations` (
   CONSTRAINT `fk_ce_officer` FOREIGN KEY (`officer_id`) REFERENCES `officers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 3. Populate escalation officer levels for all active complaint categories
--- Automatically maps Levels 1, 2, 3, and 4 across all category departments.
-INSERT INTO `escalation_officer_levels` (`category_id`, `level_no`, `officer_id`, `designation`, `escalation_period_days`, `is_active`)
-SELECT 
-    cc.id AS category_id,
-    lvl.level_no,
-    COALESCE(off_map.officer_id, 1) AS officer_id,
-    lvl.designation,
-    lvl.escalation_period_days,
-    1 AS is_active
-FROM `complaint_categories` cc
-CROSS JOIN (
-    SELECT 1 AS level_no, 'Assistant Engineer (Field Officer)' AS designation, 3 AS escalation_period_days
-    UNION ALL
-    SELECT 2 AS level_no, 'Assistant Executive Engineer (AEE)' AS designation, 5 AS escalation_period_days
-    UNION ALL
-    SELECT 3 AS level_no, 'Executive Engineer / Head of Department' AS designation, 7 AS escalation_period_days
-    UNION ALL
-    SELECT 4 AS level_no, 'Superintending Engineer / City Commissioner' AS designation, 10 AS escalation_period_days
-) lvl
-LEFT JOIN (
-    SELECT category_id, officer_id, ROW_NUMBER() OVER (PARTITION BY category_id ORDER BY officer_id) AS rn
-    FROM officer_category_map
-) off_map ON off_map.category_id = cc.id AND off_map.rn = lvl.level_no
-WHERE cc.is_active = 1
-ON DUPLICATE KEY UPDATE 
-    `officer_id` = VALUES(`officer_id`),
-    `designation` = VALUES(`designation`),
-    `escalation_period_days` = VALUES(`escalation_period_days`);
+-- 3. Historical bulk seed REMOVED to protect existing officer assignments.
+-- Earlier versions assigned the first four mapped officer IDs to stages 1-4,
+-- labeled those officers AE/AEE/EE/Commissioner without verifying designations,
+-- fell back to officer_id=1 and used ON DUPLICATE KEY UPDATE officer_id=...
+-- which could OVERWRITE any reviewed stage allocation when rerun.
+-- Running this file now creates missing tables ONLY and preserves all records.
+-- Stage officer assignments must be individually checked against official
+-- department, designation and escalation approvals before insertion or update.
+-- Read-only auditing: employee/escalation-audit.php
+
