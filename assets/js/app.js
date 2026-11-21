@@ -27,7 +27,13 @@
                 const response = await fetch(
                     `${baseUrl}/ajax/categories.php?department_id=${encodeURIComponent(departmentId)}`
                 );
+                if (!response.ok) throw new Error('Category request failed');
                 const data = await response.json();
+                if (!Array.isArray(data)) throw new Error('Invalid category response');
+                if (data.length === 0) {
+                    categorySelect.innerHTML = '<option value="">No active categories for this department</option>';
+                    return;
+                }
 
                 data.forEach((row) => {
                     const option = document.createElement('option');
@@ -38,6 +44,7 @@
                 });
             } catch (error) {
                 console.error('Unable to load categories', error);
+                categorySelect.innerHTML = '<option value="">Unable to load categories; try again</option>';
             }
         }
 
