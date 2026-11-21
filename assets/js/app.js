@@ -14,36 +14,54 @@
 
     const departmentSelect = document.querySelector('[data-category-source]');
     const categorySelect = document.querySelector('#complaint_category_id');
+    const categoryHelp = document.querySelector('#complaint-category-help');
+    const categoryData = document.querySelector('#complaint-category-data');
 
-    if (departmentSelect && categorySelect) {
-        const selectedCategory = categorySelect.dataset.selected || '';
-
-        async function loadCategories() {
-            const departmentId = departmentSelect.value;
-            categorySelect.innerHTML = '<option value="">Select complaint category</option>';
-
-            if (!departmentId) return;
-
-            try {
-                const response = await fetch(
-                    `${baseUrl}/ajax/categories.php?department_id=${encodeURIComponent(departmentId)}`
-                );
-                const data = await response.json();
-
-                data.forEach((row) => {
-                    const option = document.createElement('option');
-                    option.value = row.id;
-                    option.textContent = `${row.category_name} (${row.sla_days} days)`;
-                    if (String(row.id) === String(selectedCategory)) option.selected = true;
-                    categorySelect.appendChild(option);
-                });
-            } catch (error) {
-                console.error('Unable to load categories', error);
-            }
+    if (departmentSelect && categorySelect && categoryData) {
+        let categoriesByDepartment = {};
+        try {
+            categoriesByDepartment = JSON.parse(categoryData.textContent || '{}');
+        } catch (error) {
+            console.error('Failed to decode category list', error);
+            if (categoryHelp) categoryHelp.textContent = 'Categories unavailable; reload this page.';
         }
 
-        departmentSelect.addEventListener('change', loadCategories);
-        if (departmentSelect.value) loadCategories();
+        // All active categories are embedded by PHP from the same database.
+        // Changing departments never needs a separate fetch or stale BASE_URL.
+        function refreshCategories(preserveSelected = false) {
+            const departmentId = String(departmentSelect.value || '');
+            const selectedId = preserveSelected
+                ? String(categorySelect.value || categorySelect.dataset.selected || '') : '';
+            const list = Object.prototype.hasOwnProperty.call(categoriesByDepartment, departmentId)
+                && Array.isArray(categoriesByDepartment[departmentId])
+                ? categoriesByDepartment[departmentId] : [];
+
+            categorySelect.replaceChildren();
+            const placeholder = document.createElement('option');
+            placeholder.value = '';
+            placeholder.textContent = 'Select complaint category';
+            categorySelect.appendChild(placeholder);
+
+            list.forEach((item) => {
+                const option = document.createElement('option');
+                option.value = String(item.id);
+                option.textContent = String(item.category_name) + ' (' + item.sla_days + ' days)';
+                categorySelect.appendChild(option);
+            });
+
+            categorySelect.value = selectedId && list.some((item) => String(item.id) === selectedId)
+                ? selectedId : '';
+            categorySelect.disabled = departmentId === '';
+            if (categoryHelp) {
+                categoryHelp.textContent = !departmentId
+                    ? 'Select a department to display its complaint categories.'
+                    : list.length
+                        ? list.length + ' categories available for this department.'
+                        : 'No active categories found for this department in the database.';
+            }
+        }
+        departmentSelect.addEventListener('change', () => refreshCategories(false));
+        refreshCategories(true);
     }
 
     const streetInput = document.querySelector('#street_name');

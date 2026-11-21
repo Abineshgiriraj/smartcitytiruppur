@@ -18,6 +18,30 @@ try {
     $errors[] = 'Master data is not available. Ask the administrator to configure departments.';
 }
 
+// Category options come from the same DB as the department dropdown.
+// Do not depend solely on a separate AJAX response.
+$categoriesByDepartment = [];
+$categoryLoadFailed = false;
+try {
+    $rows = db()->query(
+        'SELECT cc.id, cc.department_id, cc.category_name, cc.sla_days
+         FROM complaint_categories cc
+         JOIN departments d ON d.id=cc.department_id AND d.is_active=1
+         WHERE cc.is_active=1
+         ORDER BY cc.category_name,cc.id'
+    )->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($rows as $row) {
+        $categoriesByDepartment[(int)$row['department_id']][] = [
+            'id'=>(int)$row['id'],
+            'category_name'=>(string)$row['category_name'],
+            'sla_days'=>(int)$row['sla_days']
+        ];
+    }
+} catch (Throwable $error) {
+    $categoryLoadFailed = true;
+    log_message('Complaint category preload failed: '.$error->getMessage());
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
 
@@ -286,7 +310,32 @@ include __DIR__ . '/includes/header.php';
             <h2 class="form-panel-title">Complaint Info</h2>
             <div class="row g-3">
                 <div class="col-md-6"><label class="form-label required">Department</label><select class="form-select" id="department_id" name="department_id" data-category-source required><option value="">Select Department</option><?php foreach ($departments as $department): ?><option value="<?php echo (int)$department['id']; ?>" <?php echo ((string)($old['department_id'] ?? '') === (string)$department['id']) ? 'selected' : ''; ?>><?php echo e($department['department_name']); ?></option><?php endforeach; ?></select></div>
-                <div class="col-md-6"><label class="form-label required">Complaint Category</label><select class="form-select" id="complaint_category_id" name="complaint_category_id" data-selected="<?php echo e($old['complaint_category_id'] ?? ''); ?>" required><option value="">Select Complaint Category</option></select></div>
+                <div class="col-md-6">
+                    <label class="form-label required" for="complaint_category_id">Complaint Category</label>
+                    <?php
+                        $currentDepartment = (int)($old['department_id'] ?? 0);
+                        $currentCategory = (int)($old['complaint_category_id'] ?? 0);
+                        $initialOptions = $categoriesByDepartment[$currentDepartment] ?? [];
+                    ?>
+                    <select class="form-select" id="complaint_category_id" name="complaint_category_id"
+                            data-selected="<?php echo $currentCategory; ?>"
+                            aria-describedby="complaint-category-help" required>
+                        <option value="">Select complaint category</option>
+                        <?php foreach ($initialOptions as $categoryOption): ?>
+                        <option value="<?php echo (int)$categoryOption['id']; ?>"
+                            <?php echo (int)$categoryOption['id'] === $currentCategory ? 'selected' : ''; ?>>
+                            <?php echo e($categoryOption['category_name'].' ('.$categoryOption['sla_days'].' days)'); ?>
+                        </option>
+                        <?php endforeach; ?>
+                    </select>
+                    <div class="form-text" id="complaint-category-help" aria-live="polite">
+                        <?php if ($categoryLoadFailed): ?>Category data unavailable; reload the page.
+                        <?php elseif ($currentDepartment > 0): ?>
+                            <?php echo count($initialOptions); ?> categories available for this department.
+                        <?php else: ?>Select a department to display its complaint categories.
+                        <?php endif; ?>
+                    </div>
+                </div>
                 <div class="col-12"><label class="form-label">Complaint Description (in Tamil)</label><textarea class="form-control" name="description_tamil" rows="3"><?php echo e($old['description_tamil'] ?? ''); ?></textarea></div>
                 <div class="col-12"><label class="form-label required">Complaint Description (in English)</label><textarea class="form-control" name="description_english" rows="4" required><?php echo e($old['description_english'] ?? ''); ?></textarea></div>
             </div>
@@ -307,4 +356,9 @@ include __DIR__ . '/includes/header.php';
         <div class="d-flex flex-wrap gap-2 mt-4"><button class="btn btn-primary px-4" type="submit">Save</button><button class="btn btn-outline-light px-4" type="reset">Clear</button></div>
     </form>
 </div>
+<script type="application/json" id="complaint-category-data"><?php echo json_encode(
+    $categoriesByDepartment,
+    JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
+    | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE
+); ?></script>
 <?php include __DIR__ . '/includes/footer.php'; ?>
