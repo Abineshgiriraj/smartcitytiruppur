@@ -203,7 +203,7 @@ include __DIR__ . '/../includes/employee-header.php';
         <section class="complaint-reference-panel">
             <h2>Grievance Allotted Employee</h2>
             <dl class="complaint-reference-details">
-                <dt>Name</dt><dd><?php echo e($complaint['officer_name'] ?: 'Not Assigned'); ?></dd>
+                <dt>Name</dt><dd><?php echo e($complaint['officer_name'] ?: 'Pending authorized officer allocation'); ?></dd>
                 <dt>Phone Number</dt><dd><?php echo e($complaint['officer_mobile'] ?: '-'); ?></dd>
                 <dt>Email ID</dt><dd>-</dd>
             </dl>

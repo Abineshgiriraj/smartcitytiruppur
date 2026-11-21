@@ -29,38 +29,10 @@ CREATE TABLE IF NOT EXISTS `department_allocations` (
 ALTER TABLE `complaint_escalations`
     MODIFY COLUMN `escalation_level_id` INT(10) UNSIGNED NULL;
 
-DROP TRIGGER IF EXISTS `trg_complaints_auto_assign`;
-DELIMITER $$
-CREATE TRIGGER `trg_complaints_auto_assign`
-BEFORE INSERT ON `complaints`
-FOR EACH ROW
-BEGIN
-    DECLARE v_officer_id INT UNSIGNED DEFAULT NULL;
-    DECLARE v_days SMALLINT UNSIGNED DEFAULT NULL;
-    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_officer_id = NULL;
-
-    IF NEW.assigned_officer_id IS NULL THEN
-        SELECT da.officer_id, da.escalation_days
-          INTO v_officer_id, v_days
-        FROM department_allocations da
-        JOIN officers o ON o.id = da.officer_id AND o.is_active = 1
-        WHERE da.department_id = NEW.department_id
-          AND da.category_id = NEW.category_id
-          AND da.zone_id = NEW.zone_id
-          AND da.ward_id = NEW.ward_id
-          AND da.stage_no = 1
-          AND da.is_active = 1
-        LIMIT 1;
-
-        IF v_officer_id IS NOT NULL THEN
-            SET NEW.assigned_officer_id = v_officer_id;
-            IF NEW.status IS NULL OR NEW.status = '' OR NEW.status = 'Registered' THEN
-                SET NEW.status = 'Assigned';
-            END IF;
-            IF v_days IS NOT NULL AND v_days > 0 THEN
-                SET NEW.due_at = DATE_ADD(NOW(), INTERVAL v_days DAY);
-            END IF;
-        END IF;
-    END IF;
-END$$
-DELIMITER ;
+-- IMPORTANT: Auto-assign trigger intentionally NOT installed.
+-- A BEFORE INSERT trigger bypasses officer_stage_authorized() and can
+-- send citizen complaints to unverified senior officers.
+-- Do not recreate trg_complaints_auto_assign. New assignments must
+-- pass through the checked PHP service after registration.
+-- Existing installations require a separate, reviewed migration to
+-- remove the historical trigger. This file makes no implicit DROP.

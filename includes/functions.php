@@ -285,6 +285,15 @@ function assign_officer_for_complaint(
         }
     }
 
+    // An explicit exact rule cannot be silently bypassed if it points to
+    // an unapproved officer. Keep the complaint unassigned for review.
+    if ($officerId !== null && !officer_stage_authorized(
+        $pdo, $categoryId, 1, $officerId, $departmentId, $wardId
+    )) {
+        log_message("Exact Stage 1 allocation denied for complaint {$complaintId}: unapproved officer {$officerId}");
+        return null;
+    }
+
     // Fallback tiers: prefer ward-specific field officers over city-wide (all-60-ward) officers
     if ($officerId === null) {
         $queries = [
@@ -300,7 +309,7 @@ function assign_officer_for_complaint(
                    (SELECT COUNT(*) FROM officer_ward_map w2 WHERE w2.officer_id = o.id) ASC,
                    (ocm.category_id IS NOT NULL) DESC,
                    o.id ASC
-                 LIMIT 1',
+                 LIMIT 250',
                 [$categoryId, $departmentId, $wardId],
             ],
             [
@@ -311,7 +320,7 @@ function assign_officer_for_complaint(
                  JOIN officer_ward_map owm ON owm.officer_id = o.id
                  WHERE ocm.category_id = ? AND owm.ward_id = ? AND o.is_active = 1
                  ORDER BY (SELECT COUNT(*) FROM officer_ward_map w2 WHERE w2.officer_id = o.id) ASC, o.id ASC
-                 LIMIT 1',
+                 LIMIT 250',
                 [$categoryId, $wardId],
             ],
             [
@@ -320,7 +329,7 @@ function assign_officer_for_complaint(
                  FROM escalation_officer_levels eol
                  JOIN officers o ON o.id = eol.officer_id AND o.is_active = 1
                  WHERE eol.category_id = ? AND eol.level_no = 1 AND eol.is_active = 1
-                 LIMIT 1',
+                 LIMIT 250',
                 [$categoryId],
             ],
             [
@@ -330,7 +339,7 @@ function assign_officer_for_complaint(
                  JOIN officer_category_map ocm ON ocm.officer_id = o.id
                  WHERE ocm.category_id = ? AND o.is_active = 1
                  ORDER BY (SELECT COUNT(*) FROM officer_ward_map w2 WHERE w2.officer_id = o.id) ASC, o.id ASC
-                 LIMIT 1',
+                 LIMIT 250',
                 [$categoryId],
             ],
             [
@@ -340,7 +349,7 @@ function assign_officer_for_complaint(
                  JOIN officer_department_map odm ON odm.officer_id = o.id
                  WHERE odm.department_id = ? AND o.is_active = 1
                  ORDER BY (SELECT COUNT(*) FROM officer_ward_map w2 WHERE w2.officer_id = o.id) ASC, o.id ASC
-                 LIMIT 1',
+                 LIMIT 250',
                 [$departmentId],
             ],
         ];
@@ -348,23 +357,26 @@ function assign_officer_for_complaint(
         foreach ($queries as [$sourceLabel, $sql, $params]) {
             $stmt = $pdo->prepare($sql);
             $stmt->execute($params);
-            $row = $stmt->fetch();
-
-            if ($row) {
-                $officerId = (int) $row['id'];
-                $officerName = (string) $row['officer_name'];
+            // Multiple candidates can share one mapped ward or department.
+            // The first officer ID may be an unapproved executive; search
+            // additional candidates in the SAME tier before falling back.
+            foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $candidate) {
+                $candidateId = (int) $candidate['id'];
+                if (!officer_stage_authorized(
+                    $pdo, $categoryId, 1, $candidateId, $departmentId, $wardId
+                )) {
+                    continue;
+                }
+                $officerId = $candidateId;
+                $officerName = (string) $candidate['officer_name'];
                 $allocationSource = $sourceLabel;
-                // Generic category-level seeded SLA is unverified. Keep the
-                // complaint's original category deadline unless an exact
-                // administrator-reviewed ward rule supplied its own SLA.
-                // Do not override due_at from the legacy generated stage label.
-                break;
+                break 2;
             }
         }
     }
 
     if ($officerId === null) {
-        log_message("Initial assignment pending: no mapped officer for complaint {$complaintId}");
+        log_message("Initial assignment pending: no approved mapped officer for complaint {$complaintId}");
         return null;
     }
     // Old seed maps 286 categories to a Commissioner as Stage 1.

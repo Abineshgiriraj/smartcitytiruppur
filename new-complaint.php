@@ -144,6 +144,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
 
             $complaintId = (int) $pdo->lastInsertId();
+
+            // Detect legacy BEFORE INSERT triggers bypassing PHP Stage 1
+            // authority checks. Roll back rather than accepting an officer
+            // selected outside officer_stage_authorized().
+            $insertCheck = $pdo->prepare(
+                'SELECT assigned_officer_id, status FROM complaints WHERE id = ? LIMIT 1'
+            );
+            $insertCheck->execute([$complaintId]);
+            $insertedState = $insertCheck->fetch(PDO::FETCH_ASSOC);
+            if (!$insertedState || $insertedState['assigned_officer_id'] !== null
+                || $insertedState['status'] !== 'Registered') {
+                throw new RuntimeException(
+                    'Unsafe database-side auto-assignment detected. Ask an administrator to review the complaint insertion trigger.'
+                );
+            }
+
             $reference = generate_reference_number($complaintId);
 
             $pdo->prepare('UPDATE complaints SET reference_no = ? WHERE id = ?')
@@ -227,6 +243,12 @@ include __DIR__ . '/includes/header.php';
                             — <strong><?php echo e($assignedOfficer['mobile_no']); ?></strong>
                         <?php endif; ?>
                     </div>
+                </div>
+            <?php else: ?>
+                <div class="alert alert-info mt-3 mb-0" role="status">
+                    Your complaint has been registered and is awaiting assignment
+                    to an authorized department officer. You can track its status
+                    using your reference number.
                 </div>
             <?php endif; ?>
             <a class="btn btn-success mt-3" href="<?php echo e(url('complaint-status.php?reference_no=' . urlencode($successReference))); ?>">Track Complaint</a>

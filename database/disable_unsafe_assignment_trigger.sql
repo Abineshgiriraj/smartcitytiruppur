@@ -1,0 +1,9 @@
+-- MANUAL, APPROVAL-REQUIRED CHANGE ONLY.
+-- On a BACKED-UP, verified test database first:
+--   SELECT DATABASE();
+--   SHOW TRIGGERS WHERE `Table` = 'complaints';
+-- Then, with authorized change control, run:
+--   DROP TRIGGER IF EXISTS trg_complaints_auto_assign;
+--
+-- No SQL action is executed by merely including this file in the repository.
+-- This script is documentation-only to prevent accidental production changes.
