@@ -1,0 +1,2219 @@
+{
+  "provenance": "Uploaded smartcitytiruppur.sql (phpMyAdmin generated 2026-11-19), ONLY department/category master rows",
+  "departments": [
+    [
+      1,
+      "Accounts",
+      1
+    ],
+    [
+      2,
+      "eGovernance",
+      1
+    ],
+    [
+      3,
+      "Election Department",
+      1
+    ],
+    [
+      4,
+      "Engineering - Sewage",
+      1
+    ],
+    [
+      5,
+      "Engineering - Street Light",
+      1
+    ],
+    [
+      6,
+      "Engineering - Water Supply",
+      1
+    ],
+    [
+      7,
+      "Engineering - Works",
+      1
+    ],
+    [
+      8,
+      "Engineering -Town plan",
+      1
+    ],
+    [
+      9,
+      "New Infrastructure - streetlight",
+      1
+    ],
+    [
+      10,
+      "New Infrastructure - works",
+      1
+    ],
+    [
+      11,
+      "Public Distribution System",
+      1
+    ],
+    [
+      12,
+      "Public Health",
+      1
+    ],
+    [
+      13,
+      "Revenue",
+      1
+    ],
+    [
+      14,
+      "Transport Department",
+      1
+    ]
+  ],
+  "categories": [
+    [
+      1,
+      1,
+      "Contractor Bill Related",
+      5,
+      1
+    ],
+    [
+      2,
+      1,
+      "Group Schemes,Deposits,EMD and Refunds",
+      11,
+      1
+    ],
+    [
+      3,
+      1,
+      "others",
+      11,
+      1
+    ],
+    [
+      4,
+      1,
+      "Pension,Family Pension,DCRG Commutation Santioned Details",
+      11,
+      1
+    ],
+    [
+      5,
+      1,
+      "Special Provident Fund",
+      11,
+      1
+    ],
+    [
+      6,
+      2,
+      "Online Payment",
+      3,
+      1
+    ],
+    [
+      7,
+      2,
+      "online Receipt",
+      3,
+      1
+    ],
+    [
+      8,
+      3,
+      "Election- others",
+      6,
+      1
+    ],
+    [
+      9,
+      4,
+      "Sewer House Block",
+      19,
+      1
+    ],
+    [
+      10,
+      4,
+      "Sewer Main Block",
+      19,
+      1
+    ],
+    [
+      11,
+      4,
+      "Sewer Manhole Open or Broken",
+      19,
+      1
+    ],
+    [
+      12,
+      4,
+      "UGD - Cleaning of Drainage",
+      19,
+      1
+    ],
+    [
+      13,
+      4,
+      "UGD- Chokking",
+      21,
+      1
+    ],
+    [
+      14,
+      4,
+      "UGD-Blocking of UGSS",
+      19,
+      1
+    ],
+    [
+      15,
+      4,
+      "UGD-Damaged Sewer Line",
+      19,
+      1
+    ],
+    [
+      16,
+      4,
+      "UGD-Leakage of Drainage",
+      19,
+      1
+    ],
+    [
+      17,
+      4,
+      "UGD-Open Man-hole",
+      19,
+      1
+    ],
+    [
+      18,
+      4,
+      "UGD-Others",
+      19,
+      1
+    ],
+    [
+      19,
+      4,
+      "UGD-Replacement of Damaged Man-hole Slab",
+      19,
+      1
+    ],
+    [
+      20,
+      4,
+      "UGD-Sewer Line Overflow /Block",
+      19,
+      1
+    ],
+    [
+      21,
+      4,
+      "UGD-Sewer Odor",
+      19,
+      1
+    ],
+    [
+      22,
+      4,
+      "UGD-Sewerage Treatment Plant - related issues",
+      19,
+      1
+    ],
+    [
+      23,
+      5,
+      "Non illumination of Street Light",
+      7,
+      1
+    ],
+    [
+      24,
+      5,
+      "Others",
+      7,
+      1
+    ],
+    [
+      25,
+      5,
+      "Poor Lighting",
+      7,
+      1
+    ],
+    [
+      26,
+      5,
+      "Street Light",
+      7,
+      1
+    ],
+    [
+      27,
+      5,
+      "Streetlight - Others",
+      7,
+      1
+    ],
+    [
+      28,
+      6,
+      "Contaminated Water",
+      7,
+      1
+    ],
+    [
+      29,
+      6,
+      "Delay in Water Supply - Related services",
+      7,
+      1
+    ],
+    [
+      30,
+      6,
+      "Dirty / Bad Smell in Water",
+      7,
+      1
+    ],
+    [
+      31,
+      6,
+      "Drinking Water Facility",
+      17,
+      1
+    ],
+    [
+      32,
+      6,
+      "Drinking water supply",
+      7,
+      1
+    ],
+    [
+      33,
+      6,
+      "Irregular Water Supply",
+      7,
+      1
+    ],
+    [
+      34,
+      6,
+      "Leakage in Distribution Systems",
+      7,
+      1
+    ],
+    [
+      35,
+      6,
+      "Leakage in Main Pipeline",
+      7,
+      1
+    ],
+    [
+      36,
+      6,
+      "Lorry water supply",
+      7,
+      1
+    ],
+    [
+      37,
+      6,
+      "Meter not working",
+      7,
+      1
+    ],
+    [
+      38,
+      6,
+      "Mini Power Pump Not Working",
+      7,
+      1
+    ],
+    [
+      39,
+      6,
+      "Non Supply - of water for long period",
+      7,
+      1
+    ],
+    [
+      40,
+      6,
+      "Polluted Water Supply",
+      7,
+      1
+    ],
+    [
+      41,
+      6,
+      "Poor Quality of Water",
+      7,
+      1
+    ],
+    [
+      42,
+      6,
+      "Poor Quantity of Water Supply",
+      7,
+      1
+    ],
+    [
+      43,
+      6,
+      "Quality of Water Supply",
+      7,
+      1
+    ],
+    [
+      44,
+      6,
+      "Request for Bulk Water Supply",
+      7,
+      1
+    ],
+    [
+      45,
+      6,
+      "Request for New Public Tap",
+      11,
+      1
+    ],
+    [
+      46,
+      6,
+      "Request For Water Supply",
+      7,
+      1
+    ],
+    [
+      47,
+      6,
+      "Request for Water Supply Through Lorry",
+      7,
+      1
+    ],
+    [
+      48,
+      6,
+      "Water Supply - - Public Fountain Repair",
+      7,
+      1
+    ],
+    [
+      49,
+      6,
+      "Water supply - Hand Pump Reparis",
+      7,
+      1
+    ],
+    [
+      50,
+      6,
+      "Water supply - HSC Repair",
+      6,
+      1
+    ],
+    [
+      51,
+      6,
+      "Water Supply - Non supply of Water",
+      7,
+      1
+    ],
+    [
+      52,
+      6,
+      "Water Supply - Others",
+      7,
+      1
+    ],
+    [
+      53,
+      6,
+      "Water Supply - Pulbic Tab Repair",
+      7,
+      1
+    ],
+    [
+      54,
+      6,
+      "Water supply Damaged Pipeline",
+      7,
+      1
+    ],
+    [
+      55,
+      6,
+      "Water Supply Frequency",
+      7,
+      1
+    ],
+    [
+      56,
+      6,
+      "Water Supply Leakage",
+      7,
+      1
+    ],
+    [
+      57,
+      6,
+      "Water Supply Leakage Repairs",
+      7,
+      1
+    ],
+    [
+      58,
+      6,
+      "Water Supply Not Given in Public Tap(Bore Water)",
+      7,
+      1
+    ],
+    [
+      59,
+      6,
+      "Water Supply Power Pump Repairs",
+      7,
+      1
+    ],
+    [
+      60,
+      6,
+      "Water Supply Road Cutting",
+      7,
+      1
+    ],
+    [
+      61,
+      6,
+      "Water Supply Wastage due to Broken/Damaged Pipeline",
+      7,
+      1
+    ],
+    [
+      62,
+      7,
+      "-",
+      16,
+      1
+    ],
+    [
+      63,
+      7,
+      "Basic Amenities Petitions",
+      12,
+      1
+    ],
+    [
+      64,
+      7,
+      "Bulinding Maintenance (Office Building,Quarters,Schools,ICDS Centers,Noon meals Center,Shopping Complex)",
+      17,
+      1
+    ],
+    [
+      65,
+      7,
+      "Burial Ground and Electrical / Gasifire Crematorium Maintenance",
+      17,
+      1
+    ],
+    [
+      66,
+      7,
+      "Burial Ground and Electrical Crematorium Maintenance",
+      17,
+      1
+    ],
+    [
+      67,
+      7,
+      "Bus Stand Maintenance",
+      17,
+      1
+    ],
+    [
+      68,
+      7,
+      "Center Median",
+      17,
+      1
+    ],
+    [
+      69,
+      7,
+      "Contract Workers",
+      17,
+      1
+    ],
+    [
+      70,
+      7,
+      "Converson of Road",
+      17,
+      1
+    ],
+    [
+      71,
+      7,
+      "Desiliting of Drain/Canal",
+      17,
+      1
+    ],
+    [
+      72,
+      7,
+      "Dredging of Water bodies",
+      17,
+      1
+    ],
+    [
+      73,
+      7,
+      "Dust pin in Parks",
+      17,
+      1
+    ],
+    [
+      74,
+      7,
+      "e-Tender",
+      4,
+      1
+    ],
+    [
+      75,
+      7,
+      "Engineering Works - Others",
+      17,
+      1
+    ],
+    [
+      76,
+      7,
+      "Flood Management",
+      17,
+      1
+    ],
+    [
+      77,
+      7,
+      "Foot Path",
+      17,
+      1
+    ],
+    [
+      78,
+      7,
+      "Hanging of power Cables",
+      11,
+      1
+    ],
+    [
+      79,
+      7,
+      "Maintenance of Park",
+      17,
+      1
+    ],
+    [
+      80,
+      7,
+      "Maintenance of Plants and Trees",
+      17,
+      1
+    ],
+    [
+      81,
+      7,
+      "Maintenance of Play Fields",
+      16,
+      1
+    ],
+    [
+      82,
+      7,
+      "Maintenance/Repairs Of Roads",
+      17,
+      1
+    ],
+    [
+      83,
+      7,
+      "Make Working Condition of Borewell Motors",
+      17,
+      1
+    ],
+    [
+      84,
+      7,
+      "Name board Issues",
+      38,
+      1
+    ],
+    [
+      85,
+      7,
+      "No Eelectricity in Public Toilets",
+      17,
+      1
+    ],
+    [
+      86,
+      7,
+      "No Water Supply in Public Toilets",
+      17,
+      1
+    ],
+    [
+      87,
+      7,
+      "Park - Others",
+      17,
+      1
+    ],
+    [
+      88,
+      7,
+      "Park Bench",
+      17,
+      1
+    ],
+    [
+      89,
+      7,
+      "Park Ligths",
+      17,
+      1
+    ],
+    [
+      90,
+      7,
+      "Park Maintenance",
+      17,
+      1
+    ],
+    [
+      91,
+      7,
+      "Removal of Abonded Vehicles",
+      11,
+      1
+    ],
+    [
+      92,
+      7,
+      "Removal of Damaged Vehicles",
+      11,
+      1
+    ],
+    [
+      93,
+      7,
+      "Repairs and Maintenance of Culeverts/Bridges",
+      17,
+      1
+    ],
+    [
+      94,
+      7,
+      "Request for Pathole repair",
+      9,
+      1
+    ],
+    [
+      95,
+      7,
+      "Request for road repair",
+      10,
+      1
+    ],
+    [
+      96,
+      7,
+      "Request of New Mini Water Tank for Pubic",
+      17,
+      1
+    ],
+    [
+      97,
+      7,
+      "Reuest for Night Security",
+      17,
+      1
+    ],
+    [
+      98,
+      7,
+      "Road - Others",
+      17,
+      1
+    ],
+    [
+      99,
+      7,
+      "Road Cutting Permission",
+      9,
+      1
+    ],
+    [
+      100,
+      7,
+      "Road Patch works",
+      35,
+      1
+    ],
+    [
+      101,
+      7,
+      "Road Signage",
+      6,
+      1
+    ],
+    [
+      102,
+      7,
+      "Road Works-CCand BT",
+      16,
+      1
+    ],
+    [
+      103,
+      7,
+      "Speed Breaker",
+      17,
+      1
+    ],
+    [
+      104,
+      7,
+      "Toilet Maintenance",
+      17,
+      1
+    ],
+    [
+      105,
+      7,
+      "Walker Path",
+      17,
+      1
+    ],
+    [
+      106,
+      7,
+      "Water Supply HSC Name Correction",
+      10,
+      1
+    ],
+    [
+      107,
+      8,
+      "Building Plan",
+      8,
+      1
+    ],
+    [
+      108,
+      8,
+      "Building plan - Others",
+      8,
+      1
+    ],
+    [
+      109,
+      8,
+      "Buliding Application",
+      8,
+      1
+    ],
+    [
+      110,
+      8,
+      "Buliding Debris",
+      8,
+      1
+    ],
+    [
+      111,
+      8,
+      "Buliding License",
+      8,
+      1
+    ],
+    [
+      112,
+      8,
+      "Buliding Plan renewal",
+      8,
+      1
+    ],
+    [
+      113,
+      8,
+      "Buliding Plan Verification",
+      8,
+      1
+    ],
+    [
+      114,
+      8,
+      "Buliding Plannig Permission",
+      8,
+      1
+    ],
+    [
+      115,
+      8,
+      "Buliding Rule Violation",
+      8,
+      1
+    ],
+    [
+      116,
+      8,
+      "Delimation",
+      8,
+      1
+    ],
+    [
+      117,
+      8,
+      "Deviation of Plan",
+      8,
+      1
+    ],
+    [
+      118,
+      8,
+      "Hoarding Removal UAC",
+      8,
+      1
+    ],
+    [
+      119,
+      8,
+      "Layout Approval",
+      8,
+      1
+    ],
+    [
+      120,
+      8,
+      "Others",
+      34,
+      1
+    ],
+    [
+      121,
+      8,
+      "Payments",
+      8,
+      1
+    ],
+    [
+      122,
+      8,
+      "Petty Shop",
+      8,
+      1
+    ],
+    [
+      123,
+      8,
+      "Removal of Permanent Encroachment",
+      34,
+      1
+    ],
+    [
+      124,
+      8,
+      "Removal of Temporary Encroachment",
+      19,
+      1
+    ],
+    [
+      125,
+      8,
+      "Request For Information",
+      8,
+      1
+    ],
+    [
+      126,
+      8,
+      "Reserve Site",
+      8,
+      1
+    ],
+    [
+      127,
+      8,
+      "Sub –Division Approval",
+      8,
+      1
+    ],
+    [
+      128,
+      8,
+      "Survey",
+      8,
+      1
+    ],
+    [
+      129,
+      8,
+      "Town Plannig-General works",
+      8,
+      1
+    ],
+    [
+      130,
+      8,
+      "Town Planning Others",
+      8,
+      1
+    ],
+    [
+      131,
+      8,
+      "Town Planning-Delay of Building Plan Approval",
+      8,
+      1
+    ],
+    [
+      132,
+      8,
+      "Town Planning-Removal of Unauthorised Hoardings",
+      8,
+      1
+    ],
+    [
+      133,
+      8,
+      "Town Planning-Without Plan Building Construction",
+      8,
+      1
+    ],
+    [
+      134,
+      8,
+      "Un-Authorised Construction",
+      8,
+      1
+    ],
+    [
+      135,
+      8,
+      "Water bodies encrochment",
+      8,
+      1
+    ],
+    [
+      136,
+      9,
+      "-",
+      34,
+      1
+    ],
+    [
+      137,
+      9,
+      "New streetlight",
+      37,
+      1
+    ],
+    [
+      138,
+      10,
+      "-",
+      34,
+      1
+    ],
+    [
+      139,
+      10,
+      "New compound wall/ New Building",
+      37,
+      1
+    ],
+    [
+      140,
+      10,
+      "New Road",
+      37,
+      1
+    ],
+    [
+      141,
+      10,
+      "New Storm water Drainage/ New culvert",
+      37,
+      1
+    ],
+    [
+      142,
+      10,
+      "New UGD connection",
+      67,
+      1
+    ],
+    [
+      143,
+      10,
+      "New water supply connection",
+      37,
+      1
+    ],
+    [
+      144,
+      10,
+      "New Water Tank/ New Borewel/ New Boremotor",
+      37,
+      1
+    ],
+    [
+      145,
+      11,
+      "Biometric Related",
+      5,
+      1
+    ],
+    [
+      146,
+      11,
+      "Change Ration shop",
+      6,
+      1
+    ],
+    [
+      147,
+      11,
+      "Commodities Related",
+      5,
+      1
+    ],
+    [
+      148,
+      11,
+      "Food Safety",
+      5,
+      1
+    ],
+    [
+      149,
+      11,
+      "PDS Machine Not Working",
+      5,
+      1
+    ],
+    [
+      150,
+      11,
+      "Ration shop - Others",
+      6,
+      1
+    ],
+    [
+      151,
+      11,
+      "Ration shop keeper",
+      6,
+      1
+    ],
+    [
+      152,
+      11,
+      "Ration Smart card",
+      6,
+      1
+    ],
+    [
+      153,
+      12,
+      "-",
+      4,
+      1
+    ],
+    [
+      154,
+      12,
+      "animals nuisance",
+      4,
+      1
+    ],
+    [
+      155,
+      12,
+      "Bakery smoke Nuisance",
+      4,
+      1
+    ],
+    [
+      156,
+      12,
+      "Bio-Medical Waste-Details",
+      7,
+      1
+    ],
+    [
+      157,
+      12,
+      "Birth - Child Sex Correction",
+      4,
+      1
+    ],
+    [
+      158,
+      12,
+      "Birth - Date of Birth Correction",
+      4,
+      1
+    ],
+    [
+      159,
+      12,
+      "Birth - Father/Mother - UID Number Correction",
+      4,
+      1
+    ],
+    [
+      160,
+      12,
+      "Birth - Hospital Name / Address Correction",
+      4,
+      1
+    ],
+    [
+      161,
+      12,
+      "Birth - Permanent Address Correction",
+      4,
+      1
+    ],
+    [
+      162,
+      12,
+      "Birth - Place of Birth Correction",
+      4,
+      1
+    ],
+    [
+      163,
+      12,
+      "Birth -Present Address Correction",
+      4,
+      1
+    ],
+    [
+      164,
+      12,
+      "Birth /DeathCertificate-Current Year",
+      4,
+      1
+    ],
+    [
+      165,
+      12,
+      "Birth /DeathCertificate-Previous year",
+      4,
+      1
+    ],
+    [
+      166,
+      12,
+      "Birth and Death Others",
+      4,
+      1
+    ],
+    [
+      167,
+      12,
+      "Birth Child Name Correction",
+      4,
+      1
+    ],
+    [
+      168,
+      12,
+      "Birth Complaint",
+      4,
+      1
+    ],
+    [
+      169,
+      12,
+      "Birth Correction",
+      4,
+      1
+    ],
+    [
+      170,
+      12,
+      "Birth Father Name Correction",
+      4,
+      1
+    ],
+    [
+      171,
+      12,
+      "Birth Mother Name Correction",
+      4,
+      1
+    ],
+    [
+      172,
+      12,
+      "Birth NAC",
+      4,
+      1
+    ],
+    [
+      173,
+      12,
+      "Birth NOC",
+      4,
+      1
+    ],
+    [
+      174,
+      12,
+      "Birth Registration",
+      4,
+      1
+    ],
+    [
+      175,
+      12,
+      "Bpl List Prepartion Details",
+      7,
+      1
+    ],
+    [
+      176,
+      12,
+      "Burning of Compostyard",
+      4,
+      1
+    ],
+    [
+      177,
+      12,
+      "Cancellation of Trade License",
+      4,
+      1
+    ],
+    [
+      178,
+      12,
+      "Cattle Menace",
+      4,
+      1
+    ],
+    [
+      179,
+      12,
+      "Child Name Regestration in Birth Certificate",
+      4,
+      1
+    ],
+    [
+      180,
+      12,
+      "Child Name Registration",
+      4,
+      1
+    ],
+    [
+      181,
+      12,
+      "Communicable Discease",
+      4,
+      1
+    ],
+    [
+      182,
+      12,
+      "Compost yard Issues",
+      4,
+      1
+    ],
+    [
+      183,
+      12,
+      "COWS NUSIANCE",
+      4,
+      1
+    ],
+    [
+      184,
+      12,
+      "D and O Trade Details",
+      4,
+      1
+    ],
+    [
+      185,
+      12,
+      "Damage of Dustbin",
+      4,
+      1
+    ],
+    [
+      186,
+      12,
+      "De-Addicition and Shelter realted Details",
+      4,
+      1
+    ],
+    [
+      187,
+      12,
+      "Dead Animal",
+      4,
+      1
+    ],
+    [
+      188,
+      12,
+      "Death - Death Date Correction",
+      4,
+      1
+    ],
+    [
+      189,
+      12,
+      "Death - Death NAC",
+      4,
+      1
+    ],
+    [
+      190,
+      12,
+      "Death - Death NOC",
+      4,
+      1
+    ],
+    [
+      191,
+      12,
+      "Death - Death Person Age Correction",
+      4,
+      1
+    ],
+    [
+      192,
+      12,
+      "Death - Death Person Father Name Correction",
+      4,
+      1
+    ],
+    [
+      193,
+      12,
+      "Death - Death Person Father UID Number Correction",
+      4,
+      1
+    ],
+    [
+      194,
+      12,
+      "Death - Death Person Husband/Wife Name Correction",
+      4,
+      1
+    ],
+    [
+      195,
+      12,
+      "Death - Death Person Mother Name Correction",
+      4,
+      1
+    ],
+    [
+      196,
+      12,
+      "Death - Death Person Mother UID Correction",
+      4,
+      1
+    ],
+    [
+      197,
+      12,
+      "Death - Death Person Name Correction",
+      4,
+      1
+    ],
+    [
+      198,
+      12,
+      "Death - Death Person Premanent Address Correction",
+      4,
+      1
+    ],
+    [
+      199,
+      12,
+      "Death - Death Person Present Address Correction",
+      4,
+      1
+    ],
+    [
+      200,
+      12,
+      "Death - Death Person Sex Correction",
+      4,
+      1
+    ],
+    [
+      201,
+      12,
+      "Death - Death Person UID Number Correction",
+      4,
+      1
+    ],
+    [
+      202,
+      12,
+      "Death - Death Place Correction",
+      4,
+      1
+    ],
+    [
+      203,
+      12,
+      "Death Complaint",
+      4,
+      1
+    ],
+    [
+      204,
+      12,
+      "Death Correction",
+      4,
+      1
+    ],
+    [
+      205,
+      12,
+      "Death Person Husband/Wife UID Number Correction",
+      4,
+      1
+    ],
+    [
+      206,
+      12,
+      "Death Registration",
+      4,
+      1
+    ],
+    [
+      207,
+      12,
+      "Deisceases",
+      7,
+      1
+    ],
+    [
+      208,
+      12,
+      "Dog - Catching",
+      4,
+      1
+    ],
+    [
+      209,
+      12,
+      "Door to Door collection",
+      4,
+      1
+    ],
+    [
+      210,
+      12,
+      "Dr.Muthulakshmi Reddy Maternity benefit Scheme",
+      12,
+      1
+    ],
+    [
+      211,
+      12,
+      "Drainage Leakage",
+      4,
+      1
+    ],
+    [
+      212,
+      12,
+      "Drainage Overflow",
+      4,
+      1
+    ],
+    [
+      213,
+      12,
+      "Drainage Silt Not Removed",
+      4,
+      1
+    ],
+    [
+      214,
+      12,
+      "Dustbin Not Cleaned",
+      4,
+      1
+    ],
+    [
+      215,
+      12,
+      "Epidemic Diseases",
+      4,
+      1
+    ],
+    [
+      216,
+      12,
+      "Extra Payment Related",
+      7,
+      1
+    ],
+    [
+      217,
+      12,
+      "Flood Management",
+      4,
+      1
+    ],
+    [
+      218,
+      12,
+      "Garbage",
+      4,
+      1
+    ],
+    [
+      219,
+      12,
+      "Garbage Vehicle Related",
+      4,
+      1
+    ],
+    [
+      220,
+      12,
+      "Illegal Trade",
+      4,
+      1
+    ],
+    [
+      221,
+      12,
+      "Improper Toilet Cleaning",
+      7,
+      1
+    ],
+    [
+      222,
+      12,
+      "License Issues",
+      4,
+      1
+    ],
+    [
+      223,
+      12,
+      "Maintenance Of Electrical Crematorium Deatils",
+      4,
+      1
+    ],
+    [
+      224,
+      12,
+      "More Fees",
+      7,
+      1
+    ],
+    [
+      225,
+      12,
+      "Mosquito Breeding",
+      4,
+      1
+    ],
+    [
+      226,
+      12,
+      "Mosquito Menace",
+      4,
+      1
+    ],
+    [
+      227,
+      12,
+      "New Machinary Installation with Trade Permission",
+      4,
+      1
+    ],
+    [
+      228,
+      12,
+      "Non availability of Bin",
+      4,
+      1
+    ],
+    [
+      229,
+      12,
+      "Non Removal of Garbage",
+      4,
+      1
+    ],
+    [
+      230,
+      12,
+      "Overflow of Dustpin",
+      4,
+      1
+    ],
+    [
+      231,
+      12,
+      "Pig Menace",
+      4,
+      1
+    ],
+    [
+      232,
+      12,
+      "pollution control",
+      4,
+      1
+    ],
+    [
+      233,
+      12,
+      "Public health - Others",
+      4,
+      1
+    ],
+    [
+      234,
+      12,
+      "Public Septic Tank Cleaning",
+      4,
+      1
+    ],
+    [
+      235,
+      12,
+      "Public Toilets / Bath Rooms Not Cleaned",
+      7,
+      1
+    ],
+    [
+      236,
+      12,
+      "Removal of Garbage",
+      4,
+      1
+    ],
+    [
+      237,
+      12,
+      "Request for Address Change for Trade License",
+      4,
+      1
+    ],
+    [
+      238,
+      12,
+      "Request for change of Dust Bin",
+      4,
+      1
+    ],
+    [
+      239,
+      12,
+      "Request for Change of Trade",
+      4,
+      1
+    ],
+    [
+      240,
+      12,
+      "Request for Cleaning of Drainage",
+      4,
+      1
+    ],
+    [
+      241,
+      12,
+      "Request for Corrective or Preventive Action",
+      4,
+      1
+    ],
+    [
+      242,
+      12,
+      "Request for Name Transfer for Trade License",
+      4,
+      1
+    ],
+    [
+      243,
+      12,
+      "Request for new Bin",
+      33,
+      1
+    ],
+    [
+      244,
+      12,
+      "Request for New Trade in Rental Buildings",
+      4,
+      1
+    ],
+    [
+      245,
+      12,
+      "Request for New Trade License",
+      4,
+      1
+    ],
+    [
+      246,
+      12,
+      "Sanitation Others",
+      4,
+      1
+    ],
+    [
+      247,
+      12,
+      "Septic Tank Cleaning",
+      4,
+      1
+    ],
+    [
+      248,
+      12,
+      "Solid Waste Management - Others",
+      4,
+      1
+    ],
+    [
+      249,
+      12,
+      "Stagnation of Storm Water Drain",
+      4,
+      1
+    ],
+    [
+      250,
+      12,
+      "Street Dogs nuisance",
+      10,
+      1
+    ],
+    [
+      251,
+      12,
+      "Street Sweeping",
+      4,
+      1
+    ],
+    [
+      252,
+      12,
+      "Sweeping Not Done",
+      4,
+      1
+    ],
+    [
+      253,
+      12,
+      "Temporary Crackers Licenses Workers",
+      7,
+      1
+    ],
+    [
+      254,
+      12,
+      "Trace Fees",
+      4,
+      1
+    ],
+    [
+      255,
+      12,
+      "UGD-Others",
+      0,
+      1
+    ],
+    [
+      256,
+      13,
+      "Booking of Assets",
+      5,
+      1
+    ],
+    [
+      257,
+      13,
+      "Drain.Maint.Charges",
+      7,
+      1
+    ],
+    [
+      258,
+      13,
+      "Lease Advance/Deposits related Issues",
+      5,
+      1
+    ],
+    [
+      259,
+      13,
+      "Litigation",
+      13,
+      1
+    ],
+    [
+      260,
+      13,
+      "Maintenance of Parking place",
+      5,
+      1
+    ],
+    [
+      261,
+      13,
+      "Name Correction",
+      7,
+      1
+    ],
+    [
+      262,
+      13,
+      "New Assessments",
+      7,
+      1
+    ],
+    [
+      263,
+      13,
+      "Non tax- Monthly Rental",
+      5,
+      1
+    ],
+    [
+      264,
+      13,
+      "Non tax-Annual Lease",
+      5,
+      1
+    ],
+    [
+      265,
+      13,
+      "Nontax-Lease Items",
+      5,
+      1
+    ],
+    [
+      266,
+      13,
+      "Nontax-Requisition for Name Correction",
+      5,
+      1
+    ],
+    [
+      267,
+      13,
+      "Nontax-Requisition for Name Transfer",
+      5,
+      1
+    ],
+    [
+      268,
+      13,
+      "Nontax-Requisition toAdjust their Deposit for Rent",
+      5,
+      1
+    ],
+    [
+      269,
+      13,
+      "Nontax-To Utilise is as Godown / Parking Area",
+      5,
+      1
+    ],
+    [
+      270,
+      13,
+      "Online Payment",
+      11,
+      1
+    ],
+    [
+      271,
+      13,
+      "Others",
+      5,
+      1
+    ],
+    [
+      272,
+      13,
+      "Parking Charges",
+      7,
+      1
+    ],
+    [
+      273,
+      13,
+      "Pay&Use Toilet",
+      7,
+      1
+    ],
+    [
+      274,
+      13,
+      "Permission to adjust empty space between Two shops",
+      5,
+      1
+    ],
+    [
+      275,
+      13,
+      "Permission to Change the Flooring on their Own exp",
+      5,
+      1
+    ],
+    [
+      276,
+      13,
+      "Permission to Construct a Toilet on their Own Exp",
+      5,
+      1
+    ],
+    [
+      277,
+      13,
+      "Permission to do Indoor Partition on their Own Exp",
+      5,
+      1
+    ],
+    [
+      278,
+      13,
+      "Permission to Make Temporary Roof in front of Shop",
+      5,
+      1
+    ],
+    [
+      279,
+      13,
+      "Permission to Smash together the wall in Shops",
+      5,
+      1
+    ],
+    [
+      280,
+      13,
+      "Prof Tax-Request for Cancel Existing Assessment No",
+      5,
+      1
+    ],
+    [
+      281,
+      13,
+      "Prof Tax-Request for Change of Address",
+      5,
+      1
+    ],
+    [
+      282,
+      13,
+      "Prof Tax-Request for Demand Notice",
+      5,
+      1
+    ],
+    [
+      283,
+      13,
+      "Prof Tax-Request for Demand Update",
+      5,
+      1
+    ],
+    [
+      284,
+      13,
+      "Prof Tax-Request for Name Correction",
+      5,
+      1
+    ],
+    [
+      285,
+      13,
+      "Prof Tax-Request for New Assessment",
+      5,
+      1
+    ],
+    [
+      286,
+      13,
+      "Prof Tax-Request for Tariff Change",
+      5,
+      1
+    ],
+    [
+      287,
+      13,
+      "Prof Tax-Request for Tax Paid Statement",
+      5,
+      1
+    ],
+    [
+      288,
+      13,
+      "Property Tax",
+      10,
+      1
+    ],
+    [
+      289,
+      13,
+      "Property Tax Name Transfer",
+      5,
+      1
+    ],
+    [
+      290,
+      13,
+      "Request For Information",
+      7,
+      1
+    ],
+    [
+      291,
+      13,
+      "Request for Parking Facility",
+      5,
+      1
+    ],
+    [
+      292,
+      13,
+      "Revenue - Others",
+      11,
+      1
+    ],
+    [
+      293,
+      13,
+      "Road side Parking Slots",
+      5,
+      1
+    ],
+    [
+      294,
+      13,
+      "Tax Fixation",
+      5,
+      1
+    ],
+    [
+      295,
+      13,
+      "Tax Payers Correction",
+      5,
+      1
+    ],
+    [
+      296,
+      13,
+      "VLT",
+      7,
+      1
+    ],
+    [
+      297,
+      13,
+      "Water Charge",
+      7,
+      1
+    ],
+    [
+      298,
+      13,
+      "Water Name Transfer",
+      6,
+      1
+    ],
+    [
+      299,
+      14,
+      "Bus maintenance",
+      6,
+      1
+    ],
+    [
+      300,
+      14,
+      "Bus not stops in exact bus stop",
+      6,
+      1
+    ],
+    [
+      301,
+      14,
+      "Bus Timing issue",
+      6,
+      1
+    ],
+    [
+      302,
+      14,
+      "Conductor Misbehaving",
+      6,
+      1
+    ],
+    [
+      303,
+      14,
+      "Extra charges",
+      6,
+      1
+    ],
+    [
+      304,
+      14,
+      "New bus route service",
+      6,
+      1
+    ],
+    [
+      305,
+      14,
+      "Not picking school/college students",
+      6,
+      1
+    ],
+    [
+      306,
+      14,
+      "Transport - others",
+      3,
+      1
+    ]
+  ]
+}
