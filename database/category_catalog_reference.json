@@ -1,0 +1,1819 @@
+{
+  "title": "Source import complaint-category catalog (historical, not authoritative SLA policy)",
+  "source": "database/data_import.sql",
+  "note": "Used only to compare and restore MISSING category names in a reviewed test database. No existing category, SLA, or officer map is overwritten.",
+  "records": [
+    {
+      "department": "Accounts",
+      "category": "Contractor Bill Related",
+      "source_sla_days": 5,
+      "source_row_id": 1
+    },
+    {
+      "department": "Accounts",
+      "category": "Group Schemes,Deposits,EMD and Refunds",
+      "source_sla_days": 11,
+      "source_row_id": 2
+    },
+    {
+      "department": "Accounts",
+      "category": "others",
+      "source_sla_days": 11,
+      "source_row_id": 3
+    },
+    {
+      "department": "Accounts",
+      "category": "Pension,Family Pension,DCRG Commutation Santioned Details",
+      "source_sla_days": 11,
+      "source_row_id": 4
+    },
+    {
+      "department": "Accounts",
+      "category": "Special Provident Fund",
+      "source_sla_days": 11,
+      "source_row_id": 5
+    },
+    {
+      "department": "eGovernance",
+      "category": "Online Payment",
+      "source_sla_days": 3,
+      "source_row_id": 6
+    },
+    {
+      "department": "eGovernance",
+      "category": "online Receipt",
+      "source_sla_days": 3,
+      "source_row_id": 7
+    },
+    {
+      "department": "Election Department",
+      "category": "Election- others",
+      "source_sla_days": 6,
+      "source_row_id": 8
+    },
+    {
+      "department": "Engineering - Sewage",
+      "category": "Sewer House Block",
+      "source_sla_days": 19,
+      "source_row_id": 9
+    },
+    {
+      "department": "Engineering - Sewage",
+      "category": "Sewer Main Block",
+      "source_sla_days": 19,
+      "source_row_id": 10
+    },
+    {
+      "department": "Engineering - Sewage",
+      "category": "Sewer Manhole Open or Broken",
+      "source_sla_days": 19,
+      "source_row_id": 11
+    },
+    {
+      "department": "Engineering - Sewage",
+      "category": "UGD - Cleaning of Drainage",
+      "source_sla_days": 19,
+      "source_row_id": 12
+    },
+    {
+      "department": "Engineering - Sewage",
+      "category": "UGD- Chokking",
+      "source_sla_days": 21,
+      "source_row_id": 13
+    },
+    {
+      "department": "Engineering - Sewage",
+      "category": "UGD-Blocking of UGSS",
+      "source_sla_days": 19,
+      "source_row_id": 14
+    },
+    {
+      "department": "Engineering - Sewage",
+      "category": "UGD-Damaged Sewer Line",
+      "source_sla_days": 19,
+      "source_row_id": 15
+    },
+    {
+      "department": "Engineering - Sewage",
+      "category": "UGD-Leakage of Drainage",
+      "source_sla_days": 19,
+      "source_row_id": 16
+    },
+    {
+      "department": "Engineering - Sewage",
+      "category": "UGD-Open Man-hole",
+      "source_sla_days": 19,
+      "source_row_id": 17
+    },
+    {
+      "department": "Engineering - Sewage",
+      "category": "UGD-Others",
+      "source_sla_days": 19,
+      "source_row_id": 18
+    },
+    {
+      "department": "Engineering - Sewage",
+      "category": "UGD-Replacement of Damaged Man-hole Slab",
+      "source_sla_days": 19,
+      "source_row_id": 19
+    },
+    {
+      "department": "Engineering - Sewage",
+      "category": "UGD-Sewer Line Overflow /Block",
+      "source_sla_days": 19,
+      "source_row_id": 20
+    },
+    {
+      "department": "Engineering - Sewage",
+      "category": "UGD-Sewer Odor",
+      "source_sla_days": 19,
+      "source_row_id": 21
+    },
+    {
+      "department": "Engineering - Sewage",
+      "category": "UGD-Sewerage Treatment Plant - related issues",
+      "source_sla_days": 19,
+      "source_row_id": 22
+    },
+    {
+      "department": "Engineering - Street Light",
+      "category": "Non illumination of Street Light",
+      "source_sla_days": 7,
+      "source_row_id": 23
+    },
+    {
+      "department": "Engineering - Street Light",
+      "category": "Others",
+      "source_sla_days": 7,
+      "source_row_id": 24
+    },
+    {
+      "department": "Engineering - Street Light",
+      "category": "Poor Lighting",
+      "source_sla_days": 7,
+      "source_row_id": 25
+    },
+    {
+      "department": "Engineering - Street Light",
+      "category": "Street Light",
+      "source_sla_days": 7,
+      "source_row_id": 26
+    },
+    {
+      "department": "Engineering - Street Light",
+      "category": "Streetlight - Others",
+      "source_sla_days": 7,
+      "source_row_id": 27
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Contaminated Water",
+      "source_sla_days": 7,
+      "source_row_id": 28
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Delay in Water Supply - Related services",
+      "source_sla_days": 7,
+      "source_row_id": 29
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Dirty / Bad Smell in Water",
+      "source_sla_days": 7,
+      "source_row_id": 30
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Drinking Water Facility",
+      "source_sla_days": 17,
+      "source_row_id": 31
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Drinking water supply",
+      "source_sla_days": 7,
+      "source_row_id": 32
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Irregular Water Supply",
+      "source_sla_days": 7,
+      "source_row_id": 33
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Leakage in Distribution Systems",
+      "source_sla_days": 7,
+      "source_row_id": 34
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Leakage in Main Pipeline",
+      "source_sla_days": 7,
+      "source_row_id": 35
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Lorry water supply",
+      "source_sla_days": 7,
+      "source_row_id": 36
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Meter not working",
+      "source_sla_days": 7,
+      "source_row_id": 37
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Mini Power Pump Not Working",
+      "source_sla_days": 7,
+      "source_row_id": 38
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Non Supply - of water for long period",
+      "source_sla_days": 7,
+      "source_row_id": 39
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Polluted Water Supply",
+      "source_sla_days": 7,
+      "source_row_id": 40
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Poor Quality of Water",
+      "source_sla_days": 7,
+      "source_row_id": 41
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Poor Quantity of Water Supply",
+      "source_sla_days": 7,
+      "source_row_id": 42
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Quality of Water Supply",
+      "source_sla_days": 7,
+      "source_row_id": 43
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Request for Bulk Water Supply",
+      "source_sla_days": 7,
+      "source_row_id": 44
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Request for New Public Tap",
+      "source_sla_days": 11,
+      "source_row_id": 45
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Request For Water Supply",
+      "source_sla_days": 7,
+      "source_row_id": 46
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Request for Water Supply Through Lorry",
+      "source_sla_days": 7,
+      "source_row_id": 47
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Water Supply - - Public Fountain Repair",
+      "source_sla_days": 7,
+      "source_row_id": 48
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Water supply - Hand Pump Reparis",
+      "source_sla_days": 7,
+      "source_row_id": 49
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Water supply - HSC Repair",
+      "source_sla_days": 6,
+      "source_row_id": 50
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Water Supply - Non supply of Water",
+      "source_sla_days": 7,
+      "source_row_id": 51
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Water Supply - Others",
+      "source_sla_days": 7,
+      "source_row_id": 52
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Water Supply - Pulbic Tab Repair",
+      "source_sla_days": 7,
+      "source_row_id": 53
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Water supply Damaged Pipeline",
+      "source_sla_days": 7,
+      "source_row_id": 54
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Water Supply Frequency",
+      "source_sla_days": 7,
+      "source_row_id": 55
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Water Supply Leakage",
+      "source_sla_days": 7,
+      "source_row_id": 56
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Water Supply Leakage Repairs",
+      "source_sla_days": 7,
+      "source_row_id": 57
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Water Supply Not Given in Public Tap(Bore Water)",
+      "source_sla_days": 7,
+      "source_row_id": 58
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Water Supply Power Pump Repairs",
+      "source_sla_days": 7,
+      "source_row_id": 59
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Water Supply Road Cutting",
+      "source_sla_days": 7,
+      "source_row_id": 60
+    },
+    {
+      "department": "Engineering - Water Supply",
+      "category": "Water Supply Wastage due to Broken/Damaged Pipeline",
+      "source_sla_days": 7,
+      "source_row_id": 61
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Basic Amenities Petitions",
+      "source_sla_days": 12,
+      "source_row_id": 63
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Bulinding Maintenance (Office Building,Quarters,Schools,ICDS Centers,Noon meals Center,Shopping Complex)",
+      "source_sla_days": 17,
+      "source_row_id": 64
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Burial Ground and Electrical / Gasifire Crematorium Maintenance",
+      "source_sla_days": 17,
+      "source_row_id": 65
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Burial Ground and Electrical Crematorium Maintenance",
+      "source_sla_days": 17,
+      "source_row_id": 66
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Bus Stand Maintenance",
+      "source_sla_days": 17,
+      "source_row_id": 67
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Center Median",
+      "source_sla_days": 17,
+      "source_row_id": 68
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Contract Workers",
+      "source_sla_days": 17,
+      "source_row_id": 69
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Converson of Road",
+      "source_sla_days": 17,
+      "source_row_id": 70
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Desiliting of Drain/Canal",
+      "source_sla_days": 17,
+      "source_row_id": 71
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Dredging of Water bodies",
+      "source_sla_days": 17,
+      "source_row_id": 72
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Dust pin in Parks",
+      "source_sla_days": 17,
+      "source_row_id": 73
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "e-Tender",
+      "source_sla_days": 4,
+      "source_row_id": 74
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Engineering Works - Others",
+      "source_sla_days": 17,
+      "source_row_id": 75
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Flood Management",
+      "source_sla_days": 17,
+      "source_row_id": 76
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Foot Path",
+      "source_sla_days": 17,
+      "source_row_id": 77
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Hanging of power Cables",
+      "source_sla_days": 11,
+      "source_row_id": 78
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Maintenance of Park",
+      "source_sla_days": 17,
+      "source_row_id": 79
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Maintenance of Plants and Trees",
+      "source_sla_days": 17,
+      "source_row_id": 80
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Maintenance of Play Fields",
+      "source_sla_days": 16,
+      "source_row_id": 81
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Maintenance/Repairs Of Roads",
+      "source_sla_days": 17,
+      "source_row_id": 82
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Make Working Condition of Borewell Motors",
+      "source_sla_days": 17,
+      "source_row_id": 83
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Name board Issues",
+      "source_sla_days": 38,
+      "source_row_id": 84
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "No Eelectricity in Public Toilets",
+      "source_sla_days": 17,
+      "source_row_id": 85
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "No Water Supply in Public Toilets",
+      "source_sla_days": 17,
+      "source_row_id": 86
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Park - Others",
+      "source_sla_days": 17,
+      "source_row_id": 87
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Park Bench",
+      "source_sla_days": 17,
+      "source_row_id": 88
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Park Ligths",
+      "source_sla_days": 17,
+      "source_row_id": 89
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Park Maintenance",
+      "source_sla_days": 17,
+      "source_row_id": 90
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Removal of Abonded Vehicles",
+      "source_sla_days": 11,
+      "source_row_id": 91
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Removal of Damaged Vehicles",
+      "source_sla_days": 11,
+      "source_row_id": 92
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Repairs and Maintenance of Culeverts/Bridges",
+      "source_sla_days": 17,
+      "source_row_id": 93
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Request for Pathole repair",
+      "source_sla_days": 9,
+      "source_row_id": 94
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Request for road repair",
+      "source_sla_days": 10,
+      "source_row_id": 95
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Request of New Mini Water Tank for Pubic",
+      "source_sla_days": 17,
+      "source_row_id": 96
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Reuest for Night Security",
+      "source_sla_days": 17,
+      "source_row_id": 97
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Road - Others",
+      "source_sla_days": 17,
+      "source_row_id": 98
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Road Cutting Permission",
+      "source_sla_days": 9,
+      "source_row_id": 99
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Road Patch works",
+      "source_sla_days": 35,
+      "source_row_id": 100
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Road Signage",
+      "source_sla_days": 6,
+      "source_row_id": 101
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Road Works-CCand BT",
+      "source_sla_days": 16,
+      "source_row_id": 102
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Speed Breaker",
+      "source_sla_days": 17,
+      "source_row_id": 103
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Toilet Maintenance",
+      "source_sla_days": 17,
+      "source_row_id": 104
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Walker Path",
+      "source_sla_days": 17,
+      "source_row_id": 105
+    },
+    {
+      "department": "Engineering - Works",
+      "category": "Water Supply HSC Name Correction",
+      "source_sla_days": 10,
+      "source_row_id": 106
+    },
+    {
+      "department": "Engineering -Town plan",
+      "category": "Building Plan",
+      "source_sla_days": 8,
+      "source_row_id": 107
+    },
+    {
+      "department": "Engineering -Town plan",
+      "category": "Building plan - Others",
+      "source_sla_days": 8,
+      "source_row_id": 108
+    },
+    {
+      "department": "Engineering -Town plan",
+      "category": "Buliding Application",
+      "source_sla_days": 8,
+      "source_row_id": 109
+    },
+    {
+      "department": "Engineering -Town plan",
+      "category": "Buliding Debris",
+      "source_sla_days": 8,
+      "source_row_id": 110
+    },
+    {
+      "department": "Engineering -Town plan",
+      "category": "Buliding License",
+      "source_sla_days": 8,
+      "source_row_id": 111
+    },
+    {
+      "department": "Engineering -Town plan",
+      "category": "Buliding Plan renewal",
+      "source_sla_days": 8,
+      "source_row_id": 112
+    },
+    {
+      "department": "Engineering -Town plan",
+      "category": "Buliding Plan Verification",
+      "source_sla_days": 8,
+      "source_row_id": 113
+    },
+    {
+      "department": "Engineering -Town plan",
+      "category": "Buliding Plannig Permission",
+      "source_sla_days": 8,
+      "source_row_id": 114
+    },
+    {
+      "department": "Engineering -Town plan",
+      "category": "Buliding Rule Violation",
+      "source_sla_days": 8,
+      "source_row_id": 115
+    },
+    {
+      "department": "Engineering -Town plan",
+      "category": "Delimation",
+      "source_sla_days": 8,
+      "source_row_id": 116
+    },
+    {
+      "department": "Engineering -Town plan",
+      "category": "Deviation of Plan",
+      "source_sla_days": 8,
+      "source_row_id": 117
+    },
+    {
+      "department": "Engineering -Town plan",
+      "category": "Hoarding Removal UAC",
+      "source_sla_days": 8,
+      "source_row_id": 118
+    },
+    {
+      "department": "Engineering -Town plan",
+      "category": "Layout Approval",
+      "source_sla_days": 8,
+      "source_row_id": 119
+    },
+    {
+      "department": "Engineering -Town plan",
+      "category": "Others",
+      "source_sla_days": 34,
+      "source_row_id": 120
+    },
+    {
+      "department": "Engineering -Town plan",
+      "category": "Payments",
+      "source_sla_days": 8,
+      "source_row_id": 121
+    },
+    {
+      "department": "Engineering -Town plan",
+      "category": "Petty Shop",
+      "source_sla_days": 8,
+      "source_row_id": 122
+    },
+    {
+      "department": "Engineering -Town plan",
+      "category": "Removal of Permanent Encroachment",
+      "source_sla_days": 34,
+      "source_row_id": 123
+    },
+    {
+      "department": "Engineering -Town plan",
+      "category": "Removal of Temporary Encroachment",
+      "source_sla_days": 19,
+      "source_row_id": 124
+    },
+    {
+      "department": "Engineering -Town plan",
+      "category": "Request For Information",
+      "source_sla_days": 8,
+      "source_row_id": 125
+    },
+    {
+      "department": "Engineering -Town plan",
+      "category": "Reserve Site",
+      "source_sla_days": 8,
+      "source_row_id": 126
+    },
+    {
+      "department": "Engineering -Town plan",
+      "category": "Sub –Division Approval",
+      "source_sla_days": 8,
+      "source_row_id": 127
+    },
+    {
+      "department": "Engineering -Town plan",
+      "category": "Survey",
+      "source_sla_days": 8,
+      "source_row_id": 128
+    },
+    {
+      "department": "Engineering -Town plan",
+      "category": "Town Plannig-General works",
+      "source_sla_days": 8,
+      "source_row_id": 129
+    },
+    {
+      "department": "Engineering -Town plan",
+      "category": "Town Planning Others",
+      "source_sla_days": 8,
+      "source_row_id": 130
+    },
+    {
+      "department": "Engineering -Town plan",
+      "category": "Town Planning-Delay of Building Plan Approval",
+      "source_sla_days": 8,
+      "source_row_id": 131
+    },
+    {
+      "department": "Engineering -Town plan",
+      "category": "Town Planning-Removal of Unauthorised Hoardings",
+      "source_sla_days": 8,
+      "source_row_id": 132
+    },
+    {
+      "department": "Engineering -Town plan",
+      "category": "Town Planning-Without Plan Building Construction",
+      "source_sla_days": 8,
+      "source_row_id": 133
+    },
+    {
+      "department": "Engineering -Town plan",
+      "category": "Un-Authorised Construction",
+      "source_sla_days": 8,
+      "source_row_id": 134
+    },
+    {
+      "department": "Engineering -Town plan",
+      "category": "Water bodies encrochment",
+      "source_sla_days": 8,
+      "source_row_id": 135
+    },
+    {
+      "department": "New Infrastructure - streetlight",
+      "category": "New streetlight",
+      "source_sla_days": 37,
+      "source_row_id": 137
+    },
+    {
+      "department": "New Infrastructure - works",
+      "category": "New compound wall/ New Building",
+      "source_sla_days": 37,
+      "source_row_id": 139
+    },
+    {
+      "department": "New Infrastructure - works",
+      "category": "New Road",
+      "source_sla_days": 37,
+      "source_row_id": 140
+    },
+    {
+      "department": "New Infrastructure - works",
+      "category": "New Storm water Drainage/ New culvert",
+      "source_sla_days": 37,
+      "source_row_id": 141
+    },
+    {
+      "department": "New Infrastructure - works",
+      "category": "New UGD connection",
+      "source_sla_days": 67,
+      "source_row_id": 142
+    },
+    {
+      "department": "New Infrastructure - works",
+      "category": "New water supply connection",
+      "source_sla_days": 37,
+      "source_row_id": 143
+    },
+    {
+      "department": "New Infrastructure - works",
+      "category": "New Water Tank/ New Borewel/ New Boremotor",
+      "source_sla_days": 37,
+      "source_row_id": 144
+    },
+    {
+      "department": "Public Distribution System",
+      "category": "Biometric Related",
+      "source_sla_days": 5,
+      "source_row_id": 145
+    },
+    {
+      "department": "Public Distribution System",
+      "category": "Change Ration shop",
+      "source_sla_days": 6,
+      "source_row_id": 146
+    },
+    {
+      "department": "Public Distribution System",
+      "category": "Commodities Related",
+      "source_sla_days": 5,
+      "source_row_id": 147
+    },
+    {
+      "department": "Public Distribution System",
+      "category": "Food Safety",
+      "source_sla_days": 5,
+      "source_row_id": 148
+    },
+    {
+      "department": "Public Distribution System",
+      "category": "PDS Machine Not Working",
+      "source_sla_days": 5,
+      "source_row_id": 149
+    },
+    {
+      "department": "Public Distribution System",
+      "category": "Ration shop - Others",
+      "source_sla_days": 6,
+      "source_row_id": 150
+    },
+    {
+      "department": "Public Distribution System",
+      "category": "Ration shop keeper",
+      "source_sla_days": 6,
+      "source_row_id": 151
+    },
+    {
+      "department": "Public Distribution System",
+      "category": "Ration Smart card",
+      "source_sla_days": 6,
+      "source_row_id": 152
+    },
+    {
+      "department": "Public Health",
+      "category": "animals nuisance",
+      "source_sla_days": 4,
+      "source_row_id": 154
+    },
+    {
+      "department": "Public Health",
+      "category": "Bakery smoke Nuisance",
+      "source_sla_days": 4,
+      "source_row_id": 155
+    },
+    {
+      "department": "Public Health",
+      "category": "Bio-Medical Waste-Details",
+      "source_sla_days": 7,
+      "source_row_id": 156
+    },
+    {
+      "department": "Public Health",
+      "category": "Birth - Child Sex Correction",
+      "source_sla_days": 4,
+      "source_row_id": 157
+    },
+    {
+      "department": "Public Health",
+      "category": "Birth - Date of Birth Correction",
+      "source_sla_days": 4,
+      "source_row_id": 158
+    },
+    {
+      "department": "Public Health",
+      "category": "Birth - Father/Mother - UID Number Correction",
+      "source_sla_days": 4,
+      "source_row_id": 159
+    },
+    {
+      "department": "Public Health",
+      "category": "Birth - Hospital Name / Address Correction",
+      "source_sla_days": 4,
+      "source_row_id": 160
+    },
+    {
+      "department": "Public Health",
+      "category": "Birth - Permanent Address Correction",
+      "source_sla_days": 4,
+      "source_row_id": 161
+    },
+    {
+      "department": "Public Health",
+      "category": "Birth - Place of Birth Correction",
+      "source_sla_days": 4,
+      "source_row_id": 162
+    },
+    {
+      "department": "Public Health",
+      "category": "Birth -Present Address Correction",
+      "source_sla_days": 4,
+      "source_row_id": 163
+    },
+    {
+      "department": "Public Health",
+      "category": "Birth /DeathCertificate-Current Year",
+      "source_sla_days": 4,
+      "source_row_id": 164
+    },
+    {
+      "department": "Public Health",
+      "category": "Birth /DeathCertificate-Previous year",
+      "source_sla_days": 4,
+      "source_row_id": 165
+    },
+    {
+      "department": "Public Health",
+      "category": "Birth and Death Others",
+      "source_sla_days": 4,
+      "source_row_id": 166
+    },
+    {
+      "department": "Public Health",
+      "category": "Birth Child Name Correction",
+      "source_sla_days": 4,
+      "source_row_id": 167
+    },
+    {
+      "department": "Public Health",
+      "category": "Birth Complaint",
+      "source_sla_days": 4,
+      "source_row_id": 168
+    },
+    {
+      "department": "Public Health",
+      "category": "Birth Correction",
+      "source_sla_days": 4,
+      "source_row_id": 169
+    },
+    {
+      "department": "Public Health",
+      "category": "Birth Father Name Correction",
+      "source_sla_days": 4,
+      "source_row_id": 170
+    },
+    {
+      "department": "Public Health",
+      "category": "Birth Mother Name Correction",
+      "source_sla_days": 4,
+      "source_row_id": 171
+    },
+    {
+      "department": "Public Health",
+      "category": "Birth NAC",
+      "source_sla_days": 4,
+      "source_row_id": 172
+    },
+    {
+      "department": "Public Health",
+      "category": "Birth NOC",
+      "source_sla_days": 4,
+      "source_row_id": 173
+    },
+    {
+      "department": "Public Health",
+      "category": "Birth Registration",
+      "source_sla_days": 4,
+      "source_row_id": 174
+    },
+    {
+      "department": "Public Health",
+      "category": "Bpl List Prepartion Details",
+      "source_sla_days": 7,
+      "source_row_id": 175
+    },
+    {
+      "department": "Public Health",
+      "category": "Burning of Compostyard",
+      "source_sla_days": 4,
+      "source_row_id": 176
+    },
+    {
+      "department": "Public Health",
+      "category": "Cancellation of Trade License",
+      "source_sla_days": 4,
+      "source_row_id": 177
+    },
+    {
+      "department": "Public Health",
+      "category": "Cattle Menace",
+      "source_sla_days": 4,
+      "source_row_id": 178
+    },
+    {
+      "department": "Public Health",
+      "category": "Child Name Regestration in Birth Certificate",
+      "source_sla_days": 4,
+      "source_row_id": 179
+    },
+    {
+      "department": "Public Health",
+      "category": "Child Name Registration",
+      "source_sla_days": 4,
+      "source_row_id": 180
+    },
+    {
+      "department": "Public Health",
+      "category": "Communicable Discease",
+      "source_sla_days": 4,
+      "source_row_id": 181
+    },
+    {
+      "department": "Public Health",
+      "category": "Compost yard Issues",
+      "source_sla_days": 4,
+      "source_row_id": 182
+    },
+    {
+      "department": "Public Health",
+      "category": "COWS NUSIANCE",
+      "source_sla_days": 4,
+      "source_row_id": 183
+    },
+    {
+      "department": "Public Health",
+      "category": "D and O Trade Details",
+      "source_sla_days": 4,
+      "source_row_id": 184
+    },
+    {
+      "department": "Public Health",
+      "category": "Damage of Dustbin",
+      "source_sla_days": 4,
+      "source_row_id": 185
+    },
+    {
+      "department": "Public Health",
+      "category": "De-Addicition and Shelter realted Details",
+      "source_sla_days": 4,
+      "source_row_id": 186
+    },
+    {
+      "department": "Public Health",
+      "category": "Dead Animal",
+      "source_sla_days": 4,
+      "source_row_id": 187
+    },
+    {
+      "department": "Public Health",
+      "category": "Death - Death Date Correction",
+      "source_sla_days": 4,
+      "source_row_id": 188
+    },
+    {
+      "department": "Public Health",
+      "category": "Death - Death NAC",
+      "source_sla_days": 4,
+      "source_row_id": 189
+    },
+    {
+      "department": "Public Health",
+      "category": "Death - Death NOC",
+      "source_sla_days": 4,
+      "source_row_id": 190
+    },
+    {
+      "department": "Public Health",
+      "category": "Death - Death Person Age Correction",
+      "source_sla_days": 4,
+      "source_row_id": 191
+    },
+    {
+      "department": "Public Health",
+      "category": "Death - Death Person Father Name Correction",
+      "source_sla_days": 4,
+      "source_row_id": 192
+    },
+    {
+      "department": "Public Health",
+      "category": "Death - Death Person Father UID Number Correction",
+      "source_sla_days": 4,
+      "source_row_id": 193
+    },
+    {
+      "department": "Public Health",
+      "category": "Death - Death Person Husband/Wife Name Correction",
+      "source_sla_days": 4,
+      "source_row_id": 194
+    },
+    {
+      "department": "Public Health",
+      "category": "Death - Death Person Mother Name Correction",
+      "source_sla_days": 4,
+      "source_row_id": 195
+    },
+    {
+      "department": "Public Health",
+      "category": "Death - Death Person Mother UID Correction",
+      "source_sla_days": 4,
+      "source_row_id": 196
+    },
+    {
+      "department": "Public Health",
+      "category": "Death - Death Person Name Correction",
+      "source_sla_days": 4,
+      "source_row_id": 197
+    },
+    {
+      "department": "Public Health",
+      "category": "Death - Death Person Premanent Address Correction",
+      "source_sla_days": 4,
+      "source_row_id": 198
+    },
+    {
+      "department": "Public Health",
+      "category": "Death - Death Person Present Address Correction",
+      "source_sla_days": 4,
+      "source_row_id": 199
+    },
+    {
+      "department": "Public Health",
+      "category": "Death - Death Person Sex Correction",
+      "source_sla_days": 4,
+      "source_row_id": 200
+    },
+    {
+      "department": "Public Health",
+      "category": "Death - Death Person UID Number Correction",
+      "source_sla_days": 4,
+      "source_row_id": 201
+    },
+    {
+      "department": "Public Health",
+      "category": "Death - Death Place Correction",
+      "source_sla_days": 4,
+      "source_row_id": 202
+    },
+    {
+      "department": "Public Health",
+      "category": "Death Complaint",
+      "source_sla_days": 4,
+      "source_row_id": 203
+    },
+    {
+      "department": "Public Health",
+      "category": "Death Correction",
+      "source_sla_days": 4,
+      "source_row_id": 204
+    },
+    {
+      "department": "Public Health",
+      "category": "Death Person Husband/Wife UID Number Correction",
+      "source_sla_days": 4,
+      "source_row_id": 205
+    },
+    {
+      "department": "Public Health",
+      "category": "Death Registration",
+      "source_sla_days": 4,
+      "source_row_id": 206
+    },
+    {
+      "department": "Public Health",
+      "category": "Deisceases",
+      "source_sla_days": 7,
+      "source_row_id": 207
+    },
+    {
+      "department": "Public Health",
+      "category": "Dog - Catching",
+      "source_sla_days": 4,
+      "source_row_id": 208
+    },
+    {
+      "department": "Public Health",
+      "category": "Door to Door collection",
+      "source_sla_days": 4,
+      "source_row_id": 209
+    },
+    {
+      "department": "Public Health",
+      "category": "Dr.Muthulakshmi Reddy Maternity benefit Scheme",
+      "source_sla_days": 12,
+      "source_row_id": 210
+    },
+    {
+      "department": "Public Health",
+      "category": "Drainage Leakage",
+      "source_sla_days": 4,
+      "source_row_id": 211
+    },
+    {
+      "department": "Public Health",
+      "category": "Drainage Overflow",
+      "source_sla_days": 4,
+      "source_row_id": 212
+    },
+    {
+      "department": "Public Health",
+      "category": "Drainage Silt Not Removed",
+      "source_sla_days": 4,
+      "source_row_id": 213
+    },
+    {
+      "department": "Public Health",
+      "category": "Dustbin Not Cleaned",
+      "source_sla_days": 4,
+      "source_row_id": 214
+    },
+    {
+      "department": "Public Health",
+      "category": "Epidemic Diseases",
+      "source_sla_days": 4,
+      "source_row_id": 215
+    },
+    {
+      "department": "Public Health",
+      "category": "Extra Payment Related",
+      "source_sla_days": 7,
+      "source_row_id": 216
+    },
+    {
+      "department": "Public Health",
+      "category": "Flood Management",
+      "source_sla_days": 4,
+      "source_row_id": 217
+    },
+    {
+      "department": "Public Health",
+      "category": "Garbage",
+      "source_sla_days": 4,
+      "source_row_id": 218
+    },
+    {
+      "department": "Public Health",
+      "category": "Garbage Vehicle Related",
+      "source_sla_days": 4,
+      "source_row_id": 219
+    },
+    {
+      "department": "Public Health",
+      "category": "Illegal Trade",
+      "source_sla_days": 4,
+      "source_row_id": 220
+    },
+    {
+      "department": "Public Health",
+      "category": "Improper Toilet Cleaning",
+      "source_sla_days": 7,
+      "source_row_id": 221
+    },
+    {
+      "department": "Public Health",
+      "category": "License Issues",
+      "source_sla_days": 4,
+      "source_row_id": 222
+    },
+    {
+      "department": "Public Health",
+      "category": "Maintenance Of Electrical Crematorium Deatils",
+      "source_sla_days": 4,
+      "source_row_id": 223
+    },
+    {
+      "department": "Public Health",
+      "category": "More Fees",
+      "source_sla_days": 7,
+      "source_row_id": 224
+    },
+    {
+      "department": "Public Health",
+      "category": "Mosquito Breeding",
+      "source_sla_days": 4,
+      "source_row_id": 225
+    },
+    {
+      "department": "Public Health",
+      "category": "Mosquito Menace",
+      "source_sla_days": 4,
+      "source_row_id": 226
+    },
+    {
+      "department": "Public Health",
+      "category": "New Machinary Installation with Trade Permission",
+      "source_sla_days": 4,
+      "source_row_id": 227
+    },
+    {
+      "department": "Public Health",
+      "category": "Non availability of Bin",
+      "source_sla_days": 4,
+      "source_row_id": 228
+    },
+    {
+      "department": "Public Health",
+      "category": "Non Removal of Garbage",
+      "source_sla_days": 4,
+      "source_row_id": 229
+    },
+    {
+      "department": "Public Health",
+      "category": "Overflow of Dustpin",
+      "source_sla_days": 4,
+      "source_row_id": 230
+    },
+    {
+      "department": "Public Health",
+      "category": "Pig Menace",
+      "source_sla_days": 4,
+      "source_row_id": 231
+    },
+    {
+      "department": "Public Health",
+      "category": "pollution control",
+      "source_sla_days": 4,
+      "source_row_id": 232
+    },
+    {
+      "department": "Public Health",
+      "category": "Public health - Others",
+      "source_sla_days": 4,
+      "source_row_id": 233
+    },
+    {
+      "department": "Public Health",
+      "category": "Public Septic Tank Cleaning",
+      "source_sla_days": 4,
+      "source_row_id": 234
+    },
+    {
+      "department": "Public Health",
+      "category": "Public Toilets / Bath Rooms Not Cleaned",
+      "source_sla_days": 7,
+      "source_row_id": 235
+    },
+    {
+      "department": "Public Health",
+      "category": "Removal of Garbage",
+      "source_sla_days": 4,
+      "source_row_id": 236
+    },
+    {
+      "department": "Public Health",
+      "category": "Request for Address Change for Trade License",
+      "source_sla_days": 4,
+      "source_row_id": 237
+    },
+    {
+      "department": "Public Health",
+      "category": "Request for change of Dust Bin",
+      "source_sla_days": 4,
+      "source_row_id": 238
+    },
+    {
+      "department": "Public Health",
+      "category": "Request for Change of Trade",
+      "source_sla_days": 4,
+      "source_row_id": 239
+    },
+    {
+      "department": "Public Health",
+      "category": "Request for Cleaning of Drainage",
+      "source_sla_days": 4,
+      "source_row_id": 240
+    },
+    {
+      "department": "Public Health",
+      "category": "Request for Corrective or Preventive Action",
+      "source_sla_days": 4,
+      "source_row_id": 241
+    },
+    {
+      "department": "Public Health",
+      "category": "Request for Name Transfer for Trade License",
+      "source_sla_days": 4,
+      "source_row_id": 242
+    },
+    {
+      "department": "Public Health",
+      "category": "Request for new Bin",
+      "source_sla_days": 33,
+      "source_row_id": 243
+    },
+    {
+      "department": "Public Health",
+      "category": "Request for New Trade in Rental Buildings",
+      "source_sla_days": 4,
+      "source_row_id": 244
+    },
+    {
+      "department": "Public Health",
+      "category": "Request for New Trade License",
+      "source_sla_days": 4,
+      "source_row_id": 245
+    },
+    {
+      "department": "Public Health",
+      "category": "Sanitation Others",
+      "source_sla_days": 4,
+      "source_row_id": 246
+    },
+    {
+      "department": "Public Health",
+      "category": "Septic Tank Cleaning",
+      "source_sla_days": 4,
+      "source_row_id": 247
+    },
+    {
+      "department": "Public Health",
+      "category": "Solid Waste Management - Others",
+      "source_sla_days": 4,
+      "source_row_id": 248
+    },
+    {
+      "department": "Public Health",
+      "category": "Stagnation of Storm Water Drain",
+      "source_sla_days": 4,
+      "source_row_id": 249
+    },
+    {
+      "department": "Public Health",
+      "category": "Street Dogs nuisance",
+      "source_sla_days": 10,
+      "source_row_id": 250
+    },
+    {
+      "department": "Public Health",
+      "category": "Street Sweeping",
+      "source_sla_days": 4,
+      "source_row_id": 251
+    },
+    {
+      "department": "Public Health",
+      "category": "Sweeping Not Done",
+      "source_sla_days": 4,
+      "source_row_id": 252
+    },
+    {
+      "department": "Public Health",
+      "category": "Temporary Crackers Licenses Workers",
+      "source_sla_days": 7,
+      "source_row_id": 253
+    },
+    {
+      "department": "Public Health",
+      "category": "Trace Fees",
+      "source_sla_days": 4,
+      "source_row_id": 254
+    },
+    {
+      "department": "Public Health",
+      "category": "UGD-Others",
+      "source_sla_days": 0,
+      "source_row_id": 255
+    },
+    {
+      "department": "Revenue",
+      "category": "Booking of Assets",
+      "source_sla_days": 5,
+      "source_row_id": 256
+    },
+    {
+      "department": "Revenue",
+      "category": "Drain.Maint.Charges",
+      "source_sla_days": 7,
+      "source_row_id": 257
+    },
+    {
+      "department": "Revenue",
+      "category": "Lease Advance/Deposits related Issues",
+      "source_sla_days": 5,
+      "source_row_id": 258
+    },
+    {
+      "department": "Revenue",
+      "category": "Litigation",
+      "source_sla_days": 13,
+      "source_row_id": 259
+    },
+    {
+      "department": "Revenue",
+      "category": "Maintenance of Parking place",
+      "source_sla_days": 5,
+      "source_row_id": 260
+    },
+    {
+      "department": "Revenue",
+      "category": "Name Correction",
+      "source_sla_days": 7,
+      "source_row_id": 261
+    },
+    {
+      "department": "Revenue",
+      "category": "New Assessments",
+      "source_sla_days": 7,
+      "source_row_id": 262
+    },
+    {
+      "department": "Revenue",
+      "category": "Non tax- Monthly Rental",
+      "source_sla_days": 5,
+      "source_row_id": 263
+    },
+    {
+      "department": "Revenue",
+      "category": "Non tax-Annual Lease",
+      "source_sla_days": 5,
+      "source_row_id": 264
+    },
+    {
+      "department": "Revenue",
+      "category": "Nontax-Lease Items",
+      "source_sla_days": 5,
+      "source_row_id": 265
+    },
+    {
+      "department": "Revenue",
+      "category": "Nontax-Requisition for Name Correction",
+      "source_sla_days": 5,
+      "source_row_id": 266
+    },
+    {
+      "department": "Revenue",
+      "category": "Nontax-Requisition for Name Transfer",
+      "source_sla_days": 5,
+      "source_row_id": 267
+    },
+    {
+      "department": "Revenue",
+      "category": "Nontax-Requisition toAdjust their Deposit for Rent",
+      "source_sla_days": 5,
+      "source_row_id": 268
+    },
+    {
+      "department": "Revenue",
+      "category": "Nontax-To Utilise is as Godown / Parking Area",
+      "source_sla_days": 5,
+      "source_row_id": 269
+    },
+    {
+      "department": "Revenue",
+      "category": "Online Payment",
+      "source_sla_days": 11,
+      "source_row_id": 270
+    },
+    {
+      "department": "Revenue",
+      "category": "Others",
+      "source_sla_days": 5,
+      "source_row_id": 271
+    },
+    {
+      "department": "Revenue",
+      "category": "Parking Charges",
+      "source_sla_days": 7,
+      "source_row_id": 272
+    },
+    {
+      "department": "Revenue",
+      "category": "Pay&Use Toilet",
+      "source_sla_days": 7,
+      "source_row_id": 273
+    },
+    {
+      "department": "Revenue",
+      "category": "Permission to adjust empty space between Two shops",
+      "source_sla_days": 5,
+      "source_row_id": 274
+    },
+    {
+      "department": "Revenue",
+      "category": "Permission to Change the Flooring on their Own exp",
+      "source_sla_days": 5,
+      "source_row_id": 275
+    },
+    {
+      "department": "Revenue",
+      "category": "Permission to Construct a Toilet on their Own Exp",
+      "source_sla_days": 5,
+      "source_row_id": 276
+    },
+    {
+      "department": "Revenue",
+      "category": "Permission to do Indoor Partition on their Own Exp",
+      "source_sla_days": 5,
+      "source_row_id": 277
+    },
+    {
+      "department": "Revenue",
+      "category": "Permission to Make Temporary Roof in front of Shop",
+      "source_sla_days": 5,
+      "source_row_id": 278
+    },
+    {
+      "department": "Revenue",
+      "category": "Permission to Smash together the wall in Shops",
+      "source_sla_days": 5,
+      "source_row_id": 279
+    },
+    {
+      "department": "Revenue",
+      "category": "Prof Tax-Request for Cancel Existing Assessment No",
+      "source_sla_days": 5,
+      "source_row_id": 280
+    },
+    {
+      "department": "Revenue",
+      "category": "Prof Tax-Request for Change of Address",
+      "source_sla_days": 5,
+      "source_row_id": 281
+    },
+    {
+      "department": "Revenue",
+      "category": "Prof Tax-Request for Demand Notice",
+      "source_sla_days": 5,
+      "source_row_id": 282
+    },
+    {
+      "department": "Revenue",
+      "category": "Prof Tax-Request for Demand Update",
+      "source_sla_days": 5,
+      "source_row_id": 283
+    },
+    {
+      "department": "Revenue",
+      "category": "Prof Tax-Request for Name Correction",
+      "source_sla_days": 5,
+      "source_row_id": 284
+    },
+    {
+      "department": "Revenue",
+      "category": "Prof Tax-Request for New Assessment",
+      "source_sla_days": 5,
+      "source_row_id": 285
+    },
+    {
+      "department": "Revenue",
+      "category": "Prof Tax-Request for Tariff Change",
+      "source_sla_days": 5,
+      "source_row_id": 286
+    },
+    {
+      "department": "Revenue",
+      "category": "Prof Tax-Request for Tax Paid Statement",
+      "source_sla_days": 5,
+      "source_row_id": 287
+    },
+    {
+      "department": "Revenue",
+      "category": "Property Tax",
+      "source_sla_days": 10,
+      "source_row_id": 288
+    },
+    {
+      "department": "Revenue",
+      "category": "Property Tax Name Transfer",
+      "source_sla_days": 5,
+      "source_row_id": 289
+    },
+    {
+      "department": "Revenue",
+      "category": "Request For Information",
+      "source_sla_days": 7,
+      "source_row_id": 290
+    },
+    {
+      "department": "Revenue",
+      "category": "Request for Parking Facility",
+      "source_sla_days": 5,
+      "source_row_id": 291
+    },
+    {
+      "department": "Revenue",
+      "category": "Revenue - Others",
+      "source_sla_days": 11,
+      "source_row_id": 292
+    },
+    {
+      "department": "Revenue",
+      "category": "Road side Parking Slots",
+      "source_sla_days": 5,
+      "source_row_id": 293
+    },
+    {
+      "department": "Revenue",
+      "category": "Tax Fixation",
+      "source_sla_days": 5,
+      "source_row_id": 294
+    },
+    {
+      "department": "Revenue",
+      "category": "Tax Payers Correction",
+      "source_sla_days": 5,
+      "source_row_id": 295
+    },
+    {
+      "department": "Revenue",
+      "category": "VLT",
+      "source_sla_days": 7,
+      "source_row_id": 296
+    },
+    {
+      "department": "Revenue",
+      "category": "Water Charge",
+      "source_sla_days": 7,
+      "source_row_id": 297
+    },
+    {
+      "department": "Revenue",
+      "category": "Water Name Transfer",
+      "source_sla_days": 6,
+      "source_row_id": 298
+    },
+    {
+      "department": "Transport Department",
+      "category": "Bus maintenance",
+      "source_sla_days": 6,
+      "source_row_id": 299
+    },
+    {
+      "department": "Transport Department",
+      "category": "Bus not stops in exact bus stop",
+      "source_sla_days": 6,
+      "source_row_id": 300
+    },
+    {
+      "department": "Transport Department",
+      "category": "Bus Timing issue",
+      "source_sla_days": 6,
+      "source_row_id": 301
+    },
+    {
+      "department": "Transport Department",
+      "category": "Conductor Misbehaving",
+      "source_sla_days": 6,
+      "source_row_id": 302
+    },
+    {
+      "department": "Transport Department",
+      "category": "Extra charges",
+      "source_sla_days": 6,
+      "source_row_id": 303
+    },
+    {
+      "department": "Transport Department",
+      "category": "New bus route service",
+      "source_sla_days": 6,
+      "source_row_id": 304
+    },
+    {
+      "department": "Transport Department",
+      "category": "Not picking school/college students",
+      "source_sla_days": 6,
+      "source_row_id": 305
+    },
+    {
+      "department": "Transport Department",
+      "category": "Transport - others",
+      "source_sla_days": 3,
+      "source_row_id": 306
+    }
+  ]
+}
