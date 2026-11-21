@@ -58,6 +58,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     verify_csrf();
 
+    // Reapply the verified initial allocation service to an existing
+    // Registered/unassigned complaint. Only authorized complaint admins can
+    // execute this, and it never creates/guesses officer approvals.
+    if (($_POST['action'] ?? '') === 'retry_initial_allocation') {
+        if (!can_manage_all_complaints($user)) {
+            http_response_code(403);
+            exit('Only authorized complaint administrators can retry allocation.');
+        }
+        $pdo = db();
+        try {
+            $pdo->beginTransaction();
+            $lock = $pdo->prepare(
+                'SELECT id,department_id,category_id,ward_id,zone_id,status,assigned_officer_id
+                 FROM complaints WHERE id=? AND is_deleted=0 FOR UPDATE'
+            );
+            $lock->execute([$complaintId]);
+            $fresh = $lock->fetch(PDO::FETCH_ASSOC);
+            if (!$fresh) throw new RuntimeException('Complaint was not found.');
+            if ($fresh['status'] !== 'Registered' || $fresh['assigned_officer_id'] !== null) {
+                throw new RuntimeException('Only registered, unassigned complaints can be retried.');
+            }
+            $active = $pdo->prepare(
+                'SELECT id FROM complaint_assignments
+                 WHERE complaint_id=? AND is_current=1 LIMIT 1 FOR UPDATE'
+            );
+            $active->execute([$complaintId]);
+            if ($active->fetchColumn() !== false) {
+                throw new RuntimeException('Active assignment exists; review history before retrying.');
+            }
+            $officerId = assign_officer_for_complaint(
+                $complaintId,
+                (int)$fresh['department_id'],
+                (int)$fresh['category_id'],
+                (int)$fresh['ward_id'],
+                (int)$fresh['zone_id']
+            );
+            if ($officerId === null) {
+                throw new RuntimeException(
+                    'No eligible approved Stage 1 officer. Check stage approval, category/department maps and ward coverage.'
+                );
+            }
+            $pdo->commit();
+            audit_log(
+                (int)$user['id'], 'verified_initial_allocation_retried',
+                'complaint', $complaintId, ['officer_id'=>$officerId]
+            );
+            flash('success', 'Complaint automatically assigned to a verified officer.');
+        } catch (Throwable $exception) {
+            if ($pdo->inTransaction()) $pdo->rollBack();
+            flash(
+                'warning',
+                APP_ENV === 'local' ? $exception->getMessage()
+                    : 'Allocation was not completed. Verify the officer approvals and routing.'
+            );
+        }
+        redirect('employee/complaint-view.php?id='.$complaintId);
+    }
+
     $newStatus = trim($_POST['status'] ?? '');
     $remarks = trim($_POST['remarks'] ?? '');
     $officerId = (int)($_POST['assigned_officer_id'] ?? 0);
@@ -241,6 +299,23 @@ include __DIR__ . '/../includes/employee-header.php';
     </div>
 
     <div class="complaint-reference-actions">
+        <?php if ($canUpdate && can_manage_all_complaints($user)
+            && $complaint['status'] === 'Registered'
+            && $complaint['assigned_officer_id'] === null): ?>
+            <div class="alert alert-info">
+                This complaint has not yet been allocated to a verified Stage 1 officer.
+                Check <a href="<?php echo e(url('employee/officer-approvals.php')); ?>">Officer Stage Approvals</a>
+                before retrying.
+            </div>
+            <form method="post" class="mb-3">
+                <?php echo csrf_field(); ?>
+                <input type="hidden" name="id" value="<?php echo $complaintId; ?>">
+                <input type="hidden" name="action" value="retry_initial_allocation">
+                <button type="submit" class="btn btn-outline-primary">
+                    <i class="bi bi-arrow-clockwise me-1"></i>Retry verified auto-allocation
+                </button>
+            </form>
+        <?php endif; ?>
         <?php if ($canUpdate): ?>
             <h2>Update Complaint</h2>
             <div class="alert alert-warning small">New officer assignments require verified category/stage approval.

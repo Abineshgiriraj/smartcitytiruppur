@@ -294,84 +294,48 @@ function assign_officer_for_complaint(
         return null;
     }
 
-    // Fallback tiers: prefer ward-specific field officers over city-wide (all-60-ward) officers
+    // Search verified Stage 1 officers FIRST, rather than truncating
+    // unverified legacy candidate lists at 250 rows. Rank officers assigned
+    // to the complaint's ward ahead of verified city-wide officers.
     if ($officerId === null) {
-        $queries = [
-            [
-                'Ward + Department match (most specific officer)',
-                'SELECT o.id, o.officer_name
-                 FROM officers o
-                 JOIN officer_department_map odm ON odm.officer_id = o.id
-                 JOIN officer_ward_map owm ON owm.officer_id = o.id
-                 LEFT JOIN officer_category_map ocm ON ocm.officer_id = o.id AND ocm.category_id = ?
-                 WHERE odm.department_id = ? AND owm.ward_id = ? AND o.is_active = 1
-                 ORDER BY
-                   (SELECT COUNT(*) FROM officer_ward_map w2 WHERE w2.officer_id = o.id) ASC,
-                   (ocm.category_id IS NOT NULL) DESC,
-                   o.id ASC
-                 LIMIT 250',
-                [$categoryId, $departmentId, $wardId],
-            ],
-            [
-                'Category + Ward match',
-                'SELECT o.id, o.officer_name
-                 FROM officers o
-                 JOIN officer_category_map ocm ON ocm.officer_id = o.id
-                 JOIN officer_ward_map owm ON owm.officer_id = o.id
-                 WHERE ocm.category_id = ? AND owm.ward_id = ? AND o.is_active = 1
-                 ORDER BY (SELECT COUNT(*) FROM officer_ward_map w2 WHERE w2.officer_id = o.id) ASC, o.id ASC
-                 LIMIT 250',
-                [$categoryId, $wardId],
-            ],
-            [
-                'Escalation Level 1 officer',
-                'SELECT o.id, o.officer_name, eol.escalation_period_days AS sla_days
-                 FROM escalation_officer_levels eol
-                 JOIN officers o ON o.id = eol.officer_id AND o.is_active = 1
-                 WHERE eol.category_id = ? AND eol.level_no = 1 AND eol.is_active = 1
-                 LIMIT 250',
-                [$categoryId],
-            ],
-            [
-                'Category match',
-                'SELECT o.id, o.officer_name
-                 FROM officers o
-                 JOIN officer_category_map ocm ON ocm.officer_id = o.id
-                 WHERE ocm.category_id = ? AND o.is_active = 1
-                 ORDER BY (SELECT COUNT(*) FROM officer_ward_map w2 WHERE w2.officer_id = o.id) ASC, o.id ASC
-                 LIMIT 250',
-                [$categoryId],
-            ],
-            [
-                'Department match',
-                'SELECT o.id, o.officer_name
-                 FROM officers o
-                 JOIN officer_department_map odm ON odm.officer_id = o.id
-                 WHERE odm.department_id = ? AND o.is_active = 1
-                 ORDER BY (SELECT COUNT(*) FROM officer_ward_map w2 WHERE w2.officer_id = o.id) ASC, o.id ASC
-                 LIMIT 250',
-                [$departmentId],
-            ],
-        ];
-
-        foreach ($queries as [$sourceLabel, $sql, $params]) {
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute($params);
-            // Multiple candidates can share one mapped ward or department.
-            // The first officer ID may be an unapproved executive; search
-            // additional candidates in the SAME tier before falling back.
-            foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $candidate) {
-                $candidateId = (int) $candidate['id'];
+        try {
+            $approvedStmt = $pdo->prepare(
+                "SELECT o.id, o.officer_name,
+                        CASE
+                            WHEN EXISTS (SELECT 1 FROM officer_ward_map w
+                                         WHERE w.officer_id=o.id AND w.ward_id=?) THEN 0
+                            WHEN NOT EXISTS (SELECT 1 FROM officer_ward_map w
+                                             WHERE w.officer_id=o.id) THEN 1
+                            ELSE 2
+                        END AS ward_priority,
+                        (SELECT COUNT(*) FROM officer_ward_map w
+                         WHERE w.officer_id=o.id) AS ward_count
+                 FROM officer_stage_approvals a
+                 JOIN officers o ON o.id=a.officer_id AND o.is_active=1
+                 WHERE a.category_id=? AND a.stage_no=1
+                   AND a.revoked_at IS NULL AND a.approved_by IS NOT NULL
+                   AND TRIM(a.approval_reference) <> ''
+                 ORDER BY ward_priority, ward_count, o.id"
+            );
+            $approvedStmt->execute([$wardId, $categoryId]);
+            foreach ($approvedStmt->fetchAll(PDO::FETCH_ASSOC) as $candidate) {
+                $candidateId = (int)$candidate['id'];
                 if (!officer_stage_authorized(
                     $pdo, $categoryId, 1, $candidateId, $departmentId, $wardId
                 )) {
                     continue;
                 }
                 $officerId = $candidateId;
-                $officerName = (string) $candidate['officer_name'];
-                $allocationSource = $sourceLabel;
-                break 2;
+                $officerName = (string)$candidate['officer_name'];
+                $allocationSource = 'Verified Stage 1 officer (approved routing)';
+                break;
             }
+        } catch (Throwable $exception) {
+            log_message(
+                "Approved Stage 1 allocation registry unavailable for complaint {$complaintId}: "
+                . $exception->getMessage()
+            );
+            return null;
         }
     }
 
