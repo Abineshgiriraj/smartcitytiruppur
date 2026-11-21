@@ -286,20 +286,7 @@ include __DIR__ . '/includes/header.php';
             <h2 class="form-panel-title">Complaint Info</h2>
             <div class="row g-3">
                 <div class="col-md-6"><label class="form-label required">Department</label><select class="form-select" id="department_id" name="department_id" data-category-source required><option value="">Select Department</option><?php foreach ($departments as $department): ?><option value="<?php echo (int)$department['id']; ?>" <?php echo ((string)($old['department_id'] ?? '') === (string)$department['id']) ? 'selected' : ''; ?>><?php echo e($department['department_name']); ?></option><?php endforeach; ?></select></div>
-                <div class="col-md-6">
-                    <label class="form-label required" for="complaint_category_id">Complaint Category</label>
-                    <input class="form-control mb-2" id="complaint_category_search" type="search"
-                           placeholder="Search all categories: streetlight, water, drainage..."
-                           autocomplete="off" aria-label="Search complaint categories across departments">
-                    <select class="form-select" id="complaint_category_id" name="complaint_category_id"
-                            data-selected="<?php echo e($old['complaint_category_id'] ?? ''); ?>"
-                            aria-describedby="complaint_category_count" required>
-                        <option value="">Loading complaint categories...</option>
-                    </select>
-                    <div class="form-text" id="complaint_category_count" aria-live="polite">
-                        Browse all categories. Selecting one automatically updates its department.
-                    </div>
-                </div>
+                <div class="col-md-6"><label class="form-label required">Complaint Category</label><select class="form-select" id="complaint_category_id" name="complaint_category_id" data-selected="<?php echo e($old['complaint_category_id'] ?? ''); ?>" required><option value="">Select Complaint Category</option></select></div>
                 <div class="col-12"><label class="form-label">Complaint Description (in Tamil)</label><textarea class="form-control" name="description_tamil" rows="3"><?php echo e($old['description_tamil'] ?? ''); ?></textarea></div>
                 <div class="col-12"><label class="form-label required">Complaint Description (in English)</label><textarea class="form-control" name="description_english" rows="4" required><?php echo e($old['description_english'] ?? ''); ?></textarea></div>
             </div>

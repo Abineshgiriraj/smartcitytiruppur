@@ -14,93 +14,36 @@
 
     const departmentSelect = document.querySelector('[data-category-source]');
     const categorySelect = document.querySelector('#complaint_category_id');
-    const categorySearch = document.querySelector('#complaint_category_search');
-    const categoryCount = document.querySelector('#complaint_category_count');
+
     if (departmentSelect && categorySelect) {
-        const previouslySelected = String(categorySelect.dataset.selected || '');
-        let allCategories = [];
-        let loading = true;
-        function renderCategories(query = '', keepSelected = '') {
-            const term = query.trim().toLocaleLowerCase();
-            const original = String(keepSelected || categorySelect.value || '');
-            const preferredDepartment = String(departmentSelect.value || '');
-            const matches = allCategories.filter((category) =>
-                (String(category.category_name) + ' ' + String(category.department_name)).toLocaleLowerCase().includes(term)
-            );
-            matches.sort((left, right) => {
-                const leftRank = String(left.department_id) === preferredDepartment ? 0 : 1;
-                const rightRank = String(right.department_id) === preferredDepartment ? 0 : 1;
-                if (leftRank !== rightRank) return leftRank - rightRank;
-                return String(left.department_name).localeCompare(String(right.department_name)) ||
-                    String(left.category_name).localeCompare(String(right.category_name));
-            });
-            categorySelect.replaceChildren();
-            const placeholder = document.createElement('option');
-            placeholder.value = '';
-            placeholder.textContent = loading ? 'Loading complaint categories...' :
-                matches.length ? 'Select complaint category (all departments)' : 'No matching complaint categories';
-            categorySelect.appendChild(placeholder);
-            const grouped = new Map();
-            for (const category of matches) {
-                const deptId = String(category.department_id);
-                let group = grouped.get(deptId);
-                if (!group) {
-                    group = document.createElement('optgroup');
-                    group.label = String(category.department_name);
-                    categorySelect.appendChild(group);
-                    grouped.set(deptId, group);
-                }
-                const option = document.createElement('option');
-                option.value = String(category.id);
-                option.textContent = String(category.category_name) + ' (' + category.sla_days + ' days)';
-                group.appendChild(option);
-            }
-            categorySelect.value = original && matches.some((item) => String(item.id) === original)
-                ? original : '';
-            if (categoryCount) categoryCount.textContent = loading ? 'Loading categories...' :
-                matches.length + ' of ' + allCategories.length + ' categories across all departments';
-        }
-        async function loadAllCategories() {
+        const selectedCategory = categorySelect.dataset.selected || '';
+
+        async function loadCategories() {
+            const departmentId = departmentSelect.value;
+            categorySelect.innerHTML = '<option value="">Select complaint category</option>';
+
+            if (!departmentId) return;
+
             try {
-                const response = await fetch(baseUrl + '/ajax/categories.php?all=1', { credentials: 'same-origin' });
-                if (!response.ok) throw new Error('Category endpoint returned ' + response.status);
-                const payload = await response.json();
-                if (!Array.isArray(payload)) throw new Error('Category endpoint returned invalid data');
-                allCategories = payload;
-                loading = false;
-                const stored = allCategories.find((item) => String(item.id) === previouslySelected);
-                if (stored) departmentSelect.value = String(stored.department_id);
-                renderCategories('', previouslySelected);
+                const response = await fetch(
+                    `${baseUrl}/ajax/categories.php?department_id=${encodeURIComponent(departmentId)}`
+                );
+                const data = await response.json();
+
+                data.forEach((row) => {
+                    const option = document.createElement('option');
+                    option.value = row.id;
+                    option.textContent = `${row.category_name} (${row.sla_days} days)`;
+                    if (String(row.id) === String(selectedCategory)) option.selected = true;
+                    categorySelect.appendChild(option);
+                });
             } catch (error) {
-                loading = false;
-                console.error('Category loading failed', error);
-                categorySelect.replaceChildren();
-                const option = document.createElement('option');
-                option.value = '';
-                option.textContent = 'Category list unavailable; refresh to retry';
-                categorySelect.appendChild(option);
-                if (categoryCount) categoryCount.textContent = 'Unable to load categories. Please retry.';
+                console.error('Unable to load categories', error);
             }
         }
-        departmentSelect.addEventListener('change', () => {
-            if (categorySearch) categorySearch.value = '';
-            renderCategories();
-            categorySelect.value = '';
-        });
-        categorySelect.addEventListener('change', () => {
-            const chosen = allCategories.find((item) => String(item.id) === categorySelect.value);
-            if (!chosen) return;
-            departmentSelect.value = String(chosen.department_id);
-            if (categorySearch) categorySearch.value = '';
-            renderCategories('', String(chosen.id));
-        });
-        if (categorySearch) {
-            categorySearch.addEventListener('input', () => {
-                renderCategories(categorySearch.value, '');
-            });
-        }
-        renderCategories();
-        loadAllCategories();
+
+        departmentSelect.addEventListener('change', loadCategories);
+        if (departmentSelect.value) loadCategories();
     }
 
     const streetInput = document.querySelector('#street_name');
