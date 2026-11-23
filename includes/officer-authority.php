@@ -41,6 +41,7 @@ function officer_stage_authorized(
              WHERE a.category_id=? AND a.stage_no=? AND a.officer_id=?
                AND a.revoked_at IS NULL AND a.approved_by IS NOT NULL
                AND TRIM(a.approval_reference) <> ''
+               AND UPPER(TRIM(a.approval_reference)) NOT LIKE 'SIMULATION-LOCAL-TEST-%'
                AND c.department_id=?
                AND EXISTS(SELECT 1 FROM officer_department_map dm
                           WHERE dm.officer_id=o.id AND dm.department_id=c.department_id)
