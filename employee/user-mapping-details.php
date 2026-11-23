@@ -54,6 +54,28 @@ if ($searched) {
             $warning = 'Category PDF policy is missing, invalid, or not officially approved. No officer can be automatically allocated.';
         }
         try {
+            // Check schema independently. Missing approval or allocation tables
+            // must not erase employee mapping rows retrieved successfully.
+            $requiredTables = [
+                'officers','officer_department_map','officer_category_map',
+                'officer_ward_map','department_allocations',
+                'officer_stage_approvals','pdf_escalation_policies',
+                'pdf_escalation_policy_stages'
+            ];
+            $foundStmt = $pdo->query(
+                "SELECT TABLE_NAME FROM information_schema.TABLES
+                 WHERE TABLE_SCHEMA=DATABASE()"
+            );
+            $presentTables = array_fill_keys($foundStmt->fetchAll(PDO::FETCH_COLUMN), true);
+            $missingTables = array_values(array_filter(
+                $requiredTables,
+                static fn(string $table): bool => !isset($presentTables[$table])
+            ));
+            if ($missingTables) {
+                $warning = 'Missing required database table(s): '
+                    . implode(', ', $missingTables) . '. '
+                    . 'The selected database is not ready for PDF auto-allocation.';
+            }
             // Department/category are both mandatory filters. The selected
             // ward remains visible even when a mapped officer covers another
             // ward; it is NEVER silently changed to match a source result.
@@ -76,6 +98,7 @@ if ($searched) {
             $stmt->execute([$wardId, $departmentId, $categoryId]);
             $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+            if (isset($presentTables['department_allocations'])) {
             $rulesStmt = $pdo->prepare(
                 'SELECT stage_no, officer_id, escalation_days
                  FROM department_allocations
@@ -86,6 +109,9 @@ if ($searched) {
             foreach ($rulesStmt->fetchAll(PDO::FETCH_ASSOC) as $rule) {
                 $exact[(int)$rule['stage_no']] = $rule;
             }
+            }
+            $approvalPairs = [];
+            if (isset($presentTables['officer_stage_approvals'])) {
             $approvalStmt = $pdo->prepare(
                 'SELECT stage_no,officer_id FROM officer_stage_approvals
                  WHERE category_id=? AND revoked_at IS NULL
@@ -93,9 +119,9 @@ if ($searched) {
                  ORDER BY stage_no,officer_id'
             );
             $approvalStmt->execute([$categoryId]);
-            $approvalPairs = [];
             foreach ($approvalStmt->fetchAll(PDO::FETCH_ASSOC) as $approval) {
                 $approvalPairs[(int)$approval['stage_no']][(int)$approval['officer_id']] = true;
+            }
             }
             $byId = [];
             foreach ($rows as $i => $person) {
@@ -125,7 +151,9 @@ if ($searched) {
                     }
                     $exactRule = $exact[$level] ?? null;
                     $chosenId = $exactRule ? (int)$exactRule['officer_id'] : null;
-                    if ($exactRule) {
+                    if (!isset($presentTables['officer_stage_approvals'])) {
+                        $outcome = 'BLOCKED: officer approval table missing';
+                    } elseif ($exactRule) {
                         $ok = isset($authorized[$chosenId])
                             && (int)$exactRule['escalation_days'] === (int)$step['period_days'];
                         $outcome = $ok ? 'READY: approved exact officer'
@@ -148,8 +176,11 @@ if ($searched) {
             }
         } catch (Throwable $error) {
             log_message('User Mapping Details could not load: '.$error->getMessage());
-            $warning = 'Mapping or approval tables could not be read. Check database setup.';
-            $rows = [];
+            $warning = 'Mapping lookup encountered a database error. '
+                . 'Previously retrieved employee rows, if any, are shown for inspection only. '
+                . 'Check server logs for the exact SQL failure.';
+            // Preserve successfully loaded employee mappings. Do not imply a
+            // failed authorization lookup proves there are zero employees.
             $stageRows = [];
         }
     }
