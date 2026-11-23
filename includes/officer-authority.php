@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+require_once __DIR__.'/pdf-escalation-policy.php';
 
 /**
  * A deliberately conservative negative title check.
@@ -8,7 +9,7 @@ declare(strict_types=1);
  */
 function officer_stage_forbidden_title(?string $designation, int $stage, int $officerId): bool
 {
-    if ($officerId === 1 || $officerId < 1 || $stage < 1 || $stage > 4) return true;
+    if ($officerId === 1 || $officerId < 1 || $stage < 1 || $stage > 6) return true;
     $title = strtoupper(trim((string)$designation));
     $title = trim(preg_replace('/[^A-Z0-9]+/', ' ', $title) ?? '');
     if (preg_match('/\b(SUPER ADMIN|SYSTEM ADMINISTRATOR)\b/', $title)) return true;
@@ -29,7 +30,7 @@ function officer_stage_authorized(
     PDO $pdo, int $categoryId, int $stage, int $officerId,
     int $departmentId, int $wardId = 0
 ): bool {
-    if (min($categoryId,$officerId,$departmentId) < 1 || $stage < 1 || $stage > 4) return false;
+    if (min($categoryId,$officerId,$departmentId) < 1 || $stage < 1 || $stage > 6) return false;
     static $errorLogged=false;
     try {
         $query=$pdo->prepare(
@@ -49,7 +50,20 @@ function officer_stage_authorized(
         );
         $query->execute([$categoryId,$stage,$officerId,$departmentId]);
         $title=$query->fetchColumn();
-        if ($title===false || officer_stage_forbidden_title((string)$title,$stage,$officerId)) return false;
+        if ($title===false) return false;
+        // PDF stage definition is the canonical source for each approved category.
+        // Even a signed officer record cannot override a missing or mismatched role.
+        $policy=pdf_policy_reviewed($pdo,$categoryId);
+        $required=$policy===null?null:pdf_policy_stage($policy,$stage);
+        if (!$required || !pdf_policy_role_matches((string)$required['role_label'],(string)$title)) return false;
+        $forbidden=officer_stage_forbidden_title((string)$title,$stage,$officerId);
+        // A few PDF workflows put the Commissioner at Stage 3, while others
+        // place that role at Stage 4-6. Permit only a reviewed, exact COMMR
+        // stage with an actual Commissioner title, never a deputy.
+        if ($forbidden && strtoupper(trim((string)$required['role_label']))==='COMMR'
+            && $stage > 1 && $officerId !== 1
+            && pdf_policy_role_matches('COMMR',(string)$title)) $forbidden=false;
+        if ($forbidden) return false;
         if ($stage===1 && $wardId>0) {
             $scope=$pdo->prepare(
                 'SELECT

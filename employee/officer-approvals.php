@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         if ($action === 'approve') {
-            if ($categoryId < 1 || $officerId < 1 || $stageNo < 1 || $stageNo > 4
+            if ($categoryId < 1 || $officerId < 1 || $stageNo < 1 || $stageNo > 6
                 || mb_strlen($reference) < 8 || mb_strlen($reference) > 255
                 || empty($_POST['confirm_authority'])) {
                 throw new RuntimeException('Enter a category, stage, officer ID, approval document reference and confirm verified authority.');
@@ -58,9 +58,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             );
             $validate->execute([$officerId, $categoryId]);
             $candidate = $validate->fetch(PDO::FETCH_ASSOC);
+            $pdf=pdf_policy_reviewed($pdo,$categoryId);
+            $expectedStage=$pdf===null?null:pdf_policy_stage($pdf,$stageNo);
+            if (!$expectedStage || !$candidate ||
+                !pdf_policy_role_matches((string)$expectedStage['role_label'],(string)$candidate['designation'])) {
+                throw new RuntimeException('Officer title does not match a reviewed PDF stage for this category.');
+            }
+            $forbidden=officer_stage_forbidden_title((string)$candidate['designation'],$stageNo,$officerId);
+            if($forbidden && strtoupper(trim((string)$expectedStage['role_label']))==='COMMR'
+               && $stageNo>1 && $officerId!==1
+               && pdf_policy_role_matches('COMMR',(string)$candidate['designation'])) $forbidden=false;
             if (!$candidate || !(int)$candidate['is_active']
                 || !(int)$candidate['department_ok'] || !(int)$candidate['category_ok']
-                || officer_stage_forbidden_title((string)$candidate['designation'],$stageNo,$officerId)) {
+                || $forbidden) {
                 throw new RuntimeException('Officer is not eligible: verify active status, designation, department and category mapping.');
             }
             $pdo->beginTransaction();
@@ -191,7 +201,9 @@ include __DIR__.'/../includes/employee-header.php';
             <option value="1">1 — Initial officer</option>
             <option value="2">2 — Second stage</option>
             <option value="3">3 — Third stage</option>
-            <option value="4">4 — Final stage</option>
+            <option value="4">4 — Stage 4 (some workflows finish here)</option>
+            <option value="5">5 — Stage 5 (where PDF specifies)</option>
+            <option value="6">6 — Stage 6 (where PDF specifies)</option>
           </select>
         </label>
         <label class="form-label">Verified officer ID

@@ -54,6 +54,13 @@ foreach ($args as $arg) {
     exit(2);
 }
 
+// Never run the superseded fixed-four-stage worker. Only the new
+// pdf-escalate-complaints.php can make stage-aware decisions, and execution
+// of that worker is restricted to an isolated test DB.
+if ($execute) {
+    fwrite(STDERR,"LEGACY WORKER DISABLED: use pdf-escalate-complaints.php on the test DB after review.\n");
+    exit(2);
+}
 if ($execute && $expectedDb === null) {
     fwrite(STDERR, "Execution requires --expect-db=DATABASE. Run --dry-run first.\n");
     exit(2);

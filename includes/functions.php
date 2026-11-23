@@ -252,6 +252,15 @@ function assign_officer_for_complaint(
         return null;
     }
 
+    // Registration must use the PDF's FIRST STAGE period, not the total
+    // category resolution period or an old seeded department default.
+    $policy=pdf_policy_reviewed($pdo,$categoryId);
+    $firstStage=$policy===null?null:pdf_policy_stage($policy,1);
+    if(!$firstStage || (int)$firstStage['period_days']<=0) {
+        log_message("Initial allocation blocked: unapproved PDF Stage 1 policy for complaint {$complaintId}");
+        return null;
+    }
+
     $officerId = null;
     $officerName = null;
     $customSlaDays = null;
@@ -349,6 +358,22 @@ function assign_officer_for_complaint(
         log_message("Initial assignment blocked: unapproved Stage 1 officer {$officerId} for complaint {$complaintId}");
         return null;
     }
+
+    // The officer's actual designation must satisfy the exact PDF role.
+    $titleLookup=$pdo->prepare('SELECT designation FROM officers WHERE id=? LIMIT 1');
+    $titleLookup->execute([$officerId]);
+    $designation=$titleLookup->fetchColumn();
+    if($designation===false || !pdf_policy_role_matches((string)$firstStage['role_label'],(string)$designation)) {
+        log_message("Initial officer role mismatch for complaint {$complaintId}; PDF requires " . $firstStage['role_label']);
+        return null;
+    }
+    // An exact ward-rule SLA that disagrees with the reviewed PDF must be
+    // explicitly reconciled; do not silently override it.
+    if($customSlaDays!==null && $customSlaDays !== (int)$firstStage['period_days']) {
+        log_message("Exact allocation SLA conflicts with PDF Stage 1 for complaint {$complaintId}");
+        return null;
+    }
+    $customSlaDays=(int)$firstStage['period_days'];
 
     // Ensure idempotent assignment row in complaint_assignments
     $pdo->prepare(
