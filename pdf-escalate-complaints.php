@@ -99,10 +99,15 @@ function pdfEscalationDecision(PDO $pdo,array $c,DateTimeImmutable $now,bool $nu
             $candidates=array_values(array_filter($candidates,
                 static fn(array $person):bool =>(int)$person['ward_rank']===$firstRank));
         }
-        if(count($candidates)>1)return $skip('AMBIGUOUS_MAPPED_NEXT_STAGE_OFFICERS');
+        if(count($candidates)>1){
+            // An equally mapped next-stage officer is selected by workload.
+            // Keep all matching candidates here; the picker applies the tie-break.
+        }
     }
     if(!$candidates)return $skip('NO_ELIGIBLE_PDF_NEXT_STAGE_OFFICER');
-    $officer=$candidates[0];$linked=$pdo->prepare(
+    $officer=$exactRule ? $candidates[0] : pdf_pick_least_loaded_officer($pdo,$candidates);
+    if(!$officer)return $skip('NO_ELIGIBLE_PDF_NEXT_STAGE_OFFICER');
+    $linked=$pdo->prepare(
         'SELECT id FROM escalation_officer_levels
          WHERE category_id=? AND level_no=? AND officer_id=? AND is_active=1 LIMIT 1'
     );
