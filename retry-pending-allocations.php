@@ -159,7 +159,12 @@ try {
                     && pdf_policy_role_matches((string)$firstStage['role_label'], (string)$exact['designation'])) {
                     echo "[PREVIEW READY] {$ref}: Would allocate to Officer #{$eId} ({$exact['officer_name']}, {$exact['designation']}) via Exact Rule (Stage 1 SLA: {$firstStage['period_days']}d)\n";
                 } else {
-                    echo "[CHECK] {$ref}: EXACT_ALLOCATION_OFFICER_INELIGIBLE (Rule points to Officer #{$eId})\n";
+                    $intake=pdf_pick_least_loaded_officer($pdo,
+                        department_intake_candidates($pdo,$deptId,$catId,$wardId));
+                    if(!$intake)$intake=configured_central_intake_officer($pdo);
+                    echo $intake
+                        ? "[PREVIEW INTAKE] {$ref}: Exact specialist mapping invalid; would assign intake Officer #{$intake['id']} for review\n"
+                        : "[CHECK] {$ref}: EXACT_ALLOCATION_OFFICER_INELIGIBLE_AND_NO_INTAKE (Rule points to Officer #{$eId})\n";
                 }
                 continue;
             }
