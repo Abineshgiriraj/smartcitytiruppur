@@ -168,6 +168,14 @@ function pdf_policy_role_matches(string $expectedRole, string $officerDesignatio
             (str_contains($actual,'EXECUTIVE ENGINEER') && !str_contains($actual,'ASSISTANT'));
     }
     if($role==='CE') return $has($actual,'CE') || str_contains($actual,'CITY ENGINEER') || str_contains($actual,'CHIEF ENGINEER');
+    if($role==='AC' || $role==='ACR') {
+        return $actual==='AC' || $actual==='ACR' || $has($actual,'ACR') || $has($actual,'AC')
+            || str_contains($actual,'ASSISTANT COMMISSIONER');
+    }
+    if($role==='CHN') {
+        return $actual==='CHN' || $actual==='CHO' || $actual==='SO'
+            || str_contains($actual,'HEALTH OFFICER');
+    }
     $alias=[
         'SI'=>'SANITARY INSPECTOR','SO'=>'SANITARY OFFICER','CHO'=>'CITY HEALTH OFFICER',
         'SRI'=>'SENIOR REVENUE INSPECTOR','ACR'=>'ASSISTANT COMMISSIONER REVENUE'

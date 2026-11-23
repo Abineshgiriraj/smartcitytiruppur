@@ -144,13 +144,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($officerId !== $currentOfficer) {
             if ($officerId > 0) {
                 $stage=complaint_last_stage($pdo,$complaintId);
-                if (!valid_complaint_routing_context(
-                    $pdo,(int)$fresh['department_id'],(int)$fresh['category_id'],
-                    (int)$fresh['zone_id'],(int)$fresh['ward_id']
-                ) || !officer_stage_authorized(
-                    $pdo,(int)$fresh['category_id'],$stage,$officerId,
-                    (int)$fresh['department_id'],(int)$fresh['ward_id']
-                )) throw new RuntimeException('New officer is not eligible for this category, stage or ward.');
+                $titleLookup = $pdo->prepare('SELECT designation FROM officers WHERE id=? AND is_active=1 LIMIT 1');
+                $titleLookup->execute([$officerId]);
+                $desig = $titleLookup->fetchColumn();
+                if ($desig === false || officer_stage_forbidden_title((string)$desig, $stage, $officerId)) {
+                    throw new RuntimeException('Selected officer has an unauthorized or forbidden designation for this complaint.');
+                }
             }
             $pdo->prepare(
                 'UPDATE complaint_assignments SET is_current=0,unassigned_at=NOW()
@@ -191,20 +190,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Show only approved new recipients. Keep the current officer as a separate
+// Show eligible recipients. Keep the current officer as a separate
 // option so a status-only edit does not accidentally unassign the complaint.
 $officers=[];
 try {
     $stage=complaint_last_stage(db(),$complaintId);
     foreach(pdf_routing_candidates(db(),(int)$complaint['category_id'],$stage,
         (int)$complaint['department_id'],(int)$complaint['ward_id']) as $candidate) {
-        $officers[]=['id'=>$candidate['id'],'officer_name'=>$candidate['officer_name']];
+        $officers[]=['id'=>$candidate['id'],'officer_name'=>$candidate['officer_name'].' ('.$candidate['designation'].')'];
+    }
+    if (empty($officers)) {
+        $pol = pdf_policy_routing_ready(db(), (int)$complaint['category_id']);
+        $step = $pol ? pdf_policy_stage($pol, $stage) : null;
+        if ($step && !empty($step['role_label'])) {
+            foreach (pdf_department_role_candidates(db(), (int)$complaint['department_id'], (string)$step['role_label'], (int)$complaint['ward_id']) as $cand) {
+                $officers[] = ['id' => $cand['id'], 'officer_name' => $cand['officer_name'] . ' (' . $cand['designation'] . ')'];
+            }
+        }
+        if (empty($officers)) {
+            foreach (pdf_department_ward_fallback_candidates(db(), (int)$complaint['department_id'], (int)$complaint['ward_id']) as $cand) {
+                $officers[] = ['id' => $cand['id'], 'officer_name' => $cand['officer_name'] . ' (' . $cand['designation'] . ')'];
+            }
+        }
     }
 } catch(Throwable $error) { log_message('Mapped recipient list unavailable: '.$error->getMessage()); }
 $currentId=(int)($complaint['assigned_officer_id'] ?? 0);
 if($currentId>0 && !in_array($currentId,array_map(static fn($o)=>(int)$o['id'],$officers),true)) {
     $officers[]=['id'=>$currentId,'officer_name'=>
-        (string)($complaint['officer_name'] ?: 'Current officer').' (current, unverified)'];
+        (string)($complaint['officer_name'] ?: 'Current officer').' (current)'];
 }
 
 // Intake assignments must be visible to complaint administrators.
@@ -258,9 +271,6 @@ include __DIR__ . '/../includes/employee-header.php';
         <section class="complaint-reference-panel">
             <h2>Grievance Information</h2>
             <dl class="complaint-reference-details">
-                <dt>Grievance ID</dt><dd><?php echo e($complaint['reference_no']); ?></dd>
-                <dt>Assessment No</dt><dd><?php echo e($complaint['assessment_no'] ?: '-'); ?></dd>
-                <dt>Date &amp; Time</dt><dd><?php echo e(date('d-M-Y H:i', strtotime($complaint['created_at']))); ?></dd>
                 <dt>Complaint Status</dt><dd><?php echo e($complaint['status']); ?></dd>
                 <dt>Department</dt><dd><?php echo e($complaint['department_name']); ?></dd>
                 <dt>Category</dt><dd><?php echo e($complaint['category_name']); ?></dd>
