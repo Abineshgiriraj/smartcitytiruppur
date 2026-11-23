@@ -184,6 +184,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = (int)($_POST['id'] ?? 0);
             if ($id <= 0) throw new RuntimeException('Invalid allocation rule.');
             $pdo->prepare('DELETE FROM department_allocations WHERE id = ?')->execute([$id]);
+        } elseif ($action === 'set_central_intake_officer') {
+            $intakeId=(int)($_POST['intake_officer_id']??0);
+            if($intakeId<=0)throw new RuntimeException('Enter a valid intake officer ID.');
+            $stmt=$pdo->prepare('SELECT id,officer_name,designation FROM officers WHERE id=? AND is_active=1');
+            $stmt->execute([$intakeId]);
+            $officer=$stmt->fetch(PDO::FETCH_ASSOC);
+            if(!$officer || officer_stage_forbidden_title((string)$officer['designation'],1,$intakeId)) {
+                throw new RuntimeException('The selected intake officer is inactive or not eligible to receive intake complaints.');
+            }
+            $pdo->prepare(
+                "INSERT INTO system_settings (setting_key,setting_value,updated_at)
+                 VALUES ('central_intake_officer_id',?,NOW())
+                 ON DUPLICATE KEY UPDATE setting_value=VALUES(setting_value),updated_at=NOW()"
+            )->execute([(string)$intakeId]);
+            audit_log((int)$user['id'],'central_intake_officer_configured','officer',$intakeId,[
+                'officer_name'=>$officer['officer_name']
+            ]);
         } elseif ($action === 'save_setting') {
             $key = trim($_POST['setting_key'] ?? '');
             $value = trim($_POST['setting_value'] ?? '');
@@ -532,6 +549,25 @@ include __DIR__ . '/../includes/employee-header.php';
 })();
 </script>
 <?php elseif ($section === 'settings'): ?>
+<div class="card content-card p-4 mb-4">
+    <h2 class="h5 fw-bold">Central Complaint Intake Officer</h2>
+    <p class="text-muted">Choose a real, active complaint intake employee. Only if no eligible PDF specialist
+    or department intake officer can be found will the system send complaints here for manual routing.
+    This is not a PDF Stage 1 assignment.</p>
+    <form method="post" class="row g-3 align-items-end">
+        <?php echo csrf_field(); ?>
+        <input type="hidden" name="action" value="set_central_intake_officer">
+        <div class="col-md-5">
+            <label class="form-label" for="intake_officer_id">Intake Officer ID</label>
+            <input id="intake_officer_id" name="intake_officer_id" type="number" min="2"
+                   class="form-control" value="<?php echo e(setting('central_intake_officer_id')); ?>" required>
+            <div class="form-text">Find the ID in Officer Directory; use the person designated to receive and redirect complaints.</div>
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-primary">Save Intake Officer</button>
+        </div>
+    </form>
+</div>
 <div class="row g-4"><?php foreach ($settings as $key => $value): ?><div class="col-md-6"><form method="post" class="card content-card p-4 h-100"><?php echo csrf_field(); ?><input type="hidden" name="action" value="save_setting"><input type="hidden" name="setting_key" value="<?php echo e($key); ?>"><label class="form-label fw-bold"><?php echo e(ucwords(str_replace('_',' ',$key))); ?></label><?php if ($key === 'office_address'): ?><textarea class="form-control mb-3" name="setting_value" rows="4"><?php echo e($value); ?></textarea><?php else: ?><input class="form-control mb-3" name="setting_value" value="<?php echo e($value); ?>"><?php endif; ?><button class="btn btn-primary">Save Setting</button></form></div><?php endforeach; ?></div>
 <?php endif; ?>
 
