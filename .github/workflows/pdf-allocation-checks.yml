@@ -58,5 +58,7 @@ jobs:
         run: php tests/test_pdf_escalation_policy.php
       - name: Check officer title and stage guards (no database)
         run: php tests/test_officer_routing_guard.php
+      - name: Test fair officer assignment without live database
+        run: php tests/test_least_loaded_allocation.php
       - name: Check PDF category coverage (no database)
         run: php tests/test_pdf_category_coverage.php
