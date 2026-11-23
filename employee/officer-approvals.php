@@ -246,10 +246,7 @@ include __DIR__.'/../includes/employee-header.php';
         <label class="form-label">Signed approval reference
           <input class="form-control mt-1" maxlength="255" minlength="8" name="approval_reference" required placeholder="Official approval / order number">
         </label>
-        <label class="d-flex align-items-start gap-2 small text-muted">
-          <input type="checkbox" class="form-check-input mt-1" name="is_simulation" value="1">
-          <span><strong>Local Simulation Mode:</strong> Check for development testing. Automatically prefixes reference with <code>SIMULATION-LOCAL-TEST-</code>.</span>
-        </label>
+        <div class="alert alert-warning small">Simulation approvals are disabled in this official registry.</div>
         <label class="d-flex align-items-start gap-2 small">
           <input type="checkbox" class="form-check-input mt-1" name="confirm_authority" value="1" required>
           <span>I have verified this officer's official authority for this specific complaint category and escalation stage.</span>
