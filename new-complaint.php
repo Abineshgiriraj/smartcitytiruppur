@@ -222,7 +222,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]);
             }
 
-            assign_officer_for_complaint($complaintId, $departmentId, $categoryId, $wardId, $zoneId);
+            $initialOfficer = assign_officer_for_complaint($complaintId, $departmentId, $categoryId, $wardId, $zoneId);
+            if ($initialOfficer === null) {
+                $initialOfficer = assign_complaint_to_intake($complaintId,$departmentId,$categoryId,$wardId,$zoneId);
+            }
+            if ($initialOfficer === null) {
+                // Do not commit a new unassigned complaint if no accountable intake
+                // officer exists. This rollback preserves the one-assignee guarantee.
+                throw new RuntimeException(
+                    'No eligible departmental or central intake officer is configured. Please contact the complaint administrator.'
+                );
+            }
             $assignedOfficer = get_assigned_officer_for_complaint($complaintId);
 
             $pdo->commit();
