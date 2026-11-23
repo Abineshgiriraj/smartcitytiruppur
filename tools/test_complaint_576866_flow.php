@@ -1,6 +1,17 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * SAFETY HOLD: This legacy end-to-end runner writes to existing municipal
+ * records / performs range-based DELETE, or modifies config/app.php.
+ * The original source is retained in Git history for controlled rework.
+ * DO NOT re-enable until fixtures live in isolated transactions or DB clones
+ * with precise ownership tracking and no real citizen complaints.
+ */
+if (PHP_SAPI !== 'cli') { http_response_code(403); exit('CLI only'); }
+fwrite(STDERR, "DISABLED: unsafe fixture/test runner. Use read-only PDF checks instead. No database changes.\n");
+exit(2);
+
 require_once __DIR__ . '/../includes/bootstrap.php';
 require_once __DIR__ . '/../includes/pdf-escalation-policy.php';
 require_once __DIR__ . '/../includes/officer-authority.php';
