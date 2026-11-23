@@ -102,6 +102,38 @@ function pdf_routing_candidates(PDO $pdo,int $categoryId,int $stage,int $departm
     return $eligible;
 }
 
+/**
+ * Select an eligible officer using ward specificity, then current open workload.
+ * Candidate eligibility is checked by pdf_routing_candidates() before this call.
+ * An exact active department allocation always takes precedence in the caller.
+ * Returns null only when no eligible officer exists; ID is the stable tie-break.
+ */
+function pdf_pick_least_loaded_officer(PDO $pdo, array $candidates): ?array
+{
+    if (!$candidates) return null;
+    $rank = min(array_map(static fn(array $c):int => (int)$c['ward_rank'], $candidates));
+    $load = $pdo->prepare(
+        "SELECT COUNT(*) FROM complaints
+         WHERE assigned_officer_id=? AND is_deleted=0
+           AND status NOT IN ('Resolved','Closed','Rejected')"
+    );
+    $winner = null;
+    $lowestCount = PHP_INT_MAX;
+    foreach ($candidates as $candidate) {
+        if ((int)$candidate['ward_rank'] !== $rank) continue;
+        $officerId = (int)$candidate['id'];
+        $load->execute([$officerId]);
+        $count = (int)$load->fetchColumn();
+        if ($winner === null || $count < $lowestCount
+            || ($count === $lowestCount && $officerId < (int)$winner['id'])) {
+            $winner = $candidate;
+            $winner['open_complaints'] = $count;
+            $lowestCount = $count;
+        }
+    }
+    return $winner;
+}
+
 /** Reject mismatched positive zone/ward or department/category data. */
 function valid_complaint_routing_context(
     PDO $pdo, int $departmentId, int $categoryId, int $zoneId, int $wardId
