@@ -169,7 +169,7 @@ foreach ($officerCandidates->fetchAll(PDO::FETCH_ASSOC) as $candidate) {
         ? (pdf_policy_role_matches($firstStageRole,$title)?'YES':'NO') : 'UNKNOWN';
     $eligible=officer_stage_authorized($pdo,$cat,1,$oid,$dep,$ward);
     echo "  #{$oid} {$candidate['officer_name']} | {$title} | ward={$wardScope}"
-       ." | PDF Stage 1 role={$roleMatch} | approved=".($eligible?'YES':'NO')."\n";
+       ." | PDF Stage 1 role={$roleMatch} | eligible=".($eligible?'YES':'NO')."\n";
 }
 echo "Note: Routing relies on existing mappings; no separate approval is required.\n";
 
@@ -215,12 +215,12 @@ if ($complaint['status'] !== 'Registered' || $complaint['assigned_officer_id'] !
         if(count($best)===0) {
             echo "BLOCKED: No officer satisfies designation + active status + category + department + ward.\n";
             echo "FIX: Review the officer's designation, category/department and ward mappings.\n";
-        } elseif(count($best)>1) {
-            echo "BLOCKED: ".count($best)." equally eligible officers at the same ward priority.\n";
-            echo "FIX: Specify one accurate ward owner or an exact department allocation rule.\n";
         } else {
-            $winner=$best[0];
-            echo "PREVIEW READY: Officer #{$winner['id']} {$winner['officer_name']} ({$winner['designation']}); Stage 1 {$stage1['period_days']} day(s).\n";
+            $winner=pdf_pick_least_loaded_officer($pdo,$best);
+            echo "PREVIEW READY: Officer #{$winner['id']} {$winner['officer_name']} ({$winner['designation']}); Stage 1 {$stage1['period_days']} day(s); open workload={$winner['open_complaints']}.\n";
+            if(count($best)>1){
+                echo "Multiple eligible officers found: workload-based selection used, no manual allocation rule required.\n";
+            }
         }
         foreach(array_slice($best,0,12) as $person){
             echo "  Best-match #{$person['id']} {$person['officer_name']} | {$person['designation']}\n";
