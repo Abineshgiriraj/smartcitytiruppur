@@ -2,11 +2,12 @@
 declare(strict_types=1);
 /**
  * PDF policy-aware escalation worker. NEVER schedule before formal approvals.
- * --dry-run only reads. --execute restricted to smartcity_escalation_test.
+ * --dry-run only reads. --execute requires explicitly verified local main database.
  * Unlike the legacy worker, every category has its own final stage (1..6).
  */
 if(PHP_SAPI!=='cli'){http_response_code(403);exit('CLI only');}
 require_once __DIR__.'/includes/bootstrap.php';
+require_once __DIR__.'/includes/local-pdf-workflow-guard.php';
 require_once __DIR__.'/includes/officer-authority.php';
 require_once __DIR__.'/includes/pdf-escalation-policy.php';
 $execute=false;$expected=null;$complaintId=null;
@@ -19,10 +20,7 @@ foreach(array_slice($argv,1) as $arg){
 }
 if(!$expected){fwrite(STDERR,"Required --expect-db=<database>, including for dry-run.\n");exit(2);}
 $pdo=db();$dbName=(string)$pdo->query('SELECT DATABASE()')->fetchColumn();
-if($dbName!==$expected){fwrite(STDERR,"DB mismatch: {$dbName} != {$expected}. No writes.\n");exit(2);}
-if($execute && $dbName!=='smartcity_escalation_test'){
-    fwrite(STDERR,"EXECUTION DISABLED outside smartcity_escalation_test.\n");exit(2);
-}
+enforce_local_pdf_workflow($pdo,$expected,$execute);
 $pdo->exec("SET SESSION time_zone = '+05:30'");
 
 function pdfEscalationDecision(PDO $pdo,array $c,DateTimeImmutable $now,bool $nullableFk):array
@@ -147,7 +145,7 @@ else{
 $query.=' ORDER BY due_at ASC,id ASC LIMIT 500';
 $stmt=$pdo->prepare($query);$stmt->execute($params);
 $rows=$stmt->fetchAll(PDO::FETCH_ASSOC);
-echo ($execute?'[SANDBOX EXECUTE]':'[DRY RUN]')." DB={$dbName}, cases=".count($rows)."\n";
+echo ($execute?'[LOCAL EXECUTE]':'[DRY RUN]')." DB={$dbName}, cases=".count($rows)."\n";
 $locked=false;$applied=0;
 try {
     if($execute){
@@ -197,4 +195,4 @@ try {
 } finally {
     if($locked)$pdo->query("SELECT RELEASE_LOCK('smartcity_pdf_escalation')");
 }
-echo "Completed: {$applied} sandbox transitions. Auto-scheduling remains disabled.\n";
+echo "Completed: {$applied} local transitions. Auto-scheduling remains disabled.\n";
