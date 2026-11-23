@@ -99,11 +99,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($departmentId <= 0 || $categoryId <= 0 || $zoneId <= 0 || $wardChoice === '' || $officerId <= 0) {
                 throw new RuntimeException('Department, category, zone, ward, and officer are all required.');
             }
-            if ($stageNo < 1 || $stageNo > 7) {
-                throw new RuntimeException('Stage must be between 1 and 7.');
+            if ($stageNo < 1 || $stageNo > 6) {
+                throw new RuntimeException('PDF stage must be between 1 and 6.');
             }
-            if ($escalationDays < 1) {
-                throw new RuntimeException('SLA / Escalation days must be at least 1.');
+            $policy = pdf_policy_reviewed($pdo, $categoryId);
+            $pdfStage = $policy === null ? null : pdf_policy_stage($policy, $stageNo);
+            if (!$pdfStage) {
+                throw new RuntimeException('No officially reviewed PDF policy for this category and stage.');
+            }
+            if ($escalationDays !== (int)$pdfStage['period_days']) {
+                throw new RuntimeException('Stage days must equal the approved PDF period: '
+                    . (int)$pdfStage['period_days'] . ' day(s).');
             }
 
             // Verify category belongs to selected department
@@ -131,6 +137,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $targetWardIds = [$wardId];
             }
 
+            // Never allow a legacy/seed officer or wrong-ward mapping to become
+            // an active exact rule. Check EVERY target ward before the first
+            // write, including the "all wards" path.
+            foreach ($targetWardIds as $targetWardId) {
+                if (!officer_stage_authorized(
+                    $pdo, $categoryId, $stageNo, $officerId,
+                    $departmentId, $targetWardId
+                )) {
+                    throw new RuntimeException('Officer is not approved for this PDF stage/category'
+                        . ' or does not have the required department/category/ward authorization.'
+                        . ' No allocation rules were saved.');
+                }
+                // Stage 1 must be ward-specific where the approved source assigns a
+                // ward; don't blindly treat an all-ward selection as permission.
+                if ($stageNo === 1) {
+                    $wardStmt = $pdo->prepare(
+                        'SELECT COUNT(*) FROM officer_ward_map WHERE officer_id=?'
+                    );
+                    $wardStmt->execute([$officerId]);
+                    $isWardScoped = (int)$wardStmt->fetchColumn() > 0;
+                    if (!$isWardScoped) {
+                        throw new RuntimeException(
+                            'Ward scope is not explicitly recorded for this field officer.'
+                            . ' Verify the ward mapping before creating exact allocation rules.'
+                        );
+                    }
+                }
+            }
+            $pdo->beginTransaction();
             $upsert = $pdo->prepare(
                 'INSERT INTO department_allocations
                  (department_id, category_id, zone_id, ward_id, stage_no, officer_id, escalation_days, is_active)
@@ -144,6 +179,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             foreach ($targetWardIds as $targetWardId) {
                 $upsert->execute([$departmentId, $categoryId, $zoneId, $targetWardId, $stageNo, $officerId, $escalationDays]);
             }
+            $pdo->commit();
         } elseif ($action === 'delete_allocation') {
             $id = (int)($_POST['id'] ?? 0);
             if ($id <= 0) throw new RuntimeException('Invalid allocation rule.');
@@ -182,6 +218,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         audit_log((int)$user['id'], $action, 'master');
         flash('success', 'Master data updated successfully.');
     } catch (Throwable $exception) {
+        if ($pdo->inTransaction()) $pdo->rollBack();
         flash('danger', APP_ENV === 'local' ? $exception->getMessage() : 'Unable to update master data.');
     }
 

@@ -242,6 +242,31 @@ function assign_officer_for_complaint(
 ): ?int {
     $pdo = db();
 
+    // Both public registration and retry must be idempotent. The caller's
+    // transaction keeps this row locked during the subsequent writes.
+    $stateStmt = $pdo->prepare(
+        'SELECT status, is_deleted, assigned_officer_id
+         FROM complaints WHERE id = ? FOR UPDATE'
+    );
+    $stateStmt->execute([$complaintId]);
+    $state = $stateStmt->fetch(PDO::FETCH_ASSOC);
+    if (!$state || $state['status'] !== 'Registered'
+        || (int)$state['is_deleted'] !== 0 || $state['assigned_officer_id'] !== null) {
+        log_message("Stage 1 allocation skipped: complaint {$complaintId} is not open and unassigned");
+        return null;
+    }
+    $historyStmt = $pdo->prepare(
+        'SELECT
+          (SELECT COUNT(*) FROM complaint_assignments WHERE complaint_id=? AND is_current=1) AS current_count,
+          (SELECT COUNT(*) FROM complaint_escalations WHERE complaint_id=?) AS escalation_count'
+    );
+    $historyStmt->execute([$complaintId, $complaintId]);
+    $history = $historyStmt->fetch(PDO::FETCH_ASSOC);
+    if ((int)$history['current_count'] !== 0 || (int)$history['escalation_count'] !== 0) {
+        log_message("Stage 1 allocation skipped: inconsistent assignment/escalation history for complaint {$complaintId}");
+        return null;
+    }
+
     if ($zoneId === null || $zoneId <= 0) {
         $zoneId = resolve_zone_id_for_ward($wardId);
     }
@@ -249,6 +274,15 @@ function assign_officer_for_complaint(
     // Do not route across an invalid category/department or ward/zone pairing.
     if (!valid_complaint_routing_context($pdo,$departmentId,$categoryId,(int)$zoneId,$wardId)) {
         log_message("Initial assignment blocked: invalid routing context for complaint {$complaintId}");
+        return null;
+    }
+
+    // Registration must use the PDF's FIRST STAGE period, not the total
+    // category resolution period or an old seeded department default.
+    $policy=pdf_policy_reviewed($pdo,$categoryId);
+    $firstStage=$policy===null?null:pdf_policy_stage($policy,1);
+    if(!$firstStage || (int)$firstStage['period_days']<=0) {
+        log_message("Initial allocation blocked: unapproved PDF Stage 1 policy for complaint {$complaintId}");
         return null;
     }
 
@@ -263,7 +297,7 @@ function assign_officer_for_complaint(
             $allocStmt = $pdo->prepare(
                 'SELECT da.officer_id, da.escalation_days, o.officer_name
                  FROM department_allocations da
-                 JOIN officers o ON o.id = da.officer_id AND o.is_active = 1
+                 LEFT JOIN officers o ON o.id = da.officer_id
                  WHERE da.department_id = ?
                    AND da.category_id = ?
                    AND da.zone_id = ?
@@ -318,6 +352,8 @@ function assign_officer_for_complaint(
                  ORDER BY ward_priority, ward_count, o.id"
             );
             $approvedStmt->execute([$wardId, $categoryId]);
+            $bestWardPriority = PHP_INT_MAX;
+            $bestCandidates = [];
             foreach ($approvedStmt->fetchAll(PDO::FETCH_ASSOC) as $candidate) {
                 $candidateId = (int)$candidate['id'];
                 if (!officer_stage_authorized(
@@ -325,10 +361,26 @@ function assign_officer_for_complaint(
                 )) {
                     continue;
                 }
-                $officerId = $candidateId;
-                $officerName = (string)$candidate['officer_name'];
-                $allocationSource = 'Verified Stage 1 officer (approved routing)';
-                break;
+                $rank = (int)$candidate['ward_priority'];
+                if ($rank < $bestWardPriority) {
+                    $bestWardPriority = $rank;
+                    $bestCandidates = [$candidate];
+                } elseif ($rank === $bestWardPriority) {
+                    $bestCandidates[] = $candidate;
+                }
+            }
+            // With no exact allocation rule, two equally eligible officers
+            // are ambiguous. Never select one by arbitrary database ID.
+            if (count($bestCandidates) > 1) {
+                log_message("Stage 1 allocation needs exact ward rule: "
+                    . count($bestCandidates) . " equally-ranked officers for complaint {$complaintId}");
+                return null;
+            }
+            if ($bestCandidates) {
+                $selected = $bestCandidates[0];
+                $officerId = (int)$selected['id'];
+                $officerName = (string)$selected['officer_name'];
+                $allocationSource = 'Unique approved Stage 1 officer (ward-first routing)';
             }
         } catch (Throwable $exception) {
             log_message(
@@ -349,6 +401,22 @@ function assign_officer_for_complaint(
         log_message("Initial assignment blocked: unapproved Stage 1 officer {$officerId} for complaint {$complaintId}");
         return null;
     }
+
+    // The officer's actual designation must satisfy the exact PDF role.
+    $titleLookup=$pdo->prepare('SELECT designation FROM officers WHERE id=? LIMIT 1');
+    $titleLookup->execute([$officerId]);
+    $designation=$titleLookup->fetchColumn();
+    if($designation===false || !pdf_policy_role_matches((string)$firstStage['role_label'],(string)$designation)) {
+        log_message("Initial officer role mismatch for complaint {$complaintId}; PDF requires " . $firstStage['role_label']);
+        return null;
+    }
+    // An exact ward-rule SLA that disagrees with the reviewed PDF must be
+    // explicitly reconciled; do not silently override it.
+    if($customSlaDays!==null && $customSlaDays !== (int)$firstStage['period_days']) {
+        log_message("Exact allocation SLA conflicts with PDF Stage 1 for complaint {$complaintId}");
+        return null;
+    }
+    $customSlaDays=(int)$firstStage['period_days'];
 
     // Ensure idempotent assignment row in complaint_assignments
     $pdo->prepare(

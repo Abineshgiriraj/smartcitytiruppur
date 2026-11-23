@@ -1,0 +1,9785 @@
+{
+  "document": "21.11.26.pdf",
+  "source_sha256": "03a496809403a2de6a597a844a36ffc979de47657541342924628c8d33d70c4b",
+  "source_rows": 301,
+  "policy_kind": "historical_PDF_reference_requires_approval",
+  "stages_per_category_max": 6,
+  "extraction_notes": [
+    {
+      "s_no": 1,
+      "stage": 2,
+      "note": "PDF cell split on page 1. Visual confirmation: ACCOUNTS SUPERINTENDENT"
+    },
+    {
+      "s_no": 2,
+      "stage": 2,
+      "note": "PDF page 1 row 2 cell contains spillover NDENT from row 1. Visual confirmation: AC ACCOUNTS"
+    },
+    {
+      "s_no": 105,
+      "stage": 6,
+      "note": "Zero-day level exactly as PDF: needs authorized policy review; automatic execution must not silently reinterpret"
+    },
+    {
+      "s_no": 135,
+      "stage": 5,
+      "note": "Zero-day level exactly as PDF: needs authorized policy review; automatic execution must not silently reinterpret"
+    }
+  ],
+  "policies": [
+    {
+      "s_no": 1,
+      "pdf_page": 1,
+      "department": "Accounts",
+      "category": "Contractor Bill Related",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "ACCOUNTANT",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "ACCOUNTS SUPERINTENDENT",
+          "days": 2
+        },
+        {
+          "stage": 3,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 2,
+      "pdf_page": 1,
+      "department": "Accounts",
+      "category": "Group Schemes,Deposits,EMD and Refunds",
+      "total_days": 11,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "ACCOUNTANT",
+          "days": 5
+        },
+        {
+          "stage": 2,
+          "role": "AC ACCOUNTS",
+          "days": 2
+        },
+        {
+          "stage": 3,
+          "role": "ACCOUNTS SUPERINTENDENT",
+          "days": 2
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 3,
+      "pdf_page": 1,
+      "department": "Accounts",
+      "category": "others",
+      "total_days": 11,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "ACCOUNTANT",
+          "days": 5
+        },
+        {
+          "stage": 2,
+          "role": "AC ACCOUNTS",
+          "days": 2
+        },
+        {
+          "stage": 3,
+          "role": "ACCOUNTS SUPERINTENDENT",
+          "days": 2
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 4,
+      "pdf_page": 1,
+      "department": "Accounts",
+      "category": "Pension,Family Pension,DCRG Commutation Santioned Details",
+      "total_days": 11,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "ACCOUNTANT",
+          "days": 5
+        },
+        {
+          "stage": 2,
+          "role": "AC ACCOUNTS",
+          "days": 2
+        },
+        {
+          "stage": 3,
+          "role": "ACCOUNTS SUPERINTENDENT",
+          "days": 2
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 5,
+      "pdf_page": 1,
+      "department": "Accounts",
+      "category": "Special Provident Fund",
+      "total_days": 11,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "ACCOUNTANT",
+          "days": 5
+        },
+        {
+          "stage": 2,
+          "role": "AC ACCOUNTS",
+          "days": 2
+        },
+        {
+          "stage": 3,
+          "role": "ACCOUNTS SUPERINTENDENT",
+          "days": 2
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 6,
+      "pdf_page": 1,
+      "department": "eGovernance",
+      "category": "Online Payment",
+      "total_days": 3,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AP",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 7,
+      "pdf_page": 1,
+      "department": "eGovernance",
+      "category": "online Receipt",
+      "total_days": 3,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AP",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 8,
+      "pdf_page": 1,
+      "department": "Election Department",
+      "category": "Election- others",
+      "total_days": 6,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "ACP",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AERO",
+          "days": 4
+        },
+        {
+          "stage": 3,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 9,
+      "pdf_page": 1,
+      "department": "Engineering - Sewage",
+      "category": "Sewer House Block",
+      "total_days": 19,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(UGD)",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE(UGD)",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 3
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 10,
+      "pdf_page": 1,
+      "department": "Engineering - Sewage",
+      "category": "Sewer Main Block",
+      "total_days": 19,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(UGD)",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE(UGD)",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 3
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 11,
+      "pdf_page": 1,
+      "department": "Engineering - Sewage",
+      "category": "Sewer Manhole Open or Broken",
+      "total_days": 19,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(UGD)",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE(UGD)",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 3
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 12,
+      "pdf_page": 1,
+      "department": "Engineering - Sewage",
+      "category": "UGD - Cleaning of Drainage",
+      "total_days": 19,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(UGD)",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE(UGD)",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 3
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 13,
+      "pdf_page": 1,
+      "department": "Engineering - Sewage",
+      "category": "UGD- Chokking",
+      "total_days": 21,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(UGD)",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE(UGD)",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 5
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 14,
+      "pdf_page": 1,
+      "department": "Engineering - Sewage",
+      "category": "UGD-Blocking of UGSS",
+      "total_days": 19,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(UGD)",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE(UGD)",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 3
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 15,
+      "pdf_page": 1,
+      "department": "Engineering - Sewage",
+      "category": "UGD-Damaged Sewer Line",
+      "total_days": 19,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(UGD)",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE(UGD)",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 3
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 16,
+      "pdf_page": 1,
+      "department": "Engineering - Sewage",
+      "category": "UGD-Leakage of Drainage",
+      "total_days": 19,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(UGD)",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE(UGD)",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 3
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 17,
+      "pdf_page": 1,
+      "department": "Engineering - Sewage",
+      "category": "UGD-Open Man-hole",
+      "total_days": 19,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(UGD)",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE(UGD)",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 3
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 18,
+      "pdf_page": 1,
+      "department": "Engineering - Sewage",
+      "category": "UGD-Others",
+      "total_days": 19,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(UGD)",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE(UGD)",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 3
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 19,
+      "pdf_page": 1,
+      "department": "Engineering - Sewage",
+      "category": "UGD-Replacement of Damaged Man-hole Slab",
+      "total_days": 19,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(UGD)",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE(UGD)",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 3
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 20,
+      "pdf_page": 1,
+      "department": "Engineering - Sewage",
+      "category": "UGD-Sewer Line Overflow /Block",
+      "total_days": 19,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(UGD)",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE(UGD)",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 3
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 21,
+      "pdf_page": 1,
+      "department": "Engineering - Sewage",
+      "category": "UGD-Sewer Odor",
+      "total_days": 19,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(UGD)",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE(UGD)",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 3
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 22,
+      "pdf_page": 2,
+      "department": "Engineering - Sewage",
+      "category": "UGD-Sewerage Treatment Plant - related issues",
+      "total_days": 19,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(UGD)",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE(UGD)",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 3
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 23,
+      "pdf_page": 2,
+      "department": "Engineering - Street Light",
+      "category": "Non illumination of Street Light",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(ELECTRICAL)",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 24,
+      "pdf_page": 2,
+      "department": "Engineering - Street Light",
+      "category": "Others",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(ELECTRICAL)",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 25,
+      "pdf_page": 2,
+      "department": "Engineering - Street Light",
+      "category": "Poor Lighting",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(ELECTRICAL)",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 26,
+      "pdf_page": 2,
+      "department": "Engineering - Street Light",
+      "category": "Street Light",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(ELECTRICAL)",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 27,
+      "pdf_page": 2,
+      "department": "Engineering - Street Light",
+      "category": "Streetlight - Others",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(ELECTRICAL)",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 28,
+      "pdf_page": 2,
+      "department": "Engineering - Water Supply",
+      "category": "Contaminated Water",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 29,
+      "pdf_page": 2,
+      "department": "Engineering - Water Supply",
+      "category": "Delay in Water Supply - Related services",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 30,
+      "pdf_page": 2,
+      "department": "Engineering - Water Supply",
+      "category": "Dirty / Bad Smell in Water",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 31,
+      "pdf_page": 2,
+      "department": "Engineering - Water Supply",
+      "category": "Drinking Water Facility",
+      "total_days": 16,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 32,
+      "pdf_page": 2,
+      "department": "Engineering - Water Supply",
+      "category": "Drinking water supply",
+      "total_days": 6,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 33,
+      "pdf_page": 2,
+      "department": "Engineering - Water Supply",
+      "category": "Irregular Water Supply",
+      "total_days": 6,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 34,
+      "pdf_page": 2,
+      "department": "Engineering - Water Supply",
+      "category": "Leakage in Distribution Systems",
+      "total_days": 6,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 35,
+      "pdf_page": 2,
+      "department": "Engineering - Water Supply",
+      "category": "Leakage in Main Pipeline",
+      "total_days": 6,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 36,
+      "pdf_page": 2,
+      "department": "Engineering - Water Supply",
+      "category": "Lorry water supply",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 37,
+      "pdf_page": 2,
+      "department": "Engineering - Water Supply",
+      "category": "Meter not working",
+      "total_days": 6,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 38,
+      "pdf_page": 2,
+      "department": "Engineering - Water Supply",
+      "category": "Mini Power Pump Not Working",
+      "total_days": 6,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 39,
+      "pdf_page": 2,
+      "department": "Engineering - Water Supply",
+      "category": "Non Supply - of water for long period",
+      "total_days": 6,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 40,
+      "pdf_page": 2,
+      "department": "Engineering - Water Supply",
+      "category": "Polluted Water Supply",
+      "total_days": 6,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 41,
+      "pdf_page": 2,
+      "department": "Engineering - Water Supply",
+      "category": "Poor Quality of Water",
+      "total_days": 6,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 42,
+      "pdf_page": 2,
+      "department": "Engineering - Water Supply",
+      "category": "Poor Quantity of Water Supply",
+      "total_days": 6,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 43,
+      "pdf_page": 3,
+      "department": "Engineering - Water Supply",
+      "category": "Quality of Water Supply",
+      "total_days": 6,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 44,
+      "pdf_page": 3,
+      "department": "Engineering - Water Supply",
+      "category": "Request for Bulk Water Supply",
+      "total_days": 6,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 45,
+      "pdf_page": 3,
+      "department": "Engineering - Water Supply",
+      "category": "Request for New Public Tap",
+      "total_days": 10,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 46,
+      "pdf_page": 3,
+      "department": "Engineering - Water Supply",
+      "category": "Request For Water Supply",
+      "total_days": 6,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 47,
+      "pdf_page": 3,
+      "department": "Engineering - Water Supply",
+      "category": "Request for Water Supply Through Lorry",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 48,
+      "pdf_page": 3,
+      "department": "Engineering - Water Supply",
+      "category": "Water Supply - - Public Fountain Repair",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 49,
+      "pdf_page": 3,
+      "department": "Engineering - Water Supply",
+      "category": "Water supply - Hand Pump Reparis",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 50,
+      "pdf_page": 3,
+      "department": "Engineering - Water Supply",
+      "category": "Water supply - HSC Repair",
+      "total_days": 6,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 51,
+      "pdf_page": 3,
+      "department": "Engineering - Water Supply",
+      "category": "Water Supply - Non supply of Water",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 52,
+      "pdf_page": 3,
+      "department": "Engineering - Water Supply",
+      "category": "Water Supply - Others",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 53,
+      "pdf_page": 3,
+      "department": "Engineering - Water Supply",
+      "category": "Water Supply - Pulbic Tab Repair",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 54,
+      "pdf_page": 3,
+      "department": "Engineering - Water Supply",
+      "category": "Water supply Damaged Pipeline",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 55,
+      "pdf_page": 3,
+      "department": "Engineering - Water Supply",
+      "category": "Water Supply Frequency",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 56,
+      "pdf_page": 3,
+      "department": "Engineering - Water Supply",
+      "category": "Water Supply Leakage",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 57,
+      "pdf_page": 3,
+      "department": "Engineering - Water Supply",
+      "category": "Water Supply Leakage Repairs",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 58,
+      "pdf_page": 3,
+      "department": "Engineering - Water Supply",
+      "category": "Water Supply Not Given in Public Tap(Bore Water)",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 59,
+      "pdf_page": 3,
+      "department": "Engineering - Water Supply",
+      "category": "Water Supply Power Pump Repairs",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 60,
+      "pdf_page": 3,
+      "department": "Engineering - Water Supply",
+      "category": "Water Supply Road Cutting",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 61,
+      "pdf_page": 3,
+      "department": "Engineering - Water Supply",
+      "category": "Water Supply Wastage due to Broken/Damaged Pipeline",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 2
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 62,
+      "pdf_page": 3,
+      "department": "Engineering - Works",
+      "category": "Basic Amenities Petitions",
+      "total_days": 12,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 63,
+      "pdf_page": 3,
+      "department": "Engineering - Works",
+      "category": "Bulinding Maintenance (Office Building,Quarters,Schools,ICDS Centers,Noon meals Center,Shopping Complex)",
+      "total_days": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 64,
+      "pdf_page": 4,
+      "department": "Engineering - Works",
+      "category": "Burial Ground and Electrical / Gasifire Crematorium Maintenance",
+      "total_days": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 65,
+      "pdf_page": 4,
+      "department": "Engineering - Works",
+      "category": "Burial Ground and Electrical Crematorium Maintenance",
+      "total_days": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 66,
+      "pdf_page": 4,
+      "department": "Engineering - Works",
+      "category": "Bus Stand Maintenance",
+      "total_days": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 67,
+      "pdf_page": 4,
+      "department": "Engineering - Works",
+      "category": "Center Median",
+      "total_days": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 68,
+      "pdf_page": 4,
+      "department": "Engineering - Works",
+      "category": "Contract Workers",
+      "total_days": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 69,
+      "pdf_page": 4,
+      "department": "Engineering - Works",
+      "category": "Converson of Road",
+      "total_days": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 70,
+      "pdf_page": 4,
+      "department": "Engineering - Works",
+      "category": "Desiliting of Drain/Canal",
+      "total_days": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 71,
+      "pdf_page": 4,
+      "department": "Engineering - Works",
+      "category": "Dredging of Water bodies",
+      "total_days": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 72,
+      "pdf_page": 4,
+      "department": "Engineering - Works",
+      "category": "Dust pin in Parks",
+      "total_days": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 73,
+      "pdf_page": 4,
+      "department": "Engineering - Works",
+      "category": "e-Tender",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 74,
+      "pdf_page": 4,
+      "department": "Engineering - Works",
+      "category": "Engineering Works - Others",
+      "total_days": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 75,
+      "pdf_page": 4,
+      "department": "Engineering - Works",
+      "category": "Flood Management",
+      "total_days": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 76,
+      "pdf_page": 4,
+      "department": "Engineering - Works",
+      "category": "Foot Path",
+      "total_days": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 77,
+      "pdf_page": 4,
+      "department": "Engineering - Works",
+      "category": "Hanging of power Cables",
+      "total_days": 11,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 78,
+      "pdf_page": 4,
+      "department": "Engineering - Works",
+      "category": "Maintenance of Park",
+      "total_days": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 79,
+      "pdf_page": 4,
+      "department": "Engineering - Works",
+      "category": "Maintenance of Plants and Trees",
+      "total_days": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 80,
+      "pdf_page": 4,
+      "department": "Engineering - Works",
+      "category": "Maintenance of Play Fields",
+      "total_days": 16,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 81,
+      "pdf_page": 4,
+      "department": "Engineering - Works",
+      "category": "Maintenance/Repairs Of Roads",
+      "total_days": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 82,
+      "pdf_page": 4,
+      "department": "Engineering - Works",
+      "category": "Make Working Condition of Borewell Motors",
+      "total_days": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 83,
+      "pdf_page": 4,
+      "department": "Engineering - Works",
+      "category": "Name board Issues",
+      "total_days": 38,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 30
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 2
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 2
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 2
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 84,
+      "pdf_page": 4,
+      "department": "Engineering - Works",
+      "category": "No Eelectricity in Public Toilets",
+      "total_days": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 85,
+      "pdf_page": 5,
+      "department": "Engineering - Works",
+      "category": "No Water Supply in Public Toilets",
+      "total_days": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 86,
+      "pdf_page": 5,
+      "department": "Engineering - Works",
+      "category": "Park - Others",
+      "total_days": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 87,
+      "pdf_page": 5,
+      "department": "Engineering - Works",
+      "category": "Park Bench",
+      "total_days": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 88,
+      "pdf_page": 5,
+      "department": "Engineering - Works",
+      "category": "Park Ligths",
+      "total_days": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 89,
+      "pdf_page": 5,
+      "department": "Engineering - Works",
+      "category": "Park Maintenance",
+      "total_days": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 90,
+      "pdf_page": 5,
+      "department": "Engineering - Works",
+      "category": "Removal of Abonded Vehicles",
+      "total_days": 11,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 91,
+      "pdf_page": 5,
+      "department": "Engineering - Works",
+      "category": "Removal of Damaged Vehicles",
+      "total_days": 11,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 92,
+      "pdf_page": 5,
+      "department": "Engineering - Works",
+      "category": "Repairs and Maintenance of Culeverts/Bridges",
+      "total_days": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 93,
+      "pdf_page": 5,
+      "department": "Engineering - Works",
+      "category": "Request for Pathole repair",
+      "total_days": 9,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 94,
+      "pdf_page": 5,
+      "department": "Engineering - Works",
+      "category": "Request for road repair",
+      "total_days": 10,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 3
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 2
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 2
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 95,
+      "pdf_page": 5,
+      "department": "Engineering - Works",
+      "category": "Request of New Mini Water Tank for Pubic",
+      "total_days": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 96,
+      "pdf_page": 5,
+      "department": "Engineering - Works",
+      "category": "Reuest for Night Security",
+      "total_days": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 97,
+      "pdf_page": 5,
+      "department": "Engineering - Works",
+      "category": "Road - Others",
+      "total_days": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 98,
+      "pdf_page": 5,
+      "department": "Engineering - Works",
+      "category": "Road Cutting Permission",
+      "total_days": 9,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 99,
+      "pdf_page": 5,
+      "department": "Engineering - Works",
+      "category": "Road Patch works",
+      "total_days": 35,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 30
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 100,
+      "pdf_page": 5,
+      "department": "Engineering - Works",
+      "category": "Road Signage",
+      "total_days": 6,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 101,
+      "pdf_page": 5,
+      "department": "Engineering - Works",
+      "category": "Road Works-CCand BT",
+      "total_days": 16,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 102,
+      "pdf_page": 5,
+      "department": "Engineering - Works",
+      "category": "Speed Breaker",
+      "total_days": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 103,
+      "pdf_page": 5,
+      "department": "Engineering - Works",
+      "category": "Toilet Maintenance",
+      "total_days": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 104,
+      "pdf_page": 5,
+      "department": "Engineering - Works",
+      "category": "Walker Path",
+      "total_days": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 3
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 105,
+      "pdf_page": 5,
+      "department": "Engineering - Works",
+      "category": "Water Supply HSC Name Correction",
+      "total_days": 10,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 0
+        }
+      ]
+    },
+    {
+      "s_no": 106,
+      "pdf_page": 6,
+      "department": "Engineering -Town plan",
+      "category": "Building Plan",
+      "total_days": 8,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(TP)",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE(PLAN)",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 107,
+      "pdf_page": 6,
+      "department": "Engineering -Town plan",
+      "category": "Building plan - Others",
+      "total_days": 8,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(TP)",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE(PLAN)",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 108,
+      "pdf_page": 6,
+      "department": "Engineering -Town plan",
+      "category": "Buliding Application",
+      "total_days": 8,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(TP)",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE(PLAN)",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 109,
+      "pdf_page": 6,
+      "department": "Engineering -Town plan",
+      "category": "Buliding Debris",
+      "total_days": 8,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(TP)",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE(PLAN)",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 110,
+      "pdf_page": 6,
+      "department": "Engineering -Town plan",
+      "category": "Buliding License",
+      "total_days": 8,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(TP)",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE(PLAN)",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 111,
+      "pdf_page": 6,
+      "department": "Engineering -Town plan",
+      "category": "Buliding Plan renewal",
+      "total_days": 8,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(TP)",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE(PLAN)",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 112,
+      "pdf_page": 6,
+      "department": "Engineering -Town plan",
+      "category": "Buliding Plan Verification",
+      "total_days": 8,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(TP)",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE(PLAN)",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 113,
+      "pdf_page": 6,
+      "department": "Engineering -Town plan",
+      "category": "Buliding Plannig Permission",
+      "total_days": 8,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(TP)",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE(PLAN)",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 114,
+      "pdf_page": 6,
+      "department": "Engineering -Town plan",
+      "category": "Buliding Rule Violation",
+      "total_days": 8,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(TP)",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE(PLAN)",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 115,
+      "pdf_page": 6,
+      "department": "Engineering -Town plan",
+      "category": "Delimation",
+      "total_days": 8,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(TP)",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE(PLAN)",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 116,
+      "pdf_page": 6,
+      "department": "Engineering -Town plan",
+      "category": "Deviation of Plan",
+      "total_days": 8,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(TP)",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE(PLAN)",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 117,
+      "pdf_page": 6,
+      "department": "Engineering -Town plan",
+      "category": "Hoarding Removal UAC",
+      "total_days": 8,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(TP)",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE(PLAN)",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 118,
+      "pdf_page": 6,
+      "department": "Engineering -Town plan",
+      "category": "Layout Approval",
+      "total_days": 8,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(TP)",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE(PLAN)",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 119,
+      "pdf_page": 6,
+      "department": "Engineering -Town plan",
+      "category": "Others",
+      "total_days": 34,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(TP)",
+          "days": 30
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE(PLAN)",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 120,
+      "pdf_page": 6,
+      "department": "Engineering -Town plan",
+      "category": "Payments",
+      "total_days": 8,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(TP)",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE(PLAN)",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 121,
+      "pdf_page": 6,
+      "department": "Engineering -Town plan",
+      "category": "Petty Shop",
+      "total_days": 8,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(TP)",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE(PLAN)",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 122,
+      "pdf_page": 6,
+      "department": "Engineering -Town plan",
+      "category": "Removal of Permanent Encroachment",
+      "total_days": 34,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(TP)",
+          "days": 30
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE(PLAN)",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 123,
+      "pdf_page": 6,
+      "department": "Engineering -Town plan",
+      "category": "Removal of Temporary Encroachment",
+      "total_days": 19,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(TP)",
+          "days": 15
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE(PLAN)",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 124,
+      "pdf_page": 6,
+      "department": "Engineering -Town plan",
+      "category": "Request For Information",
+      "total_days": 8,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(TP)",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE(PLAN)",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 125,
+      "pdf_page": 6,
+      "department": "Engineering -Town plan",
+      "category": "Reserve Site",
+      "total_days": 8,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(TP)",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE(PLAN)",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 126,
+      "pdf_page": 6,
+      "department": "Engineering -Town plan",
+      "category": "Sub –Division Approval",
+      "total_days": 8,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(TP)",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE(PLAN)",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 127,
+      "pdf_page": 7,
+      "department": "Engineering -Town plan",
+      "category": "Survey",
+      "total_days": 8,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(TP)",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE(PLAN)",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 128,
+      "pdf_page": 7,
+      "department": "Engineering -Town plan",
+      "category": "Town Plannig-General works",
+      "total_days": 8,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(TP)",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE(PLAN)",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 129,
+      "pdf_page": 7,
+      "department": "Engineering -Town plan",
+      "category": "Town Planning Others",
+      "total_days": 8,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(TP)",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE(PLAN)",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 130,
+      "pdf_page": 7,
+      "department": "Engineering -Town plan",
+      "category": "Town Planning-Delay of Building Plan Approval",
+      "total_days": 8,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(TP)",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE(PLAN)",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 131,
+      "pdf_page": 7,
+      "department": "Engineering -Town plan",
+      "category": "Town Planning-Removal of Unauthorised Hoardings",
+      "total_days": 8,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(TP)",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE(PLAN)",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 132,
+      "pdf_page": 7,
+      "department": "Engineering -Town plan",
+      "category": "Town Planning-Without Plan Building Construction",
+      "total_days": 8,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(TP)",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE(PLAN)",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 133,
+      "pdf_page": 7,
+      "department": "Engineering -Town plan",
+      "category": "Un-Authorised Construction",
+      "total_days": 8,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(TP)",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE(PLAN)",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 134,
+      "pdf_page": 7,
+      "department": "Engineering -Town plan",
+      "category": "Water bodies encrochment",
+      "total_days": 8,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(TP)",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "EE(PLAN)",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 135,
+      "pdf_page": 7,
+      "department": "New Infrastructure - streetlight",
+      "category": "New streetlight",
+      "total_days": 37,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 30
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 2
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 2
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 2
+        },
+        {
+          "stage": 5,
+          "role": "AE",
+          "days": 0
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 136,
+      "pdf_page": 7,
+      "department": "New Infrastructure - works",
+      "category": "New compound wall/ New Building",
+      "total_days": 37,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 30
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 2
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 2
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 2
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 137,
+      "pdf_page": 7,
+      "department": "New Infrastructure - works",
+      "category": "New Road",
+      "total_days": 37,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 30
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 2
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 2
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 2
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 138,
+      "pdf_page": 7,
+      "department": "New Infrastructure - works",
+      "category": "New Storm water Drainage/ New culvert",
+      "total_days": 37,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 30
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 2
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 2
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 2
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 139,
+      "pdf_page": 7,
+      "department": "New Infrastructure - works",
+      "category": "New UGD connection",
+      "total_days": 67,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE(UGD)",
+          "days": 30
+        },
+        {
+          "stage": 2,
+          "role": "AE/JE",
+          "days": 30
+        },
+        {
+          "stage": 3,
+          "role": "AEE",
+          "days": 2
+        },
+        {
+          "stage": 4,
+          "role": "EE",
+          "days": 2
+        },
+        {
+          "stage": 5,
+          "role": "CE",
+          "days": 2
+        },
+        {
+          "stage": 6,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 140,
+      "pdf_page": 7,
+      "department": "New Infrastructure - works",
+      "category": "New water supply connection",
+      "total_days": 37,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 30
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 2
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 2
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 2
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 141,
+      "pdf_page": 7,
+      "department": "New Infrastructure - works",
+      "category": "New Water Tank/ New Borewel/ New Boremotor",
+      "total_days": 37,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "AE/JE",
+          "days": 30
+        },
+        {
+          "stage": 2,
+          "role": "AEE",
+          "days": 2
+        },
+        {
+          "stage": 3,
+          "role": "EE",
+          "days": 2
+        },
+        {
+          "stage": 4,
+          "role": "CE",
+          "days": 2
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 142,
+      "pdf_page": 7,
+      "department": "Public Distribution System",
+      "category": "Biometric Related",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "NODAL OFFICER",
+          "days": 5
+        }
+      ]
+    },
+    {
+      "s_no": 143,
+      "pdf_page": 7,
+      "department": "Public Distribution System",
+      "category": "Change Ration shop",
+      "total_days": 6,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "NODAL OFFICER",
+          "days": 6
+        }
+      ]
+    },
+    {
+      "s_no": 144,
+      "pdf_page": 7,
+      "department": "Public Distribution System",
+      "category": "Commodities Related",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "NODAL OFFICER",
+          "days": 5
+        }
+      ]
+    },
+    {
+      "s_no": 145,
+      "pdf_page": 7,
+      "department": "Public Distribution System",
+      "category": "Food Safety",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "NODAL OFFICER",
+          "days": 5
+        }
+      ]
+    },
+    {
+      "s_no": 146,
+      "pdf_page": 7,
+      "department": "Public Distribution System",
+      "category": "PDS Machine Not Working",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "NODAL OFFICER",
+          "days": 5
+        }
+      ]
+    },
+    {
+      "s_no": 147,
+      "pdf_page": 7,
+      "department": "Public Distribution System",
+      "category": "Ration shop - Others",
+      "total_days": 6,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "NODAL OFFICER",
+          "days": 6
+        }
+      ]
+    },
+    {
+      "s_no": 148,
+      "pdf_page": 8,
+      "department": "Public Distribution System",
+      "category": "Ration shop keeper",
+      "total_days": 6,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "NODAL OFFICER",
+          "days": 6
+        }
+      ]
+    },
+    {
+      "s_no": 149,
+      "pdf_page": 8,
+      "department": "Public Distribution System",
+      "category": "Ration Smart card",
+      "total_days": 6,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "NODAL OFFICER",
+          "days": 6
+        }
+      ]
+    },
+    {
+      "s_no": 150,
+      "pdf_page": 8,
+      "department": "Public Health",
+      "category": "animals nuisance",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 151,
+      "pdf_page": 8,
+      "department": "Public Health",
+      "category": "Bakery smoke Nuisance",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 152,
+      "pdf_page": 8,
+      "department": "Public Health",
+      "category": "Bio-Medical Waste-Details",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 153,
+      "pdf_page": 8,
+      "department": "Public Health",
+      "category": "Birth NAC",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 154,
+      "pdf_page": 8,
+      "department": "Public Health",
+      "category": "Birth NOC",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 155,
+      "pdf_page": 8,
+      "department": "Public Health",
+      "category": "Birth - Child Sex Correction",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 156,
+      "pdf_page": 8,
+      "department": "Public Health",
+      "category": "Birth - Date of Birth Correction",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 157,
+      "pdf_page": 8,
+      "department": "Public Health",
+      "category": "Birth - Father/Mother - UID Number Correction",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 158,
+      "pdf_page": 8,
+      "department": "Public Health",
+      "category": "Birth - Hospital Name / Address Correction",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 159,
+      "pdf_page": 8,
+      "department": "Public Health",
+      "category": "Birth - Permanent Address Correction",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 160,
+      "pdf_page": 8,
+      "department": "Public Health",
+      "category": "Birth - Place of Birth Correction",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 161,
+      "pdf_page": 8,
+      "department": "Public Health",
+      "category": "Birth -Present Address Correction",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 162,
+      "pdf_page": 8,
+      "department": "Public Health",
+      "category": "Birth /DeathCertificate-Current Year",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 163,
+      "pdf_page": 8,
+      "department": "Public Health",
+      "category": "Birth /DeathCertificate-Previous year",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 164,
+      "pdf_page": 8,
+      "department": "Public Health",
+      "category": "Birth and Death Others",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 165,
+      "pdf_page": 8,
+      "department": "Public Health",
+      "category": "Birth Child Name Correction",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 166,
+      "pdf_page": 8,
+      "department": "Public Health",
+      "category": "Birth Complaint",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 167,
+      "pdf_page": 8,
+      "department": "Public Health",
+      "category": "Birth Correction",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 168,
+      "pdf_page": 8,
+      "department": "Public Health",
+      "category": "Birth Father Name Correction",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 169,
+      "pdf_page": 9,
+      "department": "Public Health",
+      "category": "Birth Mother Name Correction",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 170,
+      "pdf_page": 9,
+      "department": "Public Health",
+      "category": "Birth Registration",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 171,
+      "pdf_page": 9,
+      "department": "Public Health",
+      "category": "Bpl List Prepartion Details",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 172,
+      "pdf_page": 9,
+      "department": "Public Health",
+      "category": "Burning of Compostyard",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 173,
+      "pdf_page": 9,
+      "department": "Public Health",
+      "category": "Cancellation of Trade License",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 174,
+      "pdf_page": 9,
+      "department": "Public Health",
+      "category": "Cattle Menace",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 175,
+      "pdf_page": 9,
+      "department": "Public Health",
+      "category": "Child Name Regestration in Birth Certificate",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 176,
+      "pdf_page": 9,
+      "department": "Public Health",
+      "category": "Child Name Registration",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 177,
+      "pdf_page": 9,
+      "department": "Public Health",
+      "category": "Communicable Discease",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 178,
+      "pdf_page": 9,
+      "department": "Public Health",
+      "category": "Compost yard Issues",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 179,
+      "pdf_page": 9,
+      "department": "Public Health",
+      "category": "COWS NUSIANCE",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 180,
+      "pdf_page": 9,
+      "department": "Public Health",
+      "category": "D and O Trade Details",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 181,
+      "pdf_page": 9,
+      "department": "Public Health",
+      "category": "Damage of Dustbin",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 182,
+      "pdf_page": 9,
+      "department": "Public Health",
+      "category": "De-Addicition and Shelter realted Details",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 183,
+      "pdf_page": 9,
+      "department": "Public Health",
+      "category": "Dead Animal",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 184,
+      "pdf_page": 9,
+      "department": "Public Health",
+      "category": "Death - Death Date Correction",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 185,
+      "pdf_page": 9,
+      "department": "Public Health",
+      "category": "Death - Death NAC",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 186,
+      "pdf_page": 9,
+      "department": "Public Health",
+      "category": "Death - Death NOC",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 187,
+      "pdf_page": 9,
+      "department": "Public Health",
+      "category": "Death - Death Person Age Correction",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 188,
+      "pdf_page": 9,
+      "department": "Public Health",
+      "category": "Death - Death Person Father Name Correction",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 189,
+      "pdf_page": 9,
+      "department": "Public Health",
+      "category": "Death - Death Person Father UID Number Correction",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 190,
+      "pdf_page": 10,
+      "department": "Public Health",
+      "category": "Death - Death Person Husband/Wife Name Correction",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 191,
+      "pdf_page": 10,
+      "department": "Public Health",
+      "category": "Death - Death Person Mother Name Correction",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 192,
+      "pdf_page": 10,
+      "department": "Public Health",
+      "category": "Death - Death Person Mother UID Correction",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 193,
+      "pdf_page": 10,
+      "department": "Public Health",
+      "category": "Death - Death Person Name Correction",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 194,
+      "pdf_page": 10,
+      "department": "Public Health",
+      "category": "Death - Death Person Premanent Address Correction",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 195,
+      "pdf_page": 10,
+      "department": "Public Health",
+      "category": "Death - Death Person Present Address Correction",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 196,
+      "pdf_page": 10,
+      "department": "Public Health",
+      "category": "Death - Death Person Sex Correction",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 197,
+      "pdf_page": 10,
+      "department": "Public Health",
+      "category": "Death - Death Person UID Number Correction",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 198,
+      "pdf_page": 10,
+      "department": "Public Health",
+      "category": "Death - Death Place Correction",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 199,
+      "pdf_page": 10,
+      "department": "Public Health",
+      "category": "Death Complaint",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 200,
+      "pdf_page": 10,
+      "department": "Public Health",
+      "category": "Death Correction",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 201,
+      "pdf_page": 10,
+      "department": "Public Health",
+      "category": "Death Person Husband/Wife UID Number Correction",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 202,
+      "pdf_page": 10,
+      "department": "Public Health",
+      "category": "Death Registration",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 203,
+      "pdf_page": 10,
+      "department": "Public Health",
+      "category": "Deisceases",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 204,
+      "pdf_page": 10,
+      "department": "Public Health",
+      "category": "Dog - Catching",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 205,
+      "pdf_page": 10,
+      "department": "Public Health",
+      "category": "Door to Door collection",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 206,
+      "pdf_page": 10,
+      "department": "Public Health",
+      "category": "Dr.Muthulakshmi Reddy Maternity benefit Scheme",
+      "total_days": 12,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "MSA",
+          "days": 6
+        },
+        {
+          "stage": 2,
+          "role": "CHN",
+          "days": 6
+        }
+      ]
+    },
+    {
+      "s_no": 207,
+      "pdf_page": 10,
+      "department": "Public Health",
+      "category": "Drainage Leakage",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 208,
+      "pdf_page": 10,
+      "department": "Public Health",
+      "category": "Drainage Overflow",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 209,
+      "pdf_page": 10,
+      "department": "Public Health",
+      "category": "Drainage Silt Not Removed",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 210,
+      "pdf_page": 10,
+      "department": "Public Health",
+      "category": "Dustbin Not Cleaned",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 211,
+      "pdf_page": 11,
+      "department": "Public Health",
+      "category": "Epidemic Diseases",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 212,
+      "pdf_page": 11,
+      "department": "Public Health",
+      "category": "Extra Payment Related",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 213,
+      "pdf_page": 11,
+      "department": "Public Health",
+      "category": "Flood Management",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 214,
+      "pdf_page": 11,
+      "department": "Public Health",
+      "category": "Garbage",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 215,
+      "pdf_page": 11,
+      "department": "Public Health",
+      "category": "Garbage Vehicle Related",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 216,
+      "pdf_page": 11,
+      "department": "Public Health",
+      "category": "Illegal Trade",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 217,
+      "pdf_page": 11,
+      "department": "Public Health",
+      "category": "Improper Toilet Cleaning",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 218,
+      "pdf_page": 11,
+      "department": "Public Health",
+      "category": "License Issues",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 219,
+      "pdf_page": 11,
+      "department": "Public Health",
+      "category": "Maintenance Of Electrical Crematorium Deatils",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 220,
+      "pdf_page": 11,
+      "department": "Public Health",
+      "category": "More Fees",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 221,
+      "pdf_page": 11,
+      "department": "Public Health",
+      "category": "Mosquito Breeding",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 222,
+      "pdf_page": 11,
+      "department": "Public Health",
+      "category": "Mosquito Menace",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 223,
+      "pdf_page": 11,
+      "department": "Public Health",
+      "category": "New Machinary Installation with Trade Permission",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 224,
+      "pdf_page": 11,
+      "department": "Public Health",
+      "category": "Non availability of Bin",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 225,
+      "pdf_page": 11,
+      "department": "Public Health",
+      "category": "Non Removal of Garbage",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 226,
+      "pdf_page": 11,
+      "department": "Public Health",
+      "category": "Overflow of Dustpin",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 227,
+      "pdf_page": 11,
+      "department": "Public Health",
+      "category": "Pig Menace",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 228,
+      "pdf_page": 11,
+      "department": "Public Health",
+      "category": "pollution control",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 229,
+      "pdf_page": 11,
+      "department": "Public Health",
+      "category": "Public health - Others",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 230,
+      "pdf_page": 11,
+      "department": "Public Health",
+      "category": "Public Septic Tank Cleaning",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 231,
+      "pdf_page": 11,
+      "department": "Public Health",
+      "category": "Public Toilets / Bath Rooms Not Cleaned",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 232,
+      "pdf_page": 12,
+      "department": "Public Health",
+      "category": "Removal of Garbage",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 233,
+      "pdf_page": 12,
+      "department": "Public Health",
+      "category": "Request for Address Change for Trade License",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 234,
+      "pdf_page": 12,
+      "department": "Public Health",
+      "category": "Request for Change of Trade",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 235,
+      "pdf_page": 12,
+      "department": "Public Health",
+      "category": "Request for change of Dust Bin",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 236,
+      "pdf_page": 12,
+      "department": "Public Health",
+      "category": "Request for Cleaning of Drainage",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 237,
+      "pdf_page": 12,
+      "department": "Public Health",
+      "category": "Request for Corrective or Preventive Action",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 238,
+      "pdf_page": 12,
+      "department": "Public Health",
+      "category": "Request for Name Transfer for Trade License",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 239,
+      "pdf_page": 12,
+      "department": "Public Health",
+      "category": "Request for new Bin",
+      "total_days": 33,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 30
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 240,
+      "pdf_page": 12,
+      "department": "Public Health",
+      "category": "Request for New Trade in Rental Buildings",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 241,
+      "pdf_page": 12,
+      "department": "Public Health",
+      "category": "Request for New Trade License",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 242,
+      "pdf_page": 12,
+      "department": "Public Health",
+      "category": "Sanitation Others",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 243,
+      "pdf_page": 12,
+      "department": "Public Health",
+      "category": "Septic Tank Cleaning",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 244,
+      "pdf_page": 12,
+      "department": "Public Health",
+      "category": "Solid Waste Management - Others",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 245,
+      "pdf_page": 12,
+      "department": "Public Health",
+      "category": "Stagnation of Storm Water Drain",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 246,
+      "pdf_page": 12,
+      "department": "Public Health",
+      "category": "Street Dogs nuisance",
+      "total_days": 10,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 3
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 3
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 3
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 247,
+      "pdf_page": 12,
+      "department": "Public Health",
+      "category": "Street Sweeping",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 248,
+      "pdf_page": 12,
+      "department": "Public Health",
+      "category": "Sweeping Not Done",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 249,
+      "pdf_page": 12,
+      "department": "Public Health",
+      "category": "Temporary Crackers Licenses Workers",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 4
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 250,
+      "pdf_page": 12,
+      "department": "Public Health",
+      "category": "Trace Fees",
+      "total_days": 4,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "SO",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "CHO",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 251,
+      "pdf_page": 12,
+      "department": "Revenue",
+      "category": "Booking of Assets",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 252,
+      "pdf_page": 12,
+      "department": "Revenue",
+      "category": "Drain.Maint.Charges",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 3
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 253,
+      "pdf_page": 13,
+      "department": "Revenue",
+      "category": "Lease Advance/Deposits related Issues",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 254,
+      "pdf_page": 13,
+      "department": "Revenue",
+      "category": "Litigation",
+      "total_days": 13,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 7
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 2
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 2
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 255,
+      "pdf_page": 13,
+      "department": "Revenue",
+      "category": "Maintenance of Parking place",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 256,
+      "pdf_page": 13,
+      "department": "Revenue",
+      "category": "Name Correction",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 3
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 257,
+      "pdf_page": 13,
+      "department": "Revenue",
+      "category": "New Assessments",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 3
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 258,
+      "pdf_page": 13,
+      "department": "Revenue",
+      "category": "Non tax- Monthly Rental",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 259,
+      "pdf_page": 13,
+      "department": "Revenue",
+      "category": "Non tax-Annual Lease",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 260,
+      "pdf_page": 13,
+      "department": "Revenue",
+      "category": "Nontax-Lease Items",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 261,
+      "pdf_page": 13,
+      "department": "Revenue",
+      "category": "Nontax-Requisition for Name Correction",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 262,
+      "pdf_page": 13,
+      "department": "Revenue",
+      "category": "Nontax-Requisition for Name Transfer",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 263,
+      "pdf_page": 13,
+      "department": "Revenue",
+      "category": "Nontax-Requisition toAdjust their Deposit for Rent",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 264,
+      "pdf_page": 13,
+      "department": "Revenue",
+      "category": "Nontax-To Utilise is as Godown / Parking Area",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 265,
+      "pdf_page": 13,
+      "department": "Revenue",
+      "category": "Online Payment",
+      "total_days": 11,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 7
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 266,
+      "pdf_page": 13,
+      "department": "Revenue",
+      "category": "Others",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 267,
+      "pdf_page": 13,
+      "department": "Revenue",
+      "category": "Parking Charges",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 3
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 268,
+      "pdf_page": 13,
+      "department": "Revenue",
+      "category": "Pay&Use Toilet",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 3
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 269,
+      "pdf_page": 13,
+      "department": "Revenue",
+      "category": "Permission to adjust empty space between Two shops",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 270,
+      "pdf_page": 13,
+      "department": "Revenue",
+      "category": "Permission to Change the Flooring on their Own exp",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 271,
+      "pdf_page": 13,
+      "department": "Revenue",
+      "category": "Permission to Construct a Toilet on their Own Exp",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 272,
+      "pdf_page": 13,
+      "department": "Revenue",
+      "category": "Permission to do Indoor Partition on their Own Exp",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 273,
+      "pdf_page": 13,
+      "department": "Revenue",
+      "category": "Permission to Make Temporary Roof in front of Shop",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 274,
+      "pdf_page": 14,
+      "department": "Revenue",
+      "category": "Permission to Smash together the wall in Shops",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 275,
+      "pdf_page": 14,
+      "department": "Revenue",
+      "category": "Prof Tax-Request for Cancel Existing Assessment No",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 276,
+      "pdf_page": 14,
+      "department": "Revenue",
+      "category": "Prof Tax-Request for Change of Address",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 277,
+      "pdf_page": 14,
+      "department": "Revenue",
+      "category": "Prof Tax-Request for Demand Notice",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 278,
+      "pdf_page": 14,
+      "department": "Revenue",
+      "category": "Prof Tax-Request for Demand Update",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 279,
+      "pdf_page": 14,
+      "department": "Revenue",
+      "category": "Prof Tax-Request for Name Correction",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 280,
+      "pdf_page": 14,
+      "department": "Revenue",
+      "category": "Prof Tax-Request for New Assessment",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 281,
+      "pdf_page": 14,
+      "department": "Revenue",
+      "category": "Prof Tax-Request for Tariff Change",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 282,
+      "pdf_page": 14,
+      "department": "Revenue",
+      "category": "Prof Tax-Request for Tax Paid Statement",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 283,
+      "pdf_page": 14,
+      "department": "Revenue",
+      "category": "Property Tax",
+      "total_days": 10,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 7
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 284,
+      "pdf_page": 14,
+      "department": "Revenue",
+      "category": "Property Tax Name Transfer",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 285,
+      "pdf_page": 14,
+      "department": "Revenue",
+      "category": "Request For Information",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 3
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 286,
+      "pdf_page": 14,
+      "department": "Revenue",
+      "category": "Request for Parking Facility",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 287,
+      "pdf_page": 14,
+      "department": "Revenue",
+      "category": "Revenue - Others",
+      "total_days": 11,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 7
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 288,
+      "pdf_page": 14,
+      "department": "Revenue",
+      "category": "Road side Parking Slots",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 289,
+      "pdf_page": 14,
+      "department": "Revenue",
+      "category": "Tax Fixation",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 290,
+      "pdf_page": 14,
+      "department": "Revenue",
+      "category": "Tax Payers Correction",
+      "total_days": 5,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 1
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 291,
+      "pdf_page": 14,
+      "department": "Revenue",
+      "category": "VLT",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 3
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 292,
+      "pdf_page": 14,
+      "department": "Revenue",
+      "category": "Water Charge",
+      "total_days": 7,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 3
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "DEPUTY COMMR",
+          "days": 1
+        },
+        {
+          "stage": 5,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 293,
+      "pdf_page": 14,
+      "department": "Revenue",
+      "category": "Water Name Transfer",
+      "total_days": 6,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "SRI",
+          "days": 3
+        },
+        {
+          "stage": 2,
+          "role": "AC",
+          "days": 1
+        },
+        {
+          "stage": 3,
+          "role": "ACR",
+          "days": 1
+        },
+        {
+          "stage": 4,
+          "role": "COMMR",
+          "days": 1
+        }
+      ]
+    },
+    {
+      "s_no": 294,
+      "pdf_page": 14,
+      "department": "Transport Department",
+      "category": "Bus maintenance",
+      "total_days": 6,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "Deputy Manager of Commercial",
+          "days": 6
+        }
+      ]
+    },
+    {
+      "s_no": 295,
+      "pdf_page": 15,
+      "department": "Transport Department",
+      "category": "Bus not stops in exact bus stop",
+      "total_days": 6,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "Deputy Manager of Commercial",
+          "days": 6
+        }
+      ]
+    },
+    {
+      "s_no": 296,
+      "pdf_page": 15,
+      "department": "Transport Department",
+      "category": "Bus Timing issue",
+      "total_days": 6,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "Deputy Manager of Commercial",
+          "days": 6
+        }
+      ]
+    },
+    {
+      "s_no": 297,
+      "pdf_page": 15,
+      "department": "Transport Department",
+      "category": "Conductor Misbehaving",
+      "total_days": 6,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "Deputy Manager of Commercial",
+          "days": 6
+        }
+      ]
+    },
+    {
+      "s_no": 298,
+      "pdf_page": 15,
+      "department": "Transport Department",
+      "category": "Extra charges",
+      "total_days": 6,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "Deputy Manager of Commercial",
+          "days": 6
+        }
+      ]
+    },
+    {
+      "s_no": 299,
+      "pdf_page": 15,
+      "department": "Transport Department",
+      "category": "New bus route service",
+      "total_days": 6,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "Deputy Manager of Commercial",
+          "days": 6
+        }
+      ]
+    },
+    {
+      "s_no": 300,
+      "pdf_page": 15,
+      "department": "Transport Department",
+      "category": "Not picking school/college students",
+      "total_days": 6,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "Deputy Manager of Commercial",
+          "days": 6
+        }
+      ]
+    },
+    {
+      "s_no": 301,
+      "pdf_page": 15,
+      "department": "Transport Department",
+      "category": "Transport - others",
+      "total_days": 3,
+      "stages": [
+        {
+          "stage": 1,
+          "role": "Deputy Manager of Commercial",
+          "days": 3
+        }
+      ]
+    }
+  ]
+}

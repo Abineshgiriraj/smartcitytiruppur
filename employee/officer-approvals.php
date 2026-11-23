@@ -37,10 +37,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stageNo = (int)($_POST['stage_no'] ?? 0);
     $officerId = (int)($_POST['officer_id'] ?? 0);
     $reference = trim((string)($_POST['approval_reference'] ?? ''));
+    $isSimulation = !empty($_POST['is_simulation']);
+    // Simulation and official approvals must be physically separated.
+    // This official registry is used for routing real citizen grievances.
+    if ($isSimulation || str_starts_with(strtoupper($reference), 'SIMULATION-LOCAL-TEST-')) {
+        flash('danger', 'Simulation approvals cannot be stored in the official routing registry. Use isolated synthetic fixtures instead.');
+        redirect('employee/officer-approvals.php');
+    }
 
     try {
         if ($action === 'approve') {
-            if ($categoryId < 1 || $officerId < 1 || $stageNo < 1 || $stageNo > 4
+            if ($categoryId < 1 || $officerId < 1 || $stageNo < 1 || $stageNo > 6
                 || mb_strlen($reference) < 8 || mb_strlen($reference) > 255
                 || empty($_POST['confirm_authority'])) {
                 throw new RuntimeException('Enter a category, stage, officer ID, approval document reference and confirm verified authority.');
@@ -58,9 +65,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             );
             $validate->execute([$officerId, $categoryId]);
             $candidate = $validate->fetch(PDO::FETCH_ASSOC);
+            $pdf=pdf_policy_reviewed($pdo,$categoryId);
+            $expectedStage=$pdf===null?null:pdf_policy_stage($pdf,$stageNo);
+            if (!$expectedStage) {
+                throw new RuntimeException(
+                    'This category does not have an approved and valid Stage '.$stageNo
+                    .' PDF policy. Review the category policy before assigning officers.'
+                );
+            }
+            if (!$candidate) {
+                throw new RuntimeException('Officer ID #'.$officerId
+                    .' was not found for the selected category. Check the ID in Officer Directory.');
+            }
+            if (!pdf_policy_role_matches((string)$expectedStage['role_label'],(string)$candidate['designation'])) {
+                $recordedTitle=trim((string)($candidate['designation'] ?? ''));
+                if ($recordedTitle==='') $recordedTitle='NOT RECORDED';
+                throw new RuntimeException(
+                    'Officer #'.$officerId.' ('.$candidate['officer_name'].') has recorded designation "'
+                    .$recordedTitle.'", but PDF Stage '.$stageNo.' requires "'
+                    .$expectedStage['role_label'].'". Verify the official designation in '
+                    .'Advanced Masters > Designations before retrying. No approval was saved.'
+                );
+            }
+            $forbidden=officer_stage_forbidden_title((string)$candidate['designation'],$stageNo,$officerId);
+            if($forbidden && strtoupper(trim((string)$expectedStage['role_label']))==='COMMR'
+               && $stageNo>1 && $officerId!==1
+               && pdf_policy_role_matches('COMMR',(string)$candidate['designation'])) $forbidden=false;
             if (!$candidate || !(int)$candidate['is_active']
                 || !(int)$candidate['department_ok'] || !(int)$candidate['category_ok']
-                || officer_stage_forbidden_title((string)$candidate['designation'],$stageNo,$officerId)) {
+                || $forbidden) {
                 throw new RuntimeException('Officer is not eligible: verify active status, designation, department and category mapping.');
             }
             $pdo->beginTransaction();
@@ -159,7 +192,12 @@ include __DIR__.'/../includes/employee-header.php';
   <div><span class="admin-eyebrow">Governed routing</span>
     <h1>Officer Stage Approvals</h1>
     <p>Verify official officer authority before assigning any citizen grievance.</p></div>
-  <span class="admin-pill"><i class="bi bi-shield-lock"></i> Approval required</span>
+  <div class="d-flex gap-2 align-items-center">
+    <a href="<?php echo e(url('employee/officer-readiness.php')); ?>" class="btn btn-outline-primary">
+      <i class="bi bi-diagram-2 me-1"></i> Officer Readiness Dashboard
+    </a>
+    <span class="admin-pill"><i class="bi bi-shield-lock"></i> Approval required</span>
+  </div>
 </div>
 <?php if (!$setupReady): ?>
 <div class="alert alert-warning" role="alert">
@@ -175,6 +213,12 @@ include __DIR__.'/../includes/employee-header.php';
     <div class="card p-4 h-100">
       <h2 class="admin-panel-heading mb-2">Document a verified officer</h2>
       <p class="small text-muted">The approving administrator must have written municipal authorization for the specific category, stage and officer. An officer ID or designation alone is insufficient.</p>
+      <div class="alert alert-info small">
+        Stage 1 for Engineering - Street Light / Street Light requires <strong>AE (Electrical)</strong>.
+        A blank or generic designation cannot pass the PDF role check.
+        <a href="<?php echo e(url('employee/master-control.php?tab=designations')); ?>">Review recorded officer designations</a>
+        and verify the true municipal appointment before recording approval.
+      </div>
       <?php if ($canEdit && $setupReady): ?>
       <form method="post" class="d-grid gap-3">
         <?php echo csrf_field(); ?><input type="hidden" name="action" value="approve">
@@ -191,7 +235,9 @@ include __DIR__.'/../includes/employee-header.php';
             <option value="1">1 — Initial officer</option>
             <option value="2">2 — Second stage</option>
             <option value="3">3 — Third stage</option>
-            <option value="4">4 — Final stage</option>
+            <option value="4">4 — Stage 4 (some workflows finish here)</option>
+            <option value="5">5 — Stage 5 (where PDF specifies)</option>
+            <option value="6">6 — Stage 6 (where PDF specifies)</option>
           </select>
         </label>
         <label class="form-label">Verified officer ID
@@ -200,6 +246,7 @@ include __DIR__.'/../includes/employee-header.php';
         <label class="form-label">Signed approval reference
           <input class="form-control mt-1" maxlength="255" minlength="8" name="approval_reference" required placeholder="Official approval / order number">
         </label>
+        <div class="alert alert-warning small">Simulation approvals are disabled in this official registry.</div>
         <label class="d-flex align-items-start gap-2 small">
           <input type="checkbox" class="form-check-input mt-1" name="confirm_authority" value="1" required>
           <span>I have verified this officer's official authority for this specific complaint category and escalation stage.</span>

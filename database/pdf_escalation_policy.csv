@@ -1,0 +1,1410 @@
+﻿pdf_row,pdf_page,department,category,stage,role,stage_days,total_days
+1,1,Accounts,Contractor Bill Related,1,ACCOUNTANT,1,5
+1,1,Accounts,Contractor Bill Related,2,ACCOUNTS SUPERINTENDENT,2,5
+1,1,Accounts,Contractor Bill Related,3,DEPUTY COMMR,1,5
+1,1,Accounts,Contractor Bill Related,4,COMMR,1,5
+2,1,Accounts,"Group Schemes,Deposits,EMD and Refunds",1,ACCOUNTANT,5,11
+2,1,Accounts,"Group Schemes,Deposits,EMD and Refunds",2,AC ACCOUNTS,2,11
+2,1,Accounts,"Group Schemes,Deposits,EMD and Refunds",3,ACCOUNTS SUPERINTENDENT,2,11
+2,1,Accounts,"Group Schemes,Deposits,EMD and Refunds",4,DEPUTY COMMR,1,11
+2,1,Accounts,"Group Schemes,Deposits,EMD and Refunds",5,COMMR,1,11
+3,1,Accounts,others,1,ACCOUNTANT,5,11
+3,1,Accounts,others,2,AC ACCOUNTS,2,11
+3,1,Accounts,others,3,ACCOUNTS SUPERINTENDENT,2,11
+3,1,Accounts,others,4,DEPUTY COMMR,1,11
+3,1,Accounts,others,5,COMMR,1,11
+4,1,Accounts,"Pension,Family Pension,DCRG Commutation Santioned Details",1,ACCOUNTANT,5,11
+4,1,Accounts,"Pension,Family Pension,DCRG Commutation Santioned Details",2,AC ACCOUNTS,2,11
+4,1,Accounts,"Pension,Family Pension,DCRG Commutation Santioned Details",3,ACCOUNTS SUPERINTENDENT,2,11
+4,1,Accounts,"Pension,Family Pension,DCRG Commutation Santioned Details",4,DEPUTY COMMR,1,11
+4,1,Accounts,"Pension,Family Pension,DCRG Commutation Santioned Details",5,COMMR,1,11
+5,1,Accounts,Special Provident Fund,1,ACCOUNTANT,5,11
+5,1,Accounts,Special Provident Fund,2,AC ACCOUNTS,2,11
+5,1,Accounts,Special Provident Fund,3,ACCOUNTS SUPERINTENDENT,2,11
+5,1,Accounts,Special Provident Fund,4,DEPUTY COMMR,1,11
+5,1,Accounts,Special Provident Fund,5,COMMR,1,11
+6,1,eGovernance,Online Payment,1,AP,1,3
+6,1,eGovernance,Online Payment,2,ACR,1,3
+6,1,eGovernance,Online Payment,3,COMMR,1,3
+7,1,eGovernance,online Receipt,1,AP,1,3
+7,1,eGovernance,online Receipt,2,ACR,1,3
+7,1,eGovernance,online Receipt,3,COMMR,1,3
+8,1,Election Department,Election- others,1,ACP,1,6
+8,1,Election Department,Election- others,2,AERO,4,6
+8,1,Election Department,Election- others,3,COMMR,1,6
+9,1,Engineering - Sewage,Sewer House Block,1,AE(UGD),6,19
+9,1,Engineering - Sewage,Sewer House Block,2,AEE(UGD),3,19
+9,1,Engineering - Sewage,Sewer House Block,3,EE,3,19
+9,1,Engineering - Sewage,Sewer House Block,4,CE,3,19
+9,1,Engineering - Sewage,Sewer House Block,5,DEPUTY COMMR,3,19
+9,1,Engineering - Sewage,Sewer House Block,6,COMMR,1,19
+10,1,Engineering - Sewage,Sewer Main Block,1,AE(UGD),6,19
+10,1,Engineering - Sewage,Sewer Main Block,2,AEE(UGD),3,19
+10,1,Engineering - Sewage,Sewer Main Block,3,EE,3,19
+10,1,Engineering - Sewage,Sewer Main Block,4,CE,3,19
+10,1,Engineering - Sewage,Sewer Main Block,5,DEPUTY COMMR,3,19
+10,1,Engineering - Sewage,Sewer Main Block,6,COMMR,1,19
+11,1,Engineering - Sewage,Sewer Manhole Open or Broken,1,AE(UGD),6,19
+11,1,Engineering - Sewage,Sewer Manhole Open or Broken,2,AEE(UGD),3,19
+11,1,Engineering - Sewage,Sewer Manhole Open or Broken,3,EE,3,19
+11,1,Engineering - Sewage,Sewer Manhole Open or Broken,4,CE,3,19
+11,1,Engineering - Sewage,Sewer Manhole Open or Broken,5,DEPUTY COMMR,3,19
+11,1,Engineering - Sewage,Sewer Manhole Open or Broken,6,COMMR,1,19
+12,1,Engineering - Sewage,UGD - Cleaning of Drainage,1,AE(UGD),6,19
+12,1,Engineering - Sewage,UGD - Cleaning of Drainage,2,AEE(UGD),3,19
+12,1,Engineering - Sewage,UGD - Cleaning of Drainage,3,EE,3,19
+12,1,Engineering - Sewage,UGD - Cleaning of Drainage,4,CE,3,19
+12,1,Engineering - Sewage,UGD - Cleaning of Drainage,5,DEPUTY COMMR,3,19
+12,1,Engineering - Sewage,UGD - Cleaning of Drainage,6,COMMR,1,19
+13,1,Engineering - Sewage,UGD- Chokking,1,AE(UGD),6,21
+13,1,Engineering - Sewage,UGD- Chokking,2,AEE(UGD),3,21
+13,1,Engineering - Sewage,UGD- Chokking,3,EE,3,21
+13,1,Engineering - Sewage,UGD- Chokking,4,CE,3,21
+13,1,Engineering - Sewage,UGD- Chokking,5,DEPUTY COMMR,5,21
+13,1,Engineering - Sewage,UGD- Chokking,6,COMMR,1,21
+14,1,Engineering - Sewage,UGD-Blocking of UGSS,1,AE(UGD),6,19
+14,1,Engineering - Sewage,UGD-Blocking of UGSS,2,AEE(UGD),3,19
+14,1,Engineering - Sewage,UGD-Blocking of UGSS,3,EE,3,19
+14,1,Engineering - Sewage,UGD-Blocking of UGSS,4,CE,3,19
+14,1,Engineering - Sewage,UGD-Blocking of UGSS,5,DEPUTY COMMR,3,19
+14,1,Engineering - Sewage,UGD-Blocking of UGSS,6,COMMR,1,19
+15,1,Engineering - Sewage,UGD-Damaged Sewer Line,1,AE(UGD),6,19
+15,1,Engineering - Sewage,UGD-Damaged Sewer Line,2,AEE(UGD),3,19
+15,1,Engineering - Sewage,UGD-Damaged Sewer Line,3,EE,3,19
+15,1,Engineering - Sewage,UGD-Damaged Sewer Line,4,CE,3,19
+15,1,Engineering - Sewage,UGD-Damaged Sewer Line,5,DEPUTY COMMR,3,19
+15,1,Engineering - Sewage,UGD-Damaged Sewer Line,6,COMMR,1,19
+16,1,Engineering - Sewage,UGD-Leakage of Drainage,1,AE(UGD),6,19
+16,1,Engineering - Sewage,UGD-Leakage of Drainage,2,AEE(UGD),3,19
+16,1,Engineering - Sewage,UGD-Leakage of Drainage,3,EE,3,19
+16,1,Engineering - Sewage,UGD-Leakage of Drainage,4,CE,3,19
+16,1,Engineering - Sewage,UGD-Leakage of Drainage,5,DEPUTY COMMR,3,19
+16,1,Engineering - Sewage,UGD-Leakage of Drainage,6,COMMR,1,19
+17,1,Engineering - Sewage,UGD-Open Man-hole,1,AE(UGD),6,19
+17,1,Engineering - Sewage,UGD-Open Man-hole,2,AEE(UGD),3,19
+17,1,Engineering - Sewage,UGD-Open Man-hole,3,EE,3,19
+17,1,Engineering - Sewage,UGD-Open Man-hole,4,CE,3,19
+17,1,Engineering - Sewage,UGD-Open Man-hole,5,DEPUTY COMMR,3,19
+17,1,Engineering - Sewage,UGD-Open Man-hole,6,COMMR,1,19
+18,1,Engineering - Sewage,UGD-Others,1,AE(UGD),6,19
+18,1,Engineering - Sewage,UGD-Others,2,AEE(UGD),3,19
+18,1,Engineering - Sewage,UGD-Others,3,EE,3,19
+18,1,Engineering - Sewage,UGD-Others,4,CE,3,19
+18,1,Engineering - Sewage,UGD-Others,5,DEPUTY COMMR,3,19
+18,1,Engineering - Sewage,UGD-Others,6,COMMR,1,19
+19,1,Engineering - Sewage,UGD-Replacement of Damaged Man-hole Slab,1,AE(UGD),6,19
+19,1,Engineering - Sewage,UGD-Replacement of Damaged Man-hole Slab,2,AEE(UGD),3,19
+19,1,Engineering - Sewage,UGD-Replacement of Damaged Man-hole Slab,3,EE,3,19
+19,1,Engineering - Sewage,UGD-Replacement of Damaged Man-hole Slab,4,CE,3,19
+19,1,Engineering - Sewage,UGD-Replacement of Damaged Man-hole Slab,5,DEPUTY COMMR,3,19
+19,1,Engineering - Sewage,UGD-Replacement of Damaged Man-hole Slab,6,COMMR,1,19
+20,1,Engineering - Sewage,UGD-Sewer Line Overflow /Block,1,AE(UGD),6,19
+20,1,Engineering - Sewage,UGD-Sewer Line Overflow /Block,2,AEE(UGD),3,19
+20,1,Engineering - Sewage,UGD-Sewer Line Overflow /Block,3,EE,3,19
+20,1,Engineering - Sewage,UGD-Sewer Line Overflow /Block,4,CE,3,19
+20,1,Engineering - Sewage,UGD-Sewer Line Overflow /Block,5,DEPUTY COMMR,3,19
+20,1,Engineering - Sewage,UGD-Sewer Line Overflow /Block,6,COMMR,1,19
+21,1,Engineering - Sewage,UGD-Sewer Odor,1,AE(UGD),6,19
+21,1,Engineering - Sewage,UGD-Sewer Odor,2,AEE(UGD),3,19
+21,1,Engineering - Sewage,UGD-Sewer Odor,3,EE,3,19
+21,1,Engineering - Sewage,UGD-Sewer Odor,4,CE,3,19
+21,1,Engineering - Sewage,UGD-Sewer Odor,5,DEPUTY COMMR,3,19
+21,1,Engineering - Sewage,UGD-Sewer Odor,6,COMMR,1,19
+22,2,Engineering - Sewage,UGD-Sewerage Treatment Plant - related issues,1,AE(UGD),6,19
+22,2,Engineering - Sewage,UGD-Sewerage Treatment Plant - related issues,2,AEE(UGD),3,19
+22,2,Engineering - Sewage,UGD-Sewerage Treatment Plant - related issues,3,EE,3,19
+22,2,Engineering - Sewage,UGD-Sewerage Treatment Plant - related issues,4,CE,3,19
+22,2,Engineering - Sewage,UGD-Sewerage Treatment Plant - related issues,5,DEPUTY COMMR,3,19
+22,2,Engineering - Sewage,UGD-Sewerage Treatment Plant - related issues,6,COMMR,1,19
+23,2,Engineering - Street Light,Non illumination of Street Light,1,AE(ELECTRICAL),2,7
+23,2,Engineering - Street Light,Non illumination of Street Light,2,AEE,1,7
+23,2,Engineering - Street Light,Non illumination of Street Light,3,EE,1,7
+23,2,Engineering - Street Light,Non illumination of Street Light,4,CE,1,7
+23,2,Engineering - Street Light,Non illumination of Street Light,5,DEPUTY COMMR,1,7
+23,2,Engineering - Street Light,Non illumination of Street Light,6,COMMR,1,7
+24,2,Engineering - Street Light,Others,1,AE(ELECTRICAL),2,7
+24,2,Engineering - Street Light,Others,2,AEE,1,7
+24,2,Engineering - Street Light,Others,3,EE,1,7
+24,2,Engineering - Street Light,Others,4,CE,1,7
+24,2,Engineering - Street Light,Others,5,DEPUTY COMMR,1,7
+24,2,Engineering - Street Light,Others,6,COMMR,1,7
+25,2,Engineering - Street Light,Poor Lighting,1,AE(ELECTRICAL),2,7
+25,2,Engineering - Street Light,Poor Lighting,2,AEE,1,7
+25,2,Engineering - Street Light,Poor Lighting,3,EE,1,7
+25,2,Engineering - Street Light,Poor Lighting,4,CE,1,7
+25,2,Engineering - Street Light,Poor Lighting,5,DEPUTY COMMR,1,7
+25,2,Engineering - Street Light,Poor Lighting,6,COMMR,1,7
+26,2,Engineering - Street Light,Street Light,1,AE(ELECTRICAL),2,7
+26,2,Engineering - Street Light,Street Light,2,AEE,1,7
+26,2,Engineering - Street Light,Street Light,3,EE,1,7
+26,2,Engineering - Street Light,Street Light,4,CE,1,7
+26,2,Engineering - Street Light,Street Light,5,DEPUTY COMMR,1,7
+26,2,Engineering - Street Light,Street Light,6,COMMR,1,7
+27,2,Engineering - Street Light,Streetlight - Others,1,AE(ELECTRICAL),2,7
+27,2,Engineering - Street Light,Streetlight - Others,2,AEE,1,7
+27,2,Engineering - Street Light,Streetlight - Others,3,EE,1,7
+27,2,Engineering - Street Light,Streetlight - Others,4,CE,1,7
+27,2,Engineering - Street Light,Streetlight - Others,5,DEPUTY COMMR,1,7
+27,2,Engineering - Street Light,Streetlight - Others,6,COMMR,1,7
+28,2,Engineering - Water Supply,Contaminated Water,1,AE/JE,2,7
+28,2,Engineering - Water Supply,Contaminated Water,2,AEE,1,7
+28,2,Engineering - Water Supply,Contaminated Water,3,EE,1,7
+28,2,Engineering - Water Supply,Contaminated Water,4,CE,1,7
+28,2,Engineering - Water Supply,Contaminated Water,5,DEPUTY COMMR,1,7
+28,2,Engineering - Water Supply,Contaminated Water,6,COMMR,1,7
+29,2,Engineering - Water Supply,Delay in Water Supply - Related services,1,AE/JE,2,7
+29,2,Engineering - Water Supply,Delay in Water Supply - Related services,2,AEE,1,7
+29,2,Engineering - Water Supply,Delay in Water Supply - Related services,3,EE,1,7
+29,2,Engineering - Water Supply,Delay in Water Supply - Related services,4,CE,1,7
+29,2,Engineering - Water Supply,Delay in Water Supply - Related services,5,DEPUTY COMMR,1,7
+29,2,Engineering - Water Supply,Delay in Water Supply - Related services,6,COMMR,1,7
+30,2,Engineering - Water Supply,Dirty / Bad Smell in Water,1,AE/JE,2,7
+30,2,Engineering - Water Supply,Dirty / Bad Smell in Water,2,AEE,1,7
+30,2,Engineering - Water Supply,Dirty / Bad Smell in Water,3,EE,1,7
+30,2,Engineering - Water Supply,Dirty / Bad Smell in Water,4,CE,1,7
+30,2,Engineering - Water Supply,Dirty / Bad Smell in Water,5,DEPUTY COMMR,1,7
+30,2,Engineering - Water Supply,Dirty / Bad Smell in Water,6,COMMR,1,7
+31,2,Engineering - Water Supply,Drinking Water Facility,1,AE/JE,6,16
+31,2,Engineering - Water Supply,Drinking Water Facility,2,AEE,3,16
+31,2,Engineering - Water Supply,Drinking Water Facility,3,EE,3,16
+31,2,Engineering - Water Supply,Drinking Water Facility,4,CE,3,16
+31,2,Engineering - Water Supply,Drinking Water Facility,5,COMMR,1,16
+32,2,Engineering - Water Supply,Drinking water supply,1,AE/JE,2,6
+32,2,Engineering - Water Supply,Drinking water supply,2,AEE,1,6
+32,2,Engineering - Water Supply,Drinking water supply,3,EE,1,6
+32,2,Engineering - Water Supply,Drinking water supply,4,CE,1,6
+32,2,Engineering - Water Supply,Drinking water supply,5,COMMR,1,6
+33,2,Engineering - Water Supply,Irregular Water Supply,1,AE/JE,2,6
+33,2,Engineering - Water Supply,Irregular Water Supply,2,AEE,1,6
+33,2,Engineering - Water Supply,Irregular Water Supply,3,EE,1,6
+33,2,Engineering - Water Supply,Irregular Water Supply,4,CE,1,6
+33,2,Engineering - Water Supply,Irregular Water Supply,5,COMMR,1,6
+34,2,Engineering - Water Supply,Leakage in Distribution Systems,1,AE/JE,2,6
+34,2,Engineering - Water Supply,Leakage in Distribution Systems,2,AEE,1,6
+34,2,Engineering - Water Supply,Leakage in Distribution Systems,3,EE,1,6
+34,2,Engineering - Water Supply,Leakage in Distribution Systems,4,CE,1,6
+34,2,Engineering - Water Supply,Leakage in Distribution Systems,5,COMMR,1,6
+35,2,Engineering - Water Supply,Leakage in Main Pipeline,1,AE/JE,2,6
+35,2,Engineering - Water Supply,Leakage in Main Pipeline,2,AEE,1,6
+35,2,Engineering - Water Supply,Leakage in Main Pipeline,3,EE,1,6
+35,2,Engineering - Water Supply,Leakage in Main Pipeline,4,CE,1,6
+35,2,Engineering - Water Supply,Leakage in Main Pipeline,5,COMMR,1,6
+36,2,Engineering - Water Supply,Lorry water supply,1,AE/JE,2,7
+36,2,Engineering - Water Supply,Lorry water supply,2,AEE,1,7
+36,2,Engineering - Water Supply,Lorry water supply,3,EE,1,7
+36,2,Engineering - Water Supply,Lorry water supply,4,CE,1,7
+36,2,Engineering - Water Supply,Lorry water supply,5,DEPUTY COMMR,1,7
+36,2,Engineering - Water Supply,Lorry water supply,6,COMMR,1,7
+37,2,Engineering - Water Supply,Meter not working,1,AE/JE,2,6
+37,2,Engineering - Water Supply,Meter not working,2,AEE,1,6
+37,2,Engineering - Water Supply,Meter not working,3,EE,1,6
+37,2,Engineering - Water Supply,Meter not working,4,CE,1,6
+37,2,Engineering - Water Supply,Meter not working,5,COMMR,1,6
+38,2,Engineering - Water Supply,Mini Power Pump Not Working,1,AE/JE,2,6
+38,2,Engineering - Water Supply,Mini Power Pump Not Working,2,AEE,1,6
+38,2,Engineering - Water Supply,Mini Power Pump Not Working,3,EE,1,6
+38,2,Engineering - Water Supply,Mini Power Pump Not Working,4,CE,1,6
+38,2,Engineering - Water Supply,Mini Power Pump Not Working,5,COMMR,1,6
+39,2,Engineering - Water Supply,Non Supply - of water for long period,1,AE/JE,2,6
+39,2,Engineering - Water Supply,Non Supply - of water for long period,2,AEE,1,6
+39,2,Engineering - Water Supply,Non Supply - of water for long period,3,EE,1,6
+39,2,Engineering - Water Supply,Non Supply - of water for long period,4,CE,1,6
+39,2,Engineering - Water Supply,Non Supply - of water for long period,5,COMMR,1,6
+40,2,Engineering - Water Supply,Polluted Water Supply,1,AE/JE,2,6
+40,2,Engineering - Water Supply,Polluted Water Supply,2,AEE,1,6
+40,2,Engineering - Water Supply,Polluted Water Supply,3,EE,1,6
+40,2,Engineering - Water Supply,Polluted Water Supply,4,CE,1,6
+40,2,Engineering - Water Supply,Polluted Water Supply,5,COMMR,1,6
+41,2,Engineering - Water Supply,Poor Quality of Water,1,AE/JE,2,6
+41,2,Engineering - Water Supply,Poor Quality of Water,2,AEE,1,6
+41,2,Engineering - Water Supply,Poor Quality of Water,3,EE,1,6
+41,2,Engineering - Water Supply,Poor Quality of Water,4,CE,1,6
+41,2,Engineering - Water Supply,Poor Quality of Water,5,COMMR,1,6
+42,2,Engineering - Water Supply,Poor Quantity of Water Supply,1,AE/JE,2,6
+42,2,Engineering - Water Supply,Poor Quantity of Water Supply,2,AEE,1,6
+42,2,Engineering - Water Supply,Poor Quantity of Water Supply,3,EE,1,6
+42,2,Engineering - Water Supply,Poor Quantity of Water Supply,4,CE,1,6
+42,2,Engineering - Water Supply,Poor Quantity of Water Supply,5,COMMR,1,6
+43,3,Engineering - Water Supply,Quality of Water Supply,1,AE/JE,2,6
+43,3,Engineering - Water Supply,Quality of Water Supply,2,AEE,1,6
+43,3,Engineering - Water Supply,Quality of Water Supply,3,EE,1,6
+43,3,Engineering - Water Supply,Quality of Water Supply,4,CE,1,6
+43,3,Engineering - Water Supply,Quality of Water Supply,5,COMMR,1,6
+44,3,Engineering - Water Supply,Request for Bulk Water Supply,1,AE/JE,2,6
+44,3,Engineering - Water Supply,Request for Bulk Water Supply,2,AEE,1,6
+44,3,Engineering - Water Supply,Request for Bulk Water Supply,3,EE,1,6
+44,3,Engineering - Water Supply,Request for Bulk Water Supply,4,CE,1,6
+44,3,Engineering - Water Supply,Request for Bulk Water Supply,5,COMMR,1,6
+45,3,Engineering - Water Supply,Request for New Public Tap,1,AE/JE,6,10
+45,3,Engineering - Water Supply,Request for New Public Tap,2,AEE,1,10
+45,3,Engineering - Water Supply,Request for New Public Tap,3,EE,1,10
+45,3,Engineering - Water Supply,Request for New Public Tap,4,CE,1,10
+45,3,Engineering - Water Supply,Request for New Public Tap,5,COMMR,1,10
+46,3,Engineering - Water Supply,Request For Water Supply,1,AE/JE,2,6
+46,3,Engineering - Water Supply,Request For Water Supply,2,AEE,1,6
+46,3,Engineering - Water Supply,Request For Water Supply,3,EE,1,6
+46,3,Engineering - Water Supply,Request For Water Supply,4,CE,1,6
+46,3,Engineering - Water Supply,Request For Water Supply,5,COMMR,1,6
+47,3,Engineering - Water Supply,Request for Water Supply Through Lorry,1,AE/JE,2,7
+47,3,Engineering - Water Supply,Request for Water Supply Through Lorry,2,AEE,1,7
+47,3,Engineering - Water Supply,Request for Water Supply Through Lorry,3,EE,1,7
+47,3,Engineering - Water Supply,Request for Water Supply Through Lorry,4,CE,1,7
+47,3,Engineering - Water Supply,Request for Water Supply Through Lorry,5,DEPUTY COMMR,1,7
+47,3,Engineering - Water Supply,Request for Water Supply Through Lorry,6,COMMR,1,7
+48,3,Engineering - Water Supply,Water Supply - - Public Fountain Repair,1,AE/JE,2,7
+48,3,Engineering - Water Supply,Water Supply - - Public Fountain Repair,2,AEE,1,7
+48,3,Engineering - Water Supply,Water Supply - - Public Fountain Repair,3,EE,1,7
+48,3,Engineering - Water Supply,Water Supply - - Public Fountain Repair,4,CE,1,7
+48,3,Engineering - Water Supply,Water Supply - - Public Fountain Repair,5,DEPUTY COMMR,1,7
+48,3,Engineering - Water Supply,Water Supply - - Public Fountain Repair,6,COMMR,1,7
+49,3,Engineering - Water Supply,Water supply - Hand Pump Reparis,1,AE/JE,2,7
+49,3,Engineering - Water Supply,Water supply - Hand Pump Reparis,2,AEE,1,7
+49,3,Engineering - Water Supply,Water supply - Hand Pump Reparis,3,EE,1,7
+49,3,Engineering - Water Supply,Water supply - Hand Pump Reparis,4,CE,1,7
+49,3,Engineering - Water Supply,Water supply - Hand Pump Reparis,5,DEPUTY COMMR,1,7
+49,3,Engineering - Water Supply,Water supply - Hand Pump Reparis,6,COMMR,1,7
+50,3,Engineering - Water Supply,Water supply - HSC Repair,1,AE/JE,1,6
+50,3,Engineering - Water Supply,Water supply - HSC Repair,2,AEE,1,6
+50,3,Engineering - Water Supply,Water supply - HSC Repair,3,EE,1,6
+50,3,Engineering - Water Supply,Water supply - HSC Repair,4,CE,1,6
+50,3,Engineering - Water Supply,Water supply - HSC Repair,5,DEPUTY COMMR,1,6
+50,3,Engineering - Water Supply,Water supply - HSC Repair,6,COMMR,1,6
+51,3,Engineering - Water Supply,Water Supply - Non supply of Water,1,AE/JE,2,7
+51,3,Engineering - Water Supply,Water Supply - Non supply of Water,2,AEE,1,7
+51,3,Engineering - Water Supply,Water Supply - Non supply of Water,3,EE,1,7
+51,3,Engineering - Water Supply,Water Supply - Non supply of Water,4,CE,1,7
+51,3,Engineering - Water Supply,Water Supply - Non supply of Water,5,DEPUTY COMMR,1,7
+51,3,Engineering - Water Supply,Water Supply - Non supply of Water,6,COMMR,1,7
+52,3,Engineering - Water Supply,Water Supply - Others,1,AE/JE,2,7
+52,3,Engineering - Water Supply,Water Supply - Others,2,AEE,1,7
+52,3,Engineering - Water Supply,Water Supply - Others,3,EE,1,7
+52,3,Engineering - Water Supply,Water Supply - Others,4,CE,1,7
+52,3,Engineering - Water Supply,Water Supply - Others,5,DEPUTY COMMR,1,7
+52,3,Engineering - Water Supply,Water Supply - Others,6,COMMR,1,7
+53,3,Engineering - Water Supply,Water Supply - Pulbic Tab Repair,1,AE/JE,2,7
+53,3,Engineering - Water Supply,Water Supply - Pulbic Tab Repair,2,AEE,1,7
+53,3,Engineering - Water Supply,Water Supply - Pulbic Tab Repair,3,EE,1,7
+53,3,Engineering - Water Supply,Water Supply - Pulbic Tab Repair,4,CE,1,7
+53,3,Engineering - Water Supply,Water Supply - Pulbic Tab Repair,5,DEPUTY COMMR,1,7
+53,3,Engineering - Water Supply,Water Supply - Pulbic Tab Repair,6,COMMR,1,7
+54,3,Engineering - Water Supply,Water supply Damaged Pipeline,1,AE/JE,2,7
+54,3,Engineering - Water Supply,Water supply Damaged Pipeline,2,AEE,1,7
+54,3,Engineering - Water Supply,Water supply Damaged Pipeline,3,EE,1,7
+54,3,Engineering - Water Supply,Water supply Damaged Pipeline,4,CE,1,7
+54,3,Engineering - Water Supply,Water supply Damaged Pipeline,5,DEPUTY COMMR,1,7
+54,3,Engineering - Water Supply,Water supply Damaged Pipeline,6,COMMR,1,7
+55,3,Engineering - Water Supply,Water Supply Frequency,1,AE/JE,2,7
+55,3,Engineering - Water Supply,Water Supply Frequency,2,AEE,1,7
+55,3,Engineering - Water Supply,Water Supply Frequency,3,EE,1,7
+55,3,Engineering - Water Supply,Water Supply Frequency,4,CE,1,7
+55,3,Engineering - Water Supply,Water Supply Frequency,5,DEPUTY COMMR,1,7
+55,3,Engineering - Water Supply,Water Supply Frequency,6,COMMR,1,7
+56,3,Engineering - Water Supply,Water Supply Leakage,1,AE/JE,2,7
+56,3,Engineering - Water Supply,Water Supply Leakage,2,AEE,1,7
+56,3,Engineering - Water Supply,Water Supply Leakage,3,EE,1,7
+56,3,Engineering - Water Supply,Water Supply Leakage,4,CE,1,7
+56,3,Engineering - Water Supply,Water Supply Leakage,5,DEPUTY COMMR,1,7
+56,3,Engineering - Water Supply,Water Supply Leakage,6,COMMR,1,7
+57,3,Engineering - Water Supply,Water Supply Leakage Repairs,1,AE/JE,2,7
+57,3,Engineering - Water Supply,Water Supply Leakage Repairs,2,AEE,1,7
+57,3,Engineering - Water Supply,Water Supply Leakage Repairs,3,EE,1,7
+57,3,Engineering - Water Supply,Water Supply Leakage Repairs,4,CE,1,7
+57,3,Engineering - Water Supply,Water Supply Leakage Repairs,5,DEPUTY COMMR,1,7
+57,3,Engineering - Water Supply,Water Supply Leakage Repairs,6,COMMR,1,7
+58,3,Engineering - Water Supply,Water Supply Not Given in Public Tap(Bore Water),1,AE/JE,2,7
+58,3,Engineering - Water Supply,Water Supply Not Given in Public Tap(Bore Water),2,AEE,1,7
+58,3,Engineering - Water Supply,Water Supply Not Given in Public Tap(Bore Water),3,EE,1,7
+58,3,Engineering - Water Supply,Water Supply Not Given in Public Tap(Bore Water),4,CE,1,7
+58,3,Engineering - Water Supply,Water Supply Not Given in Public Tap(Bore Water),5,DEPUTY COMMR,1,7
+58,3,Engineering - Water Supply,Water Supply Not Given in Public Tap(Bore Water),6,COMMR,1,7
+59,3,Engineering - Water Supply,Water Supply Power Pump Repairs,1,AE/JE,2,7
+59,3,Engineering - Water Supply,Water Supply Power Pump Repairs,2,AEE,1,7
+59,3,Engineering - Water Supply,Water Supply Power Pump Repairs,3,EE,1,7
+59,3,Engineering - Water Supply,Water Supply Power Pump Repairs,4,CE,1,7
+59,3,Engineering - Water Supply,Water Supply Power Pump Repairs,5,DEPUTY COMMR,1,7
+59,3,Engineering - Water Supply,Water Supply Power Pump Repairs,6,COMMR,1,7
+60,3,Engineering - Water Supply,Water Supply Road Cutting,1,AE/JE,2,7
+60,3,Engineering - Water Supply,Water Supply Road Cutting,2,AEE,1,7
+60,3,Engineering - Water Supply,Water Supply Road Cutting,3,EE,1,7
+60,3,Engineering - Water Supply,Water Supply Road Cutting,4,CE,1,7
+60,3,Engineering - Water Supply,Water Supply Road Cutting,5,DEPUTY COMMR,1,7
+60,3,Engineering - Water Supply,Water Supply Road Cutting,6,COMMR,1,7
+61,3,Engineering - Water Supply,Water Supply Wastage due to Broken/Damaged Pipeline,1,AE/JE,2,7
+61,3,Engineering - Water Supply,Water Supply Wastage due to Broken/Damaged Pipeline,2,AEE,1,7
+61,3,Engineering - Water Supply,Water Supply Wastage due to Broken/Damaged Pipeline,3,EE,1,7
+61,3,Engineering - Water Supply,Water Supply Wastage due to Broken/Damaged Pipeline,4,CE,1,7
+61,3,Engineering - Water Supply,Water Supply Wastage due to Broken/Damaged Pipeline,5,DEPUTY COMMR,1,7
+61,3,Engineering - Water Supply,Water Supply Wastage due to Broken/Damaged Pipeline,6,COMMR,1,7
+62,3,Engineering - Works,Basic Amenities Petitions,1,AE/JE,1,12
+62,3,Engineering - Works,Basic Amenities Petitions,2,AEE,3,12
+62,3,Engineering - Works,Basic Amenities Petitions,3,EE,3,12
+62,3,Engineering - Works,Basic Amenities Petitions,4,CE,3,12
+62,3,Engineering - Works,Basic Amenities Petitions,5,DEPUTY COMMR,1,12
+62,3,Engineering - Works,Basic Amenities Petitions,6,COMMR,1,12
+63,3,Engineering - Works,"Bulinding Maintenance (Office Building,Quarters,Schools,ICDS Centers,Noon meals Center,Shopping Complex)",1,AE/JE,6,17
+63,3,Engineering - Works,"Bulinding Maintenance (Office Building,Quarters,Schools,ICDS Centers,Noon meals Center,Shopping Complex)",2,AEE,3,17
+63,3,Engineering - Works,"Bulinding Maintenance (Office Building,Quarters,Schools,ICDS Centers,Noon meals Center,Shopping Complex)",3,EE,3,17
+63,3,Engineering - Works,"Bulinding Maintenance (Office Building,Quarters,Schools,ICDS Centers,Noon meals Center,Shopping Complex)",4,CE,3,17
+63,3,Engineering - Works,"Bulinding Maintenance (Office Building,Quarters,Schools,ICDS Centers,Noon meals Center,Shopping Complex)",5,DEPUTY COMMR,1,17
+63,3,Engineering - Works,"Bulinding Maintenance (Office Building,Quarters,Schools,ICDS Centers,Noon meals Center,Shopping Complex)",6,COMMR,1,17
+64,4,Engineering - Works,Burial Ground and Electrical / Gasifire Crematorium Maintenance,1,AE/JE,6,17
+64,4,Engineering - Works,Burial Ground and Electrical / Gasifire Crematorium Maintenance,2,AEE,3,17
+64,4,Engineering - Works,Burial Ground and Electrical / Gasifire Crematorium Maintenance,3,EE,3,17
+64,4,Engineering - Works,Burial Ground and Electrical / Gasifire Crematorium Maintenance,4,CE,3,17
+64,4,Engineering - Works,Burial Ground and Electrical / Gasifire Crematorium Maintenance,5,DEPUTY COMMR,1,17
+64,4,Engineering - Works,Burial Ground and Electrical / Gasifire Crematorium Maintenance,6,COMMR,1,17
+65,4,Engineering - Works,Burial Ground and Electrical Crematorium Maintenance,1,AE/JE,6,17
+65,4,Engineering - Works,Burial Ground and Electrical Crematorium Maintenance,2,AEE,3,17
+65,4,Engineering - Works,Burial Ground and Electrical Crematorium Maintenance,3,EE,3,17
+65,4,Engineering - Works,Burial Ground and Electrical Crematorium Maintenance,4,CE,3,17
+65,4,Engineering - Works,Burial Ground and Electrical Crematorium Maintenance,5,DEPUTY COMMR,1,17
+65,4,Engineering - Works,Burial Ground and Electrical Crematorium Maintenance,6,COMMR,1,17
+66,4,Engineering - Works,Bus Stand Maintenance,1,AE/JE,6,17
+66,4,Engineering - Works,Bus Stand Maintenance,2,AEE,3,17
+66,4,Engineering - Works,Bus Stand Maintenance,3,EE,3,17
+66,4,Engineering - Works,Bus Stand Maintenance,4,CE,3,17
+66,4,Engineering - Works,Bus Stand Maintenance,5,DEPUTY COMMR,1,17
+66,4,Engineering - Works,Bus Stand Maintenance,6,COMMR,1,17
+67,4,Engineering - Works,Center Median,1,AE/JE,6,17
+67,4,Engineering - Works,Center Median,2,AEE,3,17
+67,4,Engineering - Works,Center Median,3,EE,3,17
+67,4,Engineering - Works,Center Median,4,CE,3,17
+67,4,Engineering - Works,Center Median,5,DEPUTY COMMR,1,17
+67,4,Engineering - Works,Center Median,6,COMMR,1,17
+68,4,Engineering - Works,Contract Workers,1,AE/JE,6,17
+68,4,Engineering - Works,Contract Workers,2,AEE,3,17
+68,4,Engineering - Works,Contract Workers,3,EE,3,17
+68,4,Engineering - Works,Contract Workers,4,CE,3,17
+68,4,Engineering - Works,Contract Workers,5,DEPUTY COMMR,1,17
+68,4,Engineering - Works,Contract Workers,6,COMMR,1,17
+69,4,Engineering - Works,Converson of Road,1,AE/JE,6,17
+69,4,Engineering - Works,Converson of Road,2,AEE,3,17
+69,4,Engineering - Works,Converson of Road,3,EE,3,17
+69,4,Engineering - Works,Converson of Road,4,CE,3,17
+69,4,Engineering - Works,Converson of Road,5,DEPUTY COMMR,1,17
+69,4,Engineering - Works,Converson of Road,6,COMMR,1,17
+70,4,Engineering - Works,Desiliting of Drain/Canal,1,AE/JE,6,17
+70,4,Engineering - Works,Desiliting of Drain/Canal,2,AEE,3,17
+70,4,Engineering - Works,Desiliting of Drain/Canal,3,EE,3,17
+70,4,Engineering - Works,Desiliting of Drain/Canal,4,CE,3,17
+70,4,Engineering - Works,Desiliting of Drain/Canal,5,DEPUTY COMMR,1,17
+70,4,Engineering - Works,Desiliting of Drain/Canal,6,COMMR,1,17
+71,4,Engineering - Works,Dredging of Water bodies,1,AE/JE,6,17
+71,4,Engineering - Works,Dredging of Water bodies,2,AEE,3,17
+71,4,Engineering - Works,Dredging of Water bodies,3,EE,3,17
+71,4,Engineering - Works,Dredging of Water bodies,4,CE,3,17
+71,4,Engineering - Works,Dredging of Water bodies,5,DEPUTY COMMR,1,17
+71,4,Engineering - Works,Dredging of Water bodies,6,COMMR,1,17
+72,4,Engineering - Works,Dust pin in Parks,1,AE/JE,6,17
+72,4,Engineering - Works,Dust pin in Parks,2,AEE,3,17
+72,4,Engineering - Works,Dust pin in Parks,3,EE,3,17
+72,4,Engineering - Works,Dust pin in Parks,4,CE,3,17
+72,4,Engineering - Works,Dust pin in Parks,5,DEPUTY COMMR,1,17
+72,4,Engineering - Works,Dust pin in Parks,6,COMMR,1,17
+73,4,Engineering - Works,e-Tender,1,EE,1,4
+73,4,Engineering - Works,e-Tender,2,CE,1,4
+73,4,Engineering - Works,e-Tender,3,DEPUTY COMMR,1,4
+73,4,Engineering - Works,e-Tender,4,COMMR,1,4
+74,4,Engineering - Works,Engineering Works - Others,1,AE/JE,6,17
+74,4,Engineering - Works,Engineering Works - Others,2,AEE,3,17
+74,4,Engineering - Works,Engineering Works - Others,3,EE,3,17
+74,4,Engineering - Works,Engineering Works - Others,4,CE,3,17
+74,4,Engineering - Works,Engineering Works - Others,5,DEPUTY COMMR,1,17
+74,4,Engineering - Works,Engineering Works - Others,6,COMMR,1,17
+75,4,Engineering - Works,Flood Management,1,AE/JE,6,17
+75,4,Engineering - Works,Flood Management,2,AEE,3,17
+75,4,Engineering - Works,Flood Management,3,EE,3,17
+75,4,Engineering - Works,Flood Management,4,CE,3,17
+75,4,Engineering - Works,Flood Management,5,DEPUTY COMMR,1,17
+75,4,Engineering - Works,Flood Management,6,COMMR,1,17
+76,4,Engineering - Works,Foot Path,1,AE/JE,6,17
+76,4,Engineering - Works,Foot Path,2,AEE,3,17
+76,4,Engineering - Works,Foot Path,3,EE,3,17
+76,4,Engineering - Works,Foot Path,4,CE,3,17
+76,4,Engineering - Works,Foot Path,5,DEPUTY COMMR,1,17
+76,4,Engineering - Works,Foot Path,6,COMMR,1,17
+77,4,Engineering - Works,Hanging of power Cables,1,AE/JE,6,11
+77,4,Engineering - Works,Hanging of power Cables,2,AEE,1,11
+77,4,Engineering - Works,Hanging of power Cables,3,EE,1,11
+77,4,Engineering - Works,Hanging of power Cables,4,CE,1,11
+77,4,Engineering - Works,Hanging of power Cables,5,DEPUTY COMMR,1,11
+77,4,Engineering - Works,Hanging of power Cables,6,COMMR,1,11
+78,4,Engineering - Works,Maintenance of Park,1,AE/JE,6,17
+78,4,Engineering - Works,Maintenance of Park,2,AEE,3,17
+78,4,Engineering - Works,Maintenance of Park,3,EE,3,17
+78,4,Engineering - Works,Maintenance of Park,4,CE,3,17
+78,4,Engineering - Works,Maintenance of Park,5,DEPUTY COMMR,1,17
+78,4,Engineering - Works,Maintenance of Park,6,COMMR,1,17
+79,4,Engineering - Works,Maintenance of Plants and Trees,1,AE/JE,6,17
+79,4,Engineering - Works,Maintenance of Plants and Trees,2,AEE,3,17
+79,4,Engineering - Works,Maintenance of Plants and Trees,3,EE,3,17
+79,4,Engineering - Works,Maintenance of Plants and Trees,4,CE,3,17
+79,4,Engineering - Works,Maintenance of Plants and Trees,5,DEPUTY COMMR,1,17
+79,4,Engineering - Works,Maintenance of Plants and Trees,6,COMMR,1,17
+80,4,Engineering - Works,Maintenance of Play Fields,1,AE/JE,6,16
+80,4,Engineering - Works,Maintenance of Play Fields,2,AEE,3,16
+80,4,Engineering - Works,Maintenance of Play Fields,3,EE,3,16
+80,4,Engineering - Works,Maintenance of Play Fields,4,CE,3,16
+80,4,Engineering - Works,Maintenance of Play Fields,5,COMMR,1,16
+81,4,Engineering - Works,Maintenance/Repairs Of Roads,1,AE/JE,6,17
+81,4,Engineering - Works,Maintenance/Repairs Of Roads,2,AEE,3,17
+81,4,Engineering - Works,Maintenance/Repairs Of Roads,3,EE,3,17
+81,4,Engineering - Works,Maintenance/Repairs Of Roads,4,CE,3,17
+81,4,Engineering - Works,Maintenance/Repairs Of Roads,5,DEPUTY COMMR,1,17
+81,4,Engineering - Works,Maintenance/Repairs Of Roads,6,COMMR,1,17
+82,4,Engineering - Works,Make Working Condition of Borewell Motors,1,AE/JE,6,17
+82,4,Engineering - Works,Make Working Condition of Borewell Motors,2,AEE,3,17
+82,4,Engineering - Works,Make Working Condition of Borewell Motors,3,EE,3,17
+82,4,Engineering - Works,Make Working Condition of Borewell Motors,4,CE,3,17
+82,4,Engineering - Works,Make Working Condition of Borewell Motors,5,DEPUTY COMMR,1,17
+82,4,Engineering - Works,Make Working Condition of Borewell Motors,6,COMMR,1,17
+83,4,Engineering - Works,Name board Issues,1,AE/JE,30,38
+83,4,Engineering - Works,Name board Issues,2,AEE,2,38
+83,4,Engineering - Works,Name board Issues,3,EE,2,38
+83,4,Engineering - Works,Name board Issues,4,CE,2,38
+83,4,Engineering - Works,Name board Issues,5,DEPUTY COMMR,1,38
+83,4,Engineering - Works,Name board Issues,6,COMMR,1,38
+84,4,Engineering - Works,No Eelectricity in Public Toilets,1,AE/JE,6,17
+84,4,Engineering - Works,No Eelectricity in Public Toilets,2,AEE,3,17
+84,4,Engineering - Works,No Eelectricity in Public Toilets,3,EE,3,17
+84,4,Engineering - Works,No Eelectricity in Public Toilets,4,CE,3,17
+84,4,Engineering - Works,No Eelectricity in Public Toilets,5,DEPUTY COMMR,1,17
+84,4,Engineering - Works,No Eelectricity in Public Toilets,6,COMMR,1,17
+85,5,Engineering - Works,No Water Supply in Public Toilets,1,AE/JE,6,17
+85,5,Engineering - Works,No Water Supply in Public Toilets,2,AEE,3,17
+85,5,Engineering - Works,No Water Supply in Public Toilets,3,EE,3,17
+85,5,Engineering - Works,No Water Supply in Public Toilets,4,CE,3,17
+85,5,Engineering - Works,No Water Supply in Public Toilets,5,DEPUTY COMMR,1,17
+85,5,Engineering - Works,No Water Supply in Public Toilets,6,COMMR,1,17
+86,5,Engineering - Works,Park - Others,1,AE/JE,6,17
+86,5,Engineering - Works,Park - Others,2,AEE,3,17
+86,5,Engineering - Works,Park - Others,3,EE,3,17
+86,5,Engineering - Works,Park - Others,4,CE,3,17
+86,5,Engineering - Works,Park - Others,5,DEPUTY COMMR,1,17
+86,5,Engineering - Works,Park - Others,6,COMMR,1,17
+87,5,Engineering - Works,Park Bench,1,AE/JE,6,17
+87,5,Engineering - Works,Park Bench,2,AEE,3,17
+87,5,Engineering - Works,Park Bench,3,EE,3,17
+87,5,Engineering - Works,Park Bench,4,CE,3,17
+87,5,Engineering - Works,Park Bench,5,DEPUTY COMMR,1,17
+87,5,Engineering - Works,Park Bench,6,COMMR,1,17
+88,5,Engineering - Works,Park Ligths,1,AE/JE,6,17
+88,5,Engineering - Works,Park Ligths,2,AEE,3,17
+88,5,Engineering - Works,Park Ligths,3,EE,3,17
+88,5,Engineering - Works,Park Ligths,4,CE,3,17
+88,5,Engineering - Works,Park Ligths,5,DEPUTY COMMR,1,17
+88,5,Engineering - Works,Park Ligths,6,COMMR,1,17
+89,5,Engineering - Works,Park Maintenance,1,AE/JE,6,17
+89,5,Engineering - Works,Park Maintenance,2,AEE,3,17
+89,5,Engineering - Works,Park Maintenance,3,EE,3,17
+89,5,Engineering - Works,Park Maintenance,4,CE,3,17
+89,5,Engineering - Works,Park Maintenance,5,DEPUTY COMMR,1,17
+89,5,Engineering - Works,Park Maintenance,6,COMMR,1,17
+90,5,Engineering - Works,Removal of Abonded Vehicles,1,AE/JE,6,11
+90,5,Engineering - Works,Removal of Abonded Vehicles,2,AEE,1,11
+90,5,Engineering - Works,Removal of Abonded Vehicles,3,EE,1,11
+90,5,Engineering - Works,Removal of Abonded Vehicles,4,CE,1,11
+90,5,Engineering - Works,Removal of Abonded Vehicles,5,DEPUTY COMMR,1,11
+90,5,Engineering - Works,Removal of Abonded Vehicles,6,COMMR,1,11
+91,5,Engineering - Works,Removal of Damaged Vehicles,1,AE/JE,6,11
+91,5,Engineering - Works,Removal of Damaged Vehicles,2,AEE,1,11
+91,5,Engineering - Works,Removal of Damaged Vehicles,3,EE,1,11
+91,5,Engineering - Works,Removal of Damaged Vehicles,4,CE,1,11
+91,5,Engineering - Works,Removal of Damaged Vehicles,5,DEPUTY COMMR,1,11
+91,5,Engineering - Works,Removal of Damaged Vehicles,6,COMMR,1,11
+92,5,Engineering - Works,Repairs and Maintenance of Culeverts/Bridges,1,AE/JE,6,17
+92,5,Engineering - Works,Repairs and Maintenance of Culeverts/Bridges,2,AEE,3,17
+92,5,Engineering - Works,Repairs and Maintenance of Culeverts/Bridges,3,EE,3,17
+92,5,Engineering - Works,Repairs and Maintenance of Culeverts/Bridges,4,CE,3,17
+92,5,Engineering - Works,Repairs and Maintenance of Culeverts/Bridges,5,DEPUTY COMMR,1,17
+92,5,Engineering - Works,Repairs and Maintenance of Culeverts/Bridges,6,COMMR,1,17
+93,5,Engineering - Works,Request for Pathole repair,1,AE/JE,4,9
+93,5,Engineering - Works,Request for Pathole repair,2,AEE,1,9
+93,5,Engineering - Works,Request for Pathole repair,3,EE,1,9
+93,5,Engineering - Works,Request for Pathole repair,4,CE,1,9
+93,5,Engineering - Works,Request for Pathole repair,5,DEPUTY COMMR,1,9
+93,5,Engineering - Works,Request for Pathole repair,6,COMMR,1,9
+94,5,Engineering - Works,Request for road repair,1,AE/JE,3,10
+94,5,Engineering - Works,Request for road repair,2,AEE,2,10
+94,5,Engineering - Works,Request for road repair,3,EE,2,10
+94,5,Engineering - Works,Request for road repair,4,CE,1,10
+94,5,Engineering - Works,Request for road repair,5,DEPUTY COMMR,1,10
+94,5,Engineering - Works,Request for road repair,6,COMMR,1,10
+95,5,Engineering - Works,Request of New Mini Water Tank for Pubic,1,AE/JE,6,17
+95,5,Engineering - Works,Request of New Mini Water Tank for Pubic,2,AEE,3,17
+95,5,Engineering - Works,Request of New Mini Water Tank for Pubic,3,EE,3,17
+95,5,Engineering - Works,Request of New Mini Water Tank for Pubic,4,CE,3,17
+95,5,Engineering - Works,Request of New Mini Water Tank for Pubic,5,DEPUTY COMMR,1,17
+95,5,Engineering - Works,Request of New Mini Water Tank for Pubic,6,COMMR,1,17
+96,5,Engineering - Works,Reuest for Night Security,1,AE/JE,6,17
+96,5,Engineering - Works,Reuest for Night Security,2,AEE,3,17
+96,5,Engineering - Works,Reuest for Night Security,3,EE,3,17
+96,5,Engineering - Works,Reuest for Night Security,4,CE,3,17
+96,5,Engineering - Works,Reuest for Night Security,5,DEPUTY COMMR,1,17
+96,5,Engineering - Works,Reuest for Night Security,6,COMMR,1,17
+97,5,Engineering - Works,Road - Others,1,AE/JE,6,17
+97,5,Engineering - Works,Road - Others,2,AEE,3,17
+97,5,Engineering - Works,Road - Others,3,EE,3,17
+97,5,Engineering - Works,Road - Others,4,CE,3,17
+97,5,Engineering - Works,Road - Others,5,DEPUTY COMMR,1,17
+97,5,Engineering - Works,Road - Others,6,COMMR,1,17
+98,5,Engineering - Works,Road Cutting Permission,1,AE/JE,4,9
+98,5,Engineering - Works,Road Cutting Permission,2,AEE,1,9
+98,5,Engineering - Works,Road Cutting Permission,3,EE,1,9
+98,5,Engineering - Works,Road Cutting Permission,4,CE,1,9
+98,5,Engineering - Works,Road Cutting Permission,5,DEPUTY COMMR,1,9
+98,5,Engineering - Works,Road Cutting Permission,6,COMMR,1,9
+99,5,Engineering - Works,Road Patch works,1,AE/JE,30,35
+99,5,Engineering - Works,Road Patch works,2,AEE,1,35
+99,5,Engineering - Works,Road Patch works,3,EE,1,35
+99,5,Engineering - Works,Road Patch works,4,CE,1,35
+99,5,Engineering - Works,Road Patch works,5,DEPUTY COMMR,1,35
+99,5,Engineering - Works,Road Patch works,6,COMMR,1,35
+100,5,Engineering - Works,Road Signage,1,AE/JE,1,6
+100,5,Engineering - Works,Road Signage,2,AEE,1,6
+100,5,Engineering - Works,Road Signage,3,EE,1,6
+100,5,Engineering - Works,Road Signage,4,CE,1,6
+100,5,Engineering - Works,Road Signage,5,DEPUTY COMMR,1,6
+100,5,Engineering - Works,Road Signage,6,COMMR,1,6
+101,5,Engineering - Works,Road Works-CCand BT,1,AE/JE,6,16
+101,5,Engineering - Works,Road Works-CCand BT,2,AEE,3,16
+101,5,Engineering - Works,Road Works-CCand BT,3,EE,3,16
+101,5,Engineering - Works,Road Works-CCand BT,4,CE,3,16
+101,5,Engineering - Works,Road Works-CCand BT,5,COMMR,1,16
+102,5,Engineering - Works,Speed Breaker,1,AE/JE,6,17
+102,5,Engineering - Works,Speed Breaker,2,AEE,3,17
+102,5,Engineering - Works,Speed Breaker,3,EE,3,17
+102,5,Engineering - Works,Speed Breaker,4,CE,3,17
+102,5,Engineering - Works,Speed Breaker,5,DEPUTY COMMR,1,17
+102,5,Engineering - Works,Speed Breaker,6,COMMR,1,17
+103,5,Engineering - Works,Toilet Maintenance,1,AE/JE,6,17
+103,5,Engineering - Works,Toilet Maintenance,2,AEE,3,17
+103,5,Engineering - Works,Toilet Maintenance,3,EE,3,17
+103,5,Engineering - Works,Toilet Maintenance,4,CE,3,17
+103,5,Engineering - Works,Toilet Maintenance,5,DEPUTY COMMR,1,17
+103,5,Engineering - Works,Toilet Maintenance,6,COMMR,1,17
+104,5,Engineering - Works,Walker Path,1,AE/JE,6,17
+104,5,Engineering - Works,Walker Path,2,AEE,3,17
+104,5,Engineering - Works,Walker Path,3,EE,3,17
+104,5,Engineering - Works,Walker Path,4,CE,3,17
+104,5,Engineering - Works,Walker Path,5,DEPUTY COMMR,1,17
+104,5,Engineering - Works,Walker Path,6,COMMR,1,17
+105,5,Engineering - Works,Water Supply HSC Name Correction,1,AE/JE,6,10
+105,5,Engineering - Works,Water Supply HSC Name Correction,2,AEE,1,10
+105,5,Engineering - Works,Water Supply HSC Name Correction,3,EE,1,10
+105,5,Engineering - Works,Water Supply HSC Name Correction,4,CE,1,10
+105,5,Engineering - Works,Water Supply HSC Name Correction,5,DEPUTY COMMR,1,10
+105,5,Engineering - Works,Water Supply HSC Name Correction,6,COMMR,0,10
+106,6,Engineering -Town plan,Building Plan,1,AE(TP),4,8
+106,6,Engineering -Town plan,Building Plan,2,AEE,1,8
+106,6,Engineering -Town plan,Building Plan,3,EE(PLAN),1,8
+106,6,Engineering -Town plan,Building Plan,4,DEPUTY COMMR,1,8
+106,6,Engineering -Town plan,Building Plan,5,COMMR,1,8
+107,6,Engineering -Town plan,Building plan - Others,1,AE(TP),4,8
+107,6,Engineering -Town plan,Building plan - Others,2,AEE,1,8
+107,6,Engineering -Town plan,Building plan - Others,3,EE(PLAN),1,8
+107,6,Engineering -Town plan,Building plan - Others,4,DEPUTY COMMR,1,8
+107,6,Engineering -Town plan,Building plan - Others,5,COMMR,1,8
+108,6,Engineering -Town plan,Buliding Application,1,AE(TP),4,8
+108,6,Engineering -Town plan,Buliding Application,2,AEE,1,8
+108,6,Engineering -Town plan,Buliding Application,3,EE(PLAN),1,8
+108,6,Engineering -Town plan,Buliding Application,4,DEPUTY COMMR,1,8
+108,6,Engineering -Town plan,Buliding Application,5,COMMR,1,8
+109,6,Engineering -Town plan,Buliding Debris,1,AE(TP),4,8
+109,6,Engineering -Town plan,Buliding Debris,2,AEE,1,8
+109,6,Engineering -Town plan,Buliding Debris,3,EE(PLAN),1,8
+109,6,Engineering -Town plan,Buliding Debris,4,DEPUTY COMMR,1,8
+109,6,Engineering -Town plan,Buliding Debris,5,COMMR,1,8
+110,6,Engineering -Town plan,Buliding License,1,AE(TP),4,8
+110,6,Engineering -Town plan,Buliding License,2,AEE,1,8
+110,6,Engineering -Town plan,Buliding License,3,EE(PLAN),1,8
+110,6,Engineering -Town plan,Buliding License,4,DEPUTY COMMR,1,8
+110,6,Engineering -Town plan,Buliding License,5,COMMR,1,8
+111,6,Engineering -Town plan,Buliding Plan renewal,1,AE(TP),4,8
+111,6,Engineering -Town plan,Buliding Plan renewal,2,AEE,1,8
+111,6,Engineering -Town plan,Buliding Plan renewal,3,EE(PLAN),1,8
+111,6,Engineering -Town plan,Buliding Plan renewal,4,DEPUTY COMMR,1,8
+111,6,Engineering -Town plan,Buliding Plan renewal,5,COMMR,1,8
+112,6,Engineering -Town plan,Buliding Plan Verification,1,AE(TP),4,8
+112,6,Engineering -Town plan,Buliding Plan Verification,2,AEE,1,8
+112,6,Engineering -Town plan,Buliding Plan Verification,3,EE(PLAN),1,8
+112,6,Engineering -Town plan,Buliding Plan Verification,4,DEPUTY COMMR,1,8
+112,6,Engineering -Town plan,Buliding Plan Verification,5,COMMR,1,8
+113,6,Engineering -Town plan,Buliding Plannig Permission,1,AE(TP),4,8
+113,6,Engineering -Town plan,Buliding Plannig Permission,2,AEE,1,8
+113,6,Engineering -Town plan,Buliding Plannig Permission,3,EE(PLAN),1,8
+113,6,Engineering -Town plan,Buliding Plannig Permission,4,DEPUTY COMMR,1,8
+113,6,Engineering -Town plan,Buliding Plannig Permission,5,COMMR,1,8
+114,6,Engineering -Town plan,Buliding Rule Violation,1,AE(TP),4,8
+114,6,Engineering -Town plan,Buliding Rule Violation,2,AEE,1,8
+114,6,Engineering -Town plan,Buliding Rule Violation,3,EE(PLAN),1,8
+114,6,Engineering -Town plan,Buliding Rule Violation,4,DEPUTY COMMR,1,8
+114,6,Engineering -Town plan,Buliding Rule Violation,5,COMMR,1,8
+115,6,Engineering -Town plan,Delimation,1,AE(TP),4,8
+115,6,Engineering -Town plan,Delimation,2,AEE,1,8
+115,6,Engineering -Town plan,Delimation,3,EE(PLAN),1,8
+115,6,Engineering -Town plan,Delimation,4,DEPUTY COMMR,1,8
+115,6,Engineering -Town plan,Delimation,5,COMMR,1,8
+116,6,Engineering -Town plan,Deviation of Plan,1,AE(TP),4,8
+116,6,Engineering -Town plan,Deviation of Plan,2,AEE,1,8
+116,6,Engineering -Town plan,Deviation of Plan,3,EE(PLAN),1,8
+116,6,Engineering -Town plan,Deviation of Plan,4,DEPUTY COMMR,1,8
+116,6,Engineering -Town plan,Deviation of Plan,5,COMMR,1,8
+117,6,Engineering -Town plan,Hoarding Removal UAC,1,AE(TP),4,8
+117,6,Engineering -Town plan,Hoarding Removal UAC,2,AEE,1,8
+117,6,Engineering -Town plan,Hoarding Removal UAC,3,EE(PLAN),1,8
+117,6,Engineering -Town plan,Hoarding Removal UAC,4,DEPUTY COMMR,1,8
+117,6,Engineering -Town plan,Hoarding Removal UAC,5,COMMR,1,8
+118,6,Engineering -Town plan,Layout Approval,1,AE(TP),4,8
+118,6,Engineering -Town plan,Layout Approval,2,AEE,1,8
+118,6,Engineering -Town plan,Layout Approval,3,EE(PLAN),1,8
+118,6,Engineering -Town plan,Layout Approval,4,DEPUTY COMMR,1,8
+118,6,Engineering -Town plan,Layout Approval,5,COMMR,1,8
+119,6,Engineering -Town plan,Others,1,AE(TP),30,34
+119,6,Engineering -Town plan,Others,2,AEE,1,34
+119,6,Engineering -Town plan,Others,3,EE(PLAN),1,34
+119,6,Engineering -Town plan,Others,4,DEPUTY COMMR,1,34
+119,6,Engineering -Town plan,Others,5,COMMR,1,34
+120,6,Engineering -Town plan,Payments,1,AE(TP),4,8
+120,6,Engineering -Town plan,Payments,2,AEE,1,8
+120,6,Engineering -Town plan,Payments,3,EE(PLAN),1,8
+120,6,Engineering -Town plan,Payments,4,DEPUTY COMMR,1,8
+120,6,Engineering -Town plan,Payments,5,COMMR,1,8
+121,6,Engineering -Town plan,Petty Shop,1,AE(TP),4,8
+121,6,Engineering -Town plan,Petty Shop,2,AEE,1,8
+121,6,Engineering -Town plan,Petty Shop,3,EE(PLAN),1,8
+121,6,Engineering -Town plan,Petty Shop,4,DEPUTY COMMR,1,8
+121,6,Engineering -Town plan,Petty Shop,5,COMMR,1,8
+122,6,Engineering -Town plan,Removal of Permanent Encroachment,1,AE(TP),30,34
+122,6,Engineering -Town plan,Removal of Permanent Encroachment,2,AEE,1,34
+122,6,Engineering -Town plan,Removal of Permanent Encroachment,3,EE(PLAN),1,34
+122,6,Engineering -Town plan,Removal of Permanent Encroachment,4,DEPUTY COMMR,1,34
+122,6,Engineering -Town plan,Removal of Permanent Encroachment,5,COMMR,1,34
+123,6,Engineering -Town plan,Removal of Temporary Encroachment,1,AE(TP),15,19
+123,6,Engineering -Town plan,Removal of Temporary Encroachment,2,AEE,1,19
+123,6,Engineering -Town plan,Removal of Temporary Encroachment,3,EE(PLAN),1,19
+123,6,Engineering -Town plan,Removal of Temporary Encroachment,4,DEPUTY COMMR,1,19
+123,6,Engineering -Town plan,Removal of Temporary Encroachment,5,COMMR,1,19
+124,6,Engineering -Town plan,Request For Information,1,AE(TP),4,8
+124,6,Engineering -Town plan,Request For Information,2,AEE,1,8
+124,6,Engineering -Town plan,Request For Information,3,EE(PLAN),1,8
+124,6,Engineering -Town plan,Request For Information,4,DEPUTY COMMR,1,8
+124,6,Engineering -Town plan,Request For Information,5,COMMR,1,8
+125,6,Engineering -Town plan,Reserve Site,1,AE(TP),4,8
+125,6,Engineering -Town plan,Reserve Site,2,AEE,1,8
+125,6,Engineering -Town plan,Reserve Site,3,EE(PLAN),1,8
+125,6,Engineering -Town plan,Reserve Site,4,DEPUTY COMMR,1,8
+125,6,Engineering -Town plan,Reserve Site,5,COMMR,1,8
+126,6,Engineering -Town plan,Sub –Division Approval,1,AE(TP),4,8
+126,6,Engineering -Town plan,Sub –Division Approval,2,AEE,1,8
+126,6,Engineering -Town plan,Sub –Division Approval,3,EE(PLAN),1,8
+126,6,Engineering -Town plan,Sub –Division Approval,4,DEPUTY COMMR,1,8
+126,6,Engineering -Town plan,Sub –Division Approval,5,COMMR,1,8
+127,7,Engineering -Town plan,Survey,1,AE(TP),4,8
+127,7,Engineering -Town plan,Survey,2,AEE,1,8
+127,7,Engineering -Town plan,Survey,3,EE(PLAN),1,8
+127,7,Engineering -Town plan,Survey,4,DEPUTY COMMR,1,8
+127,7,Engineering -Town plan,Survey,5,COMMR,1,8
+128,7,Engineering -Town plan,Town Plannig-General works,1,AE(TP),4,8
+128,7,Engineering -Town plan,Town Plannig-General works,2,AEE,1,8
+128,7,Engineering -Town plan,Town Plannig-General works,3,EE(PLAN),1,8
+128,7,Engineering -Town plan,Town Plannig-General works,4,DEPUTY COMMR,1,8
+128,7,Engineering -Town plan,Town Plannig-General works,5,COMMR,1,8
+129,7,Engineering -Town plan,Town Planning Others,1,AE(TP),4,8
+129,7,Engineering -Town plan,Town Planning Others,2,AEE,1,8
+129,7,Engineering -Town plan,Town Planning Others,3,EE(PLAN),1,8
+129,7,Engineering -Town plan,Town Planning Others,4,DEPUTY COMMR,1,8
+129,7,Engineering -Town plan,Town Planning Others,5,COMMR,1,8
+130,7,Engineering -Town plan,Town Planning-Delay of Building Plan Approval,1,AE(TP),4,8
+130,7,Engineering -Town plan,Town Planning-Delay of Building Plan Approval,2,AEE,1,8
+130,7,Engineering -Town plan,Town Planning-Delay of Building Plan Approval,3,EE(PLAN),1,8
+130,7,Engineering -Town plan,Town Planning-Delay of Building Plan Approval,4,DEPUTY COMMR,1,8
+130,7,Engineering -Town plan,Town Planning-Delay of Building Plan Approval,5,COMMR,1,8
+131,7,Engineering -Town plan,Town Planning-Removal of Unauthorised Hoardings,1,AE(TP),4,8
+131,7,Engineering -Town plan,Town Planning-Removal of Unauthorised Hoardings,2,AEE,1,8
+131,7,Engineering -Town plan,Town Planning-Removal of Unauthorised Hoardings,3,EE(PLAN),1,8
+131,7,Engineering -Town plan,Town Planning-Removal of Unauthorised Hoardings,4,DEPUTY COMMR,1,8
+131,7,Engineering -Town plan,Town Planning-Removal of Unauthorised Hoardings,5,COMMR,1,8
+132,7,Engineering -Town plan,Town Planning-Without Plan Building Construction,1,AE(TP),4,8
+132,7,Engineering -Town plan,Town Planning-Without Plan Building Construction,2,AEE,1,8
+132,7,Engineering -Town plan,Town Planning-Without Plan Building Construction,3,EE(PLAN),1,8
+132,7,Engineering -Town plan,Town Planning-Without Plan Building Construction,4,DEPUTY COMMR,1,8
+132,7,Engineering -Town plan,Town Planning-Without Plan Building Construction,5,COMMR,1,8
+133,7,Engineering -Town plan,Un-Authorised Construction,1,AE(TP),4,8
+133,7,Engineering -Town plan,Un-Authorised Construction,2,AEE,1,8
+133,7,Engineering -Town plan,Un-Authorised Construction,3,EE(PLAN),1,8
+133,7,Engineering -Town plan,Un-Authorised Construction,4,DEPUTY COMMR,1,8
+133,7,Engineering -Town plan,Un-Authorised Construction,5,COMMR,1,8
+134,7,Engineering -Town plan,Water bodies encrochment,1,AE(TP),4,8
+134,7,Engineering -Town plan,Water bodies encrochment,2,AEE,1,8
+134,7,Engineering -Town plan,Water bodies encrochment,3,EE(PLAN),1,8
+134,7,Engineering -Town plan,Water bodies encrochment,4,DEPUTY COMMR,1,8
+134,7,Engineering -Town plan,Water bodies encrochment,5,COMMR,1,8
+135,7,New Infrastructure - streetlight,New streetlight,1,AE/JE,30,37
+135,7,New Infrastructure - streetlight,New streetlight,2,AEE,2,37
+135,7,New Infrastructure - streetlight,New streetlight,3,EE,2,37
+135,7,New Infrastructure - streetlight,New streetlight,4,CE,2,37
+135,7,New Infrastructure - streetlight,New streetlight,5,AE,0,37
+135,7,New Infrastructure - streetlight,New streetlight,6,COMMR,1,37
+136,7,New Infrastructure - works,New compound wall/ New Building,1,AE/JE,30,37
+136,7,New Infrastructure - works,New compound wall/ New Building,2,AEE,2,37
+136,7,New Infrastructure - works,New compound wall/ New Building,3,EE,2,37
+136,7,New Infrastructure - works,New compound wall/ New Building,4,CE,2,37
+136,7,New Infrastructure - works,New compound wall/ New Building,5,COMMR,1,37
+137,7,New Infrastructure - works,New Road,1,AE/JE,30,37
+137,7,New Infrastructure - works,New Road,2,AEE,2,37
+137,7,New Infrastructure - works,New Road,3,EE,2,37
+137,7,New Infrastructure - works,New Road,4,CE,2,37
+137,7,New Infrastructure - works,New Road,5,COMMR,1,37
+138,7,New Infrastructure - works,New Storm water Drainage/ New culvert,1,AE/JE,30,37
+138,7,New Infrastructure - works,New Storm water Drainage/ New culvert,2,AEE,2,37
+138,7,New Infrastructure - works,New Storm water Drainage/ New culvert,3,EE,2,37
+138,7,New Infrastructure - works,New Storm water Drainage/ New culvert,4,CE,2,37
+138,7,New Infrastructure - works,New Storm water Drainage/ New culvert,5,COMMR,1,37
+139,7,New Infrastructure - works,New UGD connection,1,AE(UGD),30,67
+139,7,New Infrastructure - works,New UGD connection,2,AE/JE,30,67
+139,7,New Infrastructure - works,New UGD connection,3,AEE,2,67
+139,7,New Infrastructure - works,New UGD connection,4,EE,2,67
+139,7,New Infrastructure - works,New UGD connection,5,CE,2,67
+139,7,New Infrastructure - works,New UGD connection,6,COMMR,1,67
+140,7,New Infrastructure - works,New water supply connection,1,AE/JE,30,37
+140,7,New Infrastructure - works,New water supply connection,2,AEE,2,37
+140,7,New Infrastructure - works,New water supply connection,3,EE,2,37
+140,7,New Infrastructure - works,New water supply connection,4,CE,2,37
+140,7,New Infrastructure - works,New water supply connection,5,COMMR,1,37
+141,7,New Infrastructure - works,New Water Tank/ New Borewel/ New Boremotor,1,AE/JE,30,37
+141,7,New Infrastructure - works,New Water Tank/ New Borewel/ New Boremotor,2,AEE,2,37
+141,7,New Infrastructure - works,New Water Tank/ New Borewel/ New Boremotor,3,EE,2,37
+141,7,New Infrastructure - works,New Water Tank/ New Borewel/ New Boremotor,4,CE,2,37
+141,7,New Infrastructure - works,New Water Tank/ New Borewel/ New Boremotor,5,COMMR,1,37
+142,7,Public Distribution System,Biometric Related,1,NODAL OFFICER,5,5
+143,7,Public Distribution System,Change Ration shop,1,NODAL OFFICER,6,6
+144,7,Public Distribution System,Commodities Related,1,NODAL OFFICER,5,5
+145,7,Public Distribution System,Food Safety,1,NODAL OFFICER,5,5
+146,7,Public Distribution System,PDS Machine Not Working,1,NODAL OFFICER,5,5
+147,7,Public Distribution System,Ration shop - Others,1,NODAL OFFICER,6,6
+148,8,Public Distribution System,Ration shop keeper,1,NODAL OFFICER,6,6
+149,8,Public Distribution System,Ration Smart card,1,NODAL OFFICER,6,6
+150,8,Public Health,animals nuisance,1,SI,1,4
+150,8,Public Health,animals nuisance,2,SO,1,4
+150,8,Public Health,animals nuisance,3,CHO,1,4
+150,8,Public Health,animals nuisance,4,COMMR,1,4
+151,8,Public Health,Bakery smoke Nuisance,1,SI,1,4
+151,8,Public Health,Bakery smoke Nuisance,2,SO,1,4
+151,8,Public Health,Bakery smoke Nuisance,3,CHO,1,4
+151,8,Public Health,Bakery smoke Nuisance,4,COMMR,1,4
+152,8,Public Health,Bio-Medical Waste-Details,1,SI,4,7
+152,8,Public Health,Bio-Medical Waste-Details,2,SO,1,7
+152,8,Public Health,Bio-Medical Waste-Details,3,CHO,1,7
+152,8,Public Health,Bio-Medical Waste-Details,4,COMMR,1,7
+153,8,Public Health,Birth NAC,1,SI,1,4
+153,8,Public Health,Birth NAC,2,SO,1,4
+153,8,Public Health,Birth NAC,3,CHO,1,4
+153,8,Public Health,Birth NAC,4,COMMR,1,4
+154,8,Public Health,Birth NOC,1,SI,1,4
+154,8,Public Health,Birth NOC,2,SO,1,4
+154,8,Public Health,Birth NOC,3,CHO,1,4
+154,8,Public Health,Birth NOC,4,COMMR,1,4
+155,8,Public Health,Birth - Child Sex Correction,1,SI,1,4
+155,8,Public Health,Birth - Child Sex Correction,2,SO,1,4
+155,8,Public Health,Birth - Child Sex Correction,3,CHO,1,4
+155,8,Public Health,Birth - Child Sex Correction,4,COMMR,1,4
+156,8,Public Health,Birth - Date of Birth Correction,1,SI,1,4
+156,8,Public Health,Birth - Date of Birth Correction,2,SO,1,4
+156,8,Public Health,Birth - Date of Birth Correction,3,CHO,1,4
+156,8,Public Health,Birth - Date of Birth Correction,4,COMMR,1,4
+157,8,Public Health,Birth - Father/Mother - UID Number Correction,1,SI,1,4
+157,8,Public Health,Birth - Father/Mother - UID Number Correction,2,SO,1,4
+157,8,Public Health,Birth - Father/Mother - UID Number Correction,3,CHO,1,4
+157,8,Public Health,Birth - Father/Mother - UID Number Correction,4,COMMR,1,4
+158,8,Public Health,Birth - Hospital Name / Address Correction,1,SI,1,4
+158,8,Public Health,Birth - Hospital Name / Address Correction,2,SO,1,4
+158,8,Public Health,Birth - Hospital Name / Address Correction,3,CHO,1,4
+158,8,Public Health,Birth - Hospital Name / Address Correction,4,COMMR,1,4
+159,8,Public Health,Birth - Permanent Address Correction,1,SI,1,4
+159,8,Public Health,Birth - Permanent Address Correction,2,SO,1,4
+159,8,Public Health,Birth - Permanent Address Correction,3,CHO,1,4
+159,8,Public Health,Birth - Permanent Address Correction,4,COMMR,1,4
+160,8,Public Health,Birth - Place of Birth Correction,1,SI,1,4
+160,8,Public Health,Birth - Place of Birth Correction,2,SO,1,4
+160,8,Public Health,Birth - Place of Birth Correction,3,CHO,1,4
+160,8,Public Health,Birth - Place of Birth Correction,4,COMMR,1,4
+161,8,Public Health,Birth -Present Address Correction,1,SI,1,4
+161,8,Public Health,Birth -Present Address Correction,2,SO,1,4
+161,8,Public Health,Birth -Present Address Correction,3,CHO,1,4
+161,8,Public Health,Birth -Present Address Correction,4,COMMR,1,4
+162,8,Public Health,Birth /DeathCertificate-Current Year,1,SI,1,4
+162,8,Public Health,Birth /DeathCertificate-Current Year,2,SO,1,4
+162,8,Public Health,Birth /DeathCertificate-Current Year,3,CHO,1,4
+162,8,Public Health,Birth /DeathCertificate-Current Year,4,COMMR,1,4
+163,8,Public Health,Birth /DeathCertificate-Previous year,1,SI,1,4
+163,8,Public Health,Birth /DeathCertificate-Previous year,2,SO,1,4
+163,8,Public Health,Birth /DeathCertificate-Previous year,3,CHO,1,4
+163,8,Public Health,Birth /DeathCertificate-Previous year,4,COMMR,1,4
+164,8,Public Health,Birth and Death Others,1,SI,1,4
+164,8,Public Health,Birth and Death Others,2,SO,1,4
+164,8,Public Health,Birth and Death Others,3,CHO,1,4
+164,8,Public Health,Birth and Death Others,4,COMMR,1,4
+165,8,Public Health,Birth Child Name Correction,1,SI,1,4
+165,8,Public Health,Birth Child Name Correction,2,SO,1,4
+165,8,Public Health,Birth Child Name Correction,3,CHO,1,4
+165,8,Public Health,Birth Child Name Correction,4,COMMR,1,4
+166,8,Public Health,Birth Complaint,1,SI,1,4
+166,8,Public Health,Birth Complaint,2,SO,1,4
+166,8,Public Health,Birth Complaint,3,CHO,1,4
+166,8,Public Health,Birth Complaint,4,COMMR,1,4
+167,8,Public Health,Birth Correction,1,SI,1,4
+167,8,Public Health,Birth Correction,2,SO,1,4
+167,8,Public Health,Birth Correction,3,CHO,1,4
+167,8,Public Health,Birth Correction,4,COMMR,1,4
+168,8,Public Health,Birth Father Name Correction,1,SI,1,4
+168,8,Public Health,Birth Father Name Correction,2,SO,1,4
+168,8,Public Health,Birth Father Name Correction,3,CHO,1,4
+168,8,Public Health,Birth Father Name Correction,4,COMMR,1,4
+169,9,Public Health,Birth Mother Name Correction,1,SI,1,4
+169,9,Public Health,Birth Mother Name Correction,2,SO,1,4
+169,9,Public Health,Birth Mother Name Correction,3,CHO,1,4
+169,9,Public Health,Birth Mother Name Correction,4,COMMR,1,4
+170,9,Public Health,Birth Registration,1,SI,1,4
+170,9,Public Health,Birth Registration,2,SO,1,4
+170,9,Public Health,Birth Registration,3,CHO,1,4
+170,9,Public Health,Birth Registration,4,COMMR,1,4
+171,9,Public Health,Bpl List Prepartion Details,1,SI,4,7
+171,9,Public Health,Bpl List Prepartion Details,2,SO,1,7
+171,9,Public Health,Bpl List Prepartion Details,3,CHO,1,7
+171,9,Public Health,Bpl List Prepartion Details,4,COMMR,1,7
+172,9,Public Health,Burning of Compostyard,1,SI,1,4
+172,9,Public Health,Burning of Compostyard,2,SO,1,4
+172,9,Public Health,Burning of Compostyard,3,CHO,1,4
+172,9,Public Health,Burning of Compostyard,4,COMMR,1,4
+173,9,Public Health,Cancellation of Trade License,1,SI,1,4
+173,9,Public Health,Cancellation of Trade License,2,SO,1,4
+173,9,Public Health,Cancellation of Trade License,3,CHO,1,4
+173,9,Public Health,Cancellation of Trade License,4,COMMR,1,4
+174,9,Public Health,Cattle Menace,1,SI,1,4
+174,9,Public Health,Cattle Menace,2,SO,1,4
+174,9,Public Health,Cattle Menace,3,CHO,1,4
+174,9,Public Health,Cattle Menace,4,COMMR,1,4
+175,9,Public Health,Child Name Regestration in Birth Certificate,1,SI,1,4
+175,9,Public Health,Child Name Regestration in Birth Certificate,2,SO,1,4
+175,9,Public Health,Child Name Regestration in Birth Certificate,3,CHO,1,4
+175,9,Public Health,Child Name Regestration in Birth Certificate,4,COMMR,1,4
+176,9,Public Health,Child Name Registration,1,SI,1,4
+176,9,Public Health,Child Name Registration,2,SO,1,4
+176,9,Public Health,Child Name Registration,3,CHO,1,4
+176,9,Public Health,Child Name Registration,4,COMMR,1,4
+177,9,Public Health,Communicable Discease,1,SI,1,4
+177,9,Public Health,Communicable Discease,2,SO,1,4
+177,9,Public Health,Communicable Discease,3,CHO,1,4
+177,9,Public Health,Communicable Discease,4,COMMR,1,4
+178,9,Public Health,Compost yard Issues,1,SI,1,4
+178,9,Public Health,Compost yard Issues,2,SO,1,4
+178,9,Public Health,Compost yard Issues,3,CHO,1,4
+178,9,Public Health,Compost yard Issues,4,COMMR,1,4
+179,9,Public Health,COWS NUSIANCE,1,SI,1,4
+179,9,Public Health,COWS NUSIANCE,2,SO,1,4
+179,9,Public Health,COWS NUSIANCE,3,CHO,1,4
+179,9,Public Health,COWS NUSIANCE,4,COMMR,1,4
+180,9,Public Health,D and O Trade Details,1,SI,1,4
+180,9,Public Health,D and O Trade Details,2,SO,1,4
+180,9,Public Health,D and O Trade Details,3,CHO,1,4
+180,9,Public Health,D and O Trade Details,4,COMMR,1,4
+181,9,Public Health,Damage of Dustbin,1,SI,1,4
+181,9,Public Health,Damage of Dustbin,2,SO,1,4
+181,9,Public Health,Damage of Dustbin,3,CHO,1,4
+181,9,Public Health,Damage of Dustbin,4,COMMR,1,4
+182,9,Public Health,De-Addicition and Shelter realted Details,1,SI,1,4
+182,9,Public Health,De-Addicition and Shelter realted Details,2,SO,1,4
+182,9,Public Health,De-Addicition and Shelter realted Details,3,CHO,1,4
+182,9,Public Health,De-Addicition and Shelter realted Details,4,COMMR,1,4
+183,9,Public Health,Dead Animal,1,SI,1,4
+183,9,Public Health,Dead Animal,2,SO,1,4
+183,9,Public Health,Dead Animal,3,CHO,1,4
+183,9,Public Health,Dead Animal,4,COMMR,1,4
+184,9,Public Health,Death - Death Date Correction,1,SI,1,4
+184,9,Public Health,Death - Death Date Correction,2,SO,1,4
+184,9,Public Health,Death - Death Date Correction,3,CHO,1,4
+184,9,Public Health,Death - Death Date Correction,4,COMMR,1,4
+185,9,Public Health,Death - Death NAC,1,SI,1,4
+185,9,Public Health,Death - Death NAC,2,SO,1,4
+185,9,Public Health,Death - Death NAC,3,CHO,1,4
+185,9,Public Health,Death - Death NAC,4,COMMR,1,4
+186,9,Public Health,Death - Death NOC,1,SI,1,4
+186,9,Public Health,Death - Death NOC,2,SO,1,4
+186,9,Public Health,Death - Death NOC,3,CHO,1,4
+186,9,Public Health,Death - Death NOC,4,COMMR,1,4
+187,9,Public Health,Death - Death Person Age Correction,1,SI,1,4
+187,9,Public Health,Death - Death Person Age Correction,2,SO,1,4
+187,9,Public Health,Death - Death Person Age Correction,3,CHO,1,4
+187,9,Public Health,Death - Death Person Age Correction,4,COMMR,1,4
+188,9,Public Health,Death - Death Person Father Name Correction,1,SI,1,4
+188,9,Public Health,Death - Death Person Father Name Correction,2,SO,1,4
+188,9,Public Health,Death - Death Person Father Name Correction,3,CHO,1,4
+188,9,Public Health,Death - Death Person Father Name Correction,4,COMMR,1,4
+189,9,Public Health,Death - Death Person Father UID Number Correction,1,SI,1,4
+189,9,Public Health,Death - Death Person Father UID Number Correction,2,SO,1,4
+189,9,Public Health,Death - Death Person Father UID Number Correction,3,CHO,1,4
+189,9,Public Health,Death - Death Person Father UID Number Correction,4,COMMR,1,4
+190,10,Public Health,Death - Death Person Husband/Wife Name Correction,1,SI,1,4
+190,10,Public Health,Death - Death Person Husband/Wife Name Correction,2,SO,1,4
+190,10,Public Health,Death - Death Person Husband/Wife Name Correction,3,CHO,1,4
+190,10,Public Health,Death - Death Person Husband/Wife Name Correction,4,COMMR,1,4
+191,10,Public Health,Death - Death Person Mother Name Correction,1,SI,1,4
+191,10,Public Health,Death - Death Person Mother Name Correction,2,SO,1,4
+191,10,Public Health,Death - Death Person Mother Name Correction,3,CHO,1,4
+191,10,Public Health,Death - Death Person Mother Name Correction,4,COMMR,1,4
+192,10,Public Health,Death - Death Person Mother UID Correction,1,SI,1,4
+192,10,Public Health,Death - Death Person Mother UID Correction,2,SO,1,4
+192,10,Public Health,Death - Death Person Mother UID Correction,3,CHO,1,4
+192,10,Public Health,Death - Death Person Mother UID Correction,4,COMMR,1,4
+193,10,Public Health,Death - Death Person Name Correction,1,SI,1,4
+193,10,Public Health,Death - Death Person Name Correction,2,SO,1,4
+193,10,Public Health,Death - Death Person Name Correction,3,CHO,1,4
+193,10,Public Health,Death - Death Person Name Correction,4,COMMR,1,4
+194,10,Public Health,Death - Death Person Premanent Address Correction,1,SI,1,4
+194,10,Public Health,Death - Death Person Premanent Address Correction,2,SO,1,4
+194,10,Public Health,Death - Death Person Premanent Address Correction,3,CHO,1,4
+194,10,Public Health,Death - Death Person Premanent Address Correction,4,COMMR,1,4
+195,10,Public Health,Death - Death Person Present Address Correction,1,SI,1,4
+195,10,Public Health,Death - Death Person Present Address Correction,2,SO,1,4
+195,10,Public Health,Death - Death Person Present Address Correction,3,CHO,1,4
+195,10,Public Health,Death - Death Person Present Address Correction,4,COMMR,1,4
+196,10,Public Health,Death - Death Person Sex Correction,1,SI,1,4
+196,10,Public Health,Death - Death Person Sex Correction,2,SO,1,4
+196,10,Public Health,Death - Death Person Sex Correction,3,CHO,1,4
+196,10,Public Health,Death - Death Person Sex Correction,4,COMMR,1,4
+197,10,Public Health,Death - Death Person UID Number Correction,1,SI,1,4
+197,10,Public Health,Death - Death Person UID Number Correction,2,SO,1,4
+197,10,Public Health,Death - Death Person UID Number Correction,3,CHO,1,4
+197,10,Public Health,Death - Death Person UID Number Correction,4,COMMR,1,4
+198,10,Public Health,Death - Death Place Correction,1,SI,1,4
+198,10,Public Health,Death - Death Place Correction,2,SO,1,4
+198,10,Public Health,Death - Death Place Correction,3,CHO,1,4
+198,10,Public Health,Death - Death Place Correction,4,COMMR,1,4
+199,10,Public Health,Death Complaint,1,SI,1,4
+199,10,Public Health,Death Complaint,2,SO,1,4
+199,10,Public Health,Death Complaint,3,CHO,1,4
+199,10,Public Health,Death Complaint,4,COMMR,1,4
+200,10,Public Health,Death Correction,1,SI,1,4
+200,10,Public Health,Death Correction,2,SO,1,4
+200,10,Public Health,Death Correction,3,CHO,1,4
+200,10,Public Health,Death Correction,4,COMMR,1,4
+201,10,Public Health,Death Person Husband/Wife UID Number Correction,1,SI,1,4
+201,10,Public Health,Death Person Husband/Wife UID Number Correction,2,SO,1,4
+201,10,Public Health,Death Person Husband/Wife UID Number Correction,3,CHO,1,4
+201,10,Public Health,Death Person Husband/Wife UID Number Correction,4,COMMR,1,4
+202,10,Public Health,Death Registration,1,SI,1,4
+202,10,Public Health,Death Registration,2,SO,1,4
+202,10,Public Health,Death Registration,3,CHO,1,4
+202,10,Public Health,Death Registration,4,COMMR,1,4
+203,10,Public Health,Deisceases,1,SI,4,7
+203,10,Public Health,Deisceases,2,SO,1,7
+203,10,Public Health,Deisceases,3,CHO,1,7
+203,10,Public Health,Deisceases,4,COMMR,1,7
+204,10,Public Health,Dog - Catching,1,SI,1,4
+204,10,Public Health,Dog - Catching,2,SO,1,4
+204,10,Public Health,Dog - Catching,3,CHO,1,4
+204,10,Public Health,Dog - Catching,4,COMMR,1,4
+205,10,Public Health,Door to Door collection,1,SI,1,4
+205,10,Public Health,Door to Door collection,2,SO,1,4
+205,10,Public Health,Door to Door collection,3,CHO,1,4
+205,10,Public Health,Door to Door collection,4,COMMR,1,4
+206,10,Public Health,Dr.Muthulakshmi Reddy Maternity benefit Scheme,1,MSA,6,12
+206,10,Public Health,Dr.Muthulakshmi Reddy Maternity benefit Scheme,2,CHN,6,12
+207,10,Public Health,Drainage Leakage,1,SI,1,4
+207,10,Public Health,Drainage Leakage,2,SO,1,4
+207,10,Public Health,Drainage Leakage,3,CHO,1,4
+207,10,Public Health,Drainage Leakage,4,COMMR,1,4
+208,10,Public Health,Drainage Overflow,1,SI,1,4
+208,10,Public Health,Drainage Overflow,2,SO,1,4
+208,10,Public Health,Drainage Overflow,3,CHO,1,4
+208,10,Public Health,Drainage Overflow,4,COMMR,1,4
+209,10,Public Health,Drainage Silt Not Removed,1,SI,1,4
+209,10,Public Health,Drainage Silt Not Removed,2,SO,1,4
+209,10,Public Health,Drainage Silt Not Removed,3,CHO,1,4
+209,10,Public Health,Drainage Silt Not Removed,4,COMMR,1,4
+210,10,Public Health,Dustbin Not Cleaned,1,SI,1,4
+210,10,Public Health,Dustbin Not Cleaned,2,SO,1,4
+210,10,Public Health,Dustbin Not Cleaned,3,CHO,1,4
+210,10,Public Health,Dustbin Not Cleaned,4,COMMR,1,4
+211,11,Public Health,Epidemic Diseases,1,SI,1,4
+211,11,Public Health,Epidemic Diseases,2,SO,1,4
+211,11,Public Health,Epidemic Diseases,3,CHO,1,4
+211,11,Public Health,Epidemic Diseases,4,COMMR,1,4
+212,11,Public Health,Extra Payment Related,1,SI,4,7
+212,11,Public Health,Extra Payment Related,2,SO,1,7
+212,11,Public Health,Extra Payment Related,3,CHO,1,7
+212,11,Public Health,Extra Payment Related,4,COMMR,1,7
+213,11,Public Health,Flood Management,1,SI,1,4
+213,11,Public Health,Flood Management,2,SO,1,4
+213,11,Public Health,Flood Management,3,CHO,1,4
+213,11,Public Health,Flood Management,4,COMMR,1,4
+214,11,Public Health,Garbage,1,SI,1,4
+214,11,Public Health,Garbage,2,SO,1,4
+214,11,Public Health,Garbage,3,CHO,1,4
+214,11,Public Health,Garbage,4,COMMR,1,4
+215,11,Public Health,Garbage Vehicle Related,1,SI,1,4
+215,11,Public Health,Garbage Vehicle Related,2,SO,1,4
+215,11,Public Health,Garbage Vehicle Related,3,CHO,1,4
+215,11,Public Health,Garbage Vehicle Related,4,COMMR,1,4
+216,11,Public Health,Illegal Trade,1,SI,1,4
+216,11,Public Health,Illegal Trade,2,SO,1,4
+216,11,Public Health,Illegal Trade,3,CHO,1,4
+216,11,Public Health,Illegal Trade,4,COMMR,1,4
+217,11,Public Health,Improper Toilet Cleaning,1,SI,4,7
+217,11,Public Health,Improper Toilet Cleaning,2,SO,1,7
+217,11,Public Health,Improper Toilet Cleaning,3,CHO,1,7
+217,11,Public Health,Improper Toilet Cleaning,4,COMMR,1,7
+218,11,Public Health,License Issues,1,SI,1,4
+218,11,Public Health,License Issues,2,SO,1,4
+218,11,Public Health,License Issues,3,CHO,1,4
+218,11,Public Health,License Issues,4,COMMR,1,4
+219,11,Public Health,Maintenance Of Electrical Crematorium Deatils,1,SI,1,4
+219,11,Public Health,Maintenance Of Electrical Crematorium Deatils,2,SO,1,4
+219,11,Public Health,Maintenance Of Electrical Crematorium Deatils,3,CHO,1,4
+219,11,Public Health,Maintenance Of Electrical Crematorium Deatils,4,COMMR,1,4
+220,11,Public Health,More Fees,1,SI,4,7
+220,11,Public Health,More Fees,2,SO,1,7
+220,11,Public Health,More Fees,3,CHO,1,7
+220,11,Public Health,More Fees,4,COMMR,1,7
+221,11,Public Health,Mosquito Breeding,1,SI,1,4
+221,11,Public Health,Mosquito Breeding,2,SO,1,4
+221,11,Public Health,Mosquito Breeding,3,CHO,1,4
+221,11,Public Health,Mosquito Breeding,4,COMMR,1,4
+222,11,Public Health,Mosquito Menace,1,SI,1,4
+222,11,Public Health,Mosquito Menace,2,SO,1,4
+222,11,Public Health,Mosquito Menace,3,CHO,1,4
+222,11,Public Health,Mosquito Menace,4,COMMR,1,4
+223,11,Public Health,New Machinary Installation with Trade Permission,1,SI,1,4
+223,11,Public Health,New Machinary Installation with Trade Permission,2,SO,1,4
+223,11,Public Health,New Machinary Installation with Trade Permission,3,CHO,1,4
+223,11,Public Health,New Machinary Installation with Trade Permission,4,COMMR,1,4
+224,11,Public Health,Non availability of Bin,1,SI,1,4
+224,11,Public Health,Non availability of Bin,2,SO,1,4
+224,11,Public Health,Non availability of Bin,3,CHO,1,4
+224,11,Public Health,Non availability of Bin,4,COMMR,1,4
+225,11,Public Health,Non Removal of Garbage,1,SI,1,4
+225,11,Public Health,Non Removal of Garbage,2,SO,1,4
+225,11,Public Health,Non Removal of Garbage,3,CHO,1,4
+225,11,Public Health,Non Removal of Garbage,4,COMMR,1,4
+226,11,Public Health,Overflow of Dustpin,1,SI,1,4
+226,11,Public Health,Overflow of Dustpin,2,SO,1,4
+226,11,Public Health,Overflow of Dustpin,3,CHO,1,4
+226,11,Public Health,Overflow of Dustpin,4,COMMR,1,4
+227,11,Public Health,Pig Menace,1,SI,1,4
+227,11,Public Health,Pig Menace,2,SO,1,4
+227,11,Public Health,Pig Menace,3,CHO,1,4
+227,11,Public Health,Pig Menace,4,COMMR,1,4
+228,11,Public Health,pollution control,1,SI,1,4
+228,11,Public Health,pollution control,2,SO,1,4
+228,11,Public Health,pollution control,3,CHO,1,4
+228,11,Public Health,pollution control,4,COMMR,1,4
+229,11,Public Health,Public health - Others,1,SI,1,4
+229,11,Public Health,Public health - Others,2,SO,1,4
+229,11,Public Health,Public health - Others,3,CHO,1,4
+229,11,Public Health,Public health - Others,4,COMMR,1,4
+230,11,Public Health,Public Septic Tank Cleaning,1,SI,1,4
+230,11,Public Health,Public Septic Tank Cleaning,2,SO,1,4
+230,11,Public Health,Public Septic Tank Cleaning,3,CHO,1,4
+230,11,Public Health,Public Septic Tank Cleaning,4,COMMR,1,4
+231,11,Public Health,Public Toilets / Bath Rooms Not Cleaned,1,SI,4,7
+231,11,Public Health,Public Toilets / Bath Rooms Not Cleaned,2,SO,1,7
+231,11,Public Health,Public Toilets / Bath Rooms Not Cleaned,3,CHO,1,7
+231,11,Public Health,Public Toilets / Bath Rooms Not Cleaned,4,COMMR,1,7
+232,12,Public Health,Removal of Garbage,1,SI,1,4
+232,12,Public Health,Removal of Garbage,2,SO,1,4
+232,12,Public Health,Removal of Garbage,3,CHO,1,4
+232,12,Public Health,Removal of Garbage,4,COMMR,1,4
+233,12,Public Health,Request for Address Change for Trade License,1,SI,1,4
+233,12,Public Health,Request for Address Change for Trade License,2,SO,1,4
+233,12,Public Health,Request for Address Change for Trade License,3,CHO,1,4
+233,12,Public Health,Request for Address Change for Trade License,4,COMMR,1,4
+234,12,Public Health,Request for Change of Trade,1,SI,1,4
+234,12,Public Health,Request for Change of Trade,2,SO,1,4
+234,12,Public Health,Request for Change of Trade,3,CHO,1,4
+234,12,Public Health,Request for Change of Trade,4,COMMR,1,4
+235,12,Public Health,Request for change of Dust Bin,1,SI,1,4
+235,12,Public Health,Request for change of Dust Bin,2,SO,1,4
+235,12,Public Health,Request for change of Dust Bin,3,CHO,1,4
+235,12,Public Health,Request for change of Dust Bin,4,COMMR,1,4
+236,12,Public Health,Request for Cleaning of Drainage,1,SI,1,4
+236,12,Public Health,Request for Cleaning of Drainage,2,SO,1,4
+236,12,Public Health,Request for Cleaning of Drainage,3,CHO,1,4
+236,12,Public Health,Request for Cleaning of Drainage,4,COMMR,1,4
+237,12,Public Health,Request for Corrective or Preventive Action,1,SI,1,4
+237,12,Public Health,Request for Corrective or Preventive Action,2,SO,1,4
+237,12,Public Health,Request for Corrective or Preventive Action,3,CHO,1,4
+237,12,Public Health,Request for Corrective or Preventive Action,4,COMMR,1,4
+238,12,Public Health,Request for Name Transfer for Trade License,1,SI,1,4
+238,12,Public Health,Request for Name Transfer for Trade License,2,SO,1,4
+238,12,Public Health,Request for Name Transfer for Trade License,3,CHO,1,4
+238,12,Public Health,Request for Name Transfer for Trade License,4,COMMR,1,4
+239,12,Public Health,Request for new Bin,1,SI,30,33
+239,12,Public Health,Request for new Bin,2,SO,1,33
+239,12,Public Health,Request for new Bin,3,CHO,1,33
+239,12,Public Health,Request for new Bin,4,COMMR,1,33
+240,12,Public Health,Request for New Trade in Rental Buildings,1,SI,1,4
+240,12,Public Health,Request for New Trade in Rental Buildings,2,SO,1,4
+240,12,Public Health,Request for New Trade in Rental Buildings,3,CHO,1,4
+240,12,Public Health,Request for New Trade in Rental Buildings,4,COMMR,1,4
+241,12,Public Health,Request for New Trade License,1,SI,1,4
+241,12,Public Health,Request for New Trade License,2,SO,1,4
+241,12,Public Health,Request for New Trade License,3,CHO,1,4
+241,12,Public Health,Request for New Trade License,4,COMMR,1,4
+242,12,Public Health,Sanitation Others,1,SI,1,4
+242,12,Public Health,Sanitation Others,2,SO,1,4
+242,12,Public Health,Sanitation Others,3,CHO,1,4
+242,12,Public Health,Sanitation Others,4,COMMR,1,4
+243,12,Public Health,Septic Tank Cleaning,1,SI,1,4
+243,12,Public Health,Septic Tank Cleaning,2,SO,1,4
+243,12,Public Health,Septic Tank Cleaning,3,CHO,1,4
+243,12,Public Health,Septic Tank Cleaning,4,COMMR,1,4
+244,12,Public Health,Solid Waste Management - Others,1,SI,1,4
+244,12,Public Health,Solid Waste Management - Others,2,SO,1,4
+244,12,Public Health,Solid Waste Management - Others,3,CHO,1,4
+244,12,Public Health,Solid Waste Management - Others,4,COMMR,1,4
+245,12,Public Health,Stagnation of Storm Water Drain,1,SI,1,4
+245,12,Public Health,Stagnation of Storm Water Drain,2,SO,1,4
+245,12,Public Health,Stagnation of Storm Water Drain,3,CHO,1,4
+245,12,Public Health,Stagnation of Storm Water Drain,4,COMMR,1,4
+246,12,Public Health,Street Dogs nuisance,1,SI,3,10
+246,12,Public Health,Street Dogs nuisance,2,SO,3,10
+246,12,Public Health,Street Dogs nuisance,3,CHO,3,10
+246,12,Public Health,Street Dogs nuisance,4,COMMR,1,10
+247,12,Public Health,Street Sweeping,1,SI,1,4
+247,12,Public Health,Street Sweeping,2,SO,1,4
+247,12,Public Health,Street Sweeping,3,CHO,1,4
+247,12,Public Health,Street Sweeping,4,COMMR,1,4
+248,12,Public Health,Sweeping Not Done,1,SI,1,4
+248,12,Public Health,Sweeping Not Done,2,SO,1,4
+248,12,Public Health,Sweeping Not Done,3,CHO,1,4
+248,12,Public Health,Sweeping Not Done,4,COMMR,1,4
+249,12,Public Health,Temporary Crackers Licenses Workers,1,SI,4,7
+249,12,Public Health,Temporary Crackers Licenses Workers,2,SO,1,7
+249,12,Public Health,Temporary Crackers Licenses Workers,3,CHO,1,7
+249,12,Public Health,Temporary Crackers Licenses Workers,4,COMMR,1,7
+250,12,Public Health,Trace Fees,1,SI,1,4
+250,12,Public Health,Trace Fees,2,SO,1,4
+250,12,Public Health,Trace Fees,3,CHO,1,4
+250,12,Public Health,Trace Fees,4,COMMR,1,4
+251,12,Revenue,Booking of Assets,1,SRI,1,5
+251,12,Revenue,Booking of Assets,2,AC,1,5
+251,12,Revenue,Booking of Assets,3,ACR,1,5
+251,12,Revenue,Booking of Assets,4,DEPUTY COMMR,1,5
+251,12,Revenue,Booking of Assets,5,COMMR,1,5
+252,12,Revenue,Drain.Maint.Charges,1,SRI,3,7
+252,12,Revenue,Drain.Maint.Charges,2,AC,1,7
+252,12,Revenue,Drain.Maint.Charges,3,ACR,1,7
+252,12,Revenue,Drain.Maint.Charges,4,DEPUTY COMMR,1,7
+252,12,Revenue,Drain.Maint.Charges,5,COMMR,1,7
+253,13,Revenue,Lease Advance/Deposits related Issues,1,SRI,1,5
+253,13,Revenue,Lease Advance/Deposits related Issues,2,AC,1,5
+253,13,Revenue,Lease Advance/Deposits related Issues,3,ACR,1,5
+253,13,Revenue,Lease Advance/Deposits related Issues,4,DEPUTY COMMR,1,5
+253,13,Revenue,Lease Advance/Deposits related Issues,5,COMMR,1,5
+254,13,Revenue,Litigation,1,SRI,7,13
+254,13,Revenue,Litigation,2,AC,2,13
+254,13,Revenue,Litigation,3,ACR,2,13
+254,13,Revenue,Litigation,4,DEPUTY COMMR,1,13
+254,13,Revenue,Litigation,5,COMMR,1,13
+255,13,Revenue,Maintenance of Parking place,1,SRI,1,5
+255,13,Revenue,Maintenance of Parking place,2,AC,1,5
+255,13,Revenue,Maintenance of Parking place,3,ACR,1,5
+255,13,Revenue,Maintenance of Parking place,4,DEPUTY COMMR,1,5
+255,13,Revenue,Maintenance of Parking place,5,COMMR,1,5
+256,13,Revenue,Name Correction,1,SRI,3,7
+256,13,Revenue,Name Correction,2,AC,1,7
+256,13,Revenue,Name Correction,3,ACR,1,7
+256,13,Revenue,Name Correction,4,DEPUTY COMMR,1,7
+256,13,Revenue,Name Correction,5,COMMR,1,7
+257,13,Revenue,New Assessments,1,SRI,3,7
+257,13,Revenue,New Assessments,2,AC,1,7
+257,13,Revenue,New Assessments,3,ACR,1,7
+257,13,Revenue,New Assessments,4,DEPUTY COMMR,1,7
+257,13,Revenue,New Assessments,5,COMMR,1,7
+258,13,Revenue,Non tax- Monthly Rental,1,SRI,1,5
+258,13,Revenue,Non tax- Monthly Rental,2,AC,1,5
+258,13,Revenue,Non tax- Monthly Rental,3,ACR,1,5
+258,13,Revenue,Non tax- Monthly Rental,4,DEPUTY COMMR,1,5
+258,13,Revenue,Non tax- Monthly Rental,5,COMMR,1,5
+259,13,Revenue,Non tax-Annual Lease,1,SRI,1,5
+259,13,Revenue,Non tax-Annual Lease,2,AC,1,5
+259,13,Revenue,Non tax-Annual Lease,3,ACR,1,5
+259,13,Revenue,Non tax-Annual Lease,4,DEPUTY COMMR,1,5
+259,13,Revenue,Non tax-Annual Lease,5,COMMR,1,5
+260,13,Revenue,Nontax-Lease Items,1,SRI,1,5
+260,13,Revenue,Nontax-Lease Items,2,AC,1,5
+260,13,Revenue,Nontax-Lease Items,3,ACR,1,5
+260,13,Revenue,Nontax-Lease Items,4,DEPUTY COMMR,1,5
+260,13,Revenue,Nontax-Lease Items,5,COMMR,1,5
+261,13,Revenue,Nontax-Requisition for Name Correction,1,SRI,1,5
+261,13,Revenue,Nontax-Requisition for Name Correction,2,AC,1,5
+261,13,Revenue,Nontax-Requisition for Name Correction,3,ACR,1,5
+261,13,Revenue,Nontax-Requisition for Name Correction,4,DEPUTY COMMR,1,5
+261,13,Revenue,Nontax-Requisition for Name Correction,5,COMMR,1,5
+262,13,Revenue,Nontax-Requisition for Name Transfer,1,SRI,1,5
+262,13,Revenue,Nontax-Requisition for Name Transfer,2,AC,1,5
+262,13,Revenue,Nontax-Requisition for Name Transfer,3,ACR,1,5
+262,13,Revenue,Nontax-Requisition for Name Transfer,4,DEPUTY COMMR,1,5
+262,13,Revenue,Nontax-Requisition for Name Transfer,5,COMMR,1,5
+263,13,Revenue,Nontax-Requisition toAdjust their Deposit for Rent,1,SRI,1,5
+263,13,Revenue,Nontax-Requisition toAdjust their Deposit for Rent,2,AC,1,5
+263,13,Revenue,Nontax-Requisition toAdjust their Deposit for Rent,3,ACR,1,5
+263,13,Revenue,Nontax-Requisition toAdjust their Deposit for Rent,4,DEPUTY COMMR,1,5
+263,13,Revenue,Nontax-Requisition toAdjust their Deposit for Rent,5,COMMR,1,5
+264,13,Revenue,Nontax-To Utilise is as Godown / Parking Area,1,SRI,1,5
+264,13,Revenue,Nontax-To Utilise is as Godown / Parking Area,2,AC,1,5
+264,13,Revenue,Nontax-To Utilise is as Godown / Parking Area,3,ACR,1,5
+264,13,Revenue,Nontax-To Utilise is as Godown / Parking Area,4,DEPUTY COMMR,1,5
+264,13,Revenue,Nontax-To Utilise is as Godown / Parking Area,5,COMMR,1,5
+265,13,Revenue,Online Payment,1,SRI,7,11
+265,13,Revenue,Online Payment,2,AC,1,11
+265,13,Revenue,Online Payment,3,ACR,1,11
+265,13,Revenue,Online Payment,4,DEPUTY COMMR,1,11
+265,13,Revenue,Online Payment,5,COMMR,1,11
+266,13,Revenue,Others,1,SRI,1,5
+266,13,Revenue,Others,2,AC,1,5
+266,13,Revenue,Others,3,ACR,1,5
+266,13,Revenue,Others,4,DEPUTY COMMR,1,5
+266,13,Revenue,Others,5,COMMR,1,5
+267,13,Revenue,Parking Charges,1,SRI,3,7
+267,13,Revenue,Parking Charges,2,AC,1,7
+267,13,Revenue,Parking Charges,3,ACR,1,7
+267,13,Revenue,Parking Charges,4,DEPUTY COMMR,1,7
+267,13,Revenue,Parking Charges,5,COMMR,1,7
+268,13,Revenue,Pay&Use Toilet,1,SRI,3,7
+268,13,Revenue,Pay&Use Toilet,2,AC,1,7
+268,13,Revenue,Pay&Use Toilet,3,ACR,1,7
+268,13,Revenue,Pay&Use Toilet,4,DEPUTY COMMR,1,7
+268,13,Revenue,Pay&Use Toilet,5,COMMR,1,7
+269,13,Revenue,Permission to adjust empty space between Two shops,1,SRI,1,5
+269,13,Revenue,Permission to adjust empty space between Two shops,2,AC,1,5
+269,13,Revenue,Permission to adjust empty space between Two shops,3,ACR,1,5
+269,13,Revenue,Permission to adjust empty space between Two shops,4,DEPUTY COMMR,1,5
+269,13,Revenue,Permission to adjust empty space between Two shops,5,COMMR,1,5
+270,13,Revenue,Permission to Change the Flooring on their Own exp,1,SRI,1,5
+270,13,Revenue,Permission to Change the Flooring on their Own exp,2,AC,1,5
+270,13,Revenue,Permission to Change the Flooring on their Own exp,3,ACR,1,5
+270,13,Revenue,Permission to Change the Flooring on their Own exp,4,DEPUTY COMMR,1,5
+270,13,Revenue,Permission to Change the Flooring on their Own exp,5,COMMR,1,5
+271,13,Revenue,Permission to Construct a Toilet on their Own Exp,1,SRI,1,5
+271,13,Revenue,Permission to Construct a Toilet on their Own Exp,2,AC,1,5
+271,13,Revenue,Permission to Construct a Toilet on their Own Exp,3,ACR,1,5
+271,13,Revenue,Permission to Construct a Toilet on their Own Exp,4,DEPUTY COMMR,1,5
+271,13,Revenue,Permission to Construct a Toilet on their Own Exp,5,COMMR,1,5
+272,13,Revenue,Permission to do Indoor Partition on their Own Exp,1,SRI,1,5
+272,13,Revenue,Permission to do Indoor Partition on their Own Exp,2,AC,1,5
+272,13,Revenue,Permission to do Indoor Partition on their Own Exp,3,ACR,1,5
+272,13,Revenue,Permission to do Indoor Partition on their Own Exp,4,DEPUTY COMMR,1,5
+272,13,Revenue,Permission to do Indoor Partition on their Own Exp,5,COMMR,1,5
+273,13,Revenue,Permission to Make Temporary Roof in front of Shop,1,SRI,1,5
+273,13,Revenue,Permission to Make Temporary Roof in front of Shop,2,AC,1,5
+273,13,Revenue,Permission to Make Temporary Roof in front of Shop,3,ACR,1,5
+273,13,Revenue,Permission to Make Temporary Roof in front of Shop,4,DEPUTY COMMR,1,5
+273,13,Revenue,Permission to Make Temporary Roof in front of Shop,5,COMMR,1,5
+274,14,Revenue,Permission to Smash together the wall in Shops,1,SRI,1,5
+274,14,Revenue,Permission to Smash together the wall in Shops,2,AC,1,5
+274,14,Revenue,Permission to Smash together the wall in Shops,3,ACR,1,5
+274,14,Revenue,Permission to Smash together the wall in Shops,4,DEPUTY COMMR,1,5
+274,14,Revenue,Permission to Smash together the wall in Shops,5,COMMR,1,5
+275,14,Revenue,Prof Tax-Request for Cancel Existing Assessment No,1,SRI,1,5
+275,14,Revenue,Prof Tax-Request for Cancel Existing Assessment No,2,AC,1,5
+275,14,Revenue,Prof Tax-Request for Cancel Existing Assessment No,3,ACR,1,5
+275,14,Revenue,Prof Tax-Request for Cancel Existing Assessment No,4,DEPUTY COMMR,1,5
+275,14,Revenue,Prof Tax-Request for Cancel Existing Assessment No,5,COMMR,1,5
+276,14,Revenue,Prof Tax-Request for Change of Address,1,SRI,1,5
+276,14,Revenue,Prof Tax-Request for Change of Address,2,AC,1,5
+276,14,Revenue,Prof Tax-Request for Change of Address,3,ACR,1,5
+276,14,Revenue,Prof Tax-Request for Change of Address,4,DEPUTY COMMR,1,5
+276,14,Revenue,Prof Tax-Request for Change of Address,5,COMMR,1,5
+277,14,Revenue,Prof Tax-Request for Demand Notice,1,SRI,1,5
+277,14,Revenue,Prof Tax-Request for Demand Notice,2,AC,1,5
+277,14,Revenue,Prof Tax-Request for Demand Notice,3,ACR,1,5
+277,14,Revenue,Prof Tax-Request for Demand Notice,4,DEPUTY COMMR,1,5
+277,14,Revenue,Prof Tax-Request for Demand Notice,5,COMMR,1,5
+278,14,Revenue,Prof Tax-Request for Demand Update,1,SRI,1,5
+278,14,Revenue,Prof Tax-Request for Demand Update,2,AC,1,5
+278,14,Revenue,Prof Tax-Request for Demand Update,3,ACR,1,5
+278,14,Revenue,Prof Tax-Request for Demand Update,4,DEPUTY COMMR,1,5
+278,14,Revenue,Prof Tax-Request for Demand Update,5,COMMR,1,5
+279,14,Revenue,Prof Tax-Request for Name Correction,1,SRI,1,5
+279,14,Revenue,Prof Tax-Request for Name Correction,2,AC,1,5
+279,14,Revenue,Prof Tax-Request for Name Correction,3,ACR,1,5
+279,14,Revenue,Prof Tax-Request for Name Correction,4,DEPUTY COMMR,1,5
+279,14,Revenue,Prof Tax-Request for Name Correction,5,COMMR,1,5
+280,14,Revenue,Prof Tax-Request for New Assessment,1,SRI,1,5
+280,14,Revenue,Prof Tax-Request for New Assessment,2,AC,1,5
+280,14,Revenue,Prof Tax-Request for New Assessment,3,ACR,1,5
+280,14,Revenue,Prof Tax-Request for New Assessment,4,DEPUTY COMMR,1,5
+280,14,Revenue,Prof Tax-Request for New Assessment,5,COMMR,1,5
+281,14,Revenue,Prof Tax-Request for Tariff Change,1,SRI,1,5
+281,14,Revenue,Prof Tax-Request for Tariff Change,2,AC,1,5
+281,14,Revenue,Prof Tax-Request for Tariff Change,3,ACR,1,5
+281,14,Revenue,Prof Tax-Request for Tariff Change,4,DEPUTY COMMR,1,5
+281,14,Revenue,Prof Tax-Request for Tariff Change,5,COMMR,1,5
+282,14,Revenue,Prof Tax-Request for Tax Paid Statement,1,SRI,1,5
+282,14,Revenue,Prof Tax-Request for Tax Paid Statement,2,AC,1,5
+282,14,Revenue,Prof Tax-Request for Tax Paid Statement,3,ACR,1,5
+282,14,Revenue,Prof Tax-Request for Tax Paid Statement,4,DEPUTY COMMR,1,5
+282,14,Revenue,Prof Tax-Request for Tax Paid Statement,5,COMMR,1,5
+283,14,Revenue,Property Tax,1,SRI,7,10
+283,14,Revenue,Property Tax,2,AC,1,10
+283,14,Revenue,Property Tax,3,ACR,1,10
+283,14,Revenue,Property Tax,4,COMMR,1,10
+284,14,Revenue,Property Tax Name Transfer,1,SRI,1,5
+284,14,Revenue,Property Tax Name Transfer,2,AC,1,5
+284,14,Revenue,Property Tax Name Transfer,3,ACR,1,5
+284,14,Revenue,Property Tax Name Transfer,4,DEPUTY COMMR,1,5
+284,14,Revenue,Property Tax Name Transfer,5,COMMR,1,5
+285,14,Revenue,Request For Information,1,SRI,3,7
+285,14,Revenue,Request For Information,2,AC,1,7
+285,14,Revenue,Request For Information,3,ACR,1,7
+285,14,Revenue,Request For Information,4,DEPUTY COMMR,1,7
+285,14,Revenue,Request For Information,5,COMMR,1,7
+286,14,Revenue,Request for Parking Facility,1,SRI,1,5
+286,14,Revenue,Request for Parking Facility,2,AC,1,5
+286,14,Revenue,Request for Parking Facility,3,ACR,1,5
+286,14,Revenue,Request for Parking Facility,4,DEPUTY COMMR,1,5
+286,14,Revenue,Request for Parking Facility,5,COMMR,1,5
+287,14,Revenue,Revenue - Others,1,SRI,7,11
+287,14,Revenue,Revenue - Others,2,AC,1,11
+287,14,Revenue,Revenue - Others,3,ACR,1,11
+287,14,Revenue,Revenue - Others,4,DEPUTY COMMR,1,11
+287,14,Revenue,Revenue - Others,5,COMMR,1,11
+288,14,Revenue,Road side Parking Slots,1,SRI,1,5
+288,14,Revenue,Road side Parking Slots,2,AC,1,5
+288,14,Revenue,Road side Parking Slots,3,ACR,1,5
+288,14,Revenue,Road side Parking Slots,4,DEPUTY COMMR,1,5
+288,14,Revenue,Road side Parking Slots,5,COMMR,1,5
+289,14,Revenue,Tax Fixation,1,SRI,1,5
+289,14,Revenue,Tax Fixation,2,AC,1,5
+289,14,Revenue,Tax Fixation,3,ACR,1,5
+289,14,Revenue,Tax Fixation,4,DEPUTY COMMR,1,5
+289,14,Revenue,Tax Fixation,5,COMMR,1,5
+290,14,Revenue,Tax Payers Correction,1,SRI,1,5
+290,14,Revenue,Tax Payers Correction,2,AC,1,5
+290,14,Revenue,Tax Payers Correction,3,ACR,1,5
+290,14,Revenue,Tax Payers Correction,4,DEPUTY COMMR,1,5
+290,14,Revenue,Tax Payers Correction,5,COMMR,1,5
+291,14,Revenue,VLT,1,SRI,3,7
+291,14,Revenue,VLT,2,AC,1,7
+291,14,Revenue,VLT,3,ACR,1,7
+291,14,Revenue,VLT,4,DEPUTY COMMR,1,7
+291,14,Revenue,VLT,5,COMMR,1,7
+292,14,Revenue,Water Charge,1,SRI,3,7
+292,14,Revenue,Water Charge,2,AC,1,7
+292,14,Revenue,Water Charge,3,ACR,1,7
+292,14,Revenue,Water Charge,4,DEPUTY COMMR,1,7
+292,14,Revenue,Water Charge,5,COMMR,1,7
+293,14,Revenue,Water Name Transfer,1,SRI,3,6
+293,14,Revenue,Water Name Transfer,2,AC,1,6
+293,14,Revenue,Water Name Transfer,3,ACR,1,6
+293,14,Revenue,Water Name Transfer,4,COMMR,1,6
+294,14,Transport Department,Bus maintenance,1,Deputy Manager of Commercial,6,6
+295,15,Transport Department,Bus not stops in exact bus stop,1,Deputy Manager of Commercial,6,6
+296,15,Transport Department,Bus Timing issue,1,Deputy Manager of Commercial,6,6
+297,15,Transport Department,Conductor Misbehaving,1,Deputy Manager of Commercial,6,6
+298,15,Transport Department,Extra charges,1,Deputy Manager of Commercial,6,6
+299,15,Transport Department,New bus route service,1,Deputy Manager of Commercial,6,6
+300,15,Transport Department,Not picking school/college students,1,Deputy Manager of Commercial,6,6
+301,15,Transport Department,Transport - others,1,Deputy Manager of Commercial,3,3

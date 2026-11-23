@@ -185,7 +185,7 @@ include __DIR__ . '/../includes/employee-header.php';
   <div>
     <span class="admin-eyebrow">ICTS / Allocation Administration</span>
     <h1 class="fw-bold mb-1"><i class="bi bi-diagram-3 text-primary me-2"></i>Officer Allocation Inspector</h1>
-    <p>Inspect exact allocation rules, fallback officer selection and escalation responsibility before making changes.</p>
+    <p>Compare legacy mapping candidates and approved routing requirements without changing records.</p>
   </div>
   <div class="d-flex gap-2 flex-wrap"><a class="btn btn-outline-warning" href="<?php echo e(url('employee/escalation-audit.php')); ?>">Escalation Audit</a><a class="btn btn-outline-secondary" href="<?php echo e(url('employee/master-control.php?tab=officers')); ?>">Advanced Masters</a></div>
 </div>
@@ -293,10 +293,13 @@ include __DIR__ . '/../includes/employee-header.php';
     <?php echo e('Zone ' . $selectedWard['zone_no'] . ' / Ward ' . $selectedWard['ward_no']); ?>
   </div>
   <?php if ($preview): ?>
-    <div class="alert alert-success">
-      <strong>First matching officer:</strong> <?php echo e($preview['officer']['officer_name']); ?>
+    <div class="alert alert-warning">
+      <strong>Legacy mapping candidate — NOT an approved allocation:</strong>
+      <?php echo e($preview['officer']['officer_name']); ?>
       (ID <?php echo (int)$preview['officer']['id']; ?>) ·
-      <strong>Source:</strong> <?php echo e($preview['source']); ?>
+      <strong>Source:</strong> <?php echo e($preview['source']); ?>.
+      This historical lookup ignores PDF-role and officer-approval requirements.
+      Never use this preview to allocate a complaint.
     </div>
   <?php else: ?>
     <div class="alert alert-warning">No active officer matched any initial-assignment tier. A new complaint could remain unassigned.</div>
@@ -310,8 +313,8 @@ include __DIR__ . '/../includes/employee-header.php';
             <td><?php echo $index+1; ?></td>
             <td><?php echo e($step['source']); ?></td>
             <td><?php echo $step['match'] ? e($step['match']['officer_name']) . ' (#' . (int)$step['match']['id'] . ')' : 'No match'; ?></td>
-            <td><?php if ($step['selected']): ?><span class="badge text-bg-success">Selected</span>
-              <?php elseif ($step['match']): ?><span class="text-muted">Fallback, not selected</span>
+            <td><?php if ($step['selected']): ?><span class="badge text-bg-warning">Legacy first match — unverified</span>
+              <?php elseif ($step['match']): ?><span class="text-muted">Legacy match — not approved</span>
               <?php else: ?><span class="text-muted">Not matched</span><?php endif; ?></td>
           </tr>
         <?php endforeach; ?>

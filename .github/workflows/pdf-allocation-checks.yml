@@ -1,0 +1,60 @@
+name: PDF allocation and escalation checks
+
+on:
+  pull_request:
+    paths:
+      - 'includes/**'
+      - 'employee/**'
+      - 'database/pdf_escalation_policy.*'
+      - 'pdf-escalate-complaints.php'
+      - 'retry-pending-allocations.php'
+      - 'tools/check_pdf_automation_readiness.php'
+      - 'tools/install_pdf_schema_local.php'
+      - 'tools/run_pdf_workflow_readonly.cmd'
+      - 'tools/report_local_pdf_workflow.php'
+      - 'tools/reconcile_officer_designation_test.php'
+      - 'includes/local-pdf-workflow-guard.php'
+      - 'tools/run_pdf_workflow_test.ps1'
+      - 'tests/test_pdf_escalation_policy.php'
+      - 'tests/test_pdf_category_coverage.php'
+      - '.github/workflows/pdf-allocation-checks.yml'
+  push:
+    branches:
+      - 'feature/pdf-escalation-6-level'
+
+permissions:
+  contents: read
+
+jobs:
+  static-qa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+      - name: Lint allocation and escalation services
+        run: |
+          php -l includes/functions.php
+          php -l includes/officer-authority.php
+          php -l includes/pdf-escalation-policy.php
+          php -l employee/masters.php
+          php -l employee/allocation-inspector.php
+          php -l employee/user-mapping-details.php
+          php -l employee/complaint-view.php
+          php -l employee/officer-approvals.php
+          php -l employee/pdf-policy-review.php
+          php -l new-complaint.php
+          php -l pdf-escalate-complaints.php
+          php -l retry-pending-allocations.php
+          php -l tools/check_pdf_automation_readiness.php
+          php -l tools/install_pdf_schema_local.php
+          php -l tools/reconcile_officer_designation_test.php
+          php -l includes/local-pdf-workflow-guard.php
+          php -l tools/report_local_pdf_workflow.php
+      - name: Check PDF policy extraction and role matching (no database)
+        run: php tests/test_pdf_escalation_policy.php
+      - name: Check PDF category coverage (no database)
+        run: php tests/test_pdf_category_coverage.php

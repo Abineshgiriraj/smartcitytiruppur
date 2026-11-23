@@ -5,8 +5,15 @@ require_once __DIR__ . '/../includes/bootstrap.php';
 $user = require_permission('complaints.view');
 $pageTitle = 'Complaints';
 
-$fromDate = trim($_GET['from_date'] ?? date('Y-m-01'));
-$toDate = trim($_GET['to_date'] ?? date('Y-m-d'));
+$fromDate = trim((string)($_GET['from_date'] ?? ''));
+$toDate = trim((string)($_GET['to_date'] ?? ''));
+// Default to all dates. Restrict only when user explicitly enters a range.
+if (($fromDate !== '' && !valid_date($fromDate))
+    || ($toDate !== '' && !valid_date($toDate))
+    || ($fromDate !== '' && $toDate !== '' && $fromDate > $toDate)) {
+    http_response_code(400);
+    exit('Invalid date range.');
+}
 $status = trim($_GET['status'] ?? '');
 $departmentId = (int)($_GET['department_id'] ?? 0);
 $zoneId = (int)($_GET['zone_id'] ?? 0);
@@ -16,12 +23,12 @@ $search = trim($_GET['q'] ?? '');
 $where = ['c.is_deleted = 0'];
 $params = [];
 
-if (valid_date($fromDate)) {
-    $where[] = 'DATE(c.created_at) >= ?';
+if ($fromDate !== '') {
+    $where[] = 'c.created_at >= ?';
     $params[] = $fromDate;
 }
-if (valid_date($toDate)) {
-    $where[] = 'DATE(c.created_at) <= ?';
+if ($toDate !== '') {
+    $where[] = 'c.created_at < DATE_ADD(?, INTERVAL 1 DAY)';
     $params[] = $toDate;
 }
 if ($status !== '') {
@@ -47,13 +54,13 @@ if ($search !== '') {
 }
 
 if (!can_manage_all_complaints($user)) {
-    if ($user['role'] === 'Department Head' && $user['department_id']) {
+    if ($user['role'] === 'Department Head') {
         $where[] = 'c.department_id = ?';
         $params[] = (int)$user['department_id'];
-    } elseif ($user['role'] === 'Zone Officer' && $user['zone_id']) {
+    } elseif ($user['role'] === 'Zone Officer') {
         $where[] = 'c.zone_id = ?';
         $params[] = (int)$user['zone_id'];
-    } elseif ($user['role'] === 'Ward Officer' && $user['ward_id']) {
+    } elseif ($user['role'] === 'Ward Officer') {
         $where[] = 'c.ward_id = ?';
         $params[] = (int)$user['ward_id'];
     } elseif ($user['role'] === 'Field Officer') {
@@ -61,21 +68,38 @@ if (!can_manage_all_complaints($user)) {
         $officerStmt->execute([(int)$user['id']]);
         $where[] = 'c.assigned_officer_id = ?';
         $params[] = (int)$officerStmt->fetchColumn();
+    } elseif ($user['role'] !== 'Call Centre' && $user['role'] !== 'Report User') {
+        $where[] = '1=0'; // Fail closed for unknown roles.
     }
 }
 
-$sql = "SELECT c.id, c.reference_no, c.citizen_name, c.mobile_no, c.status, c.created_at, c.due_at,
-               d.department_name, cc.category_name, z.zone_no, w.ward_no, o.officer_name
+$condition = implode(' AND ', $where);
+$countStmt = db()->prepare("SELECT COUNT(*) FROM complaints c WHERE $condition");
+$countStmt->execute($params);
+$matchedTotal = (int)$countStmt->fetchColumn();
+$pageSize = 50;
+$pageCount = max(1, (int)ceil($matchedTotal / $pageSize));
+$requestedPage = filter_var($_GET['page'] ?? 1, FILTER_VALIDATE_INT);
+$page = min($pageCount, max(1, $requestedPage === false ? 1 : (int)$requestedPage));
+$offset = ($page - 1) * $pageSize;
+$paginationQuery = $_GET;
+unset($paginationQuery['page']);
+$pageUrl = static function (int $number) use ($paginationQuery): string {
+    return url('employee/complaints.php') . '?' . http_build_query(array_merge($paginationQuery, ['page' => $number]));
+};
+$sql = "SELECT c.id,c.reference_no,c.citizen_name,c.mobile_no,c.status,c.created_at,c.due_at,
+               COALESCE(d.department_name,'Unmapped') AS department_name,
+               COALESCE(cc.category_name,'Unmapped') AS category_name,
+               z.zone_no,w.ward_no,o.officer_name
         FROM complaints c
-        JOIN departments d ON d.id = c.department_id
-        JOIN complaint_categories cc ON cc.id = c.category_id
-        JOIN zones z ON z.id = c.zone_id
-        JOIN wards w ON w.id = c.ward_id
-        LEFT JOIN officers o ON o.id = c.assigned_officer_id
-        WHERE " . implode(' AND ', $where) . "
-        ORDER BY c.created_at DESC
-        LIMIT 1000";
-
+        LEFT JOIN departments d ON d.id=c.department_id
+        LEFT JOIN complaint_categories cc ON cc.id=c.category_id
+        LEFT JOIN zones z ON z.id=c.zone_id
+        LEFT JOIN wards w ON w.id=c.ward_id
+        LEFT JOIN officers o ON o.id=c.assigned_officer_id
+        WHERE $condition
+        ORDER BY c.created_at DESC,c.id DESC
+        LIMIT $pageSize OFFSET $offset";
 $stmt = db()->prepare($sql);
 $stmt->execute($params);
 $rows = $stmt->fetchAll();
@@ -87,7 +111,8 @@ $wards = db()->query('SELECT id, ward_no FROM wards WHERE is_active = 1 ORDER BY
 include __DIR__ . '/../includes/employee-header.php';
 ?>
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
-    <div><h1 class="h3 fw-bold mb-1">Complaint Inbox</h1><p class="text-muted mb-0"><?php echo count($rows); ?> record(s) shown</p></div>
+    <div><h1 class="h3 fw-bold mb-1">Complaint Inbox</h1>
+    <p class="text-muted mb-0"><?php echo number_format($matchedTotal); ?> matching non-deleted complaint(s) across <?php echo $fromDate !== '' || $toDate !== '' ? 'selected dates' : 'all dates'; ?> · showing <?php echo count($rows); ?> on page <?php echo $page; ?> of <?php echo $pageCount; ?>.</p></div>
 </div>
 
 <div class="card content-card p-4 mb-4 no-print">
@@ -129,5 +154,14 @@ include __DIR__ . '/../includes/employee-header.php';
             </tbody>
         </table>
     </div>
+    <?php if ($pageCount > 1): ?>
+      <nav class="d-flex flex-wrap align-items-center justify-content-between gap-2 mt-3" aria-label="Complaint pagination">
+        <span class="small text-muted">Page <?php echo $page; ?> of <?php echo $pageCount; ?> (<?php echo number_format($matchedTotal); ?> total matching)</span>
+        <div class="d-flex gap-2">
+          <?php if ($page > 1): ?><a class="btn btn-outline-primary btn-sm" href="<?php echo e($pageUrl($page - 1)); ?>">Previous</a><?php endif; ?>
+          <?php if ($page < $pageCount): ?><a class="btn btn-outline-primary btn-sm" href="<?php echo e($pageUrl($page + 1)); ?>">Next</a><?php endif; ?>
+        </div>
+      </nav>
+    <?php endif; ?>
 </div>
 <?php include __DIR__ . '/../includes/employee-footer.php'; ?>
