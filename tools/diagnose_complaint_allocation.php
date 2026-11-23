@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * Read-only diagnosis for a complaint not assigned to a verified Stage 1 officer.
+ * Read-only diagnosis for a complaint awaiting Stage 1 allocation from existing mappings.
  * php tools/diagnose_complaint_allocation.php --expect-db=smartcitytiruppur --reference=TCMC-2026-576866
  */
 if (PHP_SAPI !== 'cli') { http_response_code(403); exit("CLI only\n"); }
@@ -121,7 +121,7 @@ if ($hasApproval) {
     }
     echo "Eligible mapped Stage 1 officers: {$valid}\n";
 } else {
-    echo "BLOCKER: Missing registry means no officer can satisfy Stage 1 authorization.\n";
+    echo "Note: Approval registry is not required for mapped routing.\n";
 }
 $probe->execute([$dbName,'department_allocations']);
 if ((int)$probe->fetchColumn()===1) {
@@ -135,9 +135,9 @@ if ((int)$probe->fetchColumn()===1) {
     echo 'Exact department allocation rows: '.count($rules)."\n";
     foreach($rules as $row) {
         $officer=(int)$row['officer_id'];
-        $ok=$hasApproval && officer_stage_authorized($pdo,$cat,1,$officer,$dep,$ward);
+        $ok=officer_stage_authorized($pdo,$cat,1,$officer,$dep,$ward);
         echo "Exact rule officer #{$officer}, active={$row['is_active']}, approved=".($ok?'YES':'NO')."\n";
-        if((int)$row['is_active']===1 && !$ok)echo "BLOCKER: exact rule is unapproved; current service refuses fallback.\n";
+        if((int)$row['is_active']===1 && !$ok)echo "BLOCKER: exact-rule officer is ineligible; no unsafe fallback.\n";
     }
 }
 $mapped=$pdo->prepare(
@@ -167,11 +167,11 @@ foreach ($officerCandidates->fetchAll(PDO::FETCH_ASSOC) as $candidate) {
         :((int)$candidate['in_ward']===1?'MATCHED':'DIFFERENT WARD'));
     $roleMatch=$firstStageRole !== null && $firstStageRole !== ''
         ? (pdf_policy_role_matches($firstStageRole,$title)?'YES':'NO') : 'UNKNOWN';
-    $approved=$hasApproval && officer_stage_authorized($pdo,$cat,1,$oid,$dep,$ward);
+    $eligible=officer_stage_authorized($pdo,$cat,1,$oid,$dep,$ward);
     echo "  #{$oid} {$candidate['officer_name']} | {$title} | ward={$wardScope}"
-       ." | PDF Stage 1 role={$roleMatch} | approved=".($approved?'YES':'NO')."\n";
+       ." | PDF Stage 1 role={$roleMatch} | approved=".($eligible?'YES':'NO')."\n";
 }
-echo "WARNING: A matching title, department or ward is not proof of municipal authority.\n";
+echo "Note: Routing relies on existing mappings; no separate approval is required.\n";
 
 $trigger=$pdo->prepare(
     "SELECT COUNT(*) FROM information_schema.TRIGGERS
@@ -180,4 +180,53 @@ $trigger=$pdo->prepare(
 );
 $trigger->execute([$dbName]);
 echo "Unsafe historical trigger: ".((int)$trigger->fetchColumn()>0?'PRESENT':'ABSENT')."\n";
+
+echo "\n=== Current automatic allocation routing decision ===\n";
+if ($complaint['status'] !== 'Registered' || $complaint['assigned_officer_id'] !== null) {
+    echo "NOT PENDING: Initial routing requires an unassigned Registered complaint.\n";
+} elseif (!valid_complaint_routing_context($pdo,$dep,$cat,$zone,$ward)) {
+    echo "BLOCKED: Complaint category/department/ward/zone mismatch.\n";
+} elseif (!($routingPolicy=pdf_policy_routing_ready($pdo,$cat))) {
+    echo "BLOCKED: PDF policy missing or invalid, including a zero-day stage.\n";
+} else {
+    $stage1=pdf_policy_stage($routingPolicy,1);
+    $candidates=pdf_routing_candidates($pdo,$cat,1,$dep,$ward);
+    $explicit=array_values(array_filter($candidates,static fn(array $x):bool=>(int)$x['ward_rank']===0));
+    $unscoped=array_values(array_filter($candidates,static fn(array $x):bool=>(int)$x['ward_rank']===1));
+    echo "Eligible matched officers: ".count($candidates)."\n";
+    echo "Explicitly mapped to ward {$ward}: ".count($explicit)."\n";
+    echo "No explicit ward mapping: ".count($unscoped)."\n";
+    $activeRules=array_values(array_filter($rules??[],static fn(array $x):bool=>(int)$x['is_active']===1));
+    if(count($activeRules)>1) {
+        echo "BLOCKED: Multiple active exact allocation rules. Review conflicting rules.\n";
+    } elseif(count($activeRules)===1) {
+        $exact=$activeRules[0];$oid=(int)$exact['officer_id'];
+        if(!officer_stage_authorized($pdo,$cat,1,$oid,$dep,$ward)) {
+            echo "BLOCKED: Exact rule officer #{$oid} is not eligible for this PDF stage and ward.\n";
+        } elseif((int)$exact['escalation_days']!==(int)$stage1['period_days']) {
+            echo "BLOCKED: Exact rule SLA conflicts with the PDF Stage 1 days.\n";
+        } else {
+            echo "PREVIEW READY: Exact rule selects Officer #{$oid} with Stage 1 {$stage1['period_days']} day(s).\n";
+        }
+    } else {
+        $priority=$candidates?(int)$candidates[0]['ward_rank']:null;
+        $best=array_values(array_filter($candidates,
+            static fn(array $x):bool=>$priority!==null && (int)$x['ward_rank']===$priority));
+        if(count($best)===0) {
+            echo "BLOCKED: No officer satisfies designation + active status + category + department + ward.\n";
+            echo "FIX: Review the officer's designation, category/department and ward mappings.\n";
+        } elseif(count($best)>1) {
+            echo "BLOCKED: ".count($best)." equally eligible officers at the same ward priority.\n";
+            echo "FIX: Specify one accurate ward owner or an exact department allocation rule.\n";
+        } else {
+            $winner=$best[0];
+            echo "PREVIEW READY: Officer #{$winner['id']} {$winner['officer_name']} ({$winner['designation']}); Stage 1 {$stage1['period_days']} day(s).\n";
+        }
+        foreach(array_slice($best,0,12) as $person){
+            echo "  Best-match #{$person['id']} {$person['officer_name']} | {$person['designation']}\n";
+        }
+        if(count($best)>12) echo "  Plus ".(count($best)-12)." other equally eligible officers.\n";
+    }
+}
+
 echo "No database changes executed.\n";
