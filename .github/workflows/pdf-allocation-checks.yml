@@ -8,6 +8,8 @@ on:
       - 'database/pdf_escalation_policy.*'
       - 'pdf-escalate-complaints.php'
       - 'retry-pending-allocations.php'
+      - 'tools/check_pdf_automation_readiness.php'
+      - 'tools/run_pdf_workflow_test.ps1'
       - 'tests/test_pdf_escalation_policy.php'
       - 'tests/test_pdf_category_coverage.php'
       - '.github/workflows/pdf-allocation-checks.yml'
@@ -41,6 +43,7 @@ jobs:
           php -l new-complaint.php
           php -l pdf-escalate-complaints.php
           php -l retry-pending-allocations.php
+          php -l tools/check_pdf_automation_readiness.php
       - name: Check PDF policy extraction and role matching (no database)
         run: php tests/test_pdf_escalation_policy.php
       - name: Check PDF category coverage (no database)
