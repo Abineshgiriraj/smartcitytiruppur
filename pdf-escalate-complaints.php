@@ -75,12 +75,6 @@ function pdfEscalationDecision(PDO $pdo,array $c,DateTimeImmutable $now,bool $nu
         pdf_routing_candidates($pdo,$category,$nextLevel,$department,$ward),
         static fn(array $person):bool =>(int)$person['id']!==$currentOfficer
     ));
-    // Prefer ward-explicit mappings over unscoped officers when no exact rule exists.
-    if($candidates){
-        $firstRank=(int)$candidates[0]['ward_rank'];
-        $candidates=array_values(array_filter($candidates,
-            static fn(array $person):bool =>(int)$person['ward_rank']===$firstRank));
-    }
     // An exact official allocation rule is authoritative for EVERY stage,
     // including when there is only one other approved candidate.
     // Never silently route around a wrong/obsolete exact mapping.
@@ -98,8 +92,14 @@ function pdfEscalationDecision(PDO $pdo,array $c,DateTimeImmutable $now,bool $nu
         $candidates=array_values(array_filter($candidates,
             static fn(array $r):bool =>(int)$r['id']===$exactId));
         if(count($candidates)!==1)return $skip('EXACT_NEXT_STAGE_OFFICER_INELIGIBLE');
-    } elseif(count($candidates)>1){
-        return $skip('AMBIGUOUS_MAPPED_NEXT_STAGE_OFFICERS');
+    } else {
+        // Without an exact stage rule, prefer ward-explicit over citywide maps.
+        if($candidates){
+            $firstRank=(int)$candidates[0]['ward_rank'];
+            $candidates=array_values(array_filter($candidates,
+                static fn(array $person):bool =>(int)$person['ward_rank']===$firstRank));
+        }
+        if(count($candidates)>1)return $skip('AMBIGUOUS_MAPPED_NEXT_STAGE_OFFICERS');
     }
     if(!$candidates)return $skip('NO_ELIGIBLE_PDF_NEXT_STAGE_OFFICER');
     $officer=$candidates[0];$linked=$pdo->prepare(
