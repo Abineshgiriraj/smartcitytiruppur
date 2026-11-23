@@ -2,14 +2,23 @@
 setlocal EnableExtensions
 REM PDF-based allocation and escalation PREVIEW on the single local smartcitytiruppur database.
 REM Runs PHP directly: does not require PowerShell execution-policy changes.
-REM Usage from project folder: .\tools\run_pdf_workflow_readonly.cmd
-REM Omit complaint ID to inspect bounded queues. NEVER changes complaint records.
+REM Usage: .\tools\run_pdf_workflow_readonly.cmd
+REM Default: concise PDF policy / officer-approval summary.
+REM Optional numeric internal complaint ID: .\tools\run_pdf_workflow_readonly.cmd 123
+REM NEVER changes complaint records.
 
 set "PHP=D:\XAMPP\php\php.exe"
 set "ROOT=%~dp0.."
 set "DB=smartcitytiruppur"
-set "FILTER="
-if not "%~1"=="" set "FILTER=--complaint-id=%~1"
+if not exist "%PHP%" (
+  echo ERROR: PHP binary not found: %PHP%
+  exit /b 2
+)
+if "%~1"=="" (
+  "%PHP%" "%ROOT%\tools\report_local_pdf_workflow.php"
+  exit /b %ERRORLEVEL%
+)
+set "FILTER=--complaint-id=%~1"
 
 if not exist "%PHP%" (
   echo ERROR: PHP binary not found: %PHP%
