@@ -328,91 +328,20 @@ function assign_officer_for_complaint(
         return null;
     }
 
-    // Use the existing officer/category/department/ward maps directly.
-    // A uniquely matching ward officer wins over an unscoped citywide officer.
+    // Use the existing active category/department/ward mappings and PDF role.
+    // If several are eligible, allocate to the least-loaded officer rather than
+    // leaving a valid complaint pending. Prefer exact ward coverage to citywide.
     if ($officerId === null) {
         try {
-            $candidates=pdf_routing_candidates($pdo,$categoryId,1,$departmentId,$wardId);
-            $bestRank=null;$best=[];
-            foreach($candidates as $candidate){
-                $rank=(int)$candidate['ward_rank'];
-                if($bestRank===null || $rank<$bestRank){
-                    $bestRank=$rank;$best=[$candidate];
-                } elseif($rank===$bestRank){
-                    $best[]=$candidate;
-                }
-            }
-            if(count($best)>1){
-                log_message("Stage 1 routing ambiguous for complaint {$complaintId}: ".count($best)." equally ranked mapped officers");
-                return null;
-            }
-            if(count($best)===1){
-                $officerId=(int)$best[0]['id'];
-                $officerName=(string)$best[0]['officer_name'];
-                $allocationSource='Unique mapped PDF Stage 1 officer (ward-first)';
-            }
-        } catch(Throwable $error){
-            log_message("Stage 1 officer lookup failed for complaint {$complaintId}: ".$error->getMessage());
-            return null;
-        }
-    }
-
-    if ($officerId === null) {
-        try {
-            $approvedStmt = $pdo->prepare(
-                "SELECT o.id, o.officer_name,
-                        CASE
-                            WHEN EXISTS (SELECT 1 FROM officer_ward_map w
-                                         WHERE w.officer_id=o.id AND w.ward_id=?) THEN 0
-                            WHEN NOT EXISTS (SELECT 1 FROM officer_ward_map w
-                                             WHERE w.officer_id=o.id) THEN 1
-                            ELSE 2
-                        END AS ward_priority,
-                        (SELECT COUNT(*) FROM officer_ward_map w
-                         WHERE w.officer_id=o.id) AS ward_count
-                 FROM officer_stage_approvals a
-                 JOIN officers o ON o.id=a.officer_id AND o.is_active=1
-                 WHERE a.category_id=? AND a.stage_no=1
-                   AND a.revoked_at IS NULL AND a.approved_by IS NOT NULL
-                   AND TRIM(a.approval_reference) <> ''
-                 ORDER BY ward_priority, ward_count, o.id"
-            );
-            $approvedStmt->execute([$wardId, $categoryId]);
-            $bestWardPriority = PHP_INT_MAX;
-            $bestCandidates = [];
-            foreach ($approvedStmt->fetchAll(PDO::FETCH_ASSOC) as $candidate) {
-                $candidateId = (int)$candidate['id'];
-                if (!officer_stage_authorized(
-                    $pdo, $categoryId, 1, $candidateId, $departmentId, $wardId
-                )) {
-                    continue;
-                }
-                $rank = (int)$candidate['ward_priority'];
-                if ($rank < $bestWardPriority) {
-                    $bestWardPriority = $rank;
-                    $bestCandidates = [$candidate];
-                } elseif ($rank === $bestWardPriority) {
-                    $bestCandidates[] = $candidate;
-                }
-            }
-            // With no exact allocation rule, two equally eligible officers
-            // are ambiguous. Never select one by arbitrary database ID.
-            if (count($bestCandidates) > 1) {
-                log_message("Stage 1 allocation needs exact ward rule: "
-                    . count($bestCandidates) . " equally-ranked officers for complaint {$complaintId}");
-                return null;
-            }
-            if ($bestCandidates) {
-                $selected = $bestCandidates[0];
+            $candidates = pdf_routing_candidates($pdo,$categoryId,1,$departmentId,$wardId);
+            $selected = pdf_pick_least_loaded_officer($pdo,$candidates);
+            if ($selected !== null) {
                 $officerId = (int)$selected['id'];
                 $officerName = (string)$selected['officer_name'];
-                $allocationSource = 'Unique approved Stage 1 officer (ward-first routing)';
+                $allocationSource = 'Mapped PDF Stage 1 least-loaded officer (ward-first)';
             }
-        } catch (Throwable $exception) {
-            log_message(
-                "Approved Stage 1 allocation registry unavailable for complaint {$complaintId}: "
-                . $exception->getMessage()
-            );
+        } catch (Throwable $error) {
+            log_message("Mapped officer selection failed for complaint {$complaintId}: ".$error->getMessage());
             return null;
         }
     }
@@ -421,8 +350,7 @@ function assign_officer_for_complaint(
         log_message("Initial assignment pending: no eligible mapped officer for complaint {$complaintId}");
         return null;
     }
-    // Old seed maps 286 categories to a Commissioner as Stage 1.
-    // A candidate must be explicitly approved, not merely active or mapped.
+    // Do not bypass the PDF stage role or existing scope maps.
     if (!officer_stage_authorized($pdo,$categoryId,1,$officerId,$departmentId,$wardId)) {
         log_message("Initial assignment blocked: ineligible Stage 1 officer {$officerId} for complaint {$complaintId}");
         return null;
