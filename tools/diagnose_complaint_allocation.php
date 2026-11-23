@@ -47,6 +47,41 @@ echo "Department {$complaint['department_name']} (#{$dep}), category {$complaint
 echo "Ward #{$ward}, Zone #{$zone}\n";
 echo "Category/ward/zone context: ".
     (valid_complaint_routing_context($pdo,$dep,$cat,$zone,$ward)?'VALID':'INVALID')."\n";
+
+$policyExists = $pdo->prepare(
+    "SELECT COUNT(*) FROM information_schema.TABLES WHERE TABLE_SCHEMA=?
+       AND TABLE_NAME IN ('pdf_escalation_policies','pdf_escalation_policy_stages')"
+);
+$policyExists->execute([$dbName]);
+$policySchemaReady = (int)$policyExists->fetchColumn() === 2;
+$firstStageRole = null;
+echo "PDF policy schema: ".($policySchemaReady ? 'INSTALLED' : 'MISSING/INCOMPLETE')."\n";
+if ($policySchemaReady) {
+    $policyStmt = $pdo->prepare(
+        "SELECT p.is_approved,p.stage_count,p.total_days,
+                p.approval_reference,p.approved_by,p.approved_at,
+                s.role_label,s.period_days
+         FROM pdf_escalation_policies p
+         LEFT JOIN pdf_escalation_policy_stages s
+           ON s.category_id=p.category_id AND s.stage_no=1
+         WHERE p.category_id=? LIMIT 1"
+    );
+    $policyStmt->execute([$cat]);
+    $policy = $policyStmt->fetch(PDO::FETCH_ASSOC);
+    if (!$policy) {
+        echo "PDF category policy: MISSING (import reviewed policy definitions in TEST only)\n";
+    } else {
+        $firstStageRole = (string)($policy['role_label'] ?? '');
+        $reviewed = pdf_policy_reviewed($pdo, $cat);
+        echo "PDF category policy: ".($reviewed ? 'APPROVED AND VALID' : 'DRAFT/INVALID/NOT FULLY APPROVED')."\n";
+        echo "PDF stage count: {$policy['stage_count']}; total period: {$policy['total_days']} days\n";
+        echo "PDF Stage 1 role: ".($firstStageRole ?: 'MISSING')."; days: ".($policy['period_days'] ?? 'MISSING')."\n";
+        if (!$reviewed) {
+            echo "BLOCKER: Stage 1 assignment requires the fully reviewed and approved PDF policy.\n";
+        }
+    }
+}
+
 $probe=$pdo->prepare(
     'SELECT COUNT(*) FROM information_schema.TABLES
      WHERE TABLE_SCHEMA=? AND TABLE_NAME=?'
@@ -113,6 +148,31 @@ $mapped=$pdo->prepare(
 );
 $mapped->execute([$dep,$cat]);
 echo 'Active officers matching both category and department (not official approvals): '.(int)$mapped->fetchColumn()."\n";
+$officerCandidates = $pdo->prepare(
+    "SELECT o.id,o.officer_name,o.designation,
+            EXISTS(SELECT 1 FROM officer_ward_map wm WHERE wm.officer_id=o.id) AS has_ward_map,
+            EXISTS(SELECT 1 FROM officer_ward_map wm WHERE wm.officer_id=o.id AND wm.ward_id=?) AS in_ward
+     FROM officers o
+     JOIN officer_department_map dm ON dm.officer_id=o.id AND dm.department_id=?
+     JOIN officer_category_map cm ON cm.officer_id=o.id AND cm.category_id=?
+     WHERE o.is_active=1
+     ORDER BY o.id LIMIT 30"
+);
+$officerCandidates->execute([$ward,$dep,$cat]);
+echo "Mapped candidate review (NOT an approval list; maximum 30):\n";
+foreach ($officerCandidates->fetchAll(PDO::FETCH_ASSOC) as $candidate) {
+    $oid=(int)$candidate['id'];
+    $title=(string)$candidate['designation'];
+    $wardScope=((int)$candidate['has_ward_map']===0?'CITY-WIDE/UNSPECIFIED'
+        :((int)$candidate['in_ward']===1?'MATCHED':'DIFFERENT WARD'));
+    $roleMatch=$firstStageRole !== null && $firstStageRole !== ''
+        ? (pdf_policy_role_matches($firstStageRole,$title)?'YES':'NO') : 'UNKNOWN';
+    $approved=$hasApproval && officer_stage_authorized($pdo,$cat,1,$oid,$dep,$ward);
+    echo "  #{$oid} {$candidate['officer_name']} | {$title} | ward={$wardScope}"
+       ." | PDF Stage 1 role={$roleMatch} | approved=".($approved?'YES':'NO')."\n";
+}
+echo "WARNING: A matching title, department or ward is not proof of municipal authority.\n";
+
 $trigger=$pdo->prepare(
     "SELECT COUNT(*) FROM information_schema.TRIGGERS
      WHERE TRIGGER_SCHEMA=? AND EVENT_OBJECT_TABLE='complaints'
