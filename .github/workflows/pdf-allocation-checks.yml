@@ -20,7 +20,7 @@ on:
       - '.github/workflows/pdf-allocation-checks.yml'
   push:
     branches:
-      - 'feature/pdf-escalation-6-level'
+      - main
 
 permissions:
   contents: read
@@ -56,5 +56,7 @@ jobs:
           php -l tools/report_local_pdf_workflow.php
       - name: Check PDF policy extraction and role matching (no database)
         run: php tests/test_pdf_escalation_policy.php
+      - name: Check officer title and stage guards (no database)
+        run: php tests/test_officer_routing_guard.php
       - name: Check PDF category coverage (no database)
         run: php tests/test_pdf_category_coverage.php
