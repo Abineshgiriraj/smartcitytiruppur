@@ -106,6 +106,14 @@ function pdf_policy_role_matches(string $expectedRole, string $officerDesignatio
     if($role==='AEE' || $role==='AEE UGD') {
         return $has($actual,'AEE') || str_contains($actual,'ASSISTANT EXECUTIVE ENGINEER');
     }
+    // The PDF distinguishes AE(ELECTRICAL) from general AE/JE or other
+    // engineering specialities. Never treat a generic AE title as evidence
+    // of the Electrical appointment, even with a stage approval record.
+    if ($role==='AE ELECTRICAL') {
+        return ($has($actual,'AE')
+            || (str_contains($actual,'ASSISTANT ENGINEER') && !str_contains($actual,'EXECUTIVE')))
+            && $has($actual,'ELECTRICAL');
+    }
     if($role==='AE' || $role==='AE JE' || str_starts_with($role,'AE ')) {
         return $has($actual,'AE') || $has($actual,'JE')
             || (str_contains($actual,'ASSISTANT ENGINEER') && !str_contains($actual,'EXECUTIVE'))
