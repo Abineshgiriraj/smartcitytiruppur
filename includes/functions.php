@@ -279,10 +279,10 @@ function assign_officer_for_complaint(
 
     // Registration must use the PDF's FIRST STAGE period, not the total
     // category resolution period or an old seeded department default.
-    $policy=pdf_policy_reviewed($pdo,$categoryId);
+    $policy=pdf_policy_routing_ready($pdo,$categoryId);
     $firstStage=$policy===null?null:pdf_policy_stage($policy,1);
     if(!$firstStage || (int)$firstStage['period_days']<=0) {
-        log_message("Initial allocation blocked: unapproved PDF Stage 1 policy for complaint {$complaintId}");
+        log_message("Initial allocation blocked: missing or invalid PDF Stage 1 policy for complaint {$complaintId}");
         return null;
     }
 
@@ -324,13 +324,39 @@ function assign_officer_for_complaint(
     if ($officerId !== null && !officer_stage_authorized(
         $pdo, $categoryId, 1, $officerId, $departmentId, $wardId
     )) {
-        log_message("Exact Stage 1 allocation denied for complaint {$complaintId}: unapproved officer {$officerId}");
+        log_message("Exact Stage 1 allocation denied for complaint {$complaintId}: ineligible officer {$officerId}");
         return null;
     }
 
-    // Search verified Stage 1 officers FIRST, rather than truncating
-    // unverified legacy candidate lists at 250 rows. Rank officers assigned
-    // to the complaint's ward ahead of verified city-wide officers.
+    // Use the existing officer/category/department/ward maps directly.
+    // A uniquely matching ward officer wins over an unscoped citywide officer.
+    if ($officerId === null) {
+        try {
+            $candidates=pdf_routing_candidates($pdo,$categoryId,1,$departmentId,$wardId);
+            $bestRank=null;$best=[];
+            foreach($candidates as $candidate){
+                $rank=(int)$candidate['ward_rank'];
+                if($bestRank===null || $rank<$bestRank){
+                    $bestRank=$rank;$best=[$candidate];
+                } elseif($rank===$bestRank){
+                    $best[]=$candidate;
+                }
+            }
+            if(count($best)>1){
+                log_message("Stage 1 routing ambiguous for complaint {$complaintId}: ".count($best)." equally ranked mapped officers");
+                return null;
+            }
+            if(count($best)===1){
+                $officerId=(int)$best[0]['id'];
+                $officerName=(string)$best[0]['officer_name'];
+                $allocationSource='Unique mapped PDF Stage 1 officer (ward-first)';
+            }
+        } catch(Throwable $error){
+            log_message("Stage 1 officer lookup failed for complaint {$complaintId}: ".$error->getMessage());
+            return null;
+        }
+    }
+
     if ($officerId === null) {
         try {
             $approvedStmt = $pdo->prepare(
@@ -392,13 +418,13 @@ function assign_officer_for_complaint(
     }
 
     if ($officerId === null) {
-        log_message("Initial assignment pending: no approved mapped officer for complaint {$complaintId}");
+        log_message("Initial assignment pending: no eligible mapped officer for complaint {$complaintId}");
         return null;
     }
     // Old seed maps 286 categories to a Commissioner as Stage 1.
     // A candidate must be explicitly approved, not merely active or mapped.
     if (!officer_stage_authorized($pdo,$categoryId,1,$officerId,$departmentId,$wardId)) {
-        log_message("Initial assignment blocked: unapproved Stage 1 officer {$officerId} for complaint {$complaintId}");
+        log_message("Initial assignment blocked: ineligible Stage 1 officer {$officerId} for complaint {$complaintId}");
         return null;
     }
 
