@@ -27,6 +27,11 @@ $assertions=[
     'Sanitary Inspector alias works'=>pdf_policy_role_matches('SI','Sanitary Inspector'),
     'AE cannot be matched by AEE'=>!pdf_policy_role_matches('AE','AEE'),
     'AE can be Assistant Engineer'=>pdf_policy_role_matches('AE(TP)','Assistant Engineer'),
+    'Electrical AE accepts exact specialty'=>pdf_policy_role_matches('AE(ELECTRICAL)','AE (Electrical)'),
+    'Electrical AE accepts spelled-out title'=>pdf_policy_role_matches('AE(ELECTRICAL)','Assistant Engineer (Electrical)'),
+    'Electrical AE rejects generic AE'=>!pdf_policy_role_matches('AE(ELECTRICAL)','AE'),
+    'Electrical AE rejects JE Electrical'=>!pdf_policy_role_matches('AE(ELECTRICAL)','Junior Engineer (Electrical)'),
+    'Electrical AE rejects AEE Electrical'=>!pdf_policy_role_matches('AE(ELECTRICAL)','Assistant Executive Engineer (Electrical)'),
     'AE or JE can be Junior Engineer'=>pdf_policy_role_matches('AE/JE','Junior Engineer'),
     'No imaginary Stage 7'=>pdf_policy_stage(['stage_count'=>6,'stages'=>array_map(
         static fn($s):array=>['stage_no'=>$s['stage'],'period_days'=>$s['days']],$lookup[9]['stages'])],7)===null,
