@@ -134,6 +134,67 @@ function pdf_pick_least_loaded_officer(PDO $pdo, array $candidates): ?array
     return $winner;
 }
 
+/**
+ * Intake fallback: choose active staff in the correct department and ward
+ * even when an imported PDF role or category map cannot be satisfied.
+ * This is NOT a PDF Stage 1 assignment and requires specialist re-routing.
+ */
+function department_intake_candidates(
+    PDO $pdo, int $departmentId, int $categoryId, int $wardId
+): array {
+    $stmt=$pdo->prepare(
+        "SELECT DISTINCT o.id,o.officer_name,o.designation,
+          CASE WHEN EXISTS(SELECT 1 FROM officer_ward_map w
+                           WHERE w.officer_id=o.id AND w.ward_id=?) THEN 0
+               ELSE 1 END AS ward_rank,
+          CASE WHEN EXISTS(SELECT 1 FROM officer_category_map cm
+                           WHERE cm.officer_id=o.id AND cm.category_id=?) THEN 0
+               ELSE 1 END AS category_rank
+         FROM officers o
+         JOIN officer_department_map dm ON dm.officer_id=o.id AND dm.department_id=?
+         WHERE o.is_active=1
+           AND (NOT EXISTS(SELECT 1 FROM officer_ward_map w WHERE w.officer_id=o.id)
+                OR EXISTS(SELECT 1 FROM officer_ward_map w
+                          WHERE w.officer_id=o.id AND w.ward_id=?))
+         ORDER BY ward_rank,category_rank,o.id"
+    );
+    $stmt->execute([$wardId,$categoryId,$departmentId,$wardId]);
+    $valid=[];
+    foreach($stmt->fetchAll(PDO::FETCH_ASSOC) as $officer){
+        if(!officer_stage_forbidden_title((string)$officer['designation'],1,(int)$officer['id'])){
+            $valid[]=$officer;
+        }
+    }
+    if(!$valid)return [];
+    $wardRank=min(array_map(static fn(array $o):int=>(int)$o['ward_rank'],$valid));
+    $valid=array_values(array_filter($valid,
+        static fn(array $o):bool=>(int)$o['ward_rank']===$wardRank));
+    $categoryRank=min(array_map(static fn(array $o):int=>(int)$o['category_rank'],$valid));
+    return array_values(array_filter($valid,
+        static fn(array $o):bool=>(int)$o['category_rank']===$categoryRank));
+}
+
+/** Only a human-configured, active central intake officer may act citywide. */
+function configured_central_intake_officer(PDO $pdo): ?array
+{
+    $stmt=$pdo->prepare("SELECT setting_value FROM system_settings
+                        WHERE setting_key='central_intake_officer_id' LIMIT 1");
+    $stmt->execute();
+    $raw=trim((string)($stmt->fetchColumn() ?: ''));
+    if(!ctype_digit($raw) || (int)$raw<1)return null;
+    $officerId=(int)$raw;
+    $stmt=$pdo->prepare(
+        'SELECT id,officer_name,designation FROM officers WHERE id=? AND is_active=1 LIMIT 1'
+    );
+    $stmt->execute([$officerId]);
+    $officer=$stmt->fetch(PDO::FETCH_ASSOC);
+    if(!$officer || officer_stage_forbidden_title(
+        (string)$officer['designation'],1,$officerId
+    ))return null;
+    $officer['ward_rank']=2; // lower priority than any eligible department staff
+    return $officer;
+}
+
 /** Reject mismatched positive zone/ward or department/category data. */
 function valid_complaint_routing_context(
     PDO $pdo, int $departmentId, int $categoryId, int $zoneId, int $wardId
