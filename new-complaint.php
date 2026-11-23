@@ -7,6 +7,7 @@ $activePage = 'complaints';
 $errors = [];
 $successReference = null;
 $assignedOfficer = null;
+$assignedToIntake = false;
 $old = $_POST;
 
 try {
@@ -225,6 +226,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $initialOfficer = assign_officer_for_complaint($complaintId, $departmentId, $categoryId, $wardId, $zoneId);
             if ($initialOfficer === null) {
                 $initialOfficer = assign_complaint_to_intake($complaintId,$departmentId,$categoryId,$wardId,$zoneId);
+                $assignedToIntake = $initialOfficer !== null;
             }
             if ($initialOfficer === null) {
                 // Do not commit a new unassigned complaint if no accountable intake
@@ -267,7 +269,7 @@ include __DIR__ . '/includes/header.php';
             <div class="display-6 fw-bold"><?php echo e($successReference); ?></div>
             <?php if ($assignedOfficer): ?>
                 <div class="mt-3 p-3 bg-white border rounded text-dark">
-                    <div class="fw-semibold">Automatically Allocated Officer:</div>
+                    <div class="fw-semibold"><?php echo $assignedToIntake ? 'Complaint Intake Officer (specialist routing pending):' : 'Automatically Allocated Officer:'; ?></div>
                     <div>
                         <?php echo e($assignedOfficer['officer_name']); ?>
                         <?php if (!empty($assignedOfficer['designation'])): ?>
@@ -277,6 +279,9 @@ include __DIR__ . '/includes/header.php';
                             — <strong><?php echo e($assignedOfficer['mobile_no']); ?></strong>
                         <?php endif; ?>
                     </div>
+                    <?php if ($assignedToIntake): ?>
+                        <p class="text-muted small mt-2 mb-0">Your complaint has an intake officer who will direct it to the responsible specialist.</p>
+                    <?php endif; ?>
                 </div>
             <?php else: ?>
                 <div class="alert alert-info mt-3 mb-0" role="status">
