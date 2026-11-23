@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * PDF policy-aware escalation worker. NEVER schedule before formal approvals.
+ * PDF policy-aware escalation worker. Schedule only after local mapping validation and authorized operational sign-off.
  * --dry-run only reads. --execute requires explicitly verified local main database.
  * Unlike the legacy worker, every category has its own final stage (1..6).
  */
@@ -28,13 +28,13 @@ function pdfEscalationDecision(PDO $pdo,array $c,DateTimeImmutable $now,bool $nu
     $skip=static fn(string $reason):array=>['ready'=>false,'reason'=>$reason];
     $id=(int)$c['id'];$category=(int)$c['category_id'];$department=(int)$c['department_id'];
     $ward=(int)$c['ward_id'];$zone=(int)$c['zone_id'];$currentOfficer=(int)($c['assigned_officer_id']??0);
-    if($currentOfficer<=0)return $skip('UNASSIGNED: initial authorization required');
+    if($currentOfficer<=0)return $skip('UNASSIGNED: initial allocation required');
     if(in_array($c['status'],['Resolved','Closed','Rejected'],true)||(int)$c['is_deleted']!==0)
         return $skip('NOT_OPEN');
     if(!valid_complaint_routing_context($pdo,$department,$category,$zone,$ward))
         return $skip('INVALID_ROUTING_CONTEXT');
-    $policy=pdf_policy_reviewed($pdo,$category);
-    if(!$policy)return $skip('PDF_POLICY_MISSING_OR_UNAPPROVED');
+    $policy=pdf_policy_routing_ready($pdo,$category);
+    if(!$policy)return $skip('PDF_POLICY_MISSING_OR_INVALID');
     $lastStmt=$pdo->prepare(
         'SELECT level_no,officer_id,escalated_at FROM complaint_escalations
          WHERE complaint_id=? ORDER BY escalated_at DESC,id DESC LIMIT 1'
@@ -50,7 +50,7 @@ function pdfEscalationDecision(PDO $pdo,array $c,DateTimeImmutable $now,bool $nu
     if($currentTitle===false || !pdf_policy_role_matches((string)$currentStep['role_label'],(string)$currentTitle))
         return $skip('CURRENT_OFFICER_NOT_PDF_ROLE');
     if(!officer_stage_authorized($pdo,$category,$level,$currentOfficer,$department,$ward))
-        return $skip('UNVERIFIED_CURRENT_STAGE_OFFICER');
+        return $skip('INELIGIBLE_CURRENT_STAGE_OFFICER');
     $assignmentStmt=$pdo->prepare(
         'SELECT officer_id,assigned_at FROM complaint_assignments
          WHERE complaint_id=? AND is_current=1 ORDER BY id DESC LIMIT 2'
@@ -71,25 +71,15 @@ function pdfEscalationDecision(PDO $pdo,array $c,DateTimeImmutable $now,bool $nu
     if($level>=(int)$policy['stage_count'])return $skip('TERMINAL_STAGE: no next officer');
     $nextLevel=$level+1;$nextStep=pdf_policy_stage($policy,$nextLevel);
     if(!$nextStep || (int)$nextStep['period_days']<=0)return $skip('INVALID_NEXT_PDF_STAGE');
-    $approved=$pdo->prepare(
-        "SELECT o.id,o.designation,o.officer_name,
-                CASE WHEN EXISTS(SELECT 1 FROM officer_ward_map w
-                                WHERE w.officer_id=o.id AND w.ward_id=?) THEN 0
-                     WHEN NOT EXISTS(SELECT 1 FROM officer_ward_map w WHERE w.officer_id=o.id) THEN 1
-                     ELSE 2 END AS ward_rank
-         FROM officer_stage_approvals a JOIN officers o ON o.id=a.officer_id AND o.is_active=1
-         WHERE a.category_id=? AND a.stage_no=? AND a.revoked_at IS NULL
-           AND a.approved_by IS NOT NULL AND TRIM(a.approval_reference)<>''
-         ORDER BY ward_rank,o.id"
-    );
-    $approved->execute([$ward,$category,$nextLevel]);
-    $candidates=[];
-    foreach($approved->fetchAll(PDO::FETCH_ASSOC) as $person){
-        $oid=(int)$person['id'];
-        if($oid===$currentOfficer)continue;
-        if(!pdf_policy_role_matches((string)$nextStep['role_label'],(string)$person['designation']))continue;
-        if(!officer_stage_authorized($pdo,$category,$nextLevel,$oid,$department,$ward))continue;
-        $candidates[]=$person;
+    $candidates=array_values(array_filter(
+        pdf_routing_candidates($pdo,$category,$nextLevel,$department,$ward),
+        static fn(array $person):bool =>(int)$person['id']!==$currentOfficer
+    ));
+    // Prefer ward-explicit mappings over unscoped officers when no exact rule exists.
+    if($candidates){
+        $firstRank=(int)$candidates[0]['ward_rank'];
+        $candidates=array_values(array_filter($candidates,
+            static fn(array $person):bool =>(int)$person['ward_rank']===$firstRank));
     }
     // An exact official allocation rule is authoritative for EVERY stage,
     // including when there is only one other approved candidate.
@@ -107,11 +97,11 @@ function pdfEscalationDecision(PDO $pdo,array $c,DateTimeImmutable $now,bool $nu
         $exactId=(int)$exactRule['officer_id'];
         $candidates=array_values(array_filter($candidates,
             static fn(array $r):bool =>(int)$r['id']===$exactId));
-        if(count($candidates)!==1)return $skip('EXACT_NEXT_STAGE_OFFICER_NOT_AUTHORIZED');
+        if(count($candidates)!==1)return $skip('EXACT_NEXT_STAGE_OFFICER_INELIGIBLE');
     } elseif(count($candidates)>1){
-        return $skip('AMBIGUOUS_APPROVED_NEXT_STAGE_OFFICERS');
+        return $skip('AMBIGUOUS_MAPPED_NEXT_STAGE_OFFICERS');
     }
-    if(!$candidates)return $skip('NO_APPROVED_PDF_NEXT_STAGE_OFFICER');
+    if(!$candidates)return $skip('NO_ELIGIBLE_PDF_NEXT_STAGE_OFFICER');
     $officer=$candidates[0];$linked=$pdo->prepare(
         'SELECT id FROM escalation_officer_levels
          WHERE category_id=? AND level_no=? AND officer_id=? AND is_active=1 LIMIT 1'
