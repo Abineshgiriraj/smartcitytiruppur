@@ -46,6 +46,8 @@ function pdf_policy_reviewed(PDO $pdo, int $categoryId): ?array
             "SELECT category_id, source_row, stage_count, total_days
              FROM pdf_escalation_policies
              WHERE category_id=? AND is_approved=1 AND approval_reference IS NOT NULL
+               AND TRIM(approval_reference) <> ''
+               AND UPPER(TRIM(approval_reference)) NOT LIKE 'SIMULATION-LOCAL-TEST-%'
                AND approved_by IS NOT NULL AND approved_at IS NOT NULL
                AND pdf_sha256='03a496809403a2de6a597a844a36ffc979de47657541342924628c8d33d70c4b'
              LIMIT 1"
