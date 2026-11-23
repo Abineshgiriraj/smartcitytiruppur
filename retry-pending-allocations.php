@@ -161,14 +161,9 @@ try {
 
             // The same eligibility source is used by registration and escalation.
             $candidates=pdf_routing_candidates($pdo,$catId,1,$deptId,$wardId);
-            $bestRank=$candidates ? (int)$candidates[0]['ward_rank'] : null;
-            $best=array_values(array_filter($candidates,
-                static fn(array $item):bool => $bestRank !== null && (int)$item['ward_rank'] === $bestRank));
-            if(count($best)===1){
-                $sel=$best[0];
-                echo "[PREVIEW READY] {$ref}: Would allocate to Officer #{$sel['id']} ({$sel['officer_name']}, {$sel['designation']}) with Stage 1 SLA: {$firstStage['period_days']}d\n";
-            } elseif(count($best)>1){
-                echo "[CHECK] {$ref}: AMBIGUOUS_MAPPED_OFFICERS (".count($best)." equally ranked officers; exact ward rule required)\n";
+            $selected=pdf_pick_least_loaded_officer($pdo,$candidates);
+            if($selected!==null){
+                echo "[PREVIEW READY] {$ref}: Would allocate to Officer #{$selected['id']} ({$selected['officer_name']}, {$selected['designation']}) with Stage 1 SLA: {$firstStage['period_days']}d; open workload={$selected['open_complaints']}\n";
             } else {
                 echo "[CHECK] {$ref}: NO_ELIGIBLE_MAPPED_STAGE_1_OFFICER (verify active officer, designation, department, category and ward maps)\n";
             }
@@ -205,9 +200,9 @@ try {
                 // Detailed skip diagnostics
                 $p = pdf_policy_routing_ready($pdo, (int)$fresh['category_id']);
                 if (!$p) {
-                    echo "[SKIP] {$ref} PDF_POLICY_MISSING_OR_UNAPPROVED\n";
+                    echo "[SKIP] {$ref} PDF_POLICY_MISSING_OR_INVALID\n";
                 } else {
-                    echo "[SKIP] {$ref} NO_ELIGIBLE_OR_AMBIGUOUS_STAGE_1_OFFICER\n";
+                    echo "[SKIP] {$ref} NO_ELIGIBLE_MAPPED_STAGE_1_OFFICER\n";
                 }
                 continue;
             }
