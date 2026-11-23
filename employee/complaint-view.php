@@ -96,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             );
             if ($officerId === null) {
                 throw new RuntimeException(
-                    'No eligible approved Stage 1 officer. Check stage approval, category/department maps and ward coverage.'
+                    'No unique eligible Stage 1 officer. Check PDF role and existing category, department and ward mappings.'
                 );
             }
             $pdo->commit();
@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             flash(
                 'warning',
                 APP_ENV === 'local' ? $exception->getMessage()
-                    : 'Allocation was not completed. Verify the officer approvals and routing.'
+                    : 'Allocation was not completed. Verify the category, department, ward and officer designation mappings.'
             );
         }
         redirect('employee/complaint-view.php?id='.$complaintId);
@@ -144,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ) || !officer_stage_authorized(
                     $pdo,(int)$fresh['category_id'],$stage,$officerId,
                     (int)$fresh['department_id'],(int)$fresh['ward_id']
-                )) throw new RuntimeException('New officer is not approved for this category and stage.');
+                )) throw new RuntimeException('New officer is not eligible for this category, stage or ward.');
             }
             $pdo->prepare(
                 'UPDATE complaint_assignments SET is_current=0,unassigned_at=NOW()
@@ -190,20 +190,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $officers=[];
 try {
     $stage=complaint_last_stage(db(),$complaintId);
-    $approved=db()->prepare(
-        'SELECT DISTINCT o.id,o.officer_name FROM officer_stage_approvals a
-         JOIN officers o ON o.id=a.officer_id AND o.is_active=1
-         WHERE a.category_id=? AND a.stage_no=? AND a.revoked_at IS NULL
-         ORDER BY o.officer_name LIMIT 500'
-    );
-    $approved->execute([(int)$complaint['category_id'],$stage]);
-    foreach($approved->fetchAll(PDO::FETCH_ASSOC) as $candidate) {
-        if(officer_stage_authorized(
-            db(),(int)$complaint['category_id'],$stage,(int)$candidate['id'],
-            (int)$complaint['department_id'],(int)$complaint['ward_id']
-        )) $officers[]=$candidate;
+    foreach(pdf_routing_candidates(db(),(int)$complaint['category_id'],$stage,
+        (int)$complaint['department_id'],(int)$complaint['ward_id']) as $candidate) {
+        $officers[]=['id'=>$candidate['id'],'officer_name'=>$candidate['officer_name']];
     }
-} catch(Throwable $error) { log_message('Approved recipient list unavailable: '.$error->getMessage()); }
+} catch(Throwable $error) { log_message('Mapped recipient list unavailable: '.$error->getMessage()); }
 $currentId=(int)($complaint['assigned_officer_id'] ?? 0);
 if($currentId>0 && !in_array($currentId,array_map(static fn($o)=>(int)$o['id'],$officers),true)) {
     $officers[]=['id'=>$currentId,'officer_name'=>
@@ -261,7 +252,7 @@ include __DIR__ . '/../includes/employee-header.php';
         <section class="complaint-reference-panel">
             <h2>Grievance Allotted Employee</h2>
             <dl class="complaint-reference-details">
-                <dt>Name</dt><dd><?php echo e($complaint['officer_name'] ?: 'Pending authorized officer allocation'); ?></dd>
+                <dt>Name</dt><dd><?php echo e($complaint['officer_name'] ?: 'Pending officer allocation'); ?></dd>
                 <dt>Phone Number</dt><dd><?php echo e($complaint['officer_mobile'] ?: '-'); ?></dd>
                 <dt>Email ID</dt><dd>-</dd>
             </dl>
@@ -303,9 +294,8 @@ include __DIR__ . '/../includes/employee-header.php';
             && $complaint['status'] === 'Registered'
             && $complaint['assigned_officer_id'] === null): ?>
             <div class="alert alert-info">
-                This complaint has not yet been allocated to a verified Stage 1 officer.
-                Check <a href="<?php echo e(url('employee/officer-approvals.php')); ?>">Officer Stage Approvals</a>
-                before retrying.
+                This complaint has not yet been assigned to a uniquely eligible Stage 1 officer.
+                Check its department, category, ward, and PDF designation mapping before retrying.
             </div>
             <form method="post" class="mb-3">
                 <?php echo csrf_field(); ?>
@@ -318,7 +308,7 @@ include __DIR__ . '/../includes/employee-header.php';
         <?php endif; ?>
         <?php if ($canUpdate): ?>
             <h2>Update Complaint</h2>
-            <div class="alert alert-warning small">New officer assignments require verified category/stage approval.
+            <div class="alert alert-warning small">New officer assignments require valid department/category/ward maps and the exact PDF stage role.
               Existing assignments may remain unchanged for status-only updates. No approval is generated automatically.</div>
             <form method="post" class="row g-3">
                 <?php echo csrf_field(); ?><input type="hidden" name="id" value="<?php echo $complaintId; ?>">
