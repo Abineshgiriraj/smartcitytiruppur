@@ -26,63 +26,80 @@ function officer_stage_forbidden_title(?string $designation, int $stage, int $of
  * officer and stage. Missing table, missing approval or bad mapping = DENY.
  * Read-only; no automatic approval or officer reassignment.
  */
+/**
+ * Routing eligibility from existing officer master maps.
+ * No additional municipal approval record is required, but an explicit
+ * REVOKED stage approval is a routing veto.
+ */
 function officer_stage_authorized(
     PDO $pdo, int $categoryId, int $stage, int $officerId,
     int $departmentId, int $wardId = 0
 ): bool {
     if (min($categoryId,$officerId,$departmentId) < 1 || $stage < 1 || $stage > 6) return false;
-    static $errorLogged=false;
     try {
-        $query=$pdo->prepare(
-            "SELECT o.designation FROM officer_stage_approvals a
-             JOIN officers o ON o.id=a.officer_id AND o.is_active=1
-             JOIN complaint_categories c ON c.id=a.category_id AND c.is_active=1
+        $query = $pdo->prepare(
+            "SELECT o.designation FROM officers o
+             JOIN complaint_categories c ON c.id=? AND c.is_active=1
              JOIN departments d ON d.id=c.department_id AND d.is_active=1
-             WHERE a.category_id=? AND a.stage_no=? AND a.officer_id=?
-               AND a.revoked_at IS NULL AND a.approved_by IS NOT NULL
-               AND TRIM(a.approval_reference) <> ''
-               AND UPPER(TRIM(a.approval_reference)) NOT LIKE 'SIMULATION-LOCAL-TEST-%'
-               AND c.department_id=?
-               AND EXISTS(SELECT 1 FROM officer_department_map dm
-                          WHERE dm.officer_id=o.id AND dm.department_id=c.department_id)
-               AND EXISTS(SELECT 1 FROM officer_category_map cm
-                          WHERE cm.officer_id=o.id AND cm.category_id=c.id)
+             WHERE o.id=? AND o.is_active=1 AND c.department_id=?
+               AND EXISTS (SELECT 1 FROM officer_department_map dm
+                           WHERE dm.officer_id=o.id AND dm.department_id=c.department_id)
+               AND EXISTS (SELECT 1 FROM officer_category_map cm
+                           WHERE cm.officer_id=o.id AND cm.category_id=c.id)
+               AND NOT EXISTS (SELECT 1 FROM officer_stage_approvals a
+                               WHERE a.category_id=c.id AND a.stage_no=? AND a.officer_id=o.id
+                                 AND a.revoked_at IS NOT NULL)
              LIMIT 1"
         );
-        $query->execute([$categoryId,$stage,$officerId,$departmentId]);
+        $query->execute([$categoryId,$officerId,$departmentId,$stage]);
         $title=$query->fetchColumn();
-        if ($title===false) return false;
-        // PDF stage definition is the canonical source for each approved category.
-        // Even a signed officer record cannot override a missing or mismatched role.
-        $policy=pdf_policy_reviewed($pdo,$categoryId);
+        if($title===false) return false;
+        $policy=pdf_policy_routing_ready($pdo,$categoryId);
         $required=$policy===null?null:pdf_policy_stage($policy,$stage);
-        if (!$required || !pdf_policy_role_matches((string)$required['role_label'],(string)$title)) return false;
+        if(!$required || !pdf_policy_role_matches((string)$required['role_label'],(string)$title))return false;
         $forbidden=officer_stage_forbidden_title((string)$title,$stage,$officerId);
-        // A few PDF workflows put the Commissioner at Stage 3, while others
-        // place that role at Stage 4-6. Permit only a reviewed, exact COMMR
-        // stage with an actual Commissioner title, never a deputy.
-        if ($forbidden && strtoupper(trim((string)$required['role_label']))==='COMMR'
-            && $stage > 1 && $officerId !== 1
-            && pdf_policy_role_matches('COMMR',(string)$title)) $forbidden=false;
-        if ($forbidden) return false;
-        if ($stage===1 && $wardId>0) {
+        if($forbidden && strtoupper(trim((string)$required['role_label']))==='COMMR'
+           && $stage>1 && $officerId!==1 && pdf_policy_role_matches('COMMR',(string)$title)) {
+            $forbidden=false;
+        }
+        if($forbidden)return false;
+        if($wardId>0){
             $scope=$pdo->prepare(
-                'SELECT
-                   EXISTS(SELECT 1 FROM officer_ward_map WHERE officer_id=?) AS mapped_any,
-                   EXISTS(SELECT 1 FROM officer_ward_map WHERE officer_id=? AND ward_id=?) AS mapped_here'
+                'SELECT EXISTS(SELECT 1 FROM officer_ward_map WHERE officer_id=?) AS mapped_any,
+                        EXISTS(SELECT 1 FROM officer_ward_map WHERE officer_id=? AND ward_id=?) AS mapped_here'
             );
             $scope->execute([$officerId,$officerId,$wardId]);
             $row=$scope->fetch(PDO::FETCH_ASSOC);
-            if ((int)($row['mapped_any'] ?? 0)===1 && (int)($row['mapped_here'] ?? 0)!==1) return false;
+            if((int)($row['mapped_any']??0)===1 && (int)($row['mapped_here']??0)!==1)return false;
         }
         return true;
-    } catch (Throwable $error) {
-        if (!$errorLogged && function_exists('log_message')) {
-            log_message('Officer authority registry unavailable; assignment blocked: '.$error->getMessage());
-            $errorLogged=true;
-        }
+    } catch(Throwable $error){
+        if(function_exists('log_message'))log_message('Officer routing eligibility unavailable: '.$error->getMessage());
         return false;
     }
+}
+
+/** Return all eligible officer candidates, ordered by explicit ward scope. */
+function pdf_routing_candidates(PDO $pdo,int $categoryId,int $stage,int $departmentId,int $wardId): array
+{
+    $sql="SELECT o.id,o.officer_name,o.designation,
+          CASE WHEN EXISTS(SELECT 1 FROM officer_ward_map w WHERE w.officer_id=o.id AND w.ward_id=?) THEN 0
+               WHEN NOT EXISTS(SELECT 1 FROM officer_ward_map w WHERE w.officer_id=o.id) THEN 1
+               ELSE 2 END AS ward_rank
+          FROM officers o
+          JOIN officer_department_map dm ON dm.officer_id=o.id AND dm.department_id=?
+          JOIN officer_category_map cm ON cm.officer_id=o.id AND cm.category_id=?
+          WHERE o.is_active=1
+          ORDER BY ward_rank,o.id";
+    $stmt=$pdo->prepare($sql);
+    $stmt->execute([$wardId,$departmentId,$categoryId]);
+    $eligible=[];
+    foreach($stmt->fetchAll(PDO::FETCH_ASSOC) as $row){
+        if(officer_stage_authorized($pdo,$categoryId,$stage,(int)$row['id'],$departmentId,$wardId)){
+            $eligible[]=$row;
+        }
+    }
+    return $eligible;
 }
 
 /** Reject mismatched positive zone/ward or department/category data. */
