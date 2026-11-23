@@ -79,6 +79,48 @@ function pdf_policy_reviewed(PDO $pdo, int $categoryId): ?array
     }
 }
 
+/**
+ * Imported PDF workflow is routable without a separate approval record.
+ * Only structurally valid, exact-source policies with positive SLA days qualify.
+ * This does NOT mark the policy as municipally approved.
+ */
+function pdf_policy_routing_ready(PDO $pdo, int $categoryId): ?array
+{
+    try {
+        $header = $pdo->prepare(
+            "SELECT category_id, source_row, stage_count, total_days
+             FROM pdf_escalation_policies
+             WHERE category_id=? AND pdf_sha256='03a496809403a2de6a597a844a36ffc979de47657541342924628c8d33d70c4b'
+             LIMIT 1"
+        );
+        $header->execute([$categoryId]);
+        $policy = $header->fetch(PDO::FETCH_ASSOC);
+        if (!$policy) return null;
+        $stages = $pdo->prepare(
+            'SELECT stage_no, role_label, period_days
+             FROM pdf_escalation_policy_stages WHERE category_id=? ORDER BY stage_no'
+        );
+        $stages->execute([$categoryId]);
+        $rows = $stages->fetchAll(PDO::FETCH_ASSOC);
+        if (count($rows) !== (int)$policy['stage_count'] || count($rows) < 1 || count($rows) > 6) return null;
+        $sum = 0;
+        foreach ($rows as $i => $row) {
+            $days = (int)$row['period_days'];
+            // Zero-day entries remain blocked until the officially reviewed
+            // source is replaced with an explicitly approved nonzero period.
+            if ((int)$row['stage_no'] !== $i + 1 || $days <= 0) return null;
+            $sum += $days;
+        }
+        if ($sum !== (int)$policy['total_days']) return null;
+        $policy['stages'] = $rows;
+        return $policy;
+    } catch (Throwable $error) {
+        if (function_exists('log_message')) log_message('PDF routing policy unavailable: '.$error->getMessage());
+        return null;
+    }
+}
+
+
 function pdf_policy_stage(array $policy, int $number): ?array
 {
     if ($number < 1 || $number > (int)$policy['stage_count']) return null;
