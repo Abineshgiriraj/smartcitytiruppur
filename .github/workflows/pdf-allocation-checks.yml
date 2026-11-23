@@ -33,6 +33,8 @@ jobs:
           php -l includes/functions.php
           php -l includes/officer-authority.php
           php -l includes/pdf-escalation-policy.php
+          php -l employee/masters.php
+          php -l employee/allocation-inspector.php
           php -l employee/complaint-view.php
           php -l employee/officer-approvals.php
           php -l employee/pdf-policy-review.php
