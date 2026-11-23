@@ -2,20 +2,20 @@
 declare(strict_types=1);
 /**
  * Retry Registered/unassigned complaints using the existing PDF-approved
- * Stage 1 allocator. Default is report-only. Writes are sandbox-only.
+ * Stage 1 allocator. Default is report-only. Local main DB opt-in only.
  *
  * php retry-pending-allocations.php --dry-run --expect-db=smartcitytiruppur
- * php retry-pending-allocations.php --dry-run --expect-db=smartcity_escalation_test
- * php retry-pending-allocations.php --execute --expect-db=smartcity_escalation_test
+ * php retry-pending-allocations.php --execute --expect-db=smartcitytiruppur
  *
  * IMPORTANT: This does not approve policies, staff or mappings.
- * Production execution requires a separately reviewed rollout.
+ * Local execution requires reviewed PDF and officer approvals; never run on live hosting.
  */
 if (PHP_SAPI !== 'cli') {
     http_response_code(403);
     exit('CLI only');
 }
 require_once __DIR__ . '/includes/bootstrap.php';
+require_once __DIR__ . '/includes/local-pdf-workflow-guard.php';
 $expected = null;
 $execute = false;
 $complaintId = null;
@@ -39,14 +39,7 @@ if ($expected === null) {
 }
 $pdo = db();
 $actual = (string)$pdo->query('SELECT DATABASE()')->fetchColumn();
-if ($actual !== $expected) {
-    fwrite(STDERR, "Database mismatch: {$actual} != {$expected}; nothing changed.\n");
-    exit(2);
-}
-if ($execute && $actual !== 'smartcity_escalation_test') {
-    fwrite(STDERR, "Execution restricted to smartcity_escalation_test. No production writes.\n");
-    exit(2);
-}
+enforce_local_pdf_workflow($pdo, $expected, $execute);
 $pdo->exec("SET SESSION time_zone = '+05:30'");
 $sql = "SELECT id,reference_no,department_id,category_id,ward_id,zone_id
         FROM complaints WHERE is_deleted=0 AND status='Registered'
@@ -60,7 +53,7 @@ $sql .= ' ORDER BY id ASC LIMIT ' . $limit;
 $query = $pdo->prepare($sql);
 $query->execute($params);
 $pending = $query->fetchAll(PDO::FETCH_ASSOC);
-echo ($execute ? '[SANDBOX EXECUTE]' : '[DRY RUN]') . " DB={$actual}; pending examined=" . count($pending) . "\n";
+echo ($execute ? '[LOCAL EXECUTE]' : '[DRY RUN]') . " DB={$actual}; pending examined=" . count($pending) . "\n";
 $lockHeld = false;
 $assigned = 0;
 $skipped = 0;
@@ -123,4 +116,4 @@ try {
 } finally {
     if ($lockHeld) $pdo->query("SELECT RELEASE_LOCK('smartcity_pending_allocation')");
 }
-echo "Finished. Allocated={$assigned}; skipped={$skipped}. Production scheduling remains disabled.\n";
+echo "Finished. Allocated={$assigned}; skipped={$skipped}. No schedule installed.\n";
