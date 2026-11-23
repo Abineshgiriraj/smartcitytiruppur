@@ -654,12 +654,7 @@ include __DIR__ . '/../includes/employee-header.php';
             <div class="form-text">Must be a genuine administrative order or council approval reference.</div>
           </div>
 
-          <div class="form-check mb-2">
-            <input class="form-check-input" type="checkbox" id="bulk_auth_is_simulation" name="is_simulation" value="1">
-            <label class="form-check-label text-muted small" for="bulk_auth_is_simulation">
-              <strong>Local Functional Testing Simulation Mode:</strong> Check for local test runs. Automatically prefixes reference with <code>SIMULATION-LOCAL-TEST-</code>.
-            </label>
-          </div>
+          <div class="alert alert-warning small mb-2">Simulation approvals are disabled in this official registry. Use isolated synthetic test fixtures for simulation.</div>
 
           <div class="form-check mb-3">
             <input class="form-check-input" type="checkbox" id="confirm_bulk_authority" name="confirm_bulk_authority" value="1" required>
@@ -707,12 +702,7 @@ include __DIR__ . '/../includes/employee-header.php';
           <input type="text" id="single_approval_reference" name="approval_reference" class="form-control" required minlength="8" maxlength="255" placeholder="e.g., MUNICIPAL-ORDER-2026-001">
         </div>
 
-        <div class="form-check mb-2">
-          <input class="form-check-input" type="checkbox" id="single_is_simulation" name="is_simulation" value="1">
-          <label class="form-check-label text-muted small" for="single_is_simulation">
-            <strong>Local Functional Testing Simulation Mode:</strong> Check for local test runs. Automatically prefixes reference with <code>SIMULATION-LOCAL-TEST-</code>.
-          </label>
-        </div>
+        <div class="alert alert-warning small mb-2">Simulation approvals are disabled in this official registry. Use isolated synthetic test fixtures for simulation.</div>
 
         <div class="form-check mb-3">
           <input class="form-check-input" type="checkbox" id="confirm_authority_single" name="confirm_authority" value="1" required>
