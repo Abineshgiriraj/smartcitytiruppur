@@ -125,9 +125,9 @@ try {
                 continue;
             }
 
-            $policy = pdf_policy_reviewed($pdo, $catId);
+            $policy = pdf_policy_routing_ready($pdo, $catId);
             if (!$policy) {
-                echo "[CHECK] {$ref}: PDF_POLICY_MISSING_OR_UNAPPROVED\n";
+                echo "[CHECK] {$ref}: PDF_POLICY_MISSING_OR_INVALID\n";
                 continue;
             }
 
@@ -154,65 +154,23 @@ try {
                     && pdf_policy_role_matches((string)$firstStage['role_label'], (string)$exact['designation'])) {
                     echo "[PREVIEW READY] {$ref}: Would allocate to Officer #{$eId} ({$exact['officer_name']}, {$exact['designation']}) via Exact Rule (Stage 1 SLA: {$firstStage['period_days']}d)\n";
                 } else {
-                    echo "[CHECK] {$ref}: EXACT_ALLOCATION_OFFICER_NOT_AUTHORIZED (Rule points to Officer #{$eId})\n";
+                    echo "[CHECK] {$ref}: EXACT_ALLOCATION_OFFICER_INELIGIBLE (Rule points to Officer #{$eId})\n";
                 }
                 continue;
             }
 
-            // Check approved stage 1 officers
-            $approvedStmt = $pdo->prepare(
-                "SELECT o.id, o.officer_name, o.designation,
-                        CASE
-                            WHEN EXISTS (SELECT 1 FROM officer_ward_map w WHERE w.officer_id = o.id AND w.ward_id = ?) THEN 0
-                            WHEN NOT EXISTS (SELECT 1 FROM officer_ward_map w WHERE w.officer_id = o.id) THEN 1
-                            ELSE 2
-                        END AS ward_rank
-                 FROM officer_stage_approvals a
-                 JOIN officers o ON o.id = a.officer_id AND o.is_active = 1
-                 WHERE a.category_id = ? AND a.stage_no = 1
-                   AND a.revoked_at IS NULL AND a.approved_by IS NOT NULL AND TRIM(a.approval_reference) <> ''
-                 ORDER BY ward_rank, o.id"
-            );
-            $approvedStmt->execute([$wardId, $catId]);
-            $approvedOfficers = $approvedStmt->fetchAll(PDO::FETCH_ASSOC);
-
-            $validCandidates = [];
-            foreach ($approvedOfficers as $cand) {
-                $candId = (int)$cand['id'];
-                if (officer_stage_authorized($pdo, $catId, 1, $candId, $deptId, $wardId)
-                    && pdf_policy_role_matches((string)$firstStage['role_label'], (string)$cand['designation'])) {
-                    $validCandidates[] = $cand;
-                }
-            }
-
-            if (count($validCandidates) === 1) {
-                $sel = $validCandidates[0];
+            // The same eligibility source is used by registration and escalation.
+            $candidates=pdf_routing_candidates($pdo,$catId,1,$deptId,$wardId);
+            $bestRank=$candidates ? (int)$candidates[0]['ward_rank'] : null;
+            $best=array_values(array_filter($candidates,
+                static fn(array $item):bool => $bestRank !== null && (int)$item['ward_rank'] === $bestRank));
+            if(count($best)===1){
+                $sel=$best[0];
                 echo "[PREVIEW READY] {$ref}: Would allocate to Officer #{$sel['id']} ({$sel['officer_name']}, {$sel['designation']}) with Stage 1 SLA: {$firstStage['period_days']}d\n";
-            } elseif (count($validCandidates) > 1) {
-                echo "[CHECK] {$ref}: AMBIGUOUS_APPROVED_OFFICERS (" . count($validCandidates) . " approved officers cover ward {$wardId}; exact ward rule required)\n";
+            } elseif(count($best)>1){
+                echo "[CHECK] {$ref}: AMBIGUOUS_MAPPED_OFFICERS (".count($best)." equally ranked officers; exact ward rule required)\n";
             } else {
-                // Check if candidate exists in master awaiting approval
-                $candStmt = $pdo->prepare(
-                    "SELECT o.id, o.officer_name, o.designation
-                     FROM officers o
-                     JOIN officer_department_map dm ON dm.officer_id = o.id AND dm.department_id = ?
-                     LEFT JOIN officer_category_map cm ON cm.officer_id = o.id
-                     WHERE o.is_active = 1 AND (cm.category_id = ? OR cm.category_id IS NULL)
-                     ORDER BY o.id"
-                );
-                $candStmt->execute([$deptId, $catId]);
-                $allMatching = [];
-                foreach ($candStmt->fetchAll(PDO::FETCH_ASSOC) as $m) {
-                    if (pdf_policy_role_matches((string)$firstStage['role_label'], (string)$m['designation'])) {
-                        $allMatching[] = $m;
-                    }
-                }
-                if ($allMatching) {
-                    $cSample = $allMatching[0];
-                    echo "[CHECK] {$ref}: NO_APPROVED_STAGE_1_OFFICER (Candidate Officer #{$cSample['id']} {$cSample['officer_name']} [{$cSample['designation']}] awaits authorization)\n";
-                } else {
-                    echo "[CHECK] {$ref}: NO_APPROVED_STAGE_1_OFFICER (No active officer in department matches required PDF role '{$firstStage['role_label']}')\n";
-                }
+                echo "[CHECK] {$ref}: NO_ELIGIBLE_MAPPED_STAGE_1_OFFICER (verify active officer, designation, department, category and ward maps)\n";
             }
             continue;
         }
@@ -245,11 +203,11 @@ try {
                 $pdo->rollBack();
                 $skipped++;
                 // Detailed skip diagnostics
-                $p = pdf_policy_reviewed($pdo, (int)$fresh['category_id']);
+                $p = pdf_policy_routing_ready($pdo, (int)$fresh['category_id']);
                 if (!$p) {
                     echo "[SKIP] {$ref} PDF_POLICY_MISSING_OR_UNAPPROVED\n";
                 } else {
-                    echo "[SKIP] {$ref} NO_APPROVED_OR_AMBIGUOUS_STAGE_1_OFFICER\n";
+                    echo "[SKIP] {$ref} NO_ELIGIBLE_OR_AMBIGUOUS_STAGE_1_OFFICER\n";
                 }
                 continue;
             }
