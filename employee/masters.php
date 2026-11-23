@@ -102,13 +102,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($stageNo < 1 || $stageNo > 6) {
                 throw new RuntimeException('PDF stage must be between 1 and 6.');
             }
-            $policy = pdf_policy_reviewed($pdo, $categoryId);
+            $policy = pdf_policy_routing_ready($pdo, $categoryId);
             $pdfStage = $policy === null ? null : pdf_policy_stage($policy, $stageNo);
             if (!$pdfStage) {
-                throw new RuntimeException('No officially reviewed PDF policy for this category and stage.');
+                throw new RuntimeException('No valid imported PDF policy for this category and stage.');
             }
             if ($escalationDays !== (int)$pdfStage['period_days']) {
-                throw new RuntimeException('Stage days must equal the approved PDF period: '
+                throw new RuntimeException('Stage days must equal the imported PDF period: '
                     . (int)$pdfStage['period_days'] . ' day(s).');
             }
 
@@ -145,11 +145,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $pdo, $categoryId, $stageNo, $officerId,
                     $departmentId, $targetWardId
                 )) {
-                    throw new RuntimeException('Officer is not approved for this PDF stage/category'
-                        . ' or does not have the required department/category/ward authorization.'
+                    throw new RuntimeException('Officer is not eligible for this PDF stage/category'
+                        . ' or lacks the required department/category/ward mapping.'
                         . ' No allocation rules were saved.');
                 }
-                // Stage 1 must be ward-specific where the approved source assigns a
+                // Stage 1 must be ward-specific where the mapped source assigns a
                 // ward; don't blindly treat an all-ward selection as permission.
                 if ($stageNo === 1) {
                     $wardStmt = $pdo->prepare(
@@ -395,7 +395,7 @@ include __DIR__ . '/../includes/employee-header.php';
                         <option value="4">Stage 4</option>
                         <option value="5">Stage 5</option>
                         <option value="6">Stage 6</option>
-                        <option value="7">Stage 7</option>
+
                     </select>
                 </div>
                 <div class="col-6">
