@@ -2,6 +2,17 @@
 declare(strict_types=1);
 
 /**
+ * SAFETY HOLD: This legacy end-to-end runner writes to existing municipal
+ * records / performs range-based DELETE, or modifies config/app.php.
+ * The original source is retained in Git history for controlled rework.
+ * DO NOT re-enable until fixtures live in isolated transactions or DB clones
+ * with precise ownership tracking and no real citizen complaints.
+ */
+if (PHP_SAPI !== 'cli') { http_response_code(403); exit('CLI only'); }
+fwrite(STDERR, "DISABLED: unsafe fixture/test runner. Use read-only PDF checks instead. No database changes.\n");
+exit(2);
+
+/**
  * Smart City Tiruppur — Complete Escalation Guard End-to-End Automated Test Suite
  * Fully verifies Commit 84af8ae7b2825340aacf8779e992419697584d96
  * Target Database: smartcity_escalation_test ONLY.
