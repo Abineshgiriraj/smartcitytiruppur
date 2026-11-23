@@ -93,21 +93,27 @@ function pdfEscalationDecision(PDO $pdo,array $c,DateTimeImmutable $now,bool $nu
         if(!officer_stage_authorized($pdo,$category,$nextLevel,$oid,$department,$ward))continue;
         $candidates[]=$person;
     }
-    if(!$candidates)return $skip('NO_APPROVED_PDF_NEXT_STAGE_OFFICER');
-    // When multiple authorized candidates exist, an exact ward allocation is
-    // needed. Never select an arbitrary person merely by lowest officer ID.
-    if(count($candidates)>1){
-        $exact=$pdo->prepare(
-            'SELECT officer_id FROM department_allocations
-             WHERE department_id=? AND category_id=? AND zone_id=? AND ward_id=?
-               AND stage_no=? AND is_active=1 LIMIT 1'
-        );
-        $exact->execute([$department,$category,$zone,$ward,$nextLevel]);
-        $exactId=(int)$exact->fetchColumn();
+    // An exact official allocation rule is authoritative for EVERY stage,
+    // including when there is only one other approved candidate.
+    // Never silently route around a wrong/obsolete exact mapping.
+    $exact=$pdo->prepare(
+        'SELECT officer_id,escalation_days FROM department_allocations
+         WHERE department_id=? AND category_id=? AND zone_id=? AND ward_id=?
+           AND stage_no=? AND is_active=1 LIMIT 1'
+    );
+    $exact->execute([$department,$category,$zone,$ward,$nextLevel]);
+    $exactRule=$exact->fetch(PDO::FETCH_ASSOC);
+    if($exactRule){
+        if((int)$exactRule['escalation_days']!==(int)$nextStep['period_days'])
+            return $skip('EXACT_STAGE_SLA_CONFLICTS_WITH_PDF');
+        $exactId=(int)$exactRule['officer_id'];
         $candidates=array_values(array_filter($candidates,
             static fn(array $r):bool =>(int)$r['id']===$exactId));
-        if(count($candidates)!==1)return $skip('AMBIGUOUS_APPROVED_NEXT_STAGE_OFFICERS');
+        if(count($candidates)!==1)return $skip('EXACT_NEXT_STAGE_OFFICER_NOT_AUTHORIZED');
+    } elseif(count($candidates)>1){
+        return $skip('AMBIGUOUS_APPROVED_NEXT_STAGE_OFFICERS');
     }
+    if(!$candidates)return $skip('NO_APPROVED_PDF_NEXT_STAGE_OFFICER');
     $officer=$candidates[0];$linked=$pdo->prepare(
         'SELECT id FROM escalation_officer_levels
          WHERE category_id=? AND level_no=? AND officer_id=? AND is_active=1 LIMIT 1'
@@ -132,8 +138,13 @@ $query='SELECT id,reference_no,status,is_deleted,assigned_officer_id,department_
         WHERE is_deleted=0 AND status NOT IN (\'Resolved\',\'Closed\',\'Rejected\')';
 $params=[];
 if($complaintId!==null){$query.=' AND id=?';$params[]=$complaintId;}
-else{$query.=' AND assigned_officer_id IS NOT NULL';}
-$query.=' ORDER BY id LIMIT 500';
+else{
+    // A scheduled cycle must prioritize overdue complaints; otherwise
+    // the first 500 assigned-but-not-due cases can hide overdue cases.
+    $query.=' AND assigned_officer_id IS NOT NULL AND due_at IS NOT NULL
+               AND due_at <= NOW()';
+}
+$query.=' ORDER BY due_at ASC,id ASC LIMIT 500';
 $stmt=$pdo->prepare($query);$stmt->execute($params);
 $rows=$stmt->fetchAll(PDO::FETCH_ASSOC);
 echo ($execute?'[SANDBOX EXECUTE]':'[DRY RUN]')." DB={$dbName}, cases=".count($rows)."\n";
