@@ -233,6 +233,67 @@ function get_assigned_officer_for_complaint(int $complaintId): ?array
     return $row ?: null;
 }
 
+/**
+ * Keep a registered complaint with a real accountable assignee when the PDF
+ * specialist lookup is not ready. The intake employee is NOT asserted to have
+ * the PDF Stage 1 designation. A human must review and route specialist work.
+ * The caller MUST own a transaction and the complaint row remains locked.
+ */
+function assign_complaint_to_intake(
+    int $complaintId,int $departmentId,int $categoryId,int $wardId,?int $zoneId=null
+): ?int {
+    $pdo=db();
+    $state=$pdo->prepare(
+        'SELECT status,is_deleted,assigned_officer_id,department_id,category_id,ward_id,zone_id
+         FROM complaints WHERE id=? FOR UPDATE'
+    );
+    $state->execute([$complaintId]);
+    $c=$state->fetch(PDO::FETCH_ASSOC);
+    if(!$c || $c['status']!=='Registered' || (int)$c['is_deleted']!==0
+       || $c['assigned_officer_id']!==null
+       || (int)$c['department_id']!==$departmentId
+       || (int)$c['category_id']!==$categoryId
+       || (int)$c['ward_id']!==$wardId) return null;
+    $zoneId=$zoneId?:resolve_zone_id_for_ward($wardId);
+    if((int)$c['zone_id']!==(int)$zoneId
+       || !valid_complaint_routing_context($pdo,$departmentId,$categoryId,(int)$zoneId,$wardId))return null;
+    $history=$pdo->prepare(
+        'SELECT (SELECT COUNT(*) FROM complaint_assignments WHERE complaint_id=?) AS assignments,
+                (SELECT COUNT(*) FROM complaint_escalations WHERE complaint_id=?) AS escalations'
+    );
+    $history->execute([$complaintId,$complaintId]);
+    $counts=$history->fetch(PDO::FETCH_ASSOC);
+    if((int)$counts['assignments']!==0 || (int)$counts['escalations']!==0)return null;
+
+    $candidates=department_intake_candidates($pdo,$departmentId,$categoryId,$wardId);
+    $selected=pdf_pick_least_loaded_officer($pdo,$candidates);
+    $route='Department intake fallback - specialist routing review required';
+    if(!$selected){
+        // Never invent an accountable employee or treat Officer #1 as intake.
+        $selected=configured_central_intake_officer($pdo);
+        $route='Central intake fallback - specialist routing review required';
+    }
+    if(!$selected)return null;
+    $officerId=(int)$selected['id'];
+    $pdo->prepare(
+        'INSERT INTO complaint_assignments
+         (complaint_id,officer_id,assigned_by,assigned_at,is_current)
+         VALUES (?,?,NULL,NOW(),1)'
+    )->execute([$complaintId,$officerId]);
+    $pdo->prepare(
+        "UPDATE complaints SET assigned_officer_id=?,status='Assigned',updated_at=NOW()
+         WHERE id=?"
+    )->execute([$officerId,$complaintId]);
+    $pdo->prepare(
+        'INSERT INTO complaint_status_history
+         (complaint_id,old_status,new_status,remarks,changed_by)
+         VALUES (?, ?, ?, ?, NULL)'
+    )->execute([$complaintId,'Registered','Assigned',
+        'Automatically assigned to intake Officer #'.$officerId.'; '.$route.'. Not a PDF Stage 1 specialist assignment.']);
+    log_message("Complaint {$complaintId} assigned to intake Officer #{$officerId}; specialist review required");
+    return $officerId;
+}
+
 function assign_officer_for_complaint(
     int $complaintId,
     int $departmentId,
