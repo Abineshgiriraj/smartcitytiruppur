@@ -127,7 +127,12 @@ try {
 
             $policy = pdf_policy_routing_ready($pdo, $catId);
             if (!$policy) {
-                echo "[CHECK] {$ref}: PDF_POLICY_MISSING_OR_INVALID\n";
+                $intake=pdf_pick_least_loaded_officer($pdo,
+                    department_intake_candidates($pdo,$deptId,$catId,$wardId));
+                if(!$intake)$intake=configured_central_intake_officer($pdo);
+                echo $intake
+                    ? "[PREVIEW INTAKE] {$ref}: Would assign to intake Officer #{$intake['id']} (specialist review required)\n"
+                    : "[CHECK] {$ref}: NO_SPECIALIST_AND_NO_CONFIGURED_INTAKE_OFFICER\n";
                 continue;
             }
 
@@ -165,7 +170,12 @@ try {
             if($selected!==null){
                 echo "[PREVIEW READY] {$ref}: Would allocate to Officer #{$selected['id']} ({$selected['officer_name']}, {$selected['designation']}) with Stage 1 SLA: {$firstStage['period_days']}d; open workload={$selected['open_complaints']}\n";
             } else {
-                echo "[CHECK] {$ref}: NO_ELIGIBLE_MAPPED_STAGE_1_OFFICER (verify active officer, designation, department, category and ward maps)\n";
+                $intake=pdf_pick_least_loaded_officer($pdo,
+                    department_intake_candidates($pdo,$deptId,$catId,$wardId));
+                if(!$intake)$intake=configured_central_intake_officer($pdo);
+                echo $intake
+                    ? "[PREVIEW INTAKE] {$ref}: Would assign to intake Officer #{$intake['id']} (specialist review required)\n"
+                    : "[CHECK] {$ref}: NO_ELIGIBLE_SPECIALIST_OR_CONFIGURED_INTAKE_OFFICER\n";
             }
             continue;
         }
@@ -194,6 +204,12 @@ try {
                 (int)$fresh['ward_id'], (int)$fresh['zone_id']
             );
 
+            if ($officerId === null) {
+                $officerId=assign_complaint_to_intake(
+                    $id,(int)$fresh['department_id'],(int)$fresh['category_id'],
+                    (int)$fresh['ward_id'],(int)$fresh['zone_id']
+                );
+            }
             if ($officerId === null) {
                 $pdo->rollBack();
                 $skipped++;
