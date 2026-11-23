@@ -441,12 +441,7 @@ include __DIR__ . '/../includes/employee-header.php';
               <div class="form-text">Must reflect genuine municipal authorization or official gazette order.</div>
             </div>
 
-            <div class="form-check mb-2">
-              <input class="form-check-input" type="checkbox" id="is_simulation_single" name="is_simulation" value="1">
-              <label class="form-check-label text-muted" for="is_simulation_single">
-                <strong>Local Functional Testing Simulation Mode:</strong> Check only for development testing without live municipal order. Automatically prefixes reference with <code>SIMULATION-LOCAL-TEST-</code>.
-              </label>
-            </div>
+            <div class="alert alert-warning small mb-2">Simulation approvals are disabled in this official registry. Use isolated synthetic test fixtures for simulation.</div>
 
             <div class="form-check mb-3">
               <input class="form-check-input" type="checkbox" id="confirm_policy_single" name="confirm_policy" value="1" required>
@@ -623,12 +618,7 @@ include __DIR__ . '/../includes/employee-header.php';
             <div class="form-text">Reference number from the official gazette or municipal council resolution.</div>
           </div>
 
-          <div class="form-check mb-2">
-            <input class="form-check-input" type="checkbox" id="bulk_is_simulation" name="is_simulation" value="1">
-            <label class="form-check-label text-muted small" for="bulk_is_simulation">
-              <strong>Local Functional Testing Simulation Mode:</strong> Check for local test runs without live council gazette. Prefixes reference with <code>SIMULATION-LOCAL-TEST-</code>.
-            </label>
-          </div>
+          <div class="alert alert-warning small mb-2">Simulation approvals are disabled in this official registry. Use isolated synthetic test fixtures for simulation.</div>
 
           <div class="form-check mb-3">
             <input class="form-check-input" type="checkbox" id="confirm_bulk_policy" name="confirm_bulk_policy" value="1" required>
