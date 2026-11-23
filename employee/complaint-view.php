@@ -95,8 +95,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 (int)$fresh['zone_id']
             );
             if ($officerId === null) {
+                $officerId=assign_complaint_to_intake(
+                    $complaintId,(int)$fresh['department_id'],(int)$fresh['category_id'],
+                    (int)$fresh['ward_id'],(int)$fresh['zone_id']
+                );
+            }
+            if ($officerId === null) {
                 throw new RuntimeException(
-                    'No unique eligible Stage 1 officer. Check PDF role and existing category, department and ward mappings.'
+                    'No eligible department intake officer or configured central intake officer is available.'
                 );
             }
             $pdo->commit();
@@ -104,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 (int)$user['id'], 'verified_initial_allocation_retried',
                 'complaint', $complaintId, ['officer_id'=>$officerId]
             );
-            flash('success', 'Complaint automatically assigned to a verified officer.');
+            flash('success', 'Complaint assigned to an accountable officer (specialist or intake); check routing history.');
         } catch (Throwable $exception) {
             if ($pdo->inTransaction()) $pdo->rollBack();
             flash(
@@ -201,6 +207,20 @@ if($currentId>0 && !in_array($currentId,array_map(static fn($o)=>(int)$o['id'],$
         (string)($complaint['officer_name'] ?: 'Current officer').' (current, unverified)'];
 }
 
+// Intake assignments must be visible to complaint administrators.
+$intakeCheck=db()->prepare(
+    "SELECT COUNT(*) FROM complaint_status_history
+     WHERE complaint_id=? AND remarks LIKE '%specialist routing review required%'
+       AND new_status='Assigned'"
+);
+$intakeCheck->execute([$complaintId]);
+$needsRoutingReview=(int)$intakeCheck->fetchColumn()>0
+    && !officer_stage_authorized(
+        db(),(int)$complaint['category_id'],complaint_last_stage(db(),$complaintId),
+        (int)($complaint['assigned_officer_id']??0),(int)$complaint['department_id'],
+        (int)$complaint['ward_id']
+    );
+
 $historyStmt = db()->prepare(
     'SELECT h.*, u.full_name
      FROM complaint_status_history h
@@ -289,20 +309,26 @@ include __DIR__ . '/../includes/employee-header.php';
         </aside>
     </div>
 
+    <?php if ($needsRoutingReview): ?>
+        <div class="alert alert-warning">
+            <strong>Department / Central Intake — Specialist Routing Required.</strong>
+            This employee is the accountable intake recipient, not a verified PDF Stage 1 specialist.
+            An administrator should correct the mapping and reroute the complaint.
+        </div>
+    <?php endif; ?>
     <div class="complaint-reference-actions">
         <?php if ($canUpdate && can_manage_all_complaints($user)
             && $complaint['status'] === 'Registered'
             && $complaint['assigned_officer_id'] === null): ?>
             <div class="alert alert-info">
-                This complaint has not yet been assigned to a uniquely eligible Stage 1 officer.
-                Check its department, category, ward, and PDF designation mapping before retrying.
+                This complaint has no assignee yet. Retry will first select a mapped PDF specialist and then an intake officer if specialist routing is unavailable.
             </div>
             <form method="post" class="mb-3">
                 <?php echo csrf_field(); ?>
                 <input type="hidden" name="id" value="<?php echo $complaintId; ?>">
                 <input type="hidden" name="action" value="retry_initial_allocation">
                 <button type="submit" class="btn btn-outline-primary">
-                    <i class="bi bi-arrow-clockwise me-1"></i>Retry verified auto-allocation
+                    <i class="bi bi-arrow-clockwise me-1"></i>Retry automatic assignment
                 </button>
             </form>
         <?php endif; ?>
