@@ -1,13 +1,13 @@
 @echo off
 setlocal EnableExtensions
-REM PDF-based allocation and escalation PREVIEW on the isolated TEST database.
+REM PDF-based allocation and escalation PREVIEW on the single local smartcitytiruppur database.
 REM Runs PHP directly: does not require PowerShell execution-policy changes.
-REM Usage from project folder: .\tools\run_pdf_workflow_readonly.cmd 950324
+REM Usage from project folder: .\tools\run_pdf_workflow_readonly.cmd
 REM Omit complaint ID to inspect bounded queues. NEVER changes complaint records.
 
 set "PHP=D:\XAMPP\php\php.exe"
 set "ROOT=%~dp0.."
-set "DB=smartcity_escalation_test"
+set "DB=smartcitytiruppur"
 set "FILTER="
 if not "%~1"=="" set "FILTER=--complaint-id=%~1"
 
