@@ -37,6 +37,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stageNo = (int)($_POST['stage_no'] ?? 0);
     $officerId = (int)($_POST['officer_id'] ?? 0);
     $reference = trim((string)($_POST['approval_reference'] ?? ''));
+    $isSimulation = !empty($_POST['is_simulation']);
+    if ($isSimulation && !str_starts_with($reference, 'SIMULATION-LOCAL-TEST-')) {
+        $reference = 'SIMULATION-LOCAL-TEST-' . ($reference !== '' ? $reference : bin2hex(random_bytes(4)));
+    }
 
     try {
         if ($action === 'approve') {
@@ -185,7 +189,12 @@ include __DIR__.'/../includes/employee-header.php';
   <div><span class="admin-eyebrow">Governed routing</span>
     <h1>Officer Stage Approvals</h1>
     <p>Verify official officer authority before assigning any citizen grievance.</p></div>
-  <span class="admin-pill"><i class="bi bi-shield-lock"></i> Approval required</span>
+  <div class="d-flex gap-2 align-items-center">
+    <a href="<?php echo e(url('employee/officer-readiness.php')); ?>" class="btn btn-outline-primary">
+      <i class="bi bi-diagram-2 me-1"></i> Officer Readiness Dashboard
+    </a>
+    <span class="admin-pill"><i class="bi bi-shield-lock"></i> Approval required</span>
+  </div>
 </div>
 <?php if (!$setupReady): ?>
 <div class="alert alert-warning" role="alert">
@@ -233,6 +242,10 @@ include __DIR__.'/../includes/employee-header.php';
         </label>
         <label class="form-label">Signed approval reference
           <input class="form-control mt-1" maxlength="255" minlength="8" name="approval_reference" required placeholder="Official approval / order number">
+        </label>
+        <label class="d-flex align-items-start gap-2 small text-muted">
+          <input type="checkbox" class="form-check-input mt-1" name="is_simulation" value="1">
+          <span><strong>Local Simulation Mode:</strong> Check for development testing. Automatically prefixes reference with <code>SIMULATION-LOCAL-TEST-</code>.</span>
         </label>
         <label class="d-flex align-items-start gap-2 small">
           <input type="checkbox" class="form-check-input mt-1" name="confirm_authority" value="1" required>
