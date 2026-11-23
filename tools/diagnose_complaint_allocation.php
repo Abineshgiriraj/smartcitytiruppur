@@ -69,15 +69,15 @@ if ($policySchemaReady) {
     $policyStmt->execute([$cat]);
     $policy = $policyStmt->fetch(PDO::FETCH_ASSOC);
     if (!$policy) {
-        echo "PDF category policy: MISSING (import reviewed policy definitions in TEST only)\n";
+        echo "PDF category policy: MISSING in smartcitytiruppur\n";
     } else {
         $firstStageRole = (string)($policy['role_label'] ?? '');
-        $reviewed = pdf_policy_reviewed($pdo, $cat);
-        echo "PDF category policy: ".($reviewed ? 'APPROVED AND VALID' : 'DRAFT/INVALID/NOT FULLY APPROVED')."\n";
+        $reviewed = pdf_policy_routing_ready($pdo, $cat);
+        echo "PDF category policy: ".($reviewed ? 'VALID PDF ROUTING RULE' : 'MISSING/INVALID PDF ROUTING RULE')."\n";
         echo "PDF stage count: {$policy['stage_count']}; total period: {$policy['total_days']} days\n";
         echo "PDF Stage 1 role: ".($firstStageRole ?: 'MISSING')."; days: ".($policy['period_days'] ?? 'MISSING')."\n";
         if (!$reviewed) {
-            echo "BLOCKER: Stage 1 assignment requires the fully reviewed and approved PDF policy.\n";
+            echo "BLOCKER: Stage 1 requires a structurally valid imported PDF policy.\n";
         }
     }
 }
@@ -102,7 +102,7 @@ if ($hasApproval) {
     );
     $query->execute([$dep,$cat,$ward,$cat]);
     $rows=$query->fetchAll(PDO::FETCH_ASSOC);
-    echo 'Stage 1 approval records: '.count($rows)."\n";
+    echo 'Historical Stage 1 approval records (not required for routing): '.count($rows)."\n";
     $valid=0;
     foreach($rows as $row) {
         $officerId=(int)$row['officer_id'];
@@ -119,7 +119,7 @@ if ($hasApproval) {
         echo 'Officer #'.$officerId.' ('.$row['designation'].'): '.($ok?'ELIGIBLE':'BLOCKED')
             .($reasons?' ['.implode('; ',$reasons).']':'')."\n";
     }
-    echo "Eligible approved Stage 1 officers: {$valid}\n";
+    echo "Eligible mapped Stage 1 officers: {$valid}\n";
 } else {
     echo "BLOCKER: Missing registry means no officer can satisfy Stage 1 authorization.\n";
 }
