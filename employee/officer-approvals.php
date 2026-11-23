@@ -38,8 +38,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $officerId = (int)($_POST['officer_id'] ?? 0);
     $reference = trim((string)($_POST['approval_reference'] ?? ''));
     $isSimulation = !empty($_POST['is_simulation']);
-    if ($isSimulation && !str_starts_with($reference, 'SIMULATION-LOCAL-TEST-')) {
-        $reference = 'SIMULATION-LOCAL-TEST-' . ($reference !== '' ? $reference : bin2hex(random_bytes(4)));
+    // Simulation and official approvals must be physically separated.
+    // This official registry is used for routing real citizen grievances.
+    if ($isSimulation || str_starts_with(strtoupper($reference), 'SIMULATION-LOCAL-TEST-')) {
+        flash('danger', 'Simulation approvals cannot be stored in the official routing registry. Use isolated synthetic fixtures instead.');
+        redirect('employee/officer-approvals.php');
     }
 
     try {
