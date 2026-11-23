@@ -7,6 +7,7 @@ $user = require_roles(['Super Admin', 'Admin']);
 require_permission('masters.view');
 $pageTitle = 'User Mapping Details';
 $pdo = db();
+$activeDatabase = (string)$pdo->query('SELECT DATABASE()')->fetchColumn();
 
 $departmentId = max(0, (int)($_GET['department_id'] ?? 0));
 $categoryId = max(0, (int)($_GET['category_id'] ?? 0));
@@ -83,6 +84,8 @@ if ($searched) {
                 "SELECT o.id,o.officer_name,o.designation,o.mobile_no,o.is_active,
                     EXISTS(SELECT 1 FROM officer_ward_map wm
                            WHERE wm.officer_id=o.id) AS ward_scoped,
+                    (SELECT COUNT(*) FROM officer_ward_map wm
+                     WHERE wm.officer_id=o.id) AS mapped_ward_count,
                     EXISTS(SELECT 1 FROM officer_ward_map wm
                            WHERE wm.officer_id=o.id AND wm.ward_id=?) AS ward_match,
                     (SELECT GROUP_CONCAT(w.ward_no ORDER BY w.ward_no SEPARATOR ', ')
@@ -196,7 +199,8 @@ include __DIR__ . '/../includes/employee-header.php';
   <a class="btn btn-outline-secondary" href="<?php echo e(url('employee/allocation-inspector.php')); ?>">Allocation Inspector</a>
 </div>
 <div class="alert alert-info">
-  <strong>Read-only review.</strong> This shows data from your own Smart City database, not a live connection to
+  <strong>Read-only review.</strong> Database: <code><?php echo e($activeDatabase); ?></code>.
+  This shows data from your own Smart City database, not a live connection to
   smarttiruppur.com. Employee names and mapped wards do not establish official authorization.
   The old site's priority values are not stored here; PDF stage numbers are shown separately.
 </div>
@@ -283,6 +287,7 @@ include __DIR__ . '/../includes/employee-header.php';
           <?php
             $wardOk=(int)$p['ward_match']===1;
             $scoped=(int)$p['ward_scoped']===1;
+            $broadScope=(int)$p['mapped_ward_count']>=30;
             $titleStages=$p['title_stages']??[];
             $approvedStages=$p['authorized_stages']??[];
           ?>
@@ -296,7 +301,8 @@ include __DIR__ . '/../includes/employee-header.php';
             <td><?php echo e($p['mapped_wards'] ?: 'Not recorded'); ?></td>
             <td><?php echo e($p['designation'] ?: 'Not recorded'); ?></td>
             <td><span class="text-muted">Not stored</span></td>
-            <td><?php echo $titleStages ? 'PDF stage '.e(implode(', ',$titleStages)) : 'No exact title match'; ?></td>
+            <td><?php echo !$policy ? 'PDF policy unavailable'
+              : ($titleStages ? 'PDF stage '.e(implode(', ',$titleStages)) : 'No exact title match'); ?></td>
             <td>
               <?php if ($approvedStages): ?>
                 <span class="badge text-bg-success">Approved: <?php echo e(implode(', ',$approvedStages)); ?></span>
@@ -305,8 +311,10 @@ include __DIR__ . '/../includes/employee-header.php';
               <?php endif; ?>
             </td>
             <td>
-              <span class="badge text-bg-<?php echo $wardOk?'success':'warning'; ?>">
-                <?php echo $wardOk?'Matches selected ward':($scoped?'OTHER WARD':'No ward scope recorded'); ?>
+              <span class="badge text-bg-<?php echo $wardOk&&!$broadScope?'success':'warning'; ?>">
+                <?php echo $wardOk
+                  ? ($broadScope ? 'Ward mapped; broad coverage — verify' : 'Matches selected ward')
+                  : ($scoped ? 'OTHER WARD' : 'No ward scope recorded'); ?>
               </span>
             </td>
           </tr>
@@ -314,6 +322,13 @@ include __DIR__ . '/../includes/employee-header.php';
       </tbody>
     </table>
   </div>
+  <?php if ($rows && array_filter($rows,static fn(array $p):bool => (int)$p['mapped_ward_count']>=30)): ?>
+  <div class="alert alert-warning mt-3 mb-0">
+    Some officers are mapped to 30 or more wards. This is broad coverage and
+    may come from legacy bulk mappings, not a verified assignment for this
+    specific ward/category. Confirm actual staff responsibility before approval.
+  </div>
+  <?php endif; ?>
   <?php if ($rows && !array_filter($rows,static fn(array $p):bool => (int)$p['ward_match']===1)): ?>
   <div class="alert alert-warning mt-3 mb-0">
     None of these employee records explicitly maps to the selected ward. Check the old ICTS
