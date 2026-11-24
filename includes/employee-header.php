@@ -11,14 +11,10 @@ $currentPage = basename($path);
 
 if ($isOfficer) {
     $menuGroups = [
-        'Officer Portal' => [
-            ['officer-dashboard.php', 'My Dashboard', 'bi-speedometer2', true],
+        'My Workspace' => [
+            ['officer-dashboard.php', 'Dashboard', 'bi-grid-1x2', true],
             ['my-complaints.php', 'My Complaints', 'bi-inbox', true],
-            ['my-complaints.php?status=Assigned', 'Pending / New', 'bi-hourglass-split', true],
-            ['my-complaints.php?status=In Progress', 'In Progress', 'bi-tools', true],
-            ['my-complaints.php?status=Resolved', 'Resolved', 'bi-check-circle', true],
-            ['my-complaints.php?status=Closed', 'Closed', 'bi-archive', true],
-            ['my-complaints.php?status=Reopened', 'Reopened', 'bi-arrow-repeat', true],
+            ['my-complaints.php?status=Assigned', 'Needs Action', 'bi-lightning-charge', true],
             ['officer-feedback.php', 'Citizen Feedback', 'bi-chat-left-heart', true],
             ['officer-profile.php', 'My Profile', 'bi-person-circle', true],
         ],
