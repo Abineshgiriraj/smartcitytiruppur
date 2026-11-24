@@ -245,7 +245,7 @@ include __DIR__ . '/../includes/employee-header.php';
                         ?>
                         <tr class="<?php echo $c['status'] === 'Reopened' ? 'table-danger' : ($isOverdue ? 'table-warning bg-opacity-25' : ''); ?>">
                             <td>
-                                <a href="<?php echo e(url('employee/officer-complaint.php?id=' . $c['id'])); ?>" class="fw-bold text-decoration-none">
+                                <a href="<?php echo e(url('employee/complaint-view.php?id=' . $c['id'])); ?>" class="fw-bold text-decoration-none">
                                     <?php echo e($c['reference_no']); ?>
                                 </a>
                                 <?php if ($c['reopen_count'] > 0): ?>
@@ -277,7 +277,7 @@ include __DIR__ . '/../includes/employee-header.php';
                                 <?php endif; ?>
                             </td>
                             <td class="text-end">
-                                <a href="<?php echo e(url('employee/officer-complaint.php?id=' . $c['id'])); ?>" class="btn btn-sm btn-primary">
+                                <a href="<?php echo e(url('employee/complaint-view.php?id=' . $c['id'])); ?>" class="btn btn-sm btn-primary">
                                     <i class="bi bi-pencil-square me-1"></i> Manage
                                 </a>
                             </td>
