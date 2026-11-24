@@ -92,7 +92,7 @@ include __DIR__ . '/../includes/employee-header.php';
                             <span class="mx-2">&bull;</span>
                             <span><i class="bi bi-telephone me-1"></i><?php echo e($officer['mobile_no'] ?: '-'); ?></span>
                             <span class="mx-2">&bull;</span>
-                            <span><i class="bi bi-envelope me-1"></i><?php echo e($officer['email'] ?: $user['email']); ?></span>
+                            <span><i class="bi bi-envelope me-1"></i><?php echo e($officer['email'] ?: $user['email'] ?: 'Mobile login'); ?></span>
                         </div>
                     </div>
                 </div>
@@ -119,7 +119,7 @@ include __DIR__ . '/../includes/employee-header.php';
                     <span class="badge bg-primary-subtle text-primary p-2 rounded-circle"><i class="bi bi-folder2-open fs-5"></i></span>
                 </div>
                 <div class="h3 fw-bold mb-0 text-dark"><?php echo number_format((int)$kpis['total_count']); ?></div>
-                <div class="text-muted small mt-1">All assigned complaints</div>
+                <div class="text-muted small mt-1">All your complaints</div>
             </div>
         </a>
     </div>
@@ -151,76 +151,31 @@ include __DIR__ . '/../includes/employee-header.php';
     </div>
 
     <div class="col-6 col-lg-3">
-        <a href="<?php echo e(url('employee/my-complaints.php?status=Resolved')); ?>" class="text-decoration-none">
+        <a href="<?php echo e(url('employee/my-complaints.php?status=Closed')); ?>" class="text-decoration-none">
             <div class="card content-card border-0 shadow-sm h-100 p-3 hover-lift border-start border-4 border-success">
                 <div class="d-flex align-items-center justify-content-between mb-2">
-                    <span class="text-muted small fw-semibold">Resolved / Closed</span>
+                    <span class="text-muted small fw-semibold">Closed</span>
                     <span class="badge bg-success-subtle text-success p-2 rounded-circle"><i class="bi bi-check-circle fs-5"></i></span>
                 </div>
-                <div class="h3 fw-bold mb-0 text-success"><?php echo number_format((int)$kpis['resolved_count'] + (int)$kpis['closed_count']); ?></div>
-                <div class="text-muted small mt-1"><?php echo (int)$kpis['resolved_count']; ?> resolved &bull; <?php echo (int)$kpis['closed_count']; ?> closed</div>
+                <div class="h3 fw-bold mb-0 text-success"><?php echo number_format((int)$kpis['closed_count']); ?></div>
+                <div class="text-muted small mt-1">Completed and closed</div>
             </div>
         </a>
     </div>
 
-    <div class="col-6 col-lg-3">
-        <a href="<?php echo e(url('employee/my-complaints.php?status=Reopened')); ?>" class="text-decoration-none">
-            <div class="card content-card border-0 shadow-sm h-100 p-3 hover-lift <?php echo (int)$kpis['reopened_count'] > 0 ? 'border-start border-4 border-danger' : ''; ?>">
-                <div class="d-flex align-items-center justify-content-between mb-2">
-                    <span class="text-muted small fw-semibold">Reopened Cases</span>
-                    <span class="badge bg-danger-subtle text-danger p-2 rounded-circle"><i class="bi bi-arrow-repeat fs-5"></i></span>
-                </div>
-                <div class="h3 fw-bold mb-0 <?php echo (int)$kpis['reopened_count'] > 0 ? 'text-danger' : 'text-dark'; ?>"><?php echo number_format((int)$kpis['reopened_count']); ?></div>
-                <div class="text-muted small mt-1">Disputed by citizens</div>
-            </div>
-        </a>
-    </div>
-
-    <div class="col-6 col-lg-3">
-        <a href="<?php echo e(url('employee/my-complaints.php?status=Overdue')); ?>" class="text-decoration-none">
-            <div class="card content-card border-0 shadow-sm h-100 p-3 hover-lift <?php echo (int)$kpis['overdue_count'] > 0 ? 'border-start border-4 border-danger bg-danger-subtle bg-opacity-25' : ''; ?>">
-                <div class="d-flex align-items-center justify-content-between mb-2">
-                    <span class="text-muted small fw-semibold">Overdue SLA</span>
-                    <span class="badge bg-danger-subtle text-danger p-2 rounded-circle"><i class="bi bi-exclamation-triangle fs-5"></i></span>
-                </div>
-                <div class="h3 fw-bold mb-0 text-danger"><?php echo number_format((int)$kpis['overdue_count']); ?></div>
-                <div class="text-danger small mt-1 fw-semibold">Past SLA deadline</div>
-            </div>
-        </a>
-    </div>
-
-    <div class="col-6 col-lg-3">
-        <a href="<?php echo e(url('employee/officer-feedback.php')); ?>" class="text-decoration-none">
-            <div class="card content-card border-0 shadow-sm h-100 p-3 hover-lift">
-                <div class="d-flex align-items-center justify-content-between mb-2">
-                    <span class="text-muted small fw-semibold">Citizen Feedback</span>
-                    <span class="badge bg-warning-subtle text-warning p-2 rounded-circle"><i class="bi bi-star-fill fs-5"></i></span>
-                </div>
-                <div class="h3 fw-bold mb-0 text-dark">
-                    <?php echo $feedbackStats['avg_rating'] !== null ? number_format((float)$feedbackStats['avg_rating'], 1) . ' / 5' : 'N/A'; ?>
-                </div>
-                <div class="text-muted small mt-1"><?php echo (int)$feedbackStats['review_count']; ?> citizen reviews</div>
-            </div>
-        </a>
-    </div>
-
-    <div class="col-6 col-lg-3">
-        <div class="card content-card border-0 shadow-sm h-100 p-3">
-            <div class="d-flex align-items-center justify-between mb-2">
-                <span class="text-muted small fw-semibold">Resolution Rate</span>
-                <span class="badge bg-primary-subtle text-primary p-2 rounded-circle"><i class="bi bi-percent fs-5"></i></span>
-            </div>
-            <?php 
-                $closedResolved = (int)$kpis['resolved_count'] + (int)$kpis['closed_count'];
-                $total = (int)$kpis['total_count'];
-                $rate = $total > 0 ? round(($closedResolved / $total) * 100) : 0;
-            ?>
-            <div class="h3 fw-bold mb-0 text-dark"><?php echo $rate; ?>%</div>
-            <div class="progress mt-2" style="height: 6px;">
-                <div class="progress-bar bg-success" role="progressbar" style="width: <?php echo $rate; ?>%"></div>
-            </div>
-        </div>
-    </div>
+</div>
+<div class="card content-card border-0 shadow-sm p-3 mb-4">
+  <div class="d-flex flex-wrap gap-2 align-items-center">
+    <span class="fw-semibold me-2">Quick filters:</span>
+    <a class="btn btn-sm btn-outline-danger" href="<?php echo e(url('employee/my-complaints.php?status=Reopened')); ?>">
+      <i class="bi bi-arrow-repeat me-1"></i>Reopened (<?php echo (int)$kpis['reopened_count']; ?>)</a>
+    <a class="btn btn-sm btn-outline-danger" href="<?php echo e(url('employee/my-complaints.php?status=Overdue')); ?>">
+      <i class="bi bi-exclamation-triangle me-1"></i>Overdue (<?php echo (int)$kpis['overdue_count']; ?>)</a>
+    <a class="btn btn-sm btn-outline-success" href="<?php echo e(url('employee/my-complaints.php?status=Resolved')); ?>">
+      <i class="bi bi-check-circle me-1"></i>Resolved (<?php echo (int)$kpis['resolved_count']; ?>)</a>
+    <a class="btn btn-sm btn-outline-primary" href="<?php echo e(url('employee/officer-feedback.php')); ?>">
+      <i class="bi bi-star me-1"></i>Feedback (<?php echo (int)$feedbackStats['review_count']; ?>)</a>
+  </div>
 </div>
 
 <!-- Reopened Section (if any) -->
