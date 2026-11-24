@@ -201,7 +201,7 @@ include __DIR__ . '/../includes/employee-header.php';
                 <?php foreach ($reopenedComplaints as $c): ?>
                     <tr>
                         <td>
-                            <a href="<?php echo e(url('employee/officer-complaint.php?id=' . $c['id'])); ?>" class="fw-bold text-decoration-none">
+                            <a href="<?php echo e(url('employee/complaint-view.php?id=' . $c['id'])); ?>" class="fw-bold text-decoration-none">
                                 <?php echo e($c['reference_no']); ?>
                             </a>
                         </td>
@@ -215,7 +215,7 @@ include __DIR__ . '/../includes/employee-header.php';
                             <span class="text-danger fw-medium"><?php echo e($c['reopen_reason'] ?: 'Citizen was not satisfied with the resolution.'); ?></span>
                         </td>
                         <td class="text-end">
-                            <a href="<?php echo e(url('employee/officer-complaint.php?id=' . $c['id'])); ?>" class="btn btn-sm btn-danger">
+                            <a href="<?php echo e(url('employee/complaint-view.php?id=' . $c['id'])); ?>" class="btn btn-sm btn-danger">
                                 <i class="bi bi-eye me-1"></i> Resolve Now
                             </a>
                         </td>
@@ -285,7 +285,7 @@ include __DIR__ . '/../includes/employee-header.php';
                         ?>
                         <tr>
                             <td>
-                                <a href="<?php echo e(url('employee/officer-complaint.php?id=' . $c['id'])); ?>" class="fw-bold text-decoration-none">
+                                <a href="<?php echo e(url('employee/complaint-view.php?id=' . $c['id'])); ?>" class="fw-bold text-decoration-none">
                                     <?php echo e($c['reference_no']); ?>
                                 </a>
                                 <div class="text-muted small"><?php echo date('d-M-Y H:i', strtotime($c['created_at'])); ?></div>
@@ -311,7 +311,7 @@ include __DIR__ . '/../includes/employee-header.php';
                                 <?php endif; ?>
                             </td>
                             <td class="text-end">
-                                <a href="<?php echo e(url('employee/officer-complaint.php?id=' . $c['id'])); ?>" class="btn btn-sm btn-primary">
+                                <a href="<?php echo e(url('employee/complaint-view.php?id=' . $c['id'])); ?>" class="btn btn-sm btn-primary">
                                     <i class="bi bi-pencil-square me-1"></i> Manage
                                 </a>
                             </td>
