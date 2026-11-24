@@ -18,7 +18,7 @@ function current_user(): ?array
     }
 
     $stmt = db()->prepare(
-        'SELECT id, full_name, email, mobile_no, role, department_id, zone_id, ward_id, is_active
+        'SELECT id, full_name, email, mobile_no, role, department_id, zone_id, ward_id, is_active, last_login_at
          FROM users WHERE id = ? LIMIT 1'
     );
     $stmt->execute([(int) $userId]);
