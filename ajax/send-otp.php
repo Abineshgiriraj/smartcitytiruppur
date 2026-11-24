@@ -17,9 +17,14 @@ try {
     }
 
     if ($purpose === 'login') {
-        $userStmt = db()->prepare('SELECT id, is_active FROM users WHERE mobile_no = ? LIMIT 1');
+        $userStmt = db()->prepare('SELECT id, is_active FROM users WHERE mobile_no = ? LIMIT 2');
         $userStmt->execute([$mobile]);
-        $userRecord = $userStmt->fetch();
+        $accounts = $userStmt->fetchAll(PDO::FETCH_ASSOC);
+        if (count($accounts) > 1) {
+            echo json_encode(['ok'=>false,'message'=>'Duplicate employee mobile number. Contact the administrator.']);
+            exit;
+        }
+        $userRecord = $accounts[0] ?? null;
         if (!$userRecord) {
             echo json_encode(['ok' => false, 'message' => 'No employee account found with this mobile number.']);
             exit;
@@ -46,6 +51,14 @@ try {
         exit;
     }
 
+    // No SMS provider is integrated here. Do not claim successful delivery on live.
+    // Integrate an approved SMS API before enabling production OTP sign-ins.
+    if ($purpose === 'login' && APP_ENV !== 'local') {
+        echo json_encode(['ok'=>false,
+            'message'=>'Mobile OTP delivery has not been configured on this server. Contact the administrator.']);
+        exit;
+    }
+
     $otp = (string)random_int(100000, 999999);
     $hash = password_hash($otp, PASSWORD_DEFAULT);
     $expiresAt = date('Y-m-d H:i:s', time() + OTP_TTL_SECONDS);
@@ -62,7 +75,9 @@ try {
     // Integrate an approved SMS provider here on the live server.
     $response = [
         'ok' => true,
-        'message' => 'OTP sent to ' . mask_mobile($mobile) . '.',
+        'message' => APP_ENV === 'local'
+            ? 'Local testing OTP generated for ' . mask_mobile($mobile) . '.'
+            : 'OTP request created (SMS delivery requires a configured gateway).',
     ];
 
     if (APP_ENV === 'local') {
