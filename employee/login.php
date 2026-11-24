@@ -2,8 +2,9 @@
 declare(strict_types=1);
 require_once __DIR__ . '/../includes/bootstrap.php';
 
-if (current_user()) {
-    redirect('employee/dashboard.php');
+if ($existingUser=current_user()) {
+    redirect(in_array($existingUser['role'],['Field Officer','Officer'],true)
+        ? 'employee/officer-dashboard.php' : 'employee/dashboard.php');
 }
 
 $errors = [];
