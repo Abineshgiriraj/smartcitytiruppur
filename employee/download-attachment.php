@@ -2,7 +2,10 @@
 declare(strict_types=1);
 require_once __DIR__ . '/../includes/bootstrap.php';
 
-$user = require_permission('complaints.view');
+$user = require_login();
+$isOfficer = in_array($user['role'],['Field Officer','Officer'],true);
+$officerId = $isOfficer ? (int)require_officer()['officer']['id'] : 0;
+if (!$isOfficer) require_permission('complaints.view');
 $attachmentId = (int)($_GET['id'] ?? 0);
 
 $stmt = db()->prepare(
@@ -24,10 +27,8 @@ $allowed = can_manage_all_complaints($user);
 if (!$allowed && $user['role'] === 'Department Head') $allowed = (int)$user['department_id'] === (int)$attachment['department_id'];
 if (!$allowed && $user['role'] === 'Zone Officer') $allowed = (int)$user['zone_id'] === (int)$attachment['zone_id'];
 if (!$allowed && $user['role'] === 'Ward Officer') $allowed = (int)$user['ward_id'] === (int)$attachment['ward_id'];
-if (!$allowed && $user['role'] === 'Field Officer') {
-    $officerStmt = db()->prepare('SELECT id FROM officers WHERE user_id = ? LIMIT 1');
-    $officerStmt->execute([(int)$user['id']]);
-    $allowed = (int)$officerStmt->fetchColumn() === (int)$attachment['assigned_officer_id'];
+if (!$allowed && $isOfficer) {
+    $allowed = $officerId > 0 && $officerId === (int)$attachment['assigned_officer_id'];
 }
 
 if (!$allowed) {
