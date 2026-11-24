@@ -28,16 +28,16 @@ include __DIR__ . '/includes/header.php';
         <div class="neo-hero-noise" aria-hidden="true"></div>
         <div class="container-xxl neo-hero-grid">
             <div class="neo-hero-copy">
-                <div class="neo-eyebrow"><span class="neo-status-dot"></span> TIRUPPUR · YOUR CITY, CONNECTED</div>
-                <h1 id="neo-hero-title">A better city<br>starts <em>with you.</em></h1>
-                <p class="neo-hero-description">Spot a problem? Make it known. Track every step. Help build the Tiruppur we all deserve—all in one simple place.</p>
+                <div class="neo-eyebrow"><span class="neo-status-dot"></span> HOMEPAGE · TIRUPPUR CITY MUNICIPAL CORPORATION</div>
+                <h1 id="neo-hero-title">Your city.<br><em>Your voice.</em></h1>
+                <p class="neo-hero-description">Register a complaint, track its progress and connect with your City Municipal Corporation — all in one place.</p>
                 <div class="neo-hero-cta">
                     <a class="neo-button neo-button-primary neo-magnetic" href="<?php echo e(url('new-complaint.php')); ?>">
                         <span class="neo-button-icon"><i class="bi bi-plus-lg"></i></span>
-                        Report an issue <i class="bi bi-arrow-up-right neo-arrow"></i>
+                        New Complaint <i class="bi bi-arrow-up-right neo-arrow"></i>
                     </a>
                     <a class="neo-button neo-button-ghost" href="<?php echo e(url('complaint-status.php')); ?>">
-                        Track my complaint <i class="bi bi-arrow-right neo-arrow"></i>
+                        Track Complaint <i class="bi bi-arrow-right neo-arrow"></i>
                     </a>
                 </div>
                 <div class="neo-hero-assurance"><i class="bi bi-shield-check"></i> Simple to report <span>·</span> Transparent progress <span>·</span> Built for everyone</div>
@@ -82,27 +82,27 @@ include __DIR__ . '/includes/header.php';
     <section class="neo-impact neo-section" id="neo-impact" aria-labelledby="neo-impact-title">
         <div class="container-xxl">
             <div class="neo-section-heading">
-                <div><div class="neo-label">THE BIG PICTURE <span></span> LIVE DATABASE</div>
-                    <h2 id="neo-impact-title">Your city. <em>In motion.</em></h2>
+                <div><div class="neo-label">COMPLAINT OVERVIEW <span></span> AT A GLANCE</div>
+                    <h2 id="neo-impact-title">Complaint <em>Overview.</em></h2>
                 </div>
-                <p>Real activity from the Tiruppur grievance system. Every number represents a voice heard and a step forward.</p>
+                <p>Current complaint statistics from Tiruppur City Municipal Corporation.</p>
             </div>
             <div class="neo-impact-grid">
                 <div class="neo-impact-card neo-impact-primary" data-civic-counter="<?php echo (int)$stats['total']; ?>">
                     <div class="neo-impact-head"><span>01 / ALL REPORTS</span><i class="bi bi-grid-3x3-gap"></i></div>
                     <strong class="neo-impact-value"><?php echo number_format($stats['total']); ?></strong>
-                    <div class="neo-impact-foot"><h3>Complaints received</h3><p>Every concern has a place here.</p></div>
+                    <div class="neo-impact-foot"><h3>Total Complaints</h3><p>Registered complaints</p></div>
                     <span class="neo-impact-shape" aria-hidden="true"></span>
                 </div>
                 <div class="neo-impact-card" data-civic-counter="<?php echo (int)$stats['resolved']; ?>">
                     <div class="neo-impact-head"><span>02 / COMPLETED</span><i class="bi bi-check2-circle"></i></div>
                     <strong class="neo-impact-value"><?php echo number_format($stats['resolved']); ?></strong>
-                    <div class="neo-impact-foot"><h3>Resolved or closed</h3><p>Progress you can follow.</p></div>
+                    <div class="neo-impact-foot"><h3>Resolved Complaints</h3><p>Resolved or closed complaints</p></div>
                 </div>
                 <div class="neo-impact-card" data-civic-counter="<?php echo (int)$stats['pending']; ?>">
                     <div class="neo-impact-head"><span>03 / IN ACTION</span><i class="bi bi-arrow-repeat"></i></div>
                     <strong class="neo-impact-value"><?php echo number_format($stats['pending']); ?></strong>
-                    <div class="neo-impact-foot"><h3>Currently in progress</h3><p>Being tracked through the system.</p></div>
+                    <div class="neo-impact-foot"><h3>Pending Complaints</h3><p>Registered, assigned or in-progress complaints</p></div>
                 </div>
             </div>
         </div>
@@ -111,15 +111,15 @@ include __DIR__ . '/includes/header.php';
     <section class="neo-journey neo-section" aria-labelledby="neo-journey-title">
         <div class="container-xxl neo-journey-grid">
             <div class="neo-journey-intro">
-                <div class="neo-label">THREE STEPS <span></span> ONE BETTER CITY</div>
-                <h2 id="neo-journey-title">A clearer way<br>to <em>make change.</em></h2>
-                <p>No confusing paperwork or endless searching. We guide you from your first report to the final update.</p>
-                <a class="neo-text-link" href="<?php echo e(url('new-complaint.php')); ?>">Get started <i class="bi bi-arrow-up-right"></i></a>
+                <div class="neo-label">COMPLAINT SERVICES <span></span> HOW IT WORKS</div>
+                <h2 id="neo-journey-title">Register and<br><em>track complaints.</em></h2>
+                <p>Submit a complaint, receive a reference number and follow its progress online.</p>
+                <a class="neo-text-link" href="<?php echo e(url('new-complaint.php')); ?>">New Complaint <i class="bi bi-arrow-up-right"></i></a>
             </div>
             <div class="neo-journey-steps">
-                <div class="neo-step"><span class="neo-step-num">01</span><span class="neo-step-icon"><i class="bi bi-chat-left-dots"></i></span><div><h3>Tell us what happened</h3><p>Describe the issue, choose the location, and add a photo if helpful.</p></div></div>
-                <div class="neo-step"><span class="neo-step-num">02</span><span class="neo-step-icon"><i class="bi bi-person-check"></i></span><div><h3>We direct it to the right team</h3><p>Your report enters the municipal workflow with an accountable officer.</p></div></div>
-                <div class="neo-step"><span class="neo-step-num">03</span><span class="neo-step-icon"><i class="bi bi-activity"></i></span><div><h3>Follow every update</h3><p>Track your complaint using the reference number you receive.</p></div></div>
+                <div class="neo-step"><span class="neo-step-num">01</span><span class="neo-step-icon"><i class="bi bi-chat-left-dots"></i></span><div><h3>Register a Complaint</h3><p>Enter complaint details, select your locality and attach supporting documents.</p></div></div>
+                <div class="neo-step"><span class="neo-step-num">02</span><span class="neo-step-icon"><i class="bi bi-person-check"></i></span><div><h3>Automatic Allocation</h3><p>The complaint is routed to a responsible municipal officer.</p></div></div>
+                <div class="neo-step"><span class="neo-step-num">03</span><span class="neo-step-icon"><i class="bi bi-activity"></i></span><div><h3>Track Complaint Status</h3><p>Use your reference number to check updates and resolution status.</p></div></div>
             </div>
         </div>
     </section>
@@ -127,27 +127,27 @@ include __DIR__ . '/includes/header.php';
     <section class="neo-services neo-section" aria-labelledby="neo-services-title">
         <div class="container-xxl">
             <div class="neo-section-heading">
-                <div><div class="neo-label">WHAT CAN WE HELP WITH? <span></span> EASY ACCESS</div>
-                    <h2 id="neo-services-title">Everything you need.<br><em>Nothing you don't.</em></h2>
+                <div><div class="neo-label">PUBLIC SERVICES <span></span> QUICK ACCESS</div>
+                    <h2 id="neo-services-title">Quick <em>Services.</em></h2>
                 </div>
-                <p>Choose a service and go straight to what matters.</p>
+                <p>What would you like to do today?</p>
             </div>
             <div class="neo-services-grid">
                 <a class="neo-service neo-service-feature" href="<?php echo e(url('new-complaint.php')); ?>">
                     <span class="neo-service-top"><i class="bi bi-pencil-square"></i><span class="neo-service-arrow"><i class="bi bi-arrow-up-right"></i></span></span>
-                    <span class="neo-service-bottom"><small>01 · START HERE</small><strong>Report a<br>problem.</strong><span>Tell us what needs attention in your neighborhood.</span></span>
+                    <span class="neo-service-bottom"><small>01 · START HERE</small><strong>New<br>Complaint</strong><span>Register a new complaint online.</span></span>
                 </a>
                 <a class="neo-service" href="<?php echo e(url('complaint-status.php')); ?>">
                     <span class="neo-service-top"><i class="bi bi-search"></i><span class="neo-service-arrow"><i class="bi bi-arrow-up-right"></i></span></span>
-                    <span class="neo-service-bottom"><small>02 · STAY INFORMED</small><strong>Track your<br>complaint.</strong><span>See the latest updates on your report.</span></span>
+                    <span class="neo-service-bottom"><small>02 · STAY INFORMED</small><strong>Track<br>Complaint</strong><span>Check your complaint status and progress.</span></span>
                 </a>
                 <a class="neo-service" href="<?php echo e(url('department-contacts.php')); ?>">
                     <span class="neo-service-top"><i class="bi bi-people"></i><span class="neo-service-arrow"><i class="bi bi-arrow-up-right"></i></span></span>
-                    <span class="neo-service-bottom"><small>03 · FIND THE RIGHT PERSON</small><strong>Department<br>contacts.</strong><span>Find municipal teams and service areas.</span></span>
+                    <span class="neo-service-bottom"><small>03 · FIND THE RIGHT PERSON</small><strong>Contact<br>Us</strong><span>Contact municipal offices and support.</span></span>
                 </a>
                 <a class="neo-service" href="<?php echo e(url('feedback.php')); ?>">
                     <span class="neo-service-top"><i class="bi bi-heart"></i><span class="neo-service-arrow"><i class="bi bi-arrow-up-right"></i></span></span>
-                    <span class="neo-service-bottom"><small>04 · HAVE YOUR SAY</small><strong>Share your<br>feedback.</strong><span>Your suggestions can help us improve.</span></span>
+                    <span class="neo-service-bottom"><small>04 · HAVE YOUR SAY</small><strong>Feedback</strong><span>Share feedback about municipal services.</span></span>
                 </a>
             </div>
         </div>
@@ -156,10 +156,10 @@ include __DIR__ . '/includes/header.php';
     <section class="neo-last-cta" aria-labelledby="neo-cta-title">
         <div class="container-xxl neo-last-cta-inner">
             <div class="neo-last-cta-copy">
-                <div class="neo-label">LET'S MAKE TIRUPPUR BETTER</div>
-                <h2 id="neo-cta-title">Every voice.<br><em>A stronger city.</em></h2>
-                <p>It starts with one report. We'll help you take it from there.</p>
-                <a class="neo-button neo-button-primary neo-button-light" href="<?php echo e(url('new-complaint.php')); ?>">Raise a complaint <i class="bi bi-arrow-up-right"></i></a>
+                <div class="neo-label">TIRUPPUR CITY MUNICIPAL CORPORATION</div>
+                <h2 id="neo-cta-title">Your city.<br><em>Your voice.</em></h2>
+                <p>Register a complaint and track its progress online.</p>
+                <a class="neo-button neo-button-primary neo-button-light" href="<?php echo e(url('new-complaint.php')); ?>">New Complaint <i class="bi bi-arrow-up-right"></i></a>
             </div>
             <div class="neo-last-cta-mark" aria-hidden="true">T<span>✦</span></div>
         </div>
