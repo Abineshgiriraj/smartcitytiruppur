@@ -88,7 +88,7 @@ function require_officer(): array
     $officer = current_officer();
     if (!$officer) {
         http_response_code(403);
-        $errorMessage = 'Your account (' . htmlspecialchars($user['email']) . ') is not linked to any active municipal officer profile. Please contact the administrator.';
+        $errorMessage = 'Your account (' . htmlspecialchars((string)($user['mobile_no'] ?: $user['email'] ?: 'unknown')) . ') is not linked to any active municipal officer profile. Please contact the administrator.';
         include __DIR__ . '/../employee/officer-access-error.php';
         exit;
     }
@@ -122,12 +122,16 @@ function login_user(string $identifier, string $password): bool
         $stmt->execute([strtolower($identifier)]);
     } else {
         $cleanMobile = normalize_mobile($identifier);
+        if (!preg_match('/^[6-9][0-9]{9}$/D', $cleanMobile)) return false;
         $stmt = db()->prepare(
-            'SELECT id, password_hash, is_active FROM users WHERE mobile_no = ? LIMIT 1'
+            'SELECT id, password_hash, is_active FROM users WHERE mobile_no = ? LIMIT 2'
         );
         $stmt->execute([$cleanMobile]);
+        $matches=$stmt->fetchAll(PDO::FETCH_ASSOC);
+        if (count($matches) !== 1) return false;
+        $user=$matches[0];
     }
-    $user = $stmt->fetch();
+    if (!isset($user)) $user = $stmt->fetch();
 
     if (!$user || !(int) $user['is_active']) {
         return false;
