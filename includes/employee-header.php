@@ -66,6 +66,7 @@ if ($isOfficer) {
   <link href="<?php echo e(url('assets/css/style.css?v=20260806b')); ?>" rel="stylesheet">
   <link href="<?php echo e(url('assets/css/admin.css?v=20261119a')); ?>" rel="stylesheet">
   <link href="<?php echo e(url('assets/css/admin-refresh.css?v=20261121b')); ?>" rel="stylesheet">
+    <link href="<?php echo e(url('assets/css/civic-modern.css?v=20261124')); ?>" rel="stylesheet">
 </head>
 <body class="employee-body admin-body">
 <div class="admin-layout">
