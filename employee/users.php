@@ -270,6 +270,16 @@ include __DIR__ . '/../includes/employee-header.php';
        <a href="<?php echo e(url('employee/users.php')); ?>">Start from first eligible officer</a></div>
     <?php endif; ?>
 </div>
+<form method="get" class="card content-card border-0 p-3 mb-3">
+  <label class="form-label fw-semibold" for="officer_q">Find an officer by name, ID or registered mobile</label>
+  <div class="input-group">
+    <input id="officer_q" name="officer_q" class="form-control" type="search"
+      value="<?php echo e($officerSearch); ?>" placeholder="Search officer directory">
+    <button class="btn btn-outline-primary" type="submit"><i class="bi bi-search me-1"></i>Find Officer</button>
+    <a class="btn btn-outline-secondary" href="<?php echo e(url('employee/users.php')); ?>">Clear</a>
+  </div>
+  <div class="form-text">Search results appear in the Officer Profile dropdown below.</div>
+</form>
 <div class="row g-4">
     <div class="col-xl-4">
         <form method="post" class="card content-card p-4 shadow-sm border-0">
