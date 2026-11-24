@@ -218,14 +218,17 @@ $zones = db()->query('SELECT id, zone_no FROM zones WHERE is_active = 1 ORDER BY
 $wards = db()->query('SELECT id, ward_no FROM wards WHERE is_active = 1 ORDER BY ward_no')->fetchAll();
 
 // Available unlinked officers
-$availableOfficers = db()->query('
-    SELECT o.id, o.officer_name, o.designation, o.mobile_no, d.department_name
-    FROM officers o
-    LEFT JOIN officer_department_map dm ON dm.officer_id = o.id
-    LEFT JOIN departments d ON d.id = dm.department_id
-    WHERE o.is_active = 1 AND (o.user_id IS NULL OR o.user_id = 0)
-    ORDER BY o.officer_name ASC
-')->fetchAll();
+$officerSearch=trim((string)($_GET['officer_q'] ?? ''));
+$officerQuery=db()->prepare(
+    'SELECT o.id,o.officer_name,o.designation,o.mobile_no
+     FROM officers o
+     WHERE o.is_active=1 AND o.user_id IS NULL
+       AND (? = "" OR o.officer_name LIKE ? OR o.mobile_no LIKE ? OR CAST(o.id AS CHAR) = ?)
+     ORDER BY o.officer_name,o.id LIMIT 150'
+);
+$like='%'.$officerSearch.'%';
+$officerQuery->execute([$officerSearch,$like,$like,$officerSearch]);
+$availableOfficers=$officerQuery->fetchAll(PDO::FETCH_ASSOC);
 
 $users = db()->query(
     'SELECT u.*, d.department_name, z.zone_no, w.ward_no,
@@ -235,7 +238,7 @@ $users = db()->query(
      LEFT JOIN zones z ON z.id = u.zone_id
      LEFT JOIN wards w ON w.id = u.ward_id
      LEFT JOIN officers o ON o.user_id = u.id
-     ORDER BY u.full_name'
+     ORDER BY u.id DESC LIMIT 100'
 )->fetchAll();
 
 include __DIR__ . '/../includes/employee-header.php';
@@ -273,6 +276,7 @@ include __DIR__ . '/../includes/employee-header.php';
             <?php echo csrf_field(); ?>
             <input type="hidden" name="action" value="create_user">
             <h2 class="h5 fw-bold mb-3"><i class="bi bi-person-plus text-primary me-2"></i>Create Employee User</h2>
+            <p class="small text-muted">For officers, select the matching profile. No fake email address is necessary.</p>
             
             <div class="mb-3">
                 <label class="form-label required">Full Name</label>
@@ -305,13 +309,20 @@ include __DIR__ . '/../includes/employee-header.php';
                 </select>
             </div>
             
+            <div class="mb-3 border rounded p-2 bg-light">
+                <div class="small fw-semibold mb-1">Find an officer to link</div>
+                <input name="officer_q_preview" class="form-control form-control-sm" id="officerFilterInput"
+                       type="search" placeholder="Filter available profiles by name, ID or mobile"
+                       oninput="Array.from(document.querySelectorAll('#officerProfileSelect option')).forEach(o => { if(!o.value)return; o.hidden=!o.textContent.toLowerCase().includes(this.value.toLowerCase()); });">
+                <div class="form-text">Showing up to 150 unlinked profiles. For other officers, search from the page URL with ?officer_q=Name.</div>
+            </div>
             <div class="mb-3">
                 <label class="form-label fw-semibold">Link to Officer Profile (required for officers)</label>
-                <select class="form-select" name="officer_id">
+                <select class="form-select" name="officer_id" id="officerProfileSelect">
                     <option value="">None / Not a Field Officer</option>
                     <?php foreach ($availableOfficers as $item): ?>
                         <option value="<?php echo (int)$item['id']; ?>">
-                            #<?php echo (int)$item['id']; ?> - <?php echo e($item['officer_name']); ?> (<?php echo e($item['designation']); ?><?php echo $item['department_name'] ? ' - ' . e($item['department_name']) : ''; ?>)
+                            #<?php echo (int)$item['id']; ?> - <?php echo e($item['officer_name']); ?> (<?php echo e($item['designation']); ?>)
                         </option>
                     <?php endforeach; ?>
                 </select>
