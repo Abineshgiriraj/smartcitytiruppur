@@ -57,7 +57,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($action === 'update_status') {
             $newStatus = trim($_POST['status'] ?? '');
             $remarks = trim($_POST['remarks'] ?? '');
-            $currentStatus = $complaint['status'];
+            // Escalation or reassignment may happen after the page was opened.
+            // Recheck ownership and status under a row lock on EVERY write.
+            db()->beginTransaction();
+            $freshStmt = db()->prepare(
+                'SELECT assigned_officer_id,status,is_deleted,resolved_at,closed_at
+                 FROM complaints WHERE id=? FOR UPDATE'
+            );
+            $freshStmt->execute([$complaintId]);
+            $fresh = $freshStmt->fetch(PDO::FETCH_ASSOC);
+            if (!$fresh || (int)$fresh['is_deleted'] !== 0
+                || (int)$fresh['assigned_officer_id'] !== $officerId) {
+                throw new RuntimeException('This complaint is no longer assigned to you. Refresh your dashboard.');
+            }
+            $currentStatus = (string)$fresh['status'];
 
             if ($currentStatus === 'Closed') {
                 throw new RuntimeException('This complaint is closed and cannot be modified.');
@@ -83,8 +96,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($remarks === '' && $newStatus === $currentStatus) {
                 throw new RuntimeException('Please enter remarks to add a progress note.');
             }
-
-            db()->beginTransaction();
 
             // Handle optional proof attachment
             if (!empty($_FILES['proof_file']['name']) && $_FILES['proof_file']['error'] === UPLOAD_ERR_OK) {
@@ -119,14 +130,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
 
-            $resolvedAt = ($newStatus === 'Resolved') ? date('Y-m-d H:i:s') : $complaint['resolved_at'];
-            $closedAt = ($newStatus === 'Closed') ? date('Y-m-d H:i:s') : $complaint['closed_at'];
-
-            db()->prepare('
-                UPDATE complaints
-                SET status = ?, resolved_at = ?, closed_at = ?, updated_at = NOW()
-                WHERE id = ?
-            ')->execute([$newStatus, $resolvedAt, $closedAt, $complaintId]);
+            $resolvedAt = ($newStatus === 'Resolved') ? date('Y-m-d H:i:s') : $fresh['resolved_at'];
+            $closedAt = ($newStatus === 'Closed') ? date('Y-m-d H:i:s') : $fresh['closed_at'];
+            if ($newStatus === 'Closed' && $resolvedAt === null) {
+                $resolvedAt = date('Y-m-d H:i:s');
+            }
+            $updateStmt=db()->prepare(
+                'UPDATE complaints SET status=?,resolved_at=?,closed_at=?,updated_at=NOW()
+                 WHERE id=? AND assigned_officer_id=? AND status=? AND is_deleted=0'
+            );
+            $updateStmt->execute([$newStatus,$resolvedAt,$closedAt,$complaintId,$officerId,$currentStatus]);
+            if ($updateStmt->rowCount() !== 1 && $newStatus !== $currentStatus) {
+                throw new RuntimeException('Complaint status changed while updating. Please refresh.');
+            }
 
             db()->prepare('
                 INSERT INTO complaint_status_history (complaint_id, old_status, new_status, remarks, changed_by, changed_at)
@@ -446,21 +462,37 @@ include __DIR__ . '/../includes/employee-header.php';
                         <input type="hidden" name="action" value="update_status">
 
                         <div class="mb-3">
-                            <label class="form-label fw-bold required">Action / Status Change</label>
-                            <select name="status" class="form-select form-select-lg" required id="officerStatusSelect">
-                                <?php if ($complaint['status'] === 'Assigned'): ?>
-                                    <option value="Assigned">Keep Assigned (Add Progress Note)</option>
-                                    <option value="In Progress" selected>Start Work &bull; In Progress</option>
-                                <?php elseif ($complaint['status'] === 'In Progress' || $complaint['status'] === 'Reopened'): ?>
-                                    <option value="<?php echo e($complaint['status']); ?>">Keep <?php echo e($complaint['status']); ?> (Add Field Note)</option>
-                                    <option value="Resolved" selected>Mark as Resolved (Work Completed)</option>
-                                    <option value="Closed">Close Complaint (Completed &amp; Verified)</option>
-                                <?php elseif ($complaint['status'] === 'Resolved'): ?>
-                                    <option value="Resolved">Keep Resolved (Add Note)</option>
-                                    <option value="Closed" selected>Close Complaint (Officially Closed)</option>
-                                <?php endif; ?>
-                            </select>
-                            <div class="form-text small">Select the new lifecycle state for this grievance.</div>
+                            <label class="form-label fw-bold required">What did you do?</label>
+                            <div class="d-grid gap-2" role="group" aria-label="Choose complaint action">
+                                <?php
+                                  $choices = match($complaint['status']) {
+                                    'Assigned' => [
+                                      ['In Progress','Start Work','bi-play-circle','primary'],
+                                      ['Assigned','Add a Note','bi-chat-dots','secondary']
+                                    ],
+                                    'In Progress','Reopened' => [
+                                      ['In Progress','Work In Progress','bi-tools','primary'],
+                                      ['Resolved','Mark Resolved','bi-check-circle','success'],
+                                      ['Closed','Close Complaint','bi-archive','dark'],
+                                    ],
+                                    'Resolved' => [
+                                      ['Closed','Close Complaint','bi-archive','success'],
+                                      ['Resolved','Add a Note','bi-chat-dots','secondary'],
+                                    ],
+                                    default => []
+                                  };
+                                ?>
+                                <?php foreach($choices as $i=>$choice): ?>
+                                  <label class="border rounded-3 p-3 d-flex align-items-center gap-2 bg-light"
+                                    style="cursor:pointer">
+                                    <input type="radio" class="form-check-input m-0" name="status"
+                                       value="<?php echo e($choice[0]); ?>" <?php echo $i===0?'checked':''; ?> required>
+                                    <i class="bi <?php echo e($choice[2]); ?> text-<?php echo e($choice[3]); ?> fs-5"></i>
+                                    <strong><?php echo e($choice[1]); ?></strong>
+                                  </label>
+                                <?php endforeach; ?>
+                            </div>
+                            <div class="form-text">Choose one action, write a short work note, and press Save Update.</div>
                         </div>
 
                         <div class="mb-3">
@@ -476,7 +508,7 @@ include __DIR__ . '/../includes/employee-header.php';
                         </div>
 
                         <button type="submit" class="btn btn-primary btn-lg w-100 shadow-sm">
-                            <i class="bi bi-check2-circle me-1"></i> Submit Action Update
+                            <i class="bi bi-check2-circle me-1"></i> Save Complaint Update
                         </button>
                     </form>
                 <?php endif; ?>
