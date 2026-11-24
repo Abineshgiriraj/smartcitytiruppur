@@ -61,9 +61,13 @@ jobs:
           php -l employee/officer-approvals.php
           php -l employee/pdf-policy-review.php
           php -l new-complaint.php
+          php -l index.php
+          php -l includes/header.php
+          php -l includes/footer.php
           php -l ajax/street-gps.php
           node --check assets/js/street-gps.js
           node --check assets/js/civic-effects.js
+          node --check assets/js/neo-experience.js
           php -l pdf-escalate-complaints.php
           php -l retry-pending-allocations.php
           php -l tools/check_pdf_automation_readiness.php
