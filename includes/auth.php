@@ -96,6 +96,22 @@ function require_officer(): array
     return ['user' => $user, 'officer' => $officer];
 }
 
+/**
+ * Phone-only accounts require users.email to allow NULL (not placeholder emails).
+ * Cache only for this request; do not perform schema changes during login.
+ */
+function user_email_nullable(PDO $pdo): bool
+{
+    static $allowed = null;
+    if ($allowed !== null) return $allowed;
+    $stmt=$pdo->prepare(
+        "SELECT IS_NULLABLE FROM information_schema.COLUMNS
+         WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='users' AND COLUMN_NAME='email'"
+    );
+    $stmt->execute();
+    return $allowed=$stmt->fetchColumn()==='YES';
+}
+
 function login_user(string $identifier, string $password): bool
 {
     $identifier = trim($identifier);
@@ -148,10 +164,14 @@ function login_user_by_otp(string $mobile, string $otp): array
     }
 
     $stmt = db()->prepare(
-        'SELECT id, full_name, email, is_active FROM users WHERE mobile_no = ? LIMIT 1'
+        'SELECT id, full_name, email, is_active FROM users WHERE mobile_no = ? LIMIT 2'
     );
     $stmt->execute([$mobile]);
-    $user = $stmt->fetch();
+    $matches = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    if (count($matches) > 1) {
+        return ['ok'=>false,'message'=>'Duplicate login number detected. Ask an administrator to correct the accounts.'];
+    }
+    $user = $matches[0] ?? null;
 
     if (!$user) {
         return ['ok' => false, 'message' => 'No employee account found with this mobile number.'];
