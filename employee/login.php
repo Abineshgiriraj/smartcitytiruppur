@@ -7,7 +7,7 @@ if (current_user()) {
 }
 
 $errors = [];
-$activeTab = 'password';
+$activeTab = 'otp';
 $emailVal = '';
 $mobileVal = '';
 
@@ -68,7 +68,7 @@ include __DIR__ . '/../includes/header.php';
                 <div class="text-center mb-4">
                     <img src="<?php echo e(url('assets/images/trippurlogo.png')); ?>" alt="Tiruppur Corporation" style="height: 60px;" class="mb-2">
                     <h2 class="h4 fw-bold mb-1">Welcome Back</h2>
-                    <p class="text-muted small">Choose your preferred login method</p>
+                    <p class="text-muted small">Use your registered mobile number to sign in securely.</p>
                 </div>
 
                 <?php if ($errors): ?>
@@ -92,7 +92,7 @@ include __DIR__ . '/../includes/header.php';
                                 role="tab"
                                 aria-controls="password-pane"
                                 aria-selected="<?php echo $activeTab === 'password' ? 'true' : 'false'; ?>">
-                            <i class="bi bi-key-fill me-1"></i> Email &amp; Password
+                            <i class="bi bi-key-fill me-1"></i> Password Login
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
@@ -104,7 +104,7 @@ include __DIR__ . '/../includes/header.php';
                                 role="tab"
                                 aria-controls="otp-pane"
                                 aria-selected="<?php echo $activeTab === 'otp' ? 'true' : 'false'; ?>">
-                            <i class="bi bi-phone-fill me-1"></i> Mobile &amp; OTP
+                            <i class="bi bi-phone-fill me-1"></i> Mobile OTP
                         </button>
                     </li>
                 </ul>
@@ -128,7 +128,7 @@ include __DIR__ . '/../includes/header.php';
                                            type="text"
                                            name="email"
                                            value="<?php echo e($emailVal); ?>"
-                                           placeholder="e.g. admin@smartcitytiruppur.gov.in"
+                                           placeholder="Email address or registered mobile number"
                                            required
                                            autofocus>
                                 </div>
@@ -188,7 +188,7 @@ include __DIR__ . '/../includes/header.php';
                                         Send OTP
                                     </button>
                                 </div>
-                                <div class="form-text small">Enter the mobile number linked to your employee account.</div>
+                                <div class="form-text small">Use the mobile number registered in the municipal officer directory. OTP is displayed only in local test mode.</div>
                             </div>
 
                             <!-- Live Feedback / OTP status box -->
