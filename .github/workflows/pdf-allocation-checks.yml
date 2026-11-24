@@ -41,6 +41,16 @@ jobs:
           php -l includes/officer-authority.php
           php -l includes/pdf-escalation-policy.php
           php -l employee/masters.php
+          php -l employee/users.php
+          php -l employee/login.php
+          php -l employee/officer-dashboard.php
+          php -l employee/my-complaints.php
+          php -l employee/officer-complaint.php
+          php -l employee/officer-feedback.php
+          php -l employee/officer-profile.php
+          php -l includes/auth.php
+          php -l includes/employee-header.php
+          php -l ajax/send-otp.php
           php -l employee/allocation-inspector.php
           php -l employee/user-mapping-details.php
           php -l employee/complaint-view.php
