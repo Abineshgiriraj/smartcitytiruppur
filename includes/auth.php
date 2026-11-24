@@ -3,18 +3,18 @@ declare(strict_types=1);
 
 function current_user(): ?array
 {
-    static $loaded = false;
+    static $cachedId = null;
     static $user = null;
 
-    if ($loaded) {
-        return $user;
+    $userId = (int)($_SESSION['user_id'] ?? 0);
+    if ($userId <= 0) {
+        $cachedId = null;
+        $user = null;
+        return null;
     }
 
-    $loaded = true;
-    $userId = $_SESSION['user_id'] ?? null;
-
-    if (!$userId) {
-        return null;
+    if ($cachedId === $userId && $user !== null) {
+        return $user;
     }
 
     $stmt = db()->prepare(
@@ -26,19 +26,91 @@ function current_user(): ?array
 
     if (!$record || !(int) $record['is_active']) {
         unset($_SESSION['user_id']);
+        $cachedId = null;
+        $user = null;
         return null;
     }
 
     $user = $record;
+    $cachedId = $userId;
     return $user;
 }
 
-function login_user(string $email, string $password): bool
+/**
+ * Returns the currently authenticated active officer mapped via officers.user_id = users.id.
+ */
+function current_officer(): ?array
 {
+    static $cachedUserId = null;
+    static $officer = null;
+
+    $user = current_user();
+    if (!$user) {
+        $cachedUserId = null;
+        $officer = null;
+        return null;
+    }
+
+    if ($cachedUserId === (int)$user['id'] && $officer !== null) {
+        return $officer;
+    }
+
     $stmt = db()->prepare(
-        'SELECT id, password_hash, is_active FROM users WHERE email = ? LIMIT 1'
+        'SELECT o.*, d.department_name
+         FROM officers o
+         LEFT JOIN officer_department_map dm ON dm.officer_id = o.id
+         LEFT JOIN departments d ON d.id = dm.department_id
+         WHERE o.user_id = ? AND o.is_active = 1
+         LIMIT 1'
     );
-    $stmt->execute([strtolower(trim($email))]);
+    $stmt->execute([(int)$user['id']]);
+    $record = $stmt->fetch();
+
+    $officer = $record ?: null;
+    $cachedUserId = (int)$user['id'];
+    return $officer;
+}
+
+/**
+ * Enforces that the logged-in user is an authorized officer linked to an active officer profile.
+ */
+function require_officer(): array
+{
+    $user = require_login();
+
+    if (!in_array($user['role'], ['Field Officer', 'Officer', 'Super Admin', 'Admin'], true)) {
+        http_response_code(403);
+        $errorMessage = 'Access denied. This section is restricted to municipal officers.';
+        include __DIR__ . '/../employee/officer-access-error.php';
+        exit;
+    }
+
+    $officer = current_officer();
+    if (!$officer) {
+        http_response_code(403);
+        $errorMessage = 'Your account (' . htmlspecialchars($user['email']) . ') is not linked to any active municipal officer profile. Please contact the administrator.';
+        include __DIR__ . '/../employee/officer-access-error.php';
+        exit;
+    }
+
+    return ['user' => $user, 'officer' => $officer];
+}
+
+function login_user(string $identifier, string $password): bool
+{
+    $identifier = trim($identifier);
+    if (filter_var($identifier, FILTER_VALIDATE_EMAIL)) {
+        $stmt = db()->prepare(
+            'SELECT id, password_hash, is_active FROM users WHERE email = ? LIMIT 1'
+        );
+        $stmt->execute([strtolower($identifier)]);
+    } else {
+        $cleanMobile = normalize_mobile($identifier);
+        $stmt = db()->prepare(
+            'SELECT id, password_hash, is_active FROM users WHERE mobile_no = ? LIMIT 1'
+        );
+        $stmt->execute([$cleanMobile]);
+    }
     $user = $stmt->fetch();
 
     if (!$user || !(int) $user['is_active']) {
@@ -49,7 +121,9 @@ function login_user(string $email, string $password): bool
         return false;
     }
 
-    session_regenerate_id(true);
+    if (session_status() === PHP_SESSION_ACTIVE && !headers_sent()) {
+        session_regenerate_id(true);
+    }
     $_SESSION['user_id'] = (int) $user['id'];
 
     db()->prepare('UPDATE users SET last_login_at = NOW() WHERE id = ?')
@@ -58,6 +132,83 @@ function login_user(string $email, string $password): bool
     audit_log((int) $user['id'], 'login', 'user', (int) $user['id']);
 
     return true;
+}
+
+function login_user_by_otp(string $mobile, string $otp): array
+{
+    $mobile = normalize_mobile($mobile);
+    $otp = trim($otp);
+
+    if (!preg_match('/^[6-9]\d{9}$/', $mobile)) {
+        return ['ok' => false, 'message' => 'Please enter a valid 10-digit mobile number.'];
+    }
+
+    if (!preg_match('/^\d{6}$/', $otp)) {
+        return ['ok' => false, 'message' => 'Please enter a valid 6-digit OTP.'];
+    }
+
+    $stmt = db()->prepare(
+        'SELECT id, full_name, email, is_active FROM users WHERE mobile_no = ? LIMIT 1'
+    );
+    $stmt->execute([$mobile]);
+    $user = $stmt->fetch();
+
+    if (!$user) {
+        return ['ok' => false, 'message' => 'No employee account found with this mobile number.'];
+    }
+
+    if (!(int)$user['is_active']) {
+        return ['ok' => false, 'message' => 'Your account is currently disabled. Please contact your administrator.'];
+    }
+
+    $otpStmt = db()->prepare(
+        'SELECT id, otp_hash, expires_at, attempt_count, verified_at
+         FROM otp_requests
+         WHERE mobile_no = ? AND purpose = ?
+         ORDER BY id DESC LIMIT 1'
+    );
+    $otpStmt->execute([$mobile, 'login']);
+    $record = $otpStmt->fetch();
+
+    if (!$record) {
+        return ['ok' => false, 'message' => 'No OTP request found for this mobile number. Please click Send OTP first.'];
+    }
+
+    if (!empty($record['verified_at'])) {
+        return ['ok' => false, 'message' => 'This OTP has already been used. Please request a new OTP.'];
+    }
+
+    if ((int)$record['attempt_count'] >= 5) {
+        return ['ok' => false, 'message' => 'Too many incorrect OTP attempts. Please request a new OTP.'];
+    }
+
+    if (strtotime((string)$record['expires_at']) < time()) {
+        return ['ok' => false, 'message' => 'OTP has expired. Please request a new OTP.'];
+    }
+
+    // Increment attempt count
+    db()->prepare('UPDATE otp_requests SET attempt_count = attempt_count + 1 WHERE id = ?')
+        ->execute([(int)$record['id']]);
+
+    if (!password_verify($otp, $record['otp_hash'])) {
+        return ['ok' => false, 'message' => 'The entered OTP is incorrect. Please try again.'];
+    }
+
+    // Mark verified
+    db()->prepare('UPDATE otp_requests SET verified_at = NOW() WHERE id = ?')
+        ->execute([(int)$record['id']]);
+
+    if (session_status() === PHP_SESSION_ACTIVE && !headers_sent()) {
+        session_regenerate_id(true);
+    }
+    $_SESSION['user_id'] = (int)$user['id'];
+
+    db()->prepare('UPDATE users SET last_login_at = NOW() WHERE id = ?')
+        ->execute([(int)$user['id']]);
+
+    audit_log((int)$user['id'], 'login_otp', 'user', (int)$user['id']);
+
+    return ['ok' => true, 'message' => 'Logged in successfully.'];
 }
 
 function logout_user(): void
@@ -145,7 +296,7 @@ function known_user_roles(): array
 {
     return [
         'Super Admin', 'Commissioner', 'Admin', 'Department Head',
-        'Zone Officer', 'Ward Officer', 'Call Centre', 'Field Officer', 'Report User',
+        'Zone Officer', 'Ward Officer', 'Call Centre', 'Field Officer', 'Officer', 'Report User',
     ];
 }
 
@@ -154,6 +305,12 @@ function baseline_permission(string $role, string $permission): bool
     if (!array_key_exists($permission, permission_catalog())
         || !in_array($role, known_user_roles(), true)) return false;
     if ($role === 'Super Admin') return true;
+
+    // Field Officer and Officer roles operate strictly within their personal officer portal
+    if (in_array($role, ['Field Officer', 'Officer'], true)) {
+        return false;
+    }
+
     if (in_array($permission, [
         'dashboard.view', 'complaints.view', 'reports.view',
         'feedback.view', 'feedback.manage'

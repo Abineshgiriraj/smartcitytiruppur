@@ -9,11 +9,25 @@ try {
 
     $mobile = normalize_mobile($_POST['mobile'] ?? '');
     $purpose = trim($_POST['purpose'] ?? 'complaint');
-    $allowedPurposes = ['complaint', 'tracking'];
+    $allowedPurposes = ['complaint', 'tracking', 'login'];
 
     if (!preg_match('/^[6-9]\d{9}$/', $mobile) || !in_array($purpose, $allowedPurposes, true)) {
         echo json_encode(['ok' => false, 'message' => 'Invalid mobile number or OTP purpose.']);
         exit;
+    }
+
+    if ($purpose === 'login') {
+        $userStmt = db()->prepare('SELECT id, is_active FROM users WHERE mobile_no = ? LIMIT 1');
+        $userStmt->execute([$mobile]);
+        $userRecord = $userStmt->fetch();
+        if (!$userRecord) {
+            echo json_encode(['ok' => false, 'message' => 'No employee account found with this mobile number.']);
+            exit;
+        }
+        if (!(int)$userRecord['is_active']) {
+            echo json_encode(['ok' => false, 'message' => 'This account is currently disabled. Please contact the administrator.']);
+            exit;
+        }
     }
 
     $rateStmt = db()->prepare(
