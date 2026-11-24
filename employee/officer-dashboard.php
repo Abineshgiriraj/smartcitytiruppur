@@ -277,7 +277,6 @@ include __DIR__ . '/../includes/employee-header.php';
                             $statusBadgeClass = match($c['status']) {
                                 'Assigned' => 'bg-warning text-dark',
                                  'Acknowledged' => 'bg-primary text-white',
-                                 'Acknowledged' => 'bg-primary text-white',
                                 'In Progress' => 'bg-info text-dark',
                                 'Reopened' => 'bg-danger',
                                 'Resolved' => 'bg-success',
