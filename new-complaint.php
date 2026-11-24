@@ -311,6 +311,16 @@ include __DIR__ . '/includes/header.php';
 
         <section class="form-panel">
             <h2 class="form-panel-title">Location Info</h2>
+            <div class="gps-location-panel mb-4">
+                <div class="gps-location-heading"><i class="bi bi-geo-alt-fill" aria-hidden="true"></i>Find Your Ward &amp; Zone Using GPS</div>
+                <p>Optional: Use the complaint location on your device to find nearby registered localities. Confirm the correct locality before submitting. You can always search manually.</p>
+                <button type="button" class="btn btn-outline-primary" id="use-complaint-location"
+                        data-endpoint="<?php echo e(url('ajax/street-gps.php')); ?>">
+                    <i class="bi bi-crosshair me-1" aria-hidden="true"></i> Use My Current Location
+                </button>
+                <div id="complaint-location-status" aria-live="polite" role="status"></div>
+                <div id="gps-locality-choices" aria-label="Nearby locality suggestions"></div>
+            </div>
             <div class="row g-3">
                 <div class="col-lg-8 autocomplete-box"><label class="form-label required">Locality Name</label><input class="form-control" id="street_name" autocomplete="off" placeholder="Type locality or street name"><div id="street_results" class="autocomplete-results d-none"></div><input type="hidden" id="street_id" name="street_id" value="<?php echo e($old['street_id'] ?? ''); ?>"><input type="hidden" id="ward_id" name="ward_id" value="<?php echo e($old['ward_id'] ?? ''); ?>"><input type="hidden" id="zone_id" name="zone_id" value="<?php echo e($old['zone_id'] ?? ''); ?>"></div>
                 <div class="col-md-2"><label class="form-label required">Ward</label><input class="form-control" id="ward_display" readonly></div>
@@ -376,4 +386,5 @@ include __DIR__ . '/includes/header.php';
     JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
     | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE
 ); ?></script>
+<script src="<?php echo e(url('assets/js/street-gps.js?v=20261124')); ?>" defer></script>
 <?php include __DIR__ . '/includes/footer.php'; ?>
