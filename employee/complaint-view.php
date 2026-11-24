@@ -55,19 +55,21 @@ if (!can_manage_all_complaints($user)) {
 
 $canUpdate = $isOfficerPortal || can_access_permission($user, 'complaints.update');
 
-// Display all official statuses, but only allow lifecycle-safe officer transitions.
-// In particular, officers cannot reset a complaint to Registered or create
-// a citizen Reopened event without the established reopen workflow.
+// Officers may close/reject active cases and reopen completed/rejected ones.
+// Registered remains an intake state. Officer-initiated reopens do not
+// consume citizens' separately limited reopen_count.
 $officerStatuses = [
     'Registered', 'Assigned', 'Acknowledged', 'In Progress',
     'Resolved', 'Closed', 'Rejected', 'Reopened'
 ];
 $officerStatusTransitions = [
-    'Assigned' => ['Assigned', 'Acknowledged', 'In Progress'],
-    'Acknowledged' => ['Acknowledged', 'In Progress'],
-    'In Progress' => ['In Progress', 'Resolved', 'Closed'],
-    'Reopened' => ['Reopened', 'Acknowledged', 'In Progress', 'Resolved', 'Closed'],
-    'Resolved' => ['Resolved', 'Closed'],
+    'Assigned' => ['Assigned', 'Acknowledged', 'In Progress', 'Resolved', 'Closed', 'Rejected'],
+    'Acknowledged' => ['Acknowledged', 'In Progress', 'Resolved', 'Closed', 'Rejected'],
+    'In Progress' => ['In Progress', 'Resolved', 'Closed', 'Rejected'],
+    'Reopened' => ['Reopened', 'Acknowledged', 'In Progress', 'Resolved', 'Closed', 'Rejected'],
+    'Resolved' => ['Resolved', 'Closed', 'Rejected', 'Reopened'],
+    'Closed' => ['Reopened'],
+    'Rejected' => ['Reopened'],
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -107,11 +109,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $resolvedAt=$fresh['resolved_at'];
             $closedAt=$fresh['closed_at'];
-            if($newStatus==='Resolved') $resolvedAt=date('Y-m-d H:i:s');
-            if($newStatus==='Closed') {
-                $closedAt=date('Y-m-d H:i:s');
-                if(!$resolvedAt)$resolvedAt=$closedAt;
+            if ($newStatus === 'Resolved') {
+                if ($old !== 'Resolved' || !$resolvedAt) $resolvedAt=date('Y-m-d H:i:s');
+                $closedAt=null;
+            } elseif ($newStatus === 'Closed') {
+                if (!$resolvedAt) $resolvedAt=date('Y-m-d H:i:s');
+                if ($old !== 'Closed' || !$closedAt) $closedAt=date('Y-m-d H:i:s');
+            } else {
+                $resolvedAt=null;
+                $closedAt=null;
             }
+            // Keep citizen reopen_count unchanged. It limits citizen, not staff, requests.
+            // Keep due_at unchanged so PDF escalation audit dates remain consistent.
             $update=$pdo->prepare(
                 'UPDATE complaints SET status=?,resolved_at=?,closed_at=?,updated_at=NOW()
                  WHERE id=? AND assigned_officer_id=? AND status=? AND is_deleted=0'
@@ -425,9 +434,9 @@ include __DIR__ . '/../includes/employee-header.php';
         <?php endif; ?>
         <?php if ($isOfficerPortal && $canUpdate): ?>
           <h2><i class="bi bi-check2-square me-2"></i>Update My Complaint</h2>
-          <?php if($complaint['status']==='Closed'): ?>
-            <div class="alert alert-secondary">This complaint is closed. No further officer updates are allowed.</div>
-          <?php else: ?>
+          <?php if(in_array($complaint['status'], ['Closed','Rejected'], true)): ?>
+            <div class="alert alert-info small">This case is completed. You may reopen it with remarks. The original PDF deadline is retained.</div>
+          <?php endif; ?>
             <form method="post" class="row g-3">
               <?php echo csrf_field(); ?>
               <input type="hidden" name="id" value="<?php echo $complaintId; ?>">
@@ -442,7 +451,7 @@ include __DIR__ . '/../includes/employee-header.php';
                     ><?php echo e($status); ?></option>
                   <?php endforeach; ?>
                 </select>
-                <div class="form-text">All official statuses are listed. Unavailable transitions are disabled.</div>
+                <div class="form-text">Close / Reject are available for active work. Reopen is available for Resolved, Closed or Rejected complaints. Registered is an intake-only status.</div>
               </div>
               <div class="col-md-6">
                 <label class="form-label fw-bold" for="officer-remarks">Remarks</label>
@@ -453,7 +462,6 @@ include __DIR__ . '/../includes/employee-header.php';
                 <button type="submit" class="btn btn-primary w-100">Save Update</button>
               </div>
             </form>
-          <?php endif; ?>
         <?php elseif ($canUpdate): ?>
             <h2>Update Complaint</h2>
             <div class="alert alert-warning small">New officer assignments require valid department/category/ward maps and the exact PDF stage role.
