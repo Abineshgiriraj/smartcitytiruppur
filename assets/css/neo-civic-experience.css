@@ -191,3 +191,40 @@ body.public-body .site-footer a:hover{color:#c9f47b}
  .neo-ticker-track,.neo-status-dot,.neo-floating-note{animation:none!important}
  .neo-home *{transition-duration:.01ms!important}
 }
+
+/* Motion details and premium styling for all citizen-facing interior pages */
+@media(prefers-reduced-motion:no-preference){
+ .neo-await-reveal{opacity:0;transform:translateY(22px);transition:opacity .8s var(--neo-ease),transform .8s var(--neo-ease)}
+ .neo-await-reveal.neo-inview{opacity:1;transform:translateY(0)}
+ .neo-hero-copy{animation:neo-enter .9s var(--neo-ease) both}
+ .neo-hero-visual{animation:neo-enter 1.1s var(--neo-ease) .15s both}
+ .neo-photo-frame{transform:rotate(-3deg) perspective(1100px) rotateX(var(--neo-tilt-x,0deg)) rotateY(var(--neo-tilt-y,0deg))}
+ .neo-photo-frame:hover{transform:rotate(0deg) scale(1.025) perspective(1100px) rotateX(var(--neo-tilt-x,0deg)) rotateY(var(--neo-tilt-y,0deg))}
+}
+@keyframes neo-enter{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+body.public-body .page-banner{
+  padding:55px 0;background:radial-gradient(circle at 80% -15%,rgba(182,241,144,.16),transparent 40%),linear-gradient(115deg,#123d37,#1d6257)!important;
+  border:0;position:relative;overflow:hidden;color:white
+}
+body.public-body .page-banner:after{content:"";position:absolute;right:-75px;top:-180px;width:430px;height:430px;border:1px solid rgba(215,250,220,.23);border-radius:50%;box-shadow:0 0 0 60px rgba(218,249,205,.025)}
+body.public-body .page-banner h1{font-family:"Manrope",sans-serif;color:#fff;letter-spacing:-1.8px;font-weight:850;font-size:clamp(32px,4vw,55px)}
+body.public-body .page-banner p{color:#d0e2d8;font-size:14px;position:relative;z-index:2}
+body.public-body .form-panel{background:#fff!important;border:1px solid #dfebdf!important;border-radius:22px!important;box-shadow:0 14px 35px rgba(18,67,45,.06)!important}
+body.public-body .form-panel:hover{box-shadow:0 23px 48px rgba(18,67,45,.09)!important}
+body.public-body .form-panel-title{background:linear-gradient(115deg,#143f37,#276b53)!important;color:#fff!important;border-radius:13px!important}
+body.public-body .complaint-form-shell .form-label{color:#26483f;font-weight:850}
+body.public-body .complaint-form-shell :is(.form-control,.form-select){border:1px solid #cfe0d3;background:#fcfefb;border-radius:12px;min-height:47px;color:#203e34}
+body.public-body .complaint-form-shell :is(.form-control,.form-select):focus{border-color:#4eac75;box-shadow:0 0 0 4px rgba(82,178,108,.14)}
+body.public-body .complaint-form-shell .input-group .btn{border-color:#b7d7bd;color:#215c43}
+body.public-body .complaint-form-shell .input-group .btn:hover{background:#dff2e2;color:#1d4e36}
+body.public-body .complaint-form-shell .btn-primary{background:#1b614d;border:0}
+body.public-body .complaint-form-shell .btn-primary:hover{background:#164b3e}
+body.public-body .complaint-form-shell .autocomplete-item:hover{background:#e5f4e7}
+body.public-body .content-card,body.public-body .status-result-card{border:1px solid #dbe8df!important;border-radius:20px!important}
+body.public-body .gps-location-panel{background:linear-gradient(115deg,#effbec,#eaf7f2);border-color:#bedfbe}
+body.public-body .gps-location-heading{color:#1c5d45}
+body.public-body .gps-location-heading i{color:#288455}
+body.public-body .gps-locality-choice:hover{border-color:#42a878;background:#f4fff3}
+body.public-body .form-panel .btn-outline-light{color:#255e43;border-color:#bcd3c0}
+body.public-body .form-panel .btn-outline-light:hover{background:#e7f4e7}
+@media(max-width:900px){body.public-body .public-header .navbar-collapse{padding:15px 0}}
