@@ -23,8 +23,10 @@ $params = [$officerId];
 
 // Status filtering
 if ($currentStatus === 'Overdue') {
-    $conditions[] = 'c.status IN ("Assigned", "In Progress", "Reopened") AND c.due_at IS NOT NULL AND c.due_at < NOW()';
-} elseif ($currentStatus !== '' && in_array($currentStatus, ['Assigned', 'In Progress', 'Resolved', 'Closed', 'Reopened'], true)) {
+    $conditions[] = 'c.status IN ("Assigned", "Acknowledged", "In Progress", "Reopened") AND c.due_at IS NOT NULL AND c.due_at < NOW()';
+} elseif ($currentStatus === 'Assigned') {
+    $conditions[] = 'c.status IN ("Assigned", "Acknowledged")';
+} elseif ($currentStatus !== '' && in_array($currentStatus, ['Acknowledged', 'In Progress', 'Resolved', 'Closed', 'Reopened'], true)) {
     $conditions[] = 'c.status = ?';
     $params[] = $currentStatus;
 }
@@ -55,12 +57,12 @@ $whereClause = implode(' AND ', $conditions);
 $countsStmt = db()->prepare('
     SELECT 
         COUNT(*) as total_count,
-        SUM(CASE WHEN status = "Assigned" THEN 1 ELSE 0 END) as assigned_count,
+        SUM(CASE WHEN status IN ("Assigned", "Acknowledged") THEN 1 ELSE 0 END) as assigned_count,
         SUM(CASE WHEN status = "In Progress" THEN 1 ELSE 0 END) as progress_count,
         SUM(CASE WHEN status = "Resolved" THEN 1 ELSE 0 END) as resolved_count,
         SUM(CASE WHEN status = "Closed" THEN 1 ELSE 0 END) as closed_count,
         SUM(CASE WHEN status = "Reopened" THEN 1 ELSE 0 END) as reopened_count,
-        SUM(CASE WHEN status IN ("Assigned", "In Progress", "Reopened") AND due_at IS NOT NULL AND due_at < NOW() THEN 1 ELSE 0 END) as overdue_count
+        SUM(CASE WHEN status IN ("Assigned", "Acknowledged", "In Progress", "Reopened") AND due_at IS NOT NULL AND due_at < NOW() THEN 1 ELSE 0 END) as overdue_count
     FROM complaints c
     WHERE c.assigned_officer_id = ? AND c.is_deleted = 0
 ');
@@ -88,8 +90,8 @@ $dataSql = "
     WHERE {$whereClause}
     ORDER BY 
         CASE WHEN c.status = 'Reopened' THEN 0 
-             WHEN c.status IN ('Assigned', 'In Progress') AND c.due_at IS NOT NULL AND c.due_at < NOW() THEN 1
-             WHEN c.status IN ('Assigned', 'In Progress') THEN 2
+             WHEN c.status IN ('Assigned', 'Acknowledged', 'In Progress') AND c.due_at IS NOT NULL AND c.due_at < NOW() THEN 1
+             WHEN c.status IN ('Assigned', 'Acknowledged', 'In Progress') THEN 2
              ELSE 3 END ASC,
         c.created_at DESC
     LIMIT {$perPage} OFFSET {$offset}
@@ -224,7 +226,7 @@ include __DIR__ . '/../includes/employee-header.php';
                             $dueText = '-';
                             if ($c['due_at']) {
                                 $dueTime = strtotime($c['due_at']);
-                                $isOverdue = time() > $dueTime && in_array($c['status'], ['Assigned', 'In Progress', 'Reopened'], true);
+                                $isOverdue = time() > $dueTime && in_array($c['status'], ['Assigned', 'Acknowledged', 'In Progress', 'Reopened'], true);
                                 $diffHours = round(($dueTime - time()) / 3600);
                                 if ($isOverdue) {
                                     $dueText = '<span class="badge bg-danger"><i class="bi bi-clock-history me-1"></i>Overdue (' . abs($diffHours) . 'h ago)</span>';
@@ -236,6 +238,7 @@ include __DIR__ . '/../includes/employee-header.php';
                             }
                             $statusBadgeClass = match($c['status']) {
                                 'Assigned' => 'bg-warning text-dark',
+                                 'Acknowledged' => 'bg-primary text-white',
                                 'In Progress' => 'bg-info text-dark',
                                 'Reopened' => 'bg-danger',
                                 'Resolved' => 'bg-success',
