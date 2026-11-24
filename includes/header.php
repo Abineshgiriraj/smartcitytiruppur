@@ -30,6 +30,7 @@ try {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <title><?php echo e($pageTitle); ?> | <?php echo e(APP_NAME); ?></title>
     <meta name="description" content="Tiruppur City Municipal Corporation public grievance redressal portal">
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
@@ -38,6 +39,7 @@ try {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link href="<?php echo e(url('assets/css/style.css?v=20260806')); ?>" rel="stylesheet">
     <link href="<?php echo e(url('assets/css/citizen-refresh.css?v=20261121b')); ?>" rel="stylesheet">
+    <link href="<?php echo e(url('assets/css/civic-modern.css?v=20261124')); ?>" rel="stylesheet">
 </head>
 <body class="public-body">
 <header class="public-header">
