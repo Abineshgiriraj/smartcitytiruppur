@@ -175,11 +175,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException('Invalid user or officer selected.');
             }
 
-            // Unlink any existing officer for this user
-            db()->prepare('UPDATE officers SET user_id = NULL WHERE user_id = ?')->execute([$userId]);
-            // Link selected officer
-            db()->prepare('UPDATE officers SET user_id = ? WHERE id = ?')->execute([$userId, $officerId]);
-
+            db()->beginTransaction();
+            $u=db()->prepare('SELECT role,mobile_no FROM users WHERE id=? AND is_active=1 FOR UPDATE');
+            $u->execute([$userId]);
+            $existingUser=$u->fetch(PDO::FETCH_ASSOC);
+            $o=db()->prepare('SELECT user_id,mobile_no FROM officers WHERE id=? AND is_active=1 FOR UPDATE');
+            $o->execute([$officerId]);
+            $targetOfficer=$o->fetch(PDO::FETCH_ASSOC);
+            if(!$existingUser || !in_array($existingUser['role'],['Field Officer','Officer'],true)
+                || !$targetOfficer || $targetOfficer['user_id'] !== null
+                || !preg_match('/^[6-9][0-9]{9}$/D',(string)$existingUser['mobile_no'])
+                || normalize_mobile((string)$targetOfficer['mobile_no']) !== (string)$existingUser['mobile_no']) {
+                throw new RuntimeException('Officer link denied: account must be a field officer, and both mobile numbers must match with no existing link.');
+            }
+            db()->prepare('UPDATE officers SET user_id=NULL WHERE user_id=?')->execute([$userId]);
+            $link=db()->prepare('UPDATE officers SET user_id=? WHERE id=? AND user_id IS NULL');
+            $link->execute([$userId,$officerId]);
+            if($link->rowCount()!==1)throw new RuntimeException('Could not reserve officer link.');
+            db()->commit();
             flash('success', 'Officer profile successfully linked to user.');
         }
     } catch (Throwable $exception) {
