@@ -55,6 +55,21 @@ if (!can_manage_all_complaints($user)) {
 
 $canUpdate = $isOfficerPortal || can_access_permission($user, 'complaints.update');
 
+// Display all official statuses, but only allow lifecycle-safe officer transitions.
+// In particular, officers cannot reset a complaint to Registered or create
+// a citizen Reopened event without the established reopen workflow.
+$officerStatuses = [
+    'Registered', 'Assigned', 'Acknowledged', 'In Progress',
+    'Resolved', 'Closed', 'Rejected', 'Reopened'
+];
+$officerStatusTransitions = [
+    'Assigned' => ['Assigned', 'Acknowledged', 'In Progress'],
+    'Acknowledged' => ['Acknowledged', 'In Progress'],
+    'In Progress' => ['In Progress', 'Resolved', 'Closed'],
+    'Reopened' => ['Reopened', 'Acknowledged', 'In Progress', 'Resolved', 'Closed'],
+    'Resolved' => ['Resolved', 'Closed'],
+];
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$isOfficerPortal) require_permission('complaints.update');
     if (!$canUpdate) {
@@ -67,12 +82,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($isOfficerPortal) {
         $newStatus=trim((string)($_POST['status']??''));
         $remarks=trim((string)($_POST['remarks']??''));
-        $allowedTransitions=[
-          'Assigned'=>['Assigned','In Progress'],
-          'In Progress'=>['In Progress','Resolved','Closed'],
-          'Reopened'=>['Reopened','In Progress','Resolved','Closed'],
-          'Resolved'=>['Resolved','Closed']
-        ];
         $pdo=db();
         try {
             if(($_POST['action']??'')!=='officer_status_update') {
@@ -93,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException('This complaint is no longer assigned to your account.');
             }
             $old=(string)$fresh['status'];
-            if(!in_array($newStatus,$allowedTransitions[$old]??[],true)) {
+            if(!in_array($newStatus,$officerStatusTransitions[$old]??[],true)) {
                 throw new RuntimeException('This status transition is not allowed for your complaint.');
             }
             $resolvedAt=$fresh['resolved_at'];
@@ -419,30 +428,25 @@ include __DIR__ . '/../includes/employee-header.php';
           <?php if($complaint['status']==='Closed'): ?>
             <div class="alert alert-secondary">This complaint is closed. No further officer updates are allowed.</div>
           <?php else: ?>
-            <?php
-              $officerActions=match($complaint['status']){
-                'Assigned'=>[['In Progress','Start Work'],['Assigned','Add Work Note']],
-                'In Progress'=>[['In Progress','Add Work Note'],['Resolved','Mark Resolved'],['Closed','Close Complaint']],
-                'Reopened'=>[['In Progress','Resume Work'],['Reopened','Add Work Note'],['Resolved','Mark Resolved'],['Closed','Close Complaint']],
-                'Resolved'=>[['Closed','Close Complaint'],['Resolved','Add Work Note']],
-                default=>[]
-              };
-            ?>
             <form method="post" class="row g-3">
               <?php echo csrf_field(); ?>
               <input type="hidden" name="id" value="<?php echo $complaintId; ?>">
               <input type="hidden" name="action" value="officer_status_update">
               <div class="col-md-4">
-                <label class="form-label fw-bold">Choose Action</label>
-                <select class="form-select" name="status" required>
-                  <?php foreach($officerActions as $item): ?>
-                    <option value="<?php echo e($item[0]); ?>"><?php echo e($item[1]); ?></option>
+                <label class="form-label fw-bold" for="officer-status">Status</label>
+                <select class="form-select" name="status" id="officer-status" required>
+                  <?php foreach ($officerStatuses as $status): ?>
+                    <option value="<?php echo e($status); ?>"
+                      <?php echo $complaint['status'] === $status ? 'selected' : ''; ?>
+                      <?php echo in_array($status, $officerStatusTransitions[$complaint['status']] ?? [], true) ? '' : 'disabled'; ?>
+                    ><?php echo e($status); ?></option>
                   <?php endforeach; ?>
                 </select>
+                <div class="form-text">All official statuses are listed. Unavailable transitions are disabled.</div>
               </div>
               <div class="col-md-6">
-                <label class="form-label fw-bold">Officer Remarks</label>
-                <textarea class="form-control" name="remarks" rows="3" minlength="5"
+                <label class="form-label fw-bold" for="officer-remarks">Remarks</label>
+                <textarea class="form-control" id="officer-remarks" name="remarks" rows="3" minlength="5"
                   placeholder="Explain the work performed (at least 5 characters)" required></textarea>
               </div>
               <div class="col-md-2 d-flex align-items-end">
