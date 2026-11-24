@@ -228,3 +228,29 @@ body.public-body .gps-locality-choice:hover{border-color:#3aa1c7;background:#f3f
 body.public-body .form-panel .btn-outline-light{color:#1b638c;border-color:#c0d8e9}
 body.public-body .form-panel .btn-outline-light:hover{background:#e7f4fb}
 @media(max-width:900px){body.public-body .public-header .navbar-collapse{padding:15px 0}}
+
+/* Familiar Tiruppur blue identity, retaining the new layout and animation. */
+body.public-body .public-header .main-navbar{
+  background:#112b49!important;border-bottom:1px solid rgba(212,239,250,.18)!important;
+  box-shadow:0 8px 32px rgba(4,25,47,.14)!important}
+body.public-body .public-header .brand-copy strong{color:#fff!important}
+body.public-body .public-header .nav-link{color:#d5e8f5!important}
+body.public-body .public-header .nav-link:hover{background:rgba(214,241,251,.12)!important;color:#fff!important}
+body.public-body .public-header .nav-link.active{background:#f1f9ff!important;color:#175e97!important}
+body.public-body .public-header .dropdown-menu{background:#fff}
+body.public-body .neo-hero{background:#103c63}
+body.public-body .neo-hero:before{
+  background:radial-gradient(ellipse at 22% 42%,rgba(92,195,239,.13),transparent 33%),
+  radial-gradient(ellipse at 75% 45%,rgba(27,150,196,.19),transparent 34%),
+  linear-gradient(118deg,#0c2948,#103d66 60%,#195e88)}
+body.public-body .neo-hero:after{
+  border-color:rgba(182,225,248,.13);
+  box-shadow:0 0 0 90px rgba(123,204,249,.023),0 0 0 180px rgba(123,204,249,.013)}
+body.public-body .neo-status-dot{background:#67d8cf;box-shadow:0 0 0 6px rgba(103,216,207,.12)}
+body.public-body .neo-hero-noise{background-image:radial-gradient(rgba(208,235,252,.68) .5px,transparent .5px)}
+body.public-body .neo-photo-frame{background:#164f7a;box-shadow:0 40px 80px rgba(1,18,43,.34)}
+body.public-body .neo-building-photo{filter:saturate(1) contrast(1.03)}
+body.public-body .neo-impact-primary{background:linear-gradient(140deg,#103b66,#145889)}
+body.public-body .neo-last-cta{background:linear-gradient(120deg,#102f52,#155b83)}
+body.public-body .neo-impact-card:hover,body.public-body .neo-service:hover{
+  box-shadow:0 25px 48px rgba(16,72,127,.13)}
