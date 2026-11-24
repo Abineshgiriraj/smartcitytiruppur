@@ -3,7 +3,15 @@ declare(strict_types=1);
 require_once __DIR__ . '/../includes/bootstrap.php';
 require_once __DIR__ . '/../includes/officer-authority.php';
 
-$user = require_permission('complaints.view');
+$user = require_login();
+$isOfficerPortal = in_array($user['role'], ['Field Officer','Officer'], true);
+$officerPortalId = 0;
+if ($isOfficerPortal) {
+    $auth = require_officer();
+    $officerPortalId = (int)$auth['officer']['id'];
+} else {
+    $user = require_permission('complaints.view');
+}
 $pageTitle = 'Complaint Details';
 $complaintId = (int)($_GET['id'] ?? $_POST['id'] ?? 0);
 
@@ -35,10 +43,8 @@ if (!can_manage_all_complaints($user)) {
     if ($user['role'] === 'Zone Officer' && (int)$user['zone_id'] !== (int)$complaint['zone_id']) $allowed = false;
     if ($user['role'] === 'Ward Officer' && (int)$user['ward_id'] !== (int)$complaint['ward_id']) $allowed = false;
 
-    if ($user['role'] === 'Field Officer') {
-        $officerStmt = db()->prepare('SELECT id FROM officers WHERE user_id = ? LIMIT 1');
-        $officerStmt->execute([(int)$user['id']]);
-        $allowed = (int)$officerStmt->fetchColumn() === (int)$complaint['assigned_officer_id'];
+    if ($isOfficerPortal) {
+        $allowed = $officerPortalId > 0 && $officerPortalId === (int)$complaint['assigned_officer_id'];
     }
 
     if (!$allowed) {
@@ -47,16 +53,76 @@ if (!can_manage_all_complaints($user)) {
     }
 }
 
-$canUpdate = can_access_permission($user, 'complaints.update');
+$canUpdate = $isOfficerPortal || can_access_permission($user, 'complaints.update');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    require_permission('complaints.update');
+    if (!$isOfficerPortal) require_permission('complaints.update');
     if (!$canUpdate) {
         http_response_code(403);
         exit('This account has read-only access.');
     }
 
     verify_csrf();
+
+    if ($isOfficerPortal) {
+        $newStatus=trim((string)($_POST['status']??''));
+        $remarks=trim((string)($_POST['remarks']??''));
+        $allowedTransitions=[
+          'Assigned'=>['Assigned','In Progress'],
+          'In Progress'=>['In Progress','Resolved','Closed'],
+          'Reopened'=>['Reopened','In Progress','Resolved','Closed'],
+          'Resolved'=>['Resolved','Closed']
+        ];
+        $pdo=db();
+        try {
+            if(($_POST['action']??'')!=='officer_status_update') {
+                throw new RuntimeException('Only status updates are available to field officers.');
+            }
+            if(mb_strlen($remarks)<5) {
+                throw new RuntimeException('Please enter at least five characters explaining the action taken.');
+            }
+            $pdo->beginTransaction();
+            $lock=$pdo->prepare(
+                'SELECT assigned_officer_id,status,is_deleted,resolved_at,closed_at FROM complaints
+                 WHERE id=? FOR UPDATE'
+            );
+            $lock->execute([$complaintId]);
+            $fresh=$lock->fetch(PDO::FETCH_ASSOC);
+            if(!$fresh || (int)$fresh['is_deleted']!==0 ||
+               (int)$fresh['assigned_officer_id']!==$officerPortalId) {
+                throw new RuntimeException('This complaint is no longer assigned to your account.');
+            }
+            $old=(string)$fresh['status'];
+            if(!in_array($newStatus,$allowedTransitions[$old]??[],true)) {
+                throw new RuntimeException('This status transition is not allowed for your complaint.');
+            }
+            $resolvedAt=$fresh['resolved_at'];
+            $closedAt=$fresh['closed_at'];
+            if($newStatus==='Resolved') $resolvedAt=date('Y-m-d H:i:s');
+            if($newStatus==='Closed') {
+                $closedAt=date('Y-m-d H:i:s');
+                if(!$resolvedAt)$resolvedAt=$closedAt;
+            }
+            $update=$pdo->prepare(
+                'UPDATE complaints SET status=?,resolved_at=?,closed_at=?,updated_at=NOW()
+                 WHERE id=? AND assigned_officer_id=? AND status=? AND is_deleted=0'
+            );
+            $update->execute([$newStatus,$resolvedAt,$closedAt,$complaintId,$officerPortalId,$old]);
+            $pdo->prepare(
+                'INSERT INTO complaint_status_history
+                 (complaint_id,old_status,new_status,remarks,changed_by)
+                 VALUES (?,?,?,?,?)'
+            )->execute([$complaintId,$old,$newStatus,$remarks,(int)$user['id']]);
+            $pdo->commit();
+            audit_log((int)$user['id'],'officer_update_complaint','complaint',$complaintId,
+                ['old_status'=>$old,'new_status'=>$newStatus]);
+            flash('success','Complaint status updated to '.$newStatus.'.');
+        } catch(Throwable $exception) {
+            if($pdo->inTransaction())$pdo->rollBack();
+            flash('danger',APP_ENV==='local'?$exception->getMessage():'Unable to update complaint.');
+        }
+        redirect('employee/complaint-view.php?id='.$complaintId);
+    }
 
     // Reapply the verified initial allocation service to an existing
     // Registered/unassigned complaint. Only authorized complaint admins can
@@ -190,6 +256,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+if (!$isOfficerPortal) {
 // Show eligible recipients. Keep the current officer as a separate
 // option so a status-only edit does not accidentally unassign the complaint.
 $officers=[];
@@ -233,6 +300,11 @@ $needsRoutingReview=(int)$intakeCheck->fetchColumn()>0
         (int)($complaint['assigned_officer_id']??0),(int)$complaint['department_id'],
         (int)$complaint['ward_id']
     );
+
+} else {
+    $officers=[];
+    $needsRoutingReview=false;
+}
 
 $historyStmt = db()->prepare(
     'SELECT h.*, u.full_name
@@ -342,7 +414,43 @@ include __DIR__ . '/../includes/employee-header.php';
                 </button>
             </form>
         <?php endif; ?>
-        <?php if ($canUpdate): ?>
+        <?php if ($isOfficerPortal && $canUpdate): ?>
+          <h2><i class="bi bi-check2-square me-2"></i>Update My Complaint</h2>
+          <?php if($complaint['status']==='Closed'): ?>
+            <div class="alert alert-secondary">This complaint is closed. No further officer updates are allowed.</div>
+          <?php else: ?>
+            <?php
+              $officerActions=match($complaint['status']){
+                'Assigned'=>[['In Progress','Start Work'],['Assigned','Add Work Note']],
+                'In Progress'=>[['In Progress','Add Work Note'],['Resolved','Mark Resolved'],['Closed','Close Complaint']],
+                'Reopened'=>[['In Progress','Resume Work'],['Reopened','Add Work Note'],['Resolved','Mark Resolved'],['Closed','Close Complaint']],
+                'Resolved'=>[['Closed','Close Complaint'],['Resolved','Add Work Note']],
+                default=>[]
+              };
+            ?>
+            <form method="post" class="row g-3">
+              <?php echo csrf_field(); ?>
+              <input type="hidden" name="id" value="<?php echo $complaintId; ?>">
+              <input type="hidden" name="action" value="officer_status_update">
+              <div class="col-md-4">
+                <label class="form-label fw-bold">Choose Action</label>
+                <select class="form-select" name="status" required>
+                  <?php foreach($officerActions as $item): ?>
+                    <option value="<?php echo e($item[0]); ?>"><?php echo e($item[1]); ?></option>
+                  <?php endforeach; ?>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold">Officer Remarks</label>
+                <textarea class="form-control" name="remarks" rows="3" minlength="5"
+                  placeholder="Explain the work performed (at least 5 characters)" required></textarea>
+              </div>
+              <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">Save Update</button>
+              </div>
+            </form>
+          <?php endif; ?>
+        <?php elseif ($canUpdate): ?>
             <h2>Update Complaint</h2>
             <div class="alert alert-warning small">New officer assignments require valid department/category/ward maps and the exact PDF stage role.
               Existing assignments may remain unchanged for status-only updates. No approval is generated automatically.</div>
