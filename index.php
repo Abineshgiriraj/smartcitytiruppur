@@ -141,7 +141,7 @@ include __DIR__ . '/includes/header.php';
                     <span class="neo-service-top"><i class="bi bi-search"></i><span class="neo-service-arrow"><i class="bi bi-arrow-up-right"></i></span></span>
                     <span class="neo-service-bottom"><small>02 · STAY INFORMED</small><strong>Track<br>Complaint</strong><span>Check your complaint status and progress.</span></span>
                 </a>
-                <a class="neo-service" href="<?php echo e(url('department-contacts.php')); ?>">
+                <a class="neo-service" href="<?php echo e(url('contact.php')); ?>">
                     <span class="neo-service-top"><i class="bi bi-people"></i><span class="neo-service-arrow"><i class="bi bi-arrow-up-right"></i></span></span>
                     <span class="neo-service-bottom"><small>03 · FIND THE RIGHT PERSON</small><strong>Contact<br>Us</strong><span>Contact municipal offices and support.</span></span>
                 </a>
