@@ -13,12 +13,12 @@ $pageTitle = 'Officer Dashboard';
 $kpiStmt = db()->prepare('
     SELECT 
         COUNT(*) as total_count,
-        SUM(CASE WHEN status = "Assigned" THEN 1 ELSE 0 END) as assigned_count,
+        SUM(CASE WHEN status IN ("Assigned", "Acknowledged") THEN 1 ELSE 0 END) as assigned_count,
         SUM(CASE WHEN status = "In Progress" THEN 1 ELSE 0 END) as progress_count,
         SUM(CASE WHEN status = "Resolved" THEN 1 ELSE 0 END) as resolved_count,
         SUM(CASE WHEN status = "Closed" THEN 1 ELSE 0 END) as closed_count,
         SUM(CASE WHEN status = "Reopened" THEN 1 ELSE 0 END) as reopened_count,
-        SUM(CASE WHEN status IN ("Assigned", "In Progress", "Reopened") AND due_at IS NOT NULL AND due_at < NOW() THEN 1 ELSE 0 END) as overdue_count
+        SUM(CASE WHEN status IN ("Assigned", "Acknowledged", "In Progress", "Reopened") AND due_at IS NOT NULL AND due_at < NOW() THEN 1 ELSE 0 END) as overdue_count
     FROM complaints
     WHERE assigned_officer_id = ? AND is_deleted = 0
 ');
@@ -47,7 +47,7 @@ $urgentStmt = db()->prepare('
     JOIN zones z ON z.id = c.zone_id
     JOIN wards w ON w.id = c.ward_id
     WHERE c.assigned_officer_id = ? AND c.is_deleted = 0
-      AND c.status IN ("Assigned", "In Progress", "Reopened")
+      AND c.status IN ("Assigned", "Acknowledged", "In Progress", "Reopened")
     ORDER BY 
         CASE WHEN c.due_at IS NOT NULL AND c.due_at < NOW() THEN 0 ELSE 1 END ASC,
         c.due_at ASC,
@@ -276,6 +276,8 @@ include __DIR__ . '/../includes/employee-header.php';
                             }
                             $statusBadgeClass = match($c['status']) {
                                 'Assigned' => 'bg-warning text-dark',
+                                 'Acknowledged' => 'bg-primary text-white',
+                                 'Acknowledged' => 'bg-primary text-white',
                                 'In Progress' => 'bg-info text-dark',
                                 'Reopened' => 'bg-danger',
                                 'Resolved' => 'bg-success',
