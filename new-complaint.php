@@ -128,6 +128,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $pdo->beginTransaction();
 
+            // Browser/GPS inputs are suggestions only: require a real active
+            // street -> ward -> zone relationship before committing allocation.
+            $locationStmt=$pdo->prepare(
+                'SELECT s.id FROM streets s
+                 JOIN wards w ON w.id=s.ward_id AND w.is_active=1
+                 JOIN zones z ON z.id=w.zone_id AND z.is_active=1
+                 WHERE s.id=? AND s.ward_id=? AND z.id=? AND s.is_active=1
+                 LIMIT 1'
+            );
+            $locationStmt->execute([$streetId,$wardId,$zoneId]);
+            if (!$locationStmt->fetchColumn()) {
+                throw new RuntimeException('The selected locality, ward and zone do not match. Please reselect your locality.');
+            }
+
             $categoryStmt = $pdo->prepare(
                 'SELECT id, sla_days FROM complaint_categories
                  WHERE id = ? AND department_id = ? AND is_active = 1 LIMIT 1'
