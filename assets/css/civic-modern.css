@@ -1,0 +1,57 @@
+/* Smart City Tiruppur · Modern civic UI
+   Presentation layer only. Existing forms, data and permissions remain intact. */
+:root { --civic-navy:#0b2442; --civic-blue:#175fac; --civic-teal:#0f9e9a;
+  --civic-ink:#18334c; --civic-line:#dce7f0; --civic-ease:cubic-bezier(.2,.8,.2,1); }
+body.public-body,body.admin-body{font-family:Inter,"Segoe UI",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+body.public-body{background:#f2f6fb;color:var(--civic-ink)}
+body.public-body .main-navbar{background:rgba(11,36,66,.98)!important;box-shadow:0 12px 35px rgba(8,32,61,.12)}
+body.public-body .navbar-brand{transition:transform .3s var(--civic-ease)}
+body.public-body .navbar-brand:hover{transform:translateY(-2px)}
+body.public-body .main-navbar .nav-link{border-radius:12px;transition:background .25s,color .25s,transform .25s}
+body.public-body .main-navbar .nav-link:hover{background:rgba(255,255,255,.1);transform:translateY(-1px)}
+body.public-body .page-banner{background:radial-gradient(circle at 85% 30%,rgba(67,186,200,.16),transparent 33%),linear-gradient(112deg,#0a2744,#175d86)!important;border:0;padding:52px 0}
+body.public-body .page-banner h1{font-size:clamp(29px,3vw,42px);font-weight:850;letter-spacing:-1.2px}
+body.public-body .content-card,body.public-body .form-panel,body.public-body .status-result-card,
+body.public-body .complaint-form-shell{border-radius:20px!important;border:1px solid #e0eaf3!important;box-shadow:0 15px 42px rgba(8,40,70,.075);transition:box-shadow .3s var(--civic-ease),transform .3s var(--civic-ease)}
+body.public-body .form-panel:hover,body.public-body .content-card:hover{box-shadow:0 22px 52px rgba(10,44,81,.12)}
+body.public-body .form-panel{background:linear-gradient(160deg,#fff,#f9fcff)!important}
+body.public-body .form-panel-title{background:linear-gradient(110deg,#145a94,#18839c)!important}
+body.public-body .form-control,body.public-body .form-select{border-radius:12px;min-height:46px;border-color:#cbdbe9;transition:border-color .22s,box-shadow .22s}
+body.public-body .form-control:focus,body.public-body .form-select:focus{border-color:#2188bd;box-shadow:0 0 0 4px rgba(33,136,189,.12)}
+body.public-body .btn,body.admin-body .btn{border-radius:12px;transition:transform .22s var(--civic-ease),box-shadow .22s var(--civic-ease),filter .22s}
+body.public-body .btn:hover,body.admin-body .btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(9,38,77,.14)}
+body.public-body .btn:active,body.admin-body .btn:active{transform:translateY(0)}
+body.public-body .btn-primary{background:linear-gradient(112deg,#1463a8,#117b9c);border:0}
+body.public-body .btn-primary:hover{filter:brightness(1.09)}
+body.public-body .city-hero{background:radial-gradient(circle at 18% 15%,rgba(67,201,195,.13),transparent 35%),linear-gradient(120deg,#071d36,#123e69 58%,#185c79)!important}
+body.public-body .city-hero-copy{animation:civic-enter .7s var(--civic-ease) both}
+body.public-body .city-hero-photo{animation:civic-photo .85s var(--civic-ease) .15s both;box-shadow:0 35px 80px rgba(2,16,33,.34)}
+body.public-body .city-hero-photo-caption{animation:civic-enter .8s var(--civic-ease) .25s both}
+body.public-body .city-stat,.public-body .frequent-card{transition:transform .28s var(--civic-ease),box-shadow .28s}
+body.public-body .city-stat:hover,body.public-body .frequent-card:hover{transform:translateY(-5px);box-shadow:0 24px 48px rgba(9,44,82,.16)}
+body.admin-body{background:#f0f5fb;color:var(--civic-ink)}
+body.admin-body .admin-sidebar{background:linear-gradient(180deg,#0a2847,#123e62)!important}
+body.admin-body .admin-topbar{box-shadow:0 8px 32px rgba(10,40,70,.045);border-bottom:1px solid #e0eaf3}
+body.admin-body .admin-page .card,body.admin-body .admin-page .content-card{border:1px solid #e0e8f2;border-radius:18px;box-shadow:0 15px 36px rgba(15,45,77,.06);transition:transform .25s,box-shadow .25s}
+body.admin-body .admin-page .card:hover,body.admin-body .admin-page .content-card:hover{box-shadow:0 20px 45px rgba(15,45,77,.11)}
+body.admin-body .admin-menu-link{transition:background .24s,transform .24s}
+body.admin-body .admin-menu-link:hover{transform:translateX(3px)}
+body.admin-body .form-control,body.admin-body .form-select{border-radius:11px}
+body.admin-body .table-hover tbody tr{transition:background .2s}
+body.admin-body .table-hover tbody tr:hover{background:#ebf5fb}
+.gps-location-panel{border:1px solid #bedeea;border-radius:16px;padding:18px 19px;background:linear-gradient(125deg,#e8f6fb,#f5fbff)}
+.gps-location-heading{display:flex;align-items:center;gap:10px;color:#124b73;font-size:15px;font-weight:800;margin-bottom:5px}
+.gps-location-heading i{font-size:21px;color:#0b9a9a}
+.gps-location-panel p{margin:0 0 13px;color:#526e81;font-size:13px}
+.gps-location-panel .btn{font-weight:700}
+#complaint-location-status{min-height:20px;margin-top:10px;font-size:13px;color:#425f73}
+#complaint-location-status[data-state="success"]{color:#116c59}
+#complaint-location-status[data-state="warning"]{color:#a15a1e}
+#gps-locality-choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px;margin-top:10px}
+.gps-locality-choice{display:flex;flex-direction:column;align-items:flex-start;gap:5px;border:1px solid #c5deec;background:white;border-radius:12px;padding:12px;text-align:left;color:#16456b;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s}
+.gps-locality-choice:hover,.gps-locality-choice:focus-visible{transform:translateY(-2px);border-color:#1686b1;box-shadow:0 8px 18px rgba(0,75,113,.1)}
+.gps-locality-choice span{font-weight:750}.gps-locality-choice small{color:#638096}
+@keyframes civic-enter{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@keyframes civic-photo{from{opacity:0;transform:translateY(18px) rotate(-2deg)}to{opacity:1;transform:rotate(2deg)}}
+@media(max-width:768px){body.public-body .page-banner{padding:30px 0} .gps-location-panel{padding:14px}#gps-locality-choices{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
