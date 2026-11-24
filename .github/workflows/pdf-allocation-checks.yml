@@ -48,6 +48,7 @@ jobs:
           php -l employee/officer-complaint.php
           php -l employee/officer-feedback.php
           php -l employee/officer-profile.php
+          php -l employee/download-attachment.php
           php -l includes/auth.php
           php -l includes/employee-header.php
           php -l ajax/send-otp.php
