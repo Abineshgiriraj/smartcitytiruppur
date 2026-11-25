@@ -199,6 +199,20 @@ $summary=$summaryStmt->fetch(PDO::FETCH_ASSOC)?:['total'=>0,'overdue'=>0,'unassi
 $selected=null;$events=[];$assignments=[];$stageRows=[];$policy=null;$currentLevel=1;$stagePeople=[];
 $stageIssue='';$nextPreview=['label'=>'No complaint selected','candidate'=>null];
 $complaintId=max(0,(int)($_GET['complaint_id']??0));
+$referenceSearch=trim((string)($_GET['reference_no']??''));
+$referenceSearch=substr($referenceSearch,0,45);
+if ($tab==='journey' && $referenceSearch!=='' && $complaintId===0) {
+    $resolveSql='SELECT id FROM complaints WHERE reference_no=? AND is_deleted=0';
+    $resolveArgs=[$referenceSearch];
+    if ($departmentScope!==null) {
+        $resolveSql.=' AND department_id=?';
+        $resolveArgs[]=$departmentScope;
+    }
+    $resolveSql.=' LIMIT 1';
+    $resolve=$pdo->prepare($resolveSql);
+    $resolve->execute($resolveArgs);
+    $complaintId=(int)$resolve->fetchColumn();
+}
 if ($tab==='journey' && $complaintId>0) {
     $detailSql='SELECT c.*,d.department_name,cc.category_name,z.zone_no,
            o.officer_name AS current_officer_name,o.designation AS current_designation
@@ -365,8 +379,20 @@ include __DIR__.'/../includes/employee-header.php';
     </div>
     <?php if($pages>1): ?><div class="er-pages"><a class="btn btn-sm btn-outline-secondary <?php echo $page<=1?'disabled':''; ?>" href="<?php echo e(er_link(['page'=>max(1,$page-1)])); ?>">Previous</a><span>Page <?php echo $page; ?> / <?php echo $pages; ?></span><a class="btn btn-sm btn-outline-secondary <?php echo $page>=$pages?'disabled':''; ?>" href="<?php echo e(er_link(['page'=>min($pages,$page+1)])); ?>">Next</a></div><?php endif; ?>
   <?php elseif($tab==='journey'): ?>
-    <form class="er-journey-search" method="get"><input type="hidden" name="tab" value="journey"><label class="form-label fw-bold">Complaint ID</label><div class="input-group"><input class="form-control" type="number" name="complaint_id" min="1" value="<?php echo $complaintId?:''; ?>" placeholder="Enter the complaint ID from the overview" required><button class="btn btn-primary">View Journey</button></div><div class="form-text">For a complaint reference, search on the Overview tab and select View journey.</div></form>
-    <?php if($complaintId>0 && !$selected): ?><div class="alert alert-warning">Complaint not found or outside your authorized department.</div><?php endif; ?>
+    <form class="er-journey-search" method="get">
+      <input type="hidden" name="tab" value="journey">
+      <label class="form-label fw-bold" for="er-journey-ref">Complaint reference number</label>
+      <div class="input-group">
+        <input id="er-journey-ref" class="form-control" type="search" name="reference_no" maxlength="45"
+          value="<?php echo e($referenceSearch ?: ($selected['reference_no'] ?? '')); ?>"
+          placeholder="TCMC-2026-970103" required>
+        <button class="btn btn-primary" type="submit"><i class="bi bi-search me-1"></i> View journey</button>
+      </div>
+      <div class="form-text">Enter the exact reference number, or click View journey beside a result in Overview.</div>
+    </form>
+    <?php if(($complaintId>0 || $referenceSearch!=='') && !$selected): ?>
+      <div class="alert alert-warning">Complaint not found or outside your authorized department.</div>
+    <?php endif; ?>
     <?php if($selected): ?>
       <div class="er-journey-head er-card">
         <div><small>REFERENCE NUMBER</small><h2><?php echo e($selected['reference_no']??('#'.$selected['id'])); ?></h2><p><?php echo e($selected['department_name']); ?> · <?php echo e($selected['category_name']); ?> · Zone <?php echo e($selected['zone_no']); ?></p></div>
@@ -383,7 +409,7 @@ include __DIR__.'/../includes/employee-header.php';
               <div class="er-timeline-item <?php echo $active?'is-active':($past?'is-past':'is-future'); ?>">
                 <div class="er-timeline-num"><?php echo $n; ?></div>
                 <div class="er-timeline-content">
-                  <div class="er-timeline-heading"><strong>Stage <?php echo $n; ?> — <?php echo e($step['role_label']); ?></strong><span class="er-state"><?php echo $active?'Current stage':($past?'Recorded earlier':'Upcoming'); ?></span></div>
+                  <div class="er-timeline-heading"><strong>Stage <?php echo $n; ?> — <?php echo e($step['role_label']); ?></strong><span class="er-state"><?php echo $active?'Current stage':($past?($person?'Recorded earlier':'Missing historical record'):'Upcoming'); ?></span></div>
                   <p>PDF stage SLA: <strong><?php echo (int)$step['period_days']; ?> day(s)</strong></p>
                   <p><?php if($active): ?>Current assigned officer: <strong><?php echo e($selected['current_officer_name']?:'Unassigned'); ?></strong><?php elseif($person): ?>Recorded recipient: <strong><?php echo e($person['officer_name']?:('#'.$person['officer_id'])); ?></strong><?php else: ?>Officer not assigned to this stage<?php endif; ?></p>
                   <?php if($person): ?><small class="text-secondary">Recorded at: <?php echo e(er_date($person['escalated_at']??$person['assigned_at']??null)); ?></small><?php endif; ?>
