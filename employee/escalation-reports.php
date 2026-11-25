@@ -309,9 +309,20 @@ if($tab==='stages') {
     $stmt->bindValue($i++,$perPage,PDO::PARAM_INT);
     $stmt->bindValue($i,($page-1)*$perPage,PDO::PARAM_INT);
     $stmt->execute();$categoryRows=$stmt->fetchAll(PDO::FETCH_ASSOC);
+    $rawStageStmt=$pdo->prepare(
+        'SELECT stage_no,role_label,period_days FROM pdf_escalation_policy_stages
+         WHERE category_id=? ORDER BY stage_no'
+    );
     foreach($categoryRows as &$r){
         $p=pdf_policy_routing_ready($pdo,(int)$r['id']);
-        $r['stages']=$p['stages']??[];
+        if ($p) {
+            $r['stages']=$p['stages'];
+        } else {
+            // Still display recorded rows, clearly marked as NOT routable;
+            // this helps the administrator identify incomplete PDF policies.
+            $rawStageStmt->execute([(int)$r['id']]);
+            $r['stages']=$rawStageStmt->fetchAll(PDO::FETCH_ASSOC);
+        }
         $r['ready']=$p!==null;
     }
     unset($r);
