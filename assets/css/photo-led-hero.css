@@ -1,9 +1,16 @@
 /* Photo-led homepage hero merged with Tiruppur's previous animated blue interface.
    Scoped to .neo-photo-hero; dashboard, forms and admin views are untouched. */
-.neo-home .neo-photo-hero {
+/* Keep a CSS copy behind the image element if it has not painted yet.
+   Both paths point to the existing municipal corporation photograph. */
+body.public-body .neo-home .neo-photo-hero {
   position:relative; isolation:isolate; min-height:clamp(600px,77vh,800px);
   display:flex; flex-direction:column; justify-content:center;
-  background:#0b274d; padding:0; overflow:hidden; color:#fff;
+  background-color:#0b274d;
+  background-image:url('../images/smart-bg.jpg');
+  background-size:cover;
+  background-position:center 44%;
+  background-repeat:no-repeat;
+  padding:0; overflow:hidden; color:#fff;
 }
 .neo-home .neo-photo-hero-backdrop {
   position:absolute; inset:0; z-index:0; overflow:hidden; pointer-events:none;
@@ -13,15 +20,22 @@
   object-position:center 44%; transform:scale(1.055) translate3d(var(--photo-x,0px),var(--photo-y,0px),0);
   transition:transform .45s cubic-bezier(.22,1,.36,1);
 }
-.neo-home .neo-photo-hero::before {
+/* These selectors are intentionally more specific than the older
+   body.public-body .neo-hero::before/::after rules. Without them that generic
+   full-opacity gradient completely hides the municipality photograph. */
+body.public-body .neo-home .neo-photo-hero::before {
   content:""; position:absolute; inset:0; z-index:1;
-  background:linear-gradient(180deg,rgba(8,30,61,.44) 0%,rgba(10,37,76,.56) 34%,rgba(7,30,65,.76) 75%,#0b274f 100%);
+  background:linear-gradient(180deg,
+    rgba(5,24,50,.22) 0%,
+    rgba(8,32,63,.30) 40%,
+    rgba(7,31,65,.62) 82%,
+    rgba(7,31,65,.84) 100%);
   pointer-events:none;
 }
-.neo-home .neo-photo-hero::after {
+body.public-body .neo-home .neo-photo-hero::after {
   content:"";position:absolute;inset:0;z-index:1;width:auto;height:auto;right:0;top:0;
   border:0;border-radius:0;box-shadow:none;
-  background:radial-gradient(ellipse at 48% 42%,rgba(3,25,53,.04),rgba(4,26,57,.23) 80%);
+  background:radial-gradient(ellipse at 48% 42%,rgba(3,25,53,.09),rgba(4,26,57,.15) 80%);
   pointer-events:none;
 }
 .neo-home .neo-photo-hero-noise {
