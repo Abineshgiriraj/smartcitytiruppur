@@ -225,8 +225,8 @@ if ($tab==='journey' && $complaintId>0) {
          JOIN complaint_categories cc ON cc.id=c.category_id
          JOIN zones z ON z.id=c.zone_id
          LEFT JOIN officers o ON o.id=c.assigned_officer_id
-         WHERE c.id=? AND c.is_deleted=0 AND c.reference_no LIKE 'TCMC-2026-%'';
-    $detailArgs=[$complaintId];
+         WHERE c.id=? AND c.is_deleted=0 AND c.reference_no LIKE ?';
+    $detailArgs=[$complaintId,'TCMC-2026-%'];
     if($departmentScope!==null){$detailSql.=' AND c.department_id=?';$detailArgs[]=$departmentScope;}
     $detailStmt=$pdo->prepare($detailSql);
     $detailStmt->execute($detailArgs);
