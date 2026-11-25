@@ -18,7 +18,8 @@ $complaintId = (int)($_GET['id'] ?? $_POST['id'] ?? 0);
 $stmt = db()->prepare(
     "SELECT c.*, d.department_name, cc.category_name, cc.sla_days,
             z.zone_no, w.ward_no, COALESCE(s.street_name, c.landmark, c.location_address, 'Not Specified') AS street_name,
-            o.officer_name, o.mobile_no AS officer_mobile
+            o.officer_name, o.designation AS officer_designation,
+            o.mobile_no AS officer_mobile, o.email AS officer_email
      FROM complaints c
      JOIN departments d ON d.id = c.department_id
      JOIN complaint_categories cc ON cc.id = c.category_id
@@ -340,83 +341,11 @@ $attachments = $attachmentStmt->fetchAll();
 
 include __DIR__ . '/../includes/employee-header.php';
 ?>
-<div class="complaint-reference-page">
-    <div class="complaint-reference-brand">
-        <img src="<?php echo e(url('assets/images/trippurlogo.png')); ?>" alt="Tiruppur Corporation">
-        <div>TIRUPPUR CITY<br><strong>MUNICIPAL CORPORATION</strong></div>
-        <img src="<?php echo e(url('assets/images/tamilnadulogo.png')); ?>" alt="Government of Tamil Nadu">
-    </div>
-
-    <?php if (!$isOfficerPortal && can_access_permission($user, 'escalation.view')): ?>
-    <div class="d-flex justify-content-end my-3">
-        <a class="btn btn-outline-primary" href="<?php echo e(url('employee/escalation-reports.php?tab=journey&complaint_id='.(int)$complaintId)); ?>">
-            <i class="bi bi-diagram-3 me-1"></i> View Escalation Journey
-        </a>
-    </div>
-    <?php endif; ?>
-
-    <div class="complaint-reference-top">
-        <section class="complaint-reference-panel">
-            <h2>User Information</h2>
-            <dl class="complaint-reference-details">
-                <dt>Name</dt><dd><?php echo e($complaint['citizen_name']); ?></dd>
-                <dt>Phone</dt><dd><?php echo e($complaint['mobile_no']); ?></dd>
-                <dt>Email ID</dt><dd><?php echo e($complaint['email'] ?: '-'); ?></dd>
-                <dt>Address</dt><dd><?php echo nl2br(e($complaint['communication_address'])); ?></dd>
-                <dt>Source</dt><dd><?php echo e($complaint['source']); ?></dd>
-            </dl>
-        </section>
-        <section class="complaint-reference-panel">
-            <h2>Grievance Information</h2>
-            <dl class="complaint-reference-details">
-                <dt>Complaint Status</dt><dd><?php echo e($complaint['status']); ?></dd>
-                <dt>Department</dt><dd><?php echo e($complaint['department_name']); ?></dd>
-                <dt>Category</dt><dd><?php echo e($complaint['category_name']); ?></dd>
-                <dt>Zone &amp; Ward</dt><dd>ZONE - <?php echo e($complaint['zone_no']); ?> - <?php echo e($complaint['ward_no']); ?></dd>
-                <dt>Closed Date</dt><dd><?php echo e($complaint['closed_at'] ? date('d-m-Y H:i', strtotime($complaint['closed_at'])) : '-'); ?></dd>
-                <dt>Remarks</dt><dd><?php echo e($history ? ($history[count($history)-1]['remarks'] ?: '-') : '-'); ?></dd>
-            </dl>
-        </section>
-        <section class="complaint-reference-panel">
-            <h2>Grievance Allotted Employee</h2>
-            <dl class="complaint-reference-details">
-                <dt>Name</dt><dd><?php echo e($complaint['officer_name'] ?: 'Pending officer allocation'); ?></dd>
-                <dt>Phone Number</dt><dd><?php echo e($complaint['officer_mobile'] ?: '-'); ?></dd>
-                <dt>Email ID</dt><dd>-</dd>
-            </dl>
-        </section>
-    </div>
-
-    <div class="complaint-reference-bottom">
-        <section class="complaint-reference-box">
-            <h2>Description</h2>
-            <div class="complaint-description"><?php echo nl2br(e($complaint['description_english'])); ?></div>
-            <h3>Description (in Tamil)</h3>
-            <div class="complaint-description"><?php echo $complaint['description_tamil'] ? nl2br(e($complaint['description_tamil'])) : '-'; ?></div>
-            <div class="complaint-reference-divider"></div>
-            <h2>User Attachments</h2>
-            <?php if (!$attachments): ?><div class="complaint-no-attachment">No Attachments Found</div><?php endif; ?>
-            <?php foreach ($attachments as $attachment): ?>
-                <a class="complaint-attachment-link" href="<?php echo e(url('employee/download-attachment.php?id=' . (int)$attachment['id'])); ?>"><?php echo e($attachment['original_name']); ?></a>
-            <?php endforeach; ?>
-        </section>
-
-        <aside class="complaint-reference-box complaint-activity-box">
-            <h2>Activity Logs</h2>
-            <?php if (!$history): ?><p class="text-muted">No activity recorded.</p><?php endif; ?>
-            <?php foreach (array_reverse($history) as $item): ?>
-                <div class="complaint-activity-item">
-                    <strong><?php echo e($item['new_status']); ?></strong>
-                    <div><?php echo e($item['full_name'] ?: ($complaint['officer_name'] ?: 'System')); ?></div>
-                    <?php if ($item['remarks']): ?><div class="mt-2">Remarks:<br><strong><?php echo e($item['remarks']); ?></strong></div><?php endif; ?>
-                    <div><?php echo e(date('d-M-Y', strtotime($item['changed_at']))); ?></div>
-                </div>
-            <?php endforeach; ?>
-            <h2 class="mt-3">Closed Attachments</h2>
-            <div class="complaint-no-attachment">No Attachments Found</div>
-        </aside>
-    </div>
-
+<?php
+$detailAudience='staff';
+include __DIR__ . '/../includes/complaint-detail-layout.php';
+?>
+<section class="scd-staff-actions" aria-label="Complaint update controls">
     <?php if ($needsRoutingReview): ?>
         <div class="alert alert-warning">
             <strong>Department / Central Intake — Specialist Routing Required.</strong>
@@ -483,5 +412,5 @@ include __DIR__ . '/../includes/employee-header.php';
             </form>
         <?php else: ?><div class="alert alert-info mb-0">This account has read-only access.</div><?php endif; ?>
     </div>
-</div>
+</section>
 <?php include __DIR__ . '/../includes/employee-footer.php'; ?>
