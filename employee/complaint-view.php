@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__ . '/../includes/bootstrap.php';
 require_once __DIR__ . '/../includes/officer-authority.php';
+require_once __DIR__ . '/../includes/complaint-officer-access.php';
 
 $user = require_login();
 $isOfficerPortal = in_array($user['role'], ['Field Officer','Officer'], true);
@@ -49,12 +50,11 @@ if (!can_manage_all_complaints($user)) {
         if (!$allowed && $officerPortalId > 0 && str_starts_with((string)$complaint['reference_no'], 'TCMC-2026-')) {
             // Earlier officers may consult the complaint and its recorded history.
             // Their former assignment never grants status or reassignment permissions.
-            $historicStmt = db()->prepare(
-                'SELECT 1 FROM complaint_assignments
-                 WHERE complaint_id=? AND officer_id=? AND is_current=0 LIMIT 1'
+            $previousOfficerAccess = complaint_officer_was_assigned(
+                db(), $complaintId, $officerPortalId,
+                (int)($complaint['assigned_officer_id'] ?? 0),
+                (string)$complaint['reference_no']
             );
-            $historicStmt->execute([$complaintId,$officerPortalId]);
-            $previousOfficerAccess = (bool)$historicStmt->fetchColumn();
             $allowed = $previousOfficerAccess;
         }
     }

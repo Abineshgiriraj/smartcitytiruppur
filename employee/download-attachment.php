@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/../includes/bootstrap.php';
+require_once __DIR__ . '/../includes/complaint-officer-access.php';
 
 $user = require_login();
 $isOfficer = in_array($user['role'],['Field Officer','Officer'],true);
@@ -32,12 +33,11 @@ if (!$allowed && $isOfficer) {
     if (!$allowed && $officerId > 0 && str_starts_with((string)$attachment['reference_no'], 'TCMC-2026-')) {
         // Grant historical officers read-only access to attachments for their
         // previously assigned complaints, never to unrelated attachments.
-        $historyStmt = db()->prepare(
-            'SELECT 1 FROM complaint_assignments
-             WHERE complaint_id=? AND officer_id=? AND is_current=0 LIMIT 1'
+        $allowed = complaint_officer_was_assigned(
+            db(), (int)$attachment['complaint_id'], $officerId,
+            (int)($attachment['assigned_officer_id'] ?? 0),
+            (string)$attachment['reference_no']
         );
-        $historyStmt->execute([(int)$attachment['complaint_id'],$officerId]);
-        $allowed = (bool)$historyStmt->fetchColumn();
     }
 }
 
