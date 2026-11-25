@@ -346,6 +346,7 @@ $detailAudience='staff';
 include __DIR__ . '/../includes/complaint-detail-layout.php';
 ?>
 <section class="scd-staff-actions" aria-label="Complaint update controls">
+  <div class="complaint-reference-actions">
     <?php if ($needsRoutingReview): ?>
         <div class="alert alert-warning">
             <strong>Department / Central Intake — Specialist Routing Required.</strong>
