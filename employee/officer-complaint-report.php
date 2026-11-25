@@ -263,7 +263,10 @@ if($officerId>0) {
              AND EXISTS(SELECT 1 FROM complaint_escalations ce WHERE ce.complaint_id=c.id AND ce.officer_id<>h.officer_id
                AND ABS(TIMESTAMPDIFF(SECOND,ce.escalated_at,h.unassigned_at))<=120)) escalated_out";
     $detailStatsArgs=[];
-    for($i=0;$i<7;$i++){array_push($detailStatsArgs,...$cParams,$officerId);}
+    for($i=0;$i<7;$i++){
+        foreach($cParams as $param) $detailStatsArgs[]=$param;
+        $detailStatsArgs[]=$officerId;
+    }
     $detailSummary=ocr_query($pdo,$detailStatsSql,$detailStatsArgs)->fetch(PDO::FETCH_ASSOC)?:$detailSummary;
 
     if($view==='current') {
