@@ -14,6 +14,8 @@ if ($isOfficer) {
         'My Workspace' => [
             ['officer-dashboard.php', 'Dashboard', 'bi-grid-1x2', true],
             ['my-complaints.php', 'My Complaints', 'bi-inbox', true],
+            ['my-complaints.php?status=TransferredToMe', 'Transferred to Me', 'bi-arrow-left-right', true],
+            ['my-complaints.php?status=PreviouslyHandled', 'Previously Handled', 'bi-clock-history', true],
             ['my-complaints.php?status=Assigned', 'Needs Action', 'bi-lightning-charge', true],
             ['officer-feedback.php', 'Citizen Feedback', 'bi-chat-left-heart', true],
             ['officer-profile.php', 'My Profile', 'bi-person-circle', true],

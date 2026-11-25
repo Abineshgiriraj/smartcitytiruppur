@@ -6,7 +6,7 @@ require_permission('escalation.view');
 $pageTitle = 'Escalation Monitor';
 $departmentScope = $user['role'] === 'Department Head' ? (int)($user['department_id'] ?? 0) : null;
 
-$where = ['c.is_deleted=0', "c.status NOT IN ('Resolved','Closed','Rejected')"];
+$where = ['c.is_deleted=0', "c.reference_no LIKE 'TCMC-2026-%'", "c.status NOT IN ('Resolved','Closed','Rejected')"];
 $params = [];
 if ($departmentScope !== null) { $where[] = 'c.department_id=?'; $params[] = $departmentScope; }
 $sql = 'SELECT c.id,c.reference_no,c.status,c.due_at,c.assigned_officer_id,
@@ -39,7 +39,7 @@ $rules = $rulesStmt->fetchAll();
 
 $historyQuery = 'SELECT ce.level_no,ce.escalated_at,c.reference_no,o.officer_name
     FROM complaint_escalations ce JOIN complaints c ON c.id=ce.complaint_id
-    JOIN officers o ON o.id=ce.officer_id WHERE c.is_deleted=0';
+    JOIN officers o ON o.id=ce.officer_id WHERE c.is_deleted=0 AND c.reference_no LIKE \'TCMC-2026-%\'';
 $historyParams = [];
 if ($departmentScope !== null) { $historyQuery .= ' AND c.department_id=?'; $historyParams[] = $departmentScope; }
 $historyQuery .= ' ORDER BY ce.escalated_at DESC LIMIT 12';
@@ -49,7 +49,7 @@ $history = $historyStmt->fetchAll();
 include __DIR__ . '/../includes/employee-header.php';
 ?>
 <div class="admin-heading">
-  <div><span class="admin-eyebrow">Workflow Monitoring</span><h1 class="fw-bold mb-1">Escalation Monitor</h1><p>Inspect overdue complaints, stage coverage and escalation events.</p></div>
+  <div><span class="admin-eyebrow">Workflow Monitoring</span><h1 class="fw-bold mb-1">Escalation Monitor</h1><p>Inspect TCMC-2026- overdue complaints and recorded escalation events. Historical complaint records remain archived.</p></div>
   <?php if (in_array($user['role'],['Super Admin','Admin'],true)): ?><a class="btn btn-outline-primary" href="<?php echo e(url('employee/masters.php?section=allocations')); ?>">Allocation Rules <i class="bi bi-arrow-right ms-1"></i></a><?php endif; ?>
 </div>
 <div class="alert alert-warning border-0"><i class="bi bi-shield-exclamation me-2"></i><strong>Read-only monitor.</strong> Viewing this page does not execute escalation. Automatic scheduling remains disabled until officer responsibilities and later stages are verified.</div>

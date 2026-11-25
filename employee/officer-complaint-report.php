@@ -269,6 +269,15 @@ if($officerId>0) {
     }
     $detailSummary=ocr_query($pdo,$detailStatsSql,$detailStatsArgs)->fetch(PDO::FETCH_ASSOC)?:$detailSummary;
 
+    // Current owner and the last recorded former owner belong to the
+    // complaint, not to an inferred future escalation candidate.
+    $handoverSelect=",
+        (SELECT co.officer_name FROM officers co WHERE co.id=c.assigned_officer_id LIMIT 1) current_owner_name,
+        (SELECT po.officer_name FROM complaint_assignments pa
+         JOIN officers po ON po.id=pa.officer_id
+         WHERE pa.complaint_id=c.id AND pa.is_current=0
+         ORDER BY pa.unassigned_at DESC,pa.id DESC LIMIT 1) previous_owner_name";
+
     if($view==='current') {
         $detailFrom="FROM complaints c
           LEFT JOIN departments d ON d.id=c.department_id
@@ -282,7 +291,7 @@ if($officerId>0) {
            (SELECT MAX(h.assigned_at) FROM complaint_assignments h WHERE h.complaint_id=c.id AND h.officer_id=?
              AND h.is_current=1) handled_at,
            (SELECT COALESCE(MAX(ce.level_no),1) FROM complaint_escalations ce WHERE ce.complaint_id=c.id) last_stage,
-           'Current' assignment_type ";
+           'Current' assignment_type {$handoverSelect} ";
         $detailSelectArgs=[$officerId];
         $detailOrder=' ORDER BY c.due_at IS NULL,c.due_at,c.created_at DESC,c.id DESC';
     } else {
@@ -299,7 +308,7 @@ if($officerId>0) {
            d.department_name,cat.category_name,w.ward_no,z.zone_no,
            COALESCE(hist.last_unassigned,hist.first_assigned) handled_at,
            (SELECT COALESCE(MAX(ce.level_no),1) FROM complaint_escalations ce WHERE ce.complaint_id=c.id) last_stage,
-           'Previous' assignment_type ";
+           'Previous' assignment_type {$handoverSelect} ";
         $detailSelectArgs=[];
         $detailOrder=' ORDER BY handled_at DESC,c.id DESC';
     }
@@ -314,11 +323,11 @@ if($officerId>0) {
         foreach($data as $r) $out[]=[
             $r['reference_no'],$r['department_name'],$r['category_name'],
             $r['zone_no'],$r['ward_no'],$r['status'],$r['assignment_type'],
-            $r['handled_at'],$r['due_at'],$r['last_stage'],$r['created_at']
+            $r['handled_at'],$r['due_at'],$r['last_stage'],$r['current_owner_name'],$r['previous_owner_name'],$r['created_at']
         ];
         if($detailTotal>$limit) $out[]=['Export capped at 5,000 complaints; narrow your filters'];
         ocr_csv_download('officer_'.(int)$selected['id'].'_complaints_'.date('Ymd_His').'.csv',
-            ['Reference','Department','Category','Zone','Ward','Status','Assignment','Assigned/Last handled','Due at','Last recorded escalation level','Created'], $out);
+            ['Reference','Department','Category','Zone','Ward','Status','Assignment','Assigned/Last handled','Due at','Last recorded escalation level','Current owner','Previous owner','Created'], $out);
     }
     $detailRows=ocr_query($pdo,$detailSelect.$detailFrom.$detailOrder.' LIMIT '.$perPage.' OFFSET '.(($page-1)*$perPage),
         array_merge($detailSelectArgs,$detailArgs))->fetchAll(PDO::FETCH_ASSOC);
@@ -456,9 +465,9 @@ include __DIR__.'/../includes/employee-header.php';
       </div></div>
       <div class="table-responsive">
         <table class="table table-hover align-middle ocr-table">
-          <thead><tr><th>Complaint reference</th><th>Department / category</th><th>Zone / ward</th><th>Complaint status</th><th><?php echo $view==='current'?'Assigned at':'Last handled'; ?></th><th>Deadline</th><th>Last recorded stage</th><th class="no-print">Actions</th></tr></thead>
+          <thead><tr><th>Complaint reference</th><th>Department / category</th><th>Zone / ward</th><th>Complaint status</th><th><?php echo $view==='current'?'Assigned at':'Last handled'; ?></th><th>Deadline</th><th>Last recorded stage</th><th>Ownership</th><th class="no-print">Actions</th></tr></thead>
           <tbody>
-          <?php if(!$detailRows): ?><tr><td colspan="8" class="text-center py-5 text-muted">No complaints in this view for the selected filters.</td></tr><?php endif; ?>
+          <?php if(!$detailRows): ?><tr><td colspan="9" class="text-center py-5 text-muted">No complaints in this view for the selected filters.</td></tr><?php endif; ?>
           <?php foreach($detailRows as $case): ?>
             <tr>
               <td><strong><?php echo e($case['reference_no']?:('#'.$case['id'])); ?></strong><small class="d-block text-muted">Registered <?php echo e(ocr_date($case['created_at'])); ?></small></td>
@@ -468,6 +477,10 @@ include __DIR__.'/../includes/employee-header.php';
               <td><?php echo e(ocr_date($case['handled_at'])); ?></td>
               <td><?php echo e(ocr_date($case['due_at'])); ?></td>
               <td>L<?php echo (int)$case['last_stage']; ?></td>
+              <td><strong><?php echo e($case['current_owner_name']?:'Unassigned'); ?></strong>
+                <?php if($case['previous_owner_name']): ?><small class="d-block text-muted">From <?php echo e($case['previous_owner_name']); ?></small><?php endif; ?>
+                <small class="d-block text-muted"><?php echo $view==='current'?'Current responsibility':'Transferred / previously handled'; ?></small>
+              </td>
               <td class="ocr-actions no-print">
                 <a class="btn btn-sm btn-outline-primary" href="<?php echo e(url('employee/complaint-view.php?id='.(int)$case['id'])); ?>" aria-label="View complaint <?php echo e($case['reference_no']?:('#'.$case['id'])); ?>">Complaint</a>
                 <a class="btn btn-sm btn-outline-secondary" href="<?php echo e(url('employee/escalation-reports.php?tab=journey&complaint_id='.(int)$case['id'])); ?>">Escalation</a>

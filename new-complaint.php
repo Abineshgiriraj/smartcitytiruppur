@@ -103,7 +103,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    if ($doorNo === '') $errors[] = 'Door / Building / Flat number is required.';
     if ($departmentId <= 0 || $categoryId <= 0) $errors[] = 'Select a department and complaint category.';
     if ($description === '') $errors[] = 'Complaint description is required.';
     if (($_SESSION['complaint_captcha'] ?? '') !== strtolower($captchaAnswer)) $errors[] = 'Captcha answer is incorrect.';
@@ -194,7 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             $dueDate = date('Y-m-d H:i:s', strtotime('+' . (int)$category['sla_days'] . ' days'));
-            $derivedLocationAddress = trim($doorNo . ', ' . $locationName);
+            $derivedLocationAddress = trim(($doorNo !== '' ? $doorNo . ', ' : '') . $locationName);
 
             // Check if description has Tamil script
             $hasTamil = (bool)preg_match('/[\x{0B80}-\x{0BFF}]/u', $description);
@@ -523,8 +522,8 @@ include __DIR__ . '/includes/header.php';
 
                     <!-- Door No / Building -->
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold required">Door No / Flat / Building / Plot No</label>
-                        <input class="form-control" id="door_no" name="door_no" value="<?php echo e($old['door_no'] ?? ''); ?>" placeholder="e.g. Door No. 14-B, 2nd Floor" required>
+                        <label class="form-label fw-semibold">Door No / Flat / Building / Plot No <span class="text-muted fw-normal">(Optional)</span></label>
+                        <input class="form-control" id="door_no" name="door_no" value="<?php echo e($old['door_no'] ?? ''); ?>" placeholder="e.g. Door No. 14-B, 2nd Floor">
                     </div>
 
                     <!-- Assessment No -->

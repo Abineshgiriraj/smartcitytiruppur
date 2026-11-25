@@ -117,7 +117,9 @@ $zones = $pdo->query(
     'SELECT id,zone_no FROM zones WHERE is_active=1 ORDER BY zone_no'
 )->fetchAll(PDO::FETCH_ASSOC);
 
-$where=['c.is_deleted=0'];
+// The operational report shows only newly numbered 2026 complaints.
+// Historical numeric/legacy references remain intact in the database.
+$where=['c.is_deleted=0', "c.reference_no LIKE 'TCMC-2026-%'"];
 $params=[];
 if ($department > 0) {$where[]='c.department_id=?';$params[]=$department;}
 if ($zone > 0) {$where[]='c.zone_id=?';$params[]=$zone;}
@@ -184,7 +186,7 @@ if (($_GET['export'] ?? '')==='csv' && $tab==='overview') {
 }
 
 $rows=$tab==='overview'?$loadRows($perPage,($page-1)*$perPage):[];
-$summaryWhere=['c.is_deleted=0'];
+$summaryWhere=['c.is_deleted=0', "c.reference_no LIKE 'TCMC-2026-%'"];
 $summaryParams=[];
 if ($department>0){$summaryWhere[]='c.department_id=?';$summaryParams[]=$department;}
 if ($from!==''){$summaryWhere[]='c.created_at>=?';$summaryParams[]=$from.' 00:00:00';}
@@ -204,7 +206,7 @@ $complaintId=max(0,(int)($_GET['complaint_id']??0));
 $referenceSearch=trim((string)($_GET['reference_no']??''));
 $referenceSearch=substr($referenceSearch,0,45);
 if ($tab==='journey' && $referenceSearch!=='' && $complaintId===0) {
-    $resolveSql='SELECT id FROM complaints WHERE reference_no=? AND is_deleted=0';
+    $resolveSql="SELECT id FROM complaints WHERE reference_no=? AND reference_no LIKE 'TCMC-2026-%' AND is_deleted=0";
     $resolveArgs=[$referenceSearch];
     if ($departmentScope!==null) {
         $resolveSql.=' AND department_id=?';
@@ -223,8 +225,8 @@ if ($tab==='journey' && $complaintId>0) {
          JOIN complaint_categories cc ON cc.id=c.category_id
          JOIN zones z ON z.id=c.zone_id
          LEFT JOIN officers o ON o.id=c.assigned_officer_id
-         WHERE c.id=? AND c.is_deleted=0';
-    $detailArgs=[$complaintId];
+         WHERE c.id=? AND c.is_deleted=0 AND c.reference_no LIKE ?';
+    $detailArgs=[$complaintId,'TCMC-2026-%'];
     if($departmentScope!==null){$detailSql.=' AND c.department_id=?';$detailArgs[]=$departmentScope;}
     $detailStmt=$pdo->prepare($detailSql);
     $detailStmt->execute($detailArgs);
@@ -359,7 +361,7 @@ include __DIR__.'/../includes/employee-header.php';
     <div>
       <span class="admin-eyebrow">Complaint Management / PDF Escalation</span>
       <h1 class="fw-bold mb-1">Escalation Reports</h1>
-      <p>Follow every assigned stage, recorded officer transfer, and the next PDF responsibility.</p>
+      <p>Follow assigned stages and recorded officer transfers for complaints numbered TCMC-2026- only. Legacy complaints are hidden, not deleted.</p>
     </div>
     <div class="er-heading-actions">
       <a class="btn btn-outline-primary" href="<?php echo e(url('employee/escalation.php')); ?>"><i class="bi bi-diagram-3 me-1"></i> Monitor</a>
@@ -427,7 +429,7 @@ include __DIR__.'/../includes/employee-header.php';
       <div class="form-text">Enter the exact reference number, or click View journey beside a result in Overview.</div>
     </form>
     <?php if(($complaintId>0 || $referenceSearch!=='') && !$selected): ?>
-      <div class="alert alert-warning">Complaint not found or outside your authorized department.</div>
+      <div class="alert alert-warning">Complaint not found in the TCMC-2026- report scope, or outside your authorized department.</div>
     <?php endif; ?>
     <?php if($selected): ?>
       <div class="er-journey-head er-card">

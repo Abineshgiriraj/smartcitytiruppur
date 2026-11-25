@@ -9,7 +9,7 @@ if (!$isOfficer) require_permission('complaints.view');
 $attachmentId = (int)($_GET['id'] ?? 0);
 
 $stmt = db()->prepare(
-    'SELECT a.*, c.department_id, c.zone_id, c.ward_id, c.assigned_officer_id
+    'SELECT a.*, c.id AS complaint_id, c.reference_no, c.department_id, c.zone_id, c.ward_id, c.assigned_officer_id
      FROM complaint_attachments a
      JOIN complaints c ON c.id = a.complaint_id
      WHERE a.id = ? LIMIT 1'
@@ -29,6 +29,16 @@ if (!$allowed && $user['role'] === 'Zone Officer') $allowed = (int)$user['zone_i
 if (!$allowed && $user['role'] === 'Ward Officer') $allowed = (int)$user['ward_id'] === (int)$attachment['ward_id'];
 if (!$allowed && $isOfficer) {
     $allowed = $officerId > 0 && $officerId === (int)$attachment['assigned_officer_id'];
+    if (!$allowed && $officerId > 0 && str_starts_with((string)$attachment['reference_no'], 'TCMC-2026-')) {
+        // Grant historical officers read-only access to attachments for their
+        // previously assigned complaints, never to unrelated attachments.
+        $historyStmt = db()->prepare(
+            'SELECT 1 FROM complaint_assignments
+             WHERE complaint_id=? AND officer_id=? AND is_current=0 LIMIT 1'
+        );
+        $historyStmt->execute([(int)$attachment['complaint_id'],$officerId]);
+        $allowed = (bool)$historyStmt->fetchColumn();
+    }
 }
 
 if (!$allowed) {

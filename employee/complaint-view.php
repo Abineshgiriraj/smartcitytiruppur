@@ -6,6 +6,7 @@ require_once __DIR__ . '/../includes/officer-authority.php';
 $user = require_login();
 $isOfficerPortal = in_array($user['role'], ['Field Officer','Officer'], true);
 $officerPortalId = 0;
+$previousOfficerAccess = false;
 if ($isOfficerPortal) {
     $auth = require_officer();
     $officerPortalId = (int)$auth['officer']['id'];
@@ -46,6 +47,16 @@ if (!can_manage_all_complaints($user)) {
 
     if ($isOfficerPortal) {
         $allowed = $officerPortalId > 0 && $officerPortalId === (int)$complaint['assigned_officer_id'];
+
+        if (!$allowed && $officerPortalId > 0 && str_starts_with((string)$complaint['reference_no'], 'TCMC-2026-')) {
+            $historicStmt = db()->prepare(
+                'SELECT 1 FROM complaint_assignments
+                 WHERE complaint_id=? AND officer_id=? AND is_current=0 LIMIT 1'
+            );
+            $historicStmt->execute([$complaintId, $officerPortalId]);
+            $previousOfficerAccess = (bool)$historicStmt->fetchColumn();
+            $allowed = $previousOfficerAccess;
+        }
     }
 
     if (!$allowed) {
@@ -54,7 +65,8 @@ if (!can_manage_all_complaints($user)) {
     }
 }
 
-$canUpdate = $isOfficerPortal || can_access_permission($user, 'complaints.update');
+$canUpdate = ($isOfficerPortal && !$previousOfficerAccess)
+    || (!$isOfficerPortal && can_access_permission($user, 'complaints.update'));
 
 // Officers may close/reject active cases and reopen completed/rejected ones.
 // Registered remains an intake state. Officer-initiated reopens do not
@@ -342,6 +354,9 @@ $attachments = $attachmentStmt->fetchAll();
 include __DIR__ . '/../includes/employee-header.php';
 ?>
 <?php
+if ($previousOfficerAccess) {
+    echo '<div class="alert alert-info mb-3" role="status"><strong>Previously assigned complaint - read-only.</strong> You may review details, attachments and activity history. Only the currently assigned officer can update this complaint.</div>';
+}
 $detailAudience='staff';
 include __DIR__ . '/../includes/complaint-detail-layout.php';
 ?>
