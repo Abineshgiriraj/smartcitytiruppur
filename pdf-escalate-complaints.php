@@ -129,6 +129,9 @@ $nullable=strtoupper((string)$col['Null'])==='YES';
 $query='SELECT id,reference_no,status,is_deleted,assigned_officer_id,department_id,
                category_id,zone_id,ward_id,created_at,due_at FROM complaints
         WHERE is_deleted=0 AND status NOT IN (\'Resolved\',\'Closed\',\'Rejected\')';
+// Process only the new reference-number series, even for an explicit complaint ID.
+// Legacy numeric references remain in the database for separate reconciliation.
+$query.=" AND reference_no LIKE 'TCMC-2026-%'";
 $params=[];
 if($complaintId!==null){$query.=' AND id=?';$params[]=$complaintId;}
 else{
