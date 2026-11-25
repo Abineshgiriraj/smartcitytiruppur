@@ -9,7 +9,9 @@ $officerId = (int)$officer['id'];
 
 $pageTitle = 'My Assigned Complaints';
 
-$currentStatus = trim($_GET['status'] ?? '');
+$currentStatus = trim((string)($_GET['status'] ?? ''));
+$showPrevious = $currentStatus === 'PreviouslyHandled';
+$showIncoming = $currentStatus === 'TransferredToMe';
 $searchQuery = trim($_GET['q'] ?? '');
 $fromDate = trim($_GET['from_date'] ?? '');
 $toDate = trim($_GET['to_date'] ?? '');
@@ -17,9 +19,26 @@ $page = max(1, (int)($_GET['page'] ?? 1));
 $perPage = 15;
 $offset = ($page - 1) * $perPage;
 
-// Base conditions
-$conditions = ['c.assigned_officer_id = ?', 'c.is_deleted = 0'];
-$params = [$officerId];
+// Current assignments are controlled by complaints.assigned_officer_id.
+// Historical rows are view-only and never part of an officer's active workload.
+$conditions = ['c.is_deleted = 0'];
+$params = [];
+if ($showPrevious) {
+    $conditions[] = "c.reference_no LIKE 'TCMC-2026-%'";
+    $conditions[] = 'EXISTS (SELECT 1 FROM complaint_assignments old
+        WHERE old.complaint_id=c.id AND old.officer_id=? AND old.is_current=0)';
+    $conditions[] = '(c.assigned_officer_id IS NULL OR c.assigned_officer_id<>?)';
+    array_push($params, $officerId, $officerId);
+} else {
+    $conditions[] = 'c.assigned_officer_id = ?';
+    $params[] = $officerId;
+    if ($showIncoming) {
+        $conditions[] = "c.reference_no LIKE 'TCMC-2026-%'";
+        $conditions[] = 'EXISTS (SELECT 1 FROM complaint_escalations ce
+            WHERE ce.complaint_id=c.id AND ce.officer_id=? AND ce.level_no>1)';
+        $params[] = $officerId;
+    }
+}
 
 // Status filtering
 if ($currentStatus === 'Overdue') {
@@ -62,7 +81,11 @@ $countsStmt = db()->prepare('
         SUM(CASE WHEN status = "Resolved" THEN 1 ELSE 0 END) as resolved_count,
         SUM(CASE WHEN status = "Closed" THEN 1 ELSE 0 END) as closed_count,
         SUM(CASE WHEN status = "Reopened" THEN 1 ELSE 0 END) as reopened_count,
-        SUM(CASE WHEN status IN ("Assigned", "Acknowledged", "In Progress", "Reopened") AND due_at IS NOT NULL AND due_at < NOW() THEN 1 ELSE 0 END) as overdue_count
+        SUM(CASE WHEN status IN ("Assigned", "Acknowledged", "In Progress", "Reopened") AND due_at IS NOT NULL AND due_at < NOW() THEN 1 ELSE 0 END) as overdue_count,
+        SUM(CASE WHEN c.reference_no LIKE 'TCMC-2026-%' AND EXISTS (
+            SELECT 1 FROM complaint_escalations ce
+            WHERE ce.complaint_id=c.id AND ce.officer_id=c.assigned_officer_id AND ce.level_no>1
+        ) THEN 1 ELSE 0 END) AS transferred_to_me_count
     FROM complaints c
     WHERE c.assigned_officer_id = ? AND c.is_deleted = 0
 ');
@@ -71,6 +94,16 @@ $tabCounts = $countsStmt->fetch() ?: [
     'total_count' => 0, 'assigned_count' => 0, 'progress_count' => 0,
     'resolved_count' => 0, 'closed_count' => 0, 'reopened_count' => 0, 'overdue_count' => 0
 ];
+// Previous assignments count separately; historical complaints never inflate
+// current-owner workload totals.
+$previousStmt = db()->prepare("SELECT COUNT(DISTINCT c.id)
+    FROM complaint_assignments h
+    JOIN complaints c ON c.id=h.complaint_id
+    WHERE h.officer_id=? AND h.is_current=0
+      AND c.is_deleted=0 AND c.reference_no LIKE 'TCMC-2026-%'
+      AND (c.assigned_officer_id IS NULL OR c.assigned_officer_id<>?)");
+$previousStmt->execute([$officerId,$officerId]);
+$previousCount=(int)$previousStmt->fetchColumn();
 
 // 2. Count for current filter
 $countStmt = db()->prepare("SELECT COUNT(*) FROM complaints c WHERE {$whereClause}");
@@ -80,13 +113,21 @@ $totalPages = max(1, (int)ceil($totalRecords / $perPage));
 
 // 3. Fetch records
 $dataSql = "
-    SELECT c.*, d.department_name, cc.category_name, cc.sla_days, z.zone_no, w.ward_no, s.street_name
+    SELECT c.*, d.department_name, cc.category_name, cc.sla_days, z.zone_no, w.ward_no, s.street_name,
+      owner.officer_name AS current_owner_name,
+      (SELECT prevOfficer.officer_name FROM complaint_assignments prev
+       JOIN officers prevOfficer ON prevOfficer.id=prev.officer_id
+       WHERE prev.complaint_id=c.id AND prev.is_current=0
+       ORDER BY prev.unassigned_at DESC,prev.id DESC LIMIT 1) AS previous_owner_name,
+      (SELECT MAX(ce.level_no) FROM complaint_escalations ce
+       WHERE ce.complaint_id=c.id AND ce.officer_id=c.assigned_officer_id) AS incoming_level
     FROM complaints c
     JOIN departments d ON d.id = c.department_id
     JOIN complaint_categories cc ON cc.id = c.category_id
     JOIN zones z ON z.id = c.zone_id
     JOIN wards w ON w.id = c.ward_id
     LEFT JOIN streets s ON s.id = c.street_id
+    LEFT JOIN officers owner ON owner.id=c.assigned_officer_id
     WHERE {$whereClause}
     ORDER BY 
         CASE WHEN c.status = 'Reopened' THEN 0 
@@ -105,8 +146,8 @@ include __DIR__ . '/../includes/employee-header.php';
 
 <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
     <div>
-        <h1 class="h3 fw-bold mb-1">My Assigned Complaints</h1>
-        <p class="text-muted mb-0">Complaints assigned to <?php echo e($officer['officer_name']); ?> (<?php echo e($officer['designation']); ?>)</p>
+        <h1 class="h3 fw-bold mb-1"><?php echo $showPrevious?'Previously Handled Complaints':'My Assigned Complaints'; ?></h1>
+        <p class="text-muted mb-0"><?php echo $showPrevious?'Previously assigned cases you can still open and review; updates belong to the current officer.':'Complaints currently assigned to '.e($officer['officer_name']).' ('.e($officer['designation']).')'; ?></p>
     </div>
     <div>
         <span class="badge bg-primary fs-6 px-3 py-2 shadow-sm">
@@ -153,6 +194,18 @@ include __DIR__ . '/../includes/employee-header.php';
                 <a class="nav-link <?php echo $currentStatus === 'Reopened' ? 'active bg-danger' : 'text-danger'; ?> px-3 py-2 fw-semibold" 
                    href="<?php echo e(url('employee/my-complaints.php?status=Reopened' . ($searchQuery ? '&q=' . urlencode($searchQuery) : ''))); ?>">
                     Reopened <span class="badge bg-danger ms-1"><?php echo (int)$tabCounts['reopened_count']; ?></span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?php echo $showIncoming ? 'active' : ''; ?> px-3 py-2 fw-semibold" href="<?php echo e(url('employee/my-complaints.php?status=TransferredToMe')); ?>">
+                    <i class="bi bi-arrow-left-right me-1"></i>Transferred to Me
+                    <span class="badge bg-primary ms-1"><?php echo (int)($tabCounts['transferred_to_me_count']??0); ?></span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?php echo $showPrevious ? 'active' : ''; ?> px-3 py-2 fw-semibold" href="<?php echo e(url('employee/my-complaints.php?status=PreviouslyHandled')); ?>">
+                    <i class="bi bi-clock-history me-1"></i>Previously Handled
+                    <span class="badge bg-secondary ms-1"><?php echo $previousCount; ?></span>
                 </a>
             </li>
             <li class="nav-item">
@@ -211,11 +264,11 @@ include __DIR__ . '/../includes/employee-header.php';
                 <thead class="table-light">
                     <tr>
                         <th>Grievance ID</th>
-                        <th>Citizen</th>
+                        <th><?php echo $showPrevious?'Assignment':'Citizen'; ?></th>
                         <th>Department / Category</th>
                         <th>Ward &amp; Street</th>
                         <th>Status</th>
-                        <th>SLA Due Date</th>
+                        <th><?php echo $showPrevious?'Current owner':'SLA Due Date'; ?></th>
                         <th class="text-end">Action</th>
                     </tr>
                 </thead>
@@ -248,17 +301,27 @@ include __DIR__ . '/../includes/employee-header.php';
                         ?>
                         <tr class="<?php echo $c['status'] === 'Reopened' ? 'table-danger' : ($isOverdue ? 'table-warning bg-opacity-25' : ''); ?>">
                             <td>
-                                <a href="<?php echo e(url('employee/complaint-view.php?id=' . $c['id'])); ?>" class="fw-bold text-decoration-none">
+                                <a href="<?php echo e(url('employee/complaint-view.php?id=' . (int)$c['id'])); ?>" class="fw-bold text-decoration-none">
                                     <?php echo e($c['reference_no']); ?>
                                 </a>
+                                <?php if($showPrevious): ?>
+                                  <span class="badge bg-light text-secondary border ms-1">Previously handled</span>
+                                <?php elseif((int)($c['incoming_level']??0)>1): ?>
+                                  <span class="badge bg-info text-dark ms-1" title="Recorded PDF escalation to your account">Escalated to me · L<?php echo (int)$c['incoming_level']; ?></span>
+                                <?php endif; ?>
                                 <?php if ($c['reopen_count'] > 0): ?>
                                     <span class="badge bg-danger ms-1" title="Reopened <?php echo (int)$c['reopen_count']; ?> times">Reopened &times;<?php echo (int)$c['reopen_count']; ?></span>
                                 <?php endif; ?>
                                 <div class="text-muted small"><?php echo date('d-M-Y H:i', strtotime($c['created_at'])); ?></div>
                             </td>
                             <td>
-                                <div class="fw-medium"><?php echo e($c['citizen_name']); ?></div>
-                                <div class="text-muted small"><?php echo e($c['mobile_no'] ? mask_mobile($c['mobile_no']) : '-'); ?></div>
+                                <?php if($showPrevious): ?>
+                                  <span class="badge bg-light text-secondary border">Earlier assignment</span>
+                                  <div class="small text-muted mt-1">View-only access retained</div>
+                                <?php else: ?>
+                                  <div class="fw-medium"><?php echo e($c['citizen_name']); ?></div>
+                                  <div class="text-muted small"><?php echo e($c['mobile_no'] ? mask_mobile($c['mobile_no']) : '-'); ?></div>
+                                <?php endif; ?>
                             </td>
                             <td>
                                 <div class="fw-medium"><?php echo e($c['category_name']); ?></div>
@@ -274,15 +337,29 @@ include __DIR__ . '/../includes/employee-header.php';
                                 <span class="badge <?php echo $statusBadgeClass; ?> px-2 py-1"><?php echo e($c['status']); ?></span>
                             </td>
                             <td>
-                                <?php echo $dueText; ?>
-                                <?php if ($c['due_at']): ?>
+                                <?php if($showPrevious): ?>
+                                  <strong><?php echo e($c['current_owner_name'] ?: 'Unassigned'); ?></strong>
+                                  <div class="text-muted small">Current responsible officer</div>
+                                <?php else: ?>
+                                  <?php echo $dueText; ?>
+                                  <?php if ($c['due_at']): ?>
                                     <div class="text-muted small mt-1"><?php echo date('d-M-Y H:i', strtotime($c['due_at'])); ?></div>
+                                  <?php endif; ?>
+                                  <?php if($c['previous_owner_name']): ?>
+                                    <div class="text-muted small mt-1">From: <?php echo e($c['previous_owner_name']); ?></div>
+                                  <?php endif; ?>
                                 <?php endif; ?>
                             </td>
                             <td class="text-end">
-                                <a href="<?php echo e(url('employee/complaint-view.php?id=' . $c['id'])); ?>" class="btn btn-sm btn-primary">
+                                <?php if($showPrevious): ?>
+                                  <a href="<?php echo e(url('employee/complaint-view.php?id=' . (int)$c['id'])); ?>" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye me-1"></i> View
+                                  </a>
+                                <?php else: ?>
+                                  <a href="<?php echo e(url('employee/complaint-view.php?id=' . (int)$c['id'])); ?>" class="btn btn-sm btn-primary">
                                     <i class="bi bi-pencil-square me-1"></i> Manage
-                                </a>
+                                  </a>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
