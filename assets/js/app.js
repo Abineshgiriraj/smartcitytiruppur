@@ -67,7 +67,7 @@
     const streetInput = document.querySelector('#street_name');
     const streetResults = document.querySelector('#street_results');
 
-    if (streetInput && streetResults) {
+    if (streetInput && streetResults && !document.getElementById('use-complaint-location')) {
         let timer = null;
 
         streetInput.addEventListener('input', () => {
@@ -94,12 +94,17 @@
                         item.className = 'autocomplete-item';
                         item.textContent = `${row.street_name} — Ward ${row.ward_no}, Zone ${row.zone_no}`;
                         item.addEventListener('click', () => {
-                            streetInput.value = row.street_name;
-                            document.querySelector('#street_id').value = row.id;
-                            document.querySelector('#ward_id').value = row.ward_id;
-                            document.querySelector('#zone_id').value = row.zone_id;
-                            document.querySelector('#ward_display').value = row.ward_no;
-                            document.querySelector('#zone_display').value = row.zone_no;
+                            if (streetInput) streetInput.value = row.street_name;
+                            const stId = document.querySelector('#street_id');
+                            if (stId) stId.value = row.id;
+                            const wId = document.querySelector('#ward_id');
+                            if (wId) wId.value = row.ward_id;
+                            const zId = document.querySelector('#zone_id');
+                            if (zId) zId.value = row.zone_id;
+                            const wDisp = document.querySelector('#ward_display');
+                            if (wDisp) wDisp.value = row.ward_no;
+                            const zDisp = document.querySelector('#zone_display');
+                            if (zDisp) zDisp.value = row.zone_no;
                             streetResults.innerHTML = '';
                             streetResults.classList.add('d-none');
                         });

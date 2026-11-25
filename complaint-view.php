@@ -96,14 +96,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $stmt = $pdo->prepare(
     "SELECT c.*, d.department_name, cc.category_name, cc.sla_days,
-            z.zone_no, w.ward_no, s.street_name,
+            z.zone_no, w.ward_no, COALESCE(s.street_name, c.landmark, c.location_address, 'Not Specified') AS street_name,
             o.officer_name, o.mobile_no AS officer_mobile
      FROM complaints c
      JOIN departments d ON d.id = c.department_id
      JOIN complaint_categories cc ON cc.id = c.category_id
      JOIN zones z ON z.id = c.zone_id
      JOIN wards w ON w.id = c.ward_id
-     JOIN streets s ON s.id = c.street_id
+     LEFT JOIN streets s ON s.id = c.street_id
      LEFT JOIN officers o ON o.id = c.assigned_officer_id
      WHERE c.reference_no = ? AND c.is_deleted = 0 LIMIT 1"
 );
