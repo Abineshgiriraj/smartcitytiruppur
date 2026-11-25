@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/../includes/bootstrap.php';
+require_once __DIR__ . '/../includes/officer-reconciliation.php';
 
 $currentUser = require_roles(['Super Admin', 'Admin']);
 require_permission('users.view');
@@ -145,6 +146,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 db()->prepare('UPDATE officers SET user_id = NULL WHERE id = ?')->execute([$officerId]);
                 flash('success', 'Officer profile unlinked from login account.');
             }
+        } elseif ($action === 'update_officer_phone') {
+            $officerId = (int)($_POST['officer_id'] ?? 0);
+            $newMobile = trim((string)($_POST['new_mobile'] ?? ''));
+            $res = update_officer_phone_verified(db(), $officerId, $newMobile, (int)$currentUser['id']);
+            if ($res['ok']) {
+                flash('success', $res['message']);
+            } else {
+                flash('danger', $res['message']);
+            }
         }
     } catch (Throwable $exception) {
         if (db()->inTransaction()) {
@@ -157,32 +167,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // -------------------------------------------------------------
-// Load Overview Data & Options
+// Load Overview Data & Options (Strictly scoped to Verified Department Contacts)
 // -------------------------------------------------------------
 $officerStats = db()->query("
     SELECT 
-        COUNT(*) AS total_officers,
-        COALESCE(SUM(user_id IS NOT NULL), 0) AS linked_officers,
-        COALESCE(SUM(user_id IS NULL), 0) AS unlinked_officers
-    FROM officers WHERE is_active = 1
+        COUNT(DISTINCT o.id) AS total_officers,
+        COALESCE(SUM(o.user_id IS NOT NULL), 0) AS linked_officers,
+        COALESCE(SUM(o.user_id IS NULL), 0) AS unlinked_officers
+    FROM officers o 
+    JOIN officer_department_map odm ON odm.officer_id = o.id
+    WHERE o.is_active = 1
 ")->fetch(PDO::FETCH_ASSOC);
 
-$totalUsersCount = (int)db()->query("SELECT COUNT(*) FROM users")->fetchColumn();
+$totalUsersCount = (int)db()->query("SELECT COUNT(*) FROM users WHERE is_active = 1")->fetchColumn();
+
+// Phone Number Reconciliation & Audit Data
+$phoneAuditData = get_officer_phone_audit_data(db());
 
 // Scopes
 $departments = db()->query('SELECT id, department_name FROM departments WHERE is_active = 1 ORDER BY department_name')->fetchAll();
 $zones = db()->query('SELECT id, zone_no FROM zones WHERE is_active = 1 ORDER BY zone_no')->fetchAll();
 $wards = db()->query('SELECT id, ward_no FROM wards WHERE is_active = 1 ORDER BY ward_no')->fetchAll();
 
-// Available unlinked officers for the unified form (searchable up to 300)
+// Available unlinked officers for the unified form (searchable, only verified department contacts)
 $officerSearch = trim((string)($_GET['officer_q'] ?? ''));
 $officerQuery = db()->prepare('
     SELECT o.id, o.officer_name, o.designation, o.mobile_no, d.department_name, dm.department_id
     FROM officers o
-    LEFT JOIN officer_department_map dm ON dm.officer_id = o.id
-    LEFT JOIN departments d ON d.id = dm.department_id
+    JOIN officer_department_map dm ON dm.officer_id = o.id
+    JOIN departments d ON d.id = dm.department_id
     WHERE o.is_active = 1 AND o.user_id IS NULL
       AND (? = "" OR o.officer_name LIKE ? OR o.mobile_no LIKE ? OR CAST(o.id AS CHAR) = ?)
+    GROUP BY o.id
     ORDER BY o.id ASC
     LIMIT 300
 ');
@@ -198,11 +214,16 @@ $userConditions = ['1=1'];
 $userParams = [];
 
 if ($userFilterRole === 'field_officer') {
-    $userConditions[] = "u.role IN ('Field Officer', 'Officer')";
+    $userConditions[] = "u.role IN ('Field Officer', 'Officer') AND u.is_active = 1";
 } elseif ($userFilterRole === 'admin') {
-    $userConditions[] = "u.role IN ('Super Admin', 'Admin', 'Commissioner', 'Department Head')";
+    $userConditions[] = "u.role IN ('Super Admin', 'Admin', 'Commissioner', 'Department Head') AND u.is_active = 1";
 } elseif ($userFilterRole === 'inactive') {
     $userConditions[] = "u.is_active = 0";
+} elseif ($userFilterRole === 'all') {
+    // Show all including inactive
+} else {
+    // Default view: active accounts only
+    $userConditions[] = "u.is_active = 1";
 }
 
 if ($userSearch !== '') {
@@ -316,7 +337,10 @@ include __DIR__ . '/../includes/employee-header.php';
                     <button class="btn btn-warning btn-lg fw-bold shadow px-4 py-3 text-dark" id="btnStartBulkProvision" onclick="openBulkProvisionModal()">
                         <i class="bi bi-lightning-charge-fill me-1"></i> Create All Eligible Officer Logins
                     </button>
-                    <div class="mt-2">
+                    <div class="mt-2 d-flex flex-wrap gap-2 justify-content-lg-end">
+                        <button class="btn btn-sm btn-outline-light" onclick="openPhoneAuditModal()">
+                            <i class="bi bi-shield-check me-1"></i> Phone Number Audit
+                        </button>
                         <button class="btn btn-sm btn-outline-light" onclick="openSkippedReportModal()">
                             <i class="bi bi-file-earmark-text me-1"></i> View Unprovisioned Report
                         </button>
@@ -478,10 +502,10 @@ include __DIR__ . '/../includes/employee-header.php';
             </div>
 
             <!-- Role Filter Pills -->
-            <div class="d-flex gap-2 mb-3">
+            <div class="d-flex flex-wrap gap-2 mb-3">
                 <a href="<?php echo e(url('employee/users.php' . ($userSearch ? '?user_search=' . urlencode($userSearch) : ''))); ?>" 
                    class="btn btn-sm <?php echo $userFilterRole === '' ? 'btn-primary' : 'btn-outline-secondary'; ?>">
-                    All Roles
+                    <i class="bi bi-person-check me-1"></i>Active Users (<?php echo number_format($totalUsersCount); ?>)
                 </a>
                 <a href="<?php echo e(url('employee/users.php?role_filter=field_officer' . ($userSearch ? '&user_search=' . urlencode($userSearch) : ''))); ?>" 
                    class="btn btn-sm <?php echo $userFilterRole === 'field_officer' ? 'btn-primary' : 'btn-outline-secondary'; ?>">
@@ -493,7 +517,11 @@ include __DIR__ . '/../includes/employee-header.php';
                 </a>
                 <a href="<?php echo e(url('employee/users.php?role_filter=inactive' . ($userSearch ? '&user_search=' . urlencode($userSearch) : ''))); ?>" 
                    class="btn btn-sm <?php echo $userFilterRole === 'inactive' ? 'btn-danger' : 'btn-outline-secondary'; ?>">
-                    Inactive
+                    <i class="bi bi-slash-circle me-1"></i>Inactive Accounts
+                </a>
+                <a href="<?php echo e(url('employee/users.php?role_filter=all' . ($userSearch ? '&user_search=' . urlencode($userSearch) : ''))); ?>" 
+                   class="btn btn-sm <?php echo $userFilterRole === 'all' ? 'btn-dark' : 'btn-outline-secondary'; ?>">
+                    All Accounts
                 </a>
             </div>
 
@@ -676,6 +704,156 @@ include __DIR__ . '/../includes/employee-header.php';
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================= -->
+<!-- Phone Number Audit & Reconciliation Modal                     -->
+<!-- ============================================================= -->
+<div class="modal fade" id="phoneAuditModal" tabindex="-1" aria-labelledby="phoneAuditModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title fw-bold" id="phoneAuditModalLabel">
+                    <i class="bi bi-shield-check me-2"></i>Officer Identity &amp; Phone Number Audit
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Summary KPI Row -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-3">
+                        <div class="p-3 bg-light rounded text-center border">
+                            <span class="text-muted small d-block">Verified Officers</span>
+                            <span class="fs-4 fw-bold text-primary"><?php echo $phoneAuditData['total_active_officers']; ?></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 bg-light rounded text-center border">
+                            <span class="text-muted small d-block">Phone Synchronized</span>
+                            <span class="fs-4 fw-bold text-success"><?php echo $phoneAuditData['matched_count']; ?></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 bg-light rounded text-center border">
+                            <span class="text-muted small d-block">Phone Mismatches</span>
+                            <span class="fs-4 fw-bold <?php echo $phoneAuditData['phone_mismatches_count'] > 0 ? 'text-danger' : 'text-muted'; ?>">
+                                <?php echo $phoneAuditData['phone_mismatches_count']; ?>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 bg-light rounded text-center border">
+                            <span class="text-muted small d-block">Duplicate Phones</span>
+                            <span class="fs-4 fw-bold <?php echo $phoneAuditData['duplicate_phones_count'] > 0 ? 'text-warning' : 'text-muted'; ?>">
+                                <?php echo $phoneAuditData['duplicate_phones_count']; ?>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-info py-2 px-3 small mb-3">
+                    <i class="bi bi-info-circle me-1"></i>
+                    <strong>Reconciliation Rule:</strong> When updating an officer's phone number, the system updates both <code>officers.mobile_no</code> and <code>users.mobile_no</code> in an atomic transaction, validates that the number is not already assigned to another officer or login, and preserves all complaint assignments.
+                </div>
+
+                <div class="table-responsive" style="max-height: 480px; overflow-y: auto;">
+                    <table class="table table-sm table-hover align-middle mb-0">
+                        <thead class="table-light sticky-top">
+                            <tr>
+                                <th>Officer ID &amp; Name</th>
+                                <th>Department &amp; Designation</th>
+                                <th>Officer Phone</th>
+                                <th>Login Account Phone</th>
+                                <th>Status</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($phoneAuditData['active_officers'] as $ao): ?>
+                                <?php
+                                    $isMatch = ($ao['officer_phone'] === $ao['user_phone']) && !empty($ao['matched_user_id']) && (int)$ao['user_active'] === 1;
+                                    $hasMismatch = !empty($ao['matched_user_id']) && ($ao['officer_phone'] !== $ao['user_phone']);
+                                ?>
+                                <tr>
+                                    <td>
+                                        <div class="fw-bold">Officer #<?php echo (int)$ao['officer_id']; ?>: <?php echo e($ao['officer_name']); ?></div>
+                                        <?php if ($ao['matched_user_id']): ?>
+                                            <small class="text-muted">Linked to User #<?php echo (int)$ao['matched_user_id']; ?> (<?php echo e($ao['user_name']); ?>)</small>
+                                        <?php else: ?>
+                                            <small class="text-danger">No Login Account</small>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <div><?php echo e($ao['departments'] ?: 'Unassigned'); ?></div>
+                                        <small class="text-muted"><?php echo e($ao['designation'] ?: 'Corporation Officer'); ?></small>
+                                    </td>
+                                    <td>
+                                        <span class="font-monospace fw-bold"><?php echo e($ao['officer_phone']); ?></span>
+                                    </td>
+                                    <td>
+                                        <?php if ($ao['user_phone']): ?>
+                                            <span class="font-monospace fw-bold"><?php echo e($ao['user_phone']); ?></span>
+                                        <?php else: ?>
+                                            <span class="text-muted">&mdash;</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <?php if ($isMatch): ?>
+                                            <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Synchronized</span>
+                                        <?php elseif ($hasMismatch): ?>
+                                            <span class="badge bg-danger"><i class="bi bi-exclamation-triangle me-1"></i>Mismatch</span>
+                                        <?php else: ?>
+                                            <span class="badge bg-warning text-dark"><i class="bi bi-clock me-1"></i>Review</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td class="text-end">
+                                        <button class="btn btn-xs btn-outline-primary" onclick="openPhoneCorrectionModal(<?php echo (int)$ao['officer_id']; ?>, '<?php echo e(addslashes($ao['officer_name'])); ?>', '<?php echo e($ao['officer_phone']); ?>')">
+                                            <i class="bi bi-pencil me-1"></i>Edit Phone
+                                        </button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Phone Correction Submodal -->
+<div class="modal fade" id="phoneCorrectionModal" tabindex="-1" aria-labelledby="phoneCorrectionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <form method="post">
+                <?php echo csrf_field(); ?>
+                <input type="hidden" name="action" value="update_officer_phone">
+                <input type="hidden" name="officer_id" id="correctOfficerId">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title fw-bold" id="phoneCorrectionModalLabel">Update Officer Official Phone</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p class="small text-muted mb-3" id="correctOfficerHelpText">Correcting phone number for officer.</p>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">New Verified 10-Digit Mobile Number</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">+91</span>
+                            <input class="form-control" type="tel" name="new_mobile" id="correctMobileInput" maxlength="10" pattern="[6-9][0-9]{9}" required>
+                        </div>
+                        <div class="form-text small">Both officer profile and OTP login will be safely updated in one transaction.</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary fw-bold">Apply Correction</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -956,6 +1134,25 @@ function finishBulkProcessing() {
     document.getElementById('btnPauseBulk').style.display = 'none';
     document.getElementById('btnDoneBulk').style.display = 'inline-block';
     document.getElementById('bulkModalCloseBtn').style.display = 'inline-block';
+}
+
+function openPhoneAuditModal() {
+    const modalEl = document.getElementById('phoneAuditModal');
+    if (modalEl) {
+        const modal = new bootstrap.Modal(modalEl);
+        modal.show();
+    }
+}
+
+function openPhoneCorrectionModal(officerId, officerName, currentPhone) {
+    document.getElementById('correctOfficerId').value = officerId;
+    document.getElementById('correctMobileInput').value = currentPhone || '';
+    document.getElementById('correctOfficerHelpText').textContent = `Correcting official mobile number for Officer #${officerId}: ${officerName}`;
+    const modalEl = document.getElementById('phoneCorrectionModal');
+    if (modalEl) {
+        const modal = new bootstrap.Modal(modalEl);
+        modal.show();
+    }
 }
 
 async function openSkippedReportModal() {
