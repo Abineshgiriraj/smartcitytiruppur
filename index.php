@@ -24,45 +24,47 @@ try {
 include __DIR__ . '/includes/header.php';
 ?>
 <div class="neo-home">
-    <!-- Full-width photo-led hero with the original blue identity and effects. -->
-    <section class="neo-hero neo-photo-hero" aria-labelledby="neo-hero-title">
-        <div class="neo-photo-hero-backdrop" aria-hidden="true">
-            <img src="<?php echo e(url('assets/images/smart-bg.jpg')); ?>"
-                 width="1600" height="900"
-                 alt="" fetchpriority="high" decoding="async">
-        </div>
-        <div class="neo-photo-hero-noise" aria-hidden="true"></div>
-        <div class="container-xxl neo-photo-hero-shell">
-            <div class="neo-hero-copy neo-photo-hero-copy">
-                <div class="neo-eyebrow">
-                    <span class="neo-status-dot" aria-hidden="true"></span>
-                    HOMEPAGE · TIRUPPUR CITY MUNICIPAL CORPORATION
-                </div>
+    <section class="neo-hero" aria-labelledby="neo-hero-title">
+        <div class="neo-hero-noise" aria-hidden="true"></div>
+        <div class="container-xxl neo-hero-grid">
+            <div class="neo-hero-copy">
+                <div class="neo-eyebrow"><span class="neo-status-dot"></span> HOMEPAGE · TIRUPPUR CITY MUNICIPAL CORPORATION</div>
                 <h1 id="neo-hero-title">Your city.<br><em>Your voice.</em></h1>
-                <p class="neo-hero-description">
-                    Register a complaint, track its progress and connect with your City Municipal Corporation — all in one place.
-                </p>
+                <p class="neo-hero-description">Register a complaint, track its progress and connect with your City Municipal Corporation — all in one place.</p>
                 <div class="neo-hero-cta">
-                    <a class="neo-button neo-button-primary neo-magnetic"
-                       href="<?php echo e(url('new-complaint.php')); ?>">
-                        <span class="neo-button-icon"><i class="bi bi-plus-lg" aria-hidden="true"></i></span>
-                        New Complaint <i class="bi bi-arrow-up-right neo-arrow" aria-hidden="true"></i>
+                    <a class="neo-button neo-button-primary neo-magnetic" href="<?php echo e(url('new-complaint.php')); ?>">
+                        <span class="neo-button-icon"><i class="bi bi-plus-lg"></i></span>
+                        New Complaint <i class="bi bi-arrow-up-right neo-arrow"></i>
                     </a>
                     <a class="neo-button neo-button-ghost" href="<?php echo e(url('complaint-status.php')); ?>">
-                        Track Complaint <i class="bi bi-arrow-right neo-arrow" aria-hidden="true"></i>
+                        Track Complaint <i class="bi bi-arrow-right neo-arrow"></i>
                     </a>
                 </div>
-                <div class="neo-hero-assurance">
-                    <i class="bi bi-shield-check" aria-hidden="true"></i>
-                    Simple to report <span>·</span> Transparent progress <span>·</span> Built for everyone
+                <div class="neo-hero-assurance"><i class="bi bi-shield-check"></i> Simple to report <span>·</span> Transparent progress <span>·</span> Built for everyone</div>
+            </div>
+
+            <div class="neo-hero-visual" aria-label="Tiruppur City Municipal Corporation building">
+                <div class="neo-photo-frame">
+                    <div class="neo-building-photo" role="img" aria-label="Tiruppur City Municipal Corporation"></div>
+                    <div class="neo-photo-glow" aria-hidden="true"></div>
+                    <div class="neo-photo-corner neo-corner-tl"></div>
+                    <div class="neo-photo-corner neo-corner-br"></div>
                 </div>
+                <div class="neo-floating-note neo-note-top" aria-hidden="true">
+                    <span class="neo-floating-icon"><i class="bi bi-geo-alt-fill"></i></span>
+                    <span><strong>Locally focused</strong><small>Every street. Every ward.</small></span>
+                </div>
+                <div class="neo-floating-note neo-note-bottom" aria-hidden="true">
+                    <span class="neo-pulse-icon"><i class="bi bi-check2-circle"></i></span>
+                    <span><strong>Real progress</strong><small>From report to resolution</small></span>
+                </div>
+                <div class="neo-orbit neo-orbit-one" aria-hidden="true"></div>
+                <div class="neo-orbit neo-orbit-two" aria-hidden="true"></div>
             </div>
         </div>
         <div class="container-xxl neo-hero-bottom">
-            <span><span class="neo-small-line" aria-hidden="true"></span> SCROLL TO EXPLORE</span>
-            <a href="#neo-impact" aria-label="Explore complaint progress">
-                <i class="bi bi-arrow-down" aria-hidden="true"></i>
-            </a>
+            <span><span class="neo-small-line"></span> SCROLL TO EXPLORE</span>
+            <a href="#neo-impact" aria-label="Explore complaint progress"><i class="bi bi-arrow-down"></i></a>
         </div>
     </section>
 
