@@ -85,3 +85,23 @@
  .er-filter-actions{flex-direction:row}
 }
 @media(prefers-reduced-motion:reduce){.er *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* Read-only routing diagnostics and all-stage candidate previews. */
+.er-readiness{border:1px solid #c7e0ee;background:#eef8fe;border-radius:16px;padding:17px 21px;margin:0 0 18px;color:#214a69;box-shadow:0 8px 18px rgba(28,72,112,.04)}
+.er-readiness-title{display:flex;gap:9px;align-items:center;flex-wrap:wrap;font-size:14px}
+.er-readiness-title>i{font-size:19px}
+.er-readiness-state{border-radius:99px;padding:5px 12px;background:#d7eefb;font-size:12px;font-weight:800}
+.er-readiness p{font-size:13px;line-height:1.6;margin:10px 0 0}
+.er-readiness .er-readiness-foot{font-size:11px;color:#62829b}
+.er-readiness-blocked{background:#fff6e9;border-color:#f5d8a7;color:#835518}
+.er-readiness-blocked .er-readiness-state{background:#fbe1b2}
+.er-readiness-due{background:#fff8e8;border-color:#f0cd93;color:#785018}
+.er-readiness-due .er-readiness-state{background:#fbe5b5}
+.er-readiness-complete{background:#eef7f1;border-color:#c5e2d0;color:#276448}
+.er-readiness-complete .er-readiness-state{background:#d9efdf}
+.er-readiness-terminal{background:#edf2fb;border-color:#c6d4ec;color:#395779}
+.er-officer-label{display:inline-block;border-radius:7px;padding:4px 8px;font-weight:800;font-size:10px;letter-spacing:.1px}
+.er-officer-recorded{color:#126348;background:#e3f5e9}
+.er-officer-preview{color:#1f6d9b;background:#e3f3fd}
+.er-officer-unavailable{color:#89571c;background:#fff0d9}
+.er-officer-missing{color:#986119!important}
