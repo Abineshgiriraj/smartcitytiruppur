@@ -5,6 +5,9 @@ on:
     paths:
       - 'includes/**'
       - 'employee/**'
+      - 'ajax/street-gps.php'
+      - 'new-complaint.php'
+      - 'assets/js/street-gps.js'
       - 'database/pdf_escalation_policy.*'
       - 'pdf-escalate-complaints.php'
       - 'retry-pending-allocations.php'
@@ -55,9 +58,19 @@ jobs:
           php -l employee/allocation-inspector.php
           php -l employee/user-mapping-details.php
           php -l employee/complaint-view.php
+          php -l employee/escalation-reports.php
+          php -l employee/officer-complaint-report.php
+          php -l includes/escalation-report-checks.php
           php -l employee/officer-approvals.php
           php -l employee/pdf-policy-review.php
           php -l new-complaint.php
+          php -l index.php
+          php -l includes/header.php
+          php -l includes/footer.php
+          php -l ajax/street-gps.php
+          node --check assets/js/street-gps.js
+          node --check assets/js/civic-effects.js
+          node --check assets/js/neo-experience.js
           php -l pdf-escalate-complaints.php
           php -l retry-pending-allocations.php
           php -l tools/check_pdf_automation_readiness.php

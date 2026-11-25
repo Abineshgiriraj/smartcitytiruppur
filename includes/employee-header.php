@@ -30,6 +30,8 @@ if ($isOfficer) {
         'Complaint Management' => [
             ['../new-complaint.php', 'New Complaint (Public Form)', 'bi-plus-circle', true],
             ['complaints.php', 'All Complaints', 'bi-inboxes', true],
+            ['escalation-reports.php', 'Escalation Reports', 'bi-diagram-3-fill', $isManager],
+            ['officer-complaint-report.php', 'Officer Complaint Report', 'bi-clipboard-data', $isManager],
             ['complaint-centre.php?view=repeated', 'Potential Repeats', 'bi-files', true],
             ['complaint-centre.php?view=completed', 'Closed Complaints', 'bi-check2-circle', true],
             ['complaint-centre.php?view=category', 'Category Dashboard', 'bi-grid-3x3-gap', true],
@@ -66,6 +68,13 @@ if ($isOfficer) {
   <link href="<?php echo e(url('assets/css/style.css?v=20260806b')); ?>" rel="stylesheet">
   <link href="<?php echo e(url('assets/css/admin.css?v=20261119a')); ?>" rel="stylesheet">
   <link href="<?php echo e(url('assets/css/admin-refresh.css?v=20261121b')); ?>" rel="stylesheet">
+    <link href="<?php echo e(url('assets/css/civic-modern.css?v=20261124')); ?>" rel="stylesheet">
+  <?php if ($currentPage === 'escalation-reports.php'): ?>
+  <link href="<?php echo e(url('assets/css/escalation-reports.css?v=20261125')); ?>" rel="stylesheet">
+  <?php endif; ?>
+  <?php if ($currentPage === 'officer-complaint-report.php'): ?>
+  <link href="<?php echo e(url('assets/css/officer-complaint-report.css?v=20261125')); ?>" rel="stylesheet">
+  <?php endif; ?>
 </head>
 <body class="employee-body admin-body">
 <div class="admin-layout">
@@ -86,6 +95,8 @@ if ($isOfficer) {
                 $routePermissions = [
                     'dashboard.php' => 'dashboard.view',
                     'complaints.php' => 'complaints.view',
+                    'escalation-reports.php' => 'escalation.view',
+                    'officer-complaint-report.php' => 'complaints.view',
                     'complaint-centre.php' => 'complaints.view',
                     'reports.php' => 'reports.view',
                     'icts-reports.php' => 'reports.view',
