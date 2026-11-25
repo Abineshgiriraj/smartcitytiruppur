@@ -65,6 +65,8 @@ jobs:
           php -l employee/officer-approvals.php
           php -l employee/pdf-policy-review.php
           php -l new-complaint.php
+          php -l complaint-view.php
+          php -l complaint-status.php
           php -l index.php
           php -l includes/header.php
           php -l includes/footer.php
