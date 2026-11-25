@@ -61,8 +61,6 @@ window.APP_ENV = <?php echo json_encode(APP_ENV); ?>;
 <script src="<?php echo e(url('assets/js/app.js?v=20261121-server-categories')); ?>"></script>
 <script src="<?php echo e(url('assets/js/civic-effects.js?v=20261124')); ?>" defer></script>
 <script src="<?php echo e(url('assets/js/neo-experience.js?v=20261124')); ?>" defer></script>
-<?php if (!empty($homepageDesignDemo)): ?>
-<script src="<?php echo e(url('assets/js/portal-design-demo.js?v=20261125')); ?>" defer></script>
-<?php endif; ?>
+
 </body>
 </html>
