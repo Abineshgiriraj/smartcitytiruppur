@@ -4,6 +4,33 @@
   const home = document.querySelector('.neo-home');
   if (!home) return;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Subtle depth for the photo-led hero. Respects reduced motion and touch devices.
+  const photoHero = home.querySelector('.neo-photo-hero');
+  const heroPhoto = photoHero?.querySelector('.neo-photo-hero-backdrop img');
+  if (photoHero && heroPhoto && !reduceMotion &&
+      window.matchMedia('(pointer:fine)').matches) {
+    let frame = 0;
+    let pointerX = 0;
+    let pointerY = 0;
+    photoHero.addEventListener('pointermove', (event) => {
+      const bounds = photoHero.getBoundingClientRect();
+      pointerX = (event.clientX - bounds.left) / bounds.width - .5;
+      pointerY = (event.clientY - bounds.top) / bounds.height - .5;
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        heroPhoto.style.setProperty('--photo-x', (pointerX * -11).toFixed(2) + 'px');
+        heroPhoto.style.setProperty('--photo-y', (pointerY * -8).toFixed(2) + 'px');
+      });
+    }, { passive: true });
+    photoHero.addEventListener('pointerleave', () => {
+      if (frame) cancelAnimationFrame(frame);
+      frame = 0;
+      heroPhoto.style.removeProperty('--photo-x');
+      heroPhoto.style.removeProperty('--photo-y');
+    });
+  }
+
   const revealItems = home.querySelectorAll(
     '.neo-section-heading,.neo-impact-card,.neo-journey-intro,.neo-step,.neo-service,.neo-last-cta-copy'
   );
