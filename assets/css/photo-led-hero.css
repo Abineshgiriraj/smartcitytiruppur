@@ -1,0 +1,105 @@
+/* Photo-led homepage hero merged with Tiruppur's previous animated blue interface.
+   Scoped to .neo-photo-hero; dashboard, forms and admin views are untouched. */
+.neo-home .neo-photo-hero {
+  position:relative; isolation:isolate; min-height:clamp(600px,77vh,800px);
+  display:flex; flex-direction:column; justify-content:center;
+  background:#0b274d; padding:0; overflow:hidden; color:#fff;
+}
+.neo-home .neo-photo-hero-backdrop {
+  position:absolute; inset:0; z-index:0; overflow:hidden; pointer-events:none;
+}
+.neo-home .neo-photo-hero-backdrop img {
+  display:block; width:100%; height:100%; object-fit:cover;
+  object-position:center 44%; transform:scale(1.055) translate3d(var(--photo-x,0px),var(--photo-y,0px),0);
+  transition:transform .45s cubic-bezier(.22,1,.36,1);
+}
+.neo-home .neo-photo-hero::before {
+  content:""; position:absolute; inset:0; z-index:1;
+  background:linear-gradient(180deg,rgba(8,30,61,.44) 0%,rgba(10,37,76,.56) 34%,rgba(7,30,65,.76) 75%,#0b274f 100%);
+  pointer-events:none;
+}
+.neo-home .neo-photo-hero::after {
+  content:"";position:absolute;inset:0;z-index:1;width:auto;height:auto;right:0;top:0;
+  border:0;border-radius:0;box-shadow:none;
+  background:radial-gradient(ellipse at 48% 42%,rgba(3,25,53,.04),rgba(4,26,57,.23) 80%);
+  pointer-events:none;
+}
+.neo-home .neo-photo-hero-noise {
+  position:absolute; inset:0; z-index:2; opacity:.15;pointer-events:none;
+  background-image:radial-gradient(rgba(203,237,255,.6) .6px,transparent .6px);
+  background-size:24px 24px; mask-image:linear-gradient(to right,#000,transparent 90%);
+}
+.neo-home .neo-photo-hero-shell {
+  position:relative;z-index:3;flex:1;width:100%;display:flex;
+  align-items:center;justify-content:center;
+  text-align:center;padding-block:clamp(75px,9vw,135px) 75px;
+}
+.neo-home .neo-photo-hero-copy {
+  width:min(100%,950px);max-width:950px;margin:0 auto;
+}
+.neo-home .neo-photo-hero .neo-eyebrow {
+  justify-content:center;color:#e0f6ff;letter-spacing:1.8px;
+  text-shadow:0 2px 10px rgba(0,21,49,.35);font-weight:900;
+}
+.neo-home .neo-photo-hero .neo-hero-copy h1 {
+  max-width:950px;margin:0 auto 25px;
+  font-size:clamp(60px,7vw,104px);font-weight:850;line-height:1.04;
+  letter-spacing:-4.5px;text-wrap:balance;color:#fff;
+  text-shadow:0 8px 28px rgba(5,31,63,.36);
+}
+.neo-home .neo-photo-hero .neo-hero-copy h1 em {color:#75e1ee}
+.neo-home .neo-photo-hero .neo-hero-description {
+  max-width:620px;margin:0 auto 30px;
+  color:#e3f1fb;font-size:clamp(15px,1.25vw,18px);
+  text-shadow:0 2px 10px rgba(0,21,49,.28);
+}
+.neo-home .neo-photo-hero .neo-hero-cta {justify-content:center}
+.neo-home .neo-photo-hero .neo-hero-assurance {
+  justify-content:center;margin-top:5px;color:#d5e9f6;
+}
+.neo-home .neo-photo-hero .neo-hero-assurance i{color:#81e4f0}
+.neo-home .neo-photo-hero .neo-hero-assurance span{color:#95c1df}
+.neo-home .neo-photo-hero .neo-hero-bottom {
+  position:relative;z-index:3;width:100%;padding-bottom:30px;
+  color:#c9e5f5;
+}
+.neo-home .neo-photo-hero .neo-hero-bottom>a {
+  background:rgba(10,50,93,.28);backdrop-filter:blur(5px);
+}
+.neo-home .neo-photo-hero .neo-hero-bottom>a:hover {
+  background:#79dbe9;color:#103956;
+}
+.neo-home .neo-photo-hero .neo-hero-copy {
+  animation:photo-hero-entrance .9s cubic-bezier(.22,1,.36,1) both;
+}
+.neo-home .neo-photo-hero .neo-hero-cta .neo-button {
+  box-shadow:0 10px 30px rgba(0,26,57,.24);
+}
+.neo-home .neo-photo-hero .neo-hero-cta .neo-button:hover {
+  box-shadow:0 17px 35px rgba(0,29,61,.34);
+}
+.neo-home .neo-photo-hero .neo-hero-cta .neo-button-ghost {
+  background:rgba(9,37,75,.5);
+  border-color:rgba(216,238,255,.65);
+  backdrop-filter:blur(10px);
+}
+.neo-home .neo-photo-hero .neo-hero-cta .neo-button-ghost:hover {
+  background:rgba(32,98,146,.7);
+}
+@keyframes photo-hero-entrance {
+  from{opacity:0;transform:translateY(24px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@media(max-width:767px) {
+  .neo-home .neo-photo-hero{min-height:650px}
+  .neo-home .neo-photo-hero-backdrop img{object-position:50% center}
+  .neo-home .neo-photo-hero-shell{padding-block:80px 35px}
+  .neo-home .neo-photo-hero .neo-hero-copy h1{font-size:clamp(48px,11vw,68px);letter-spacing:-2.6px}
+  .neo-home .neo-photo-hero .neo-hero-cta .neo-button{max-width:350px}
+  .neo-home .neo-photo-hero .neo-hero-cta {align-items:center}
+  .neo-home .neo-photo-hero .neo-hero-bottom{padding-bottom:22px}
+}
+@media(prefers-reduced-motion:reduce) {
+  .neo-home .neo-photo-hero .neo-hero-copy{animation:none!important}
+  .neo-home .neo-photo-hero-backdrop img{transform:none!important;transition:none!important}
+}
