@@ -347,6 +347,14 @@ include __DIR__ . '/../includes/employee-header.php';
         <img src="<?php echo e(url('assets/images/tamilnadulogo.png')); ?>" alt="Government of Tamil Nadu">
     </div>
 
+    <?php if (!$isOfficerPortal && can_access_permission($user, 'escalation.view')): ?>
+    <div class="d-flex justify-content-end my-3">
+        <a class="btn btn-outline-primary" href="<?php echo e(url('employee/escalation-reports.php?tab=journey&complaint_id='.(int)$complaintId)); ?>">
+            <i class="bi bi-diagram-3 me-1"></i> View Escalation Journey
+        </a>
+    </div>
+    <?php endif; ?>
+
     <div class="complaint-reference-top">
         <section class="complaint-reference-panel">
             <h2>User Information</h2>
