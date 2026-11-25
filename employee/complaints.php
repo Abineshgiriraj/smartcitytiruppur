@@ -98,7 +98,13 @@ $sql = "SELECT c.id,c.reference_no,c.citizen_name,c.mobile_no,c.status,c.created
                (SELECT MAX(ce.level_no) FROM complaint_escalations ce
                 WHERE ce.complaint_id=c.id AND ce.officer_id=c.assigned_officer_id) current_transfer_level,
                (SELECT MAX(ce.escalated_at) FROM complaint_escalations ce
-                WHERE ce.complaint_id=c.id AND ce.officer_id=c.assigned_officer_id) last_escalated_at
+                WHERE ce.complaint_id=c.id AND ce.officer_id=c.assigned_officer_id) last_escalated_at,
+               (SELECT GROUP_CONCAT(
+                   CONCAT(ho.officer_name,CASE WHEN ha.is_current=1 THEN ' (Current)' ELSE '' END)
+                   ORDER BY ha.assigned_at,ha.id SEPARATOR ' → ')
+                FROM complaint_assignments ha
+                JOIN officers ho ON ho.id=ha.officer_id
+                WHERE ha.complaint_id=c.id) AS assignment_chain
         FROM complaints c
         LEFT JOIN departments d ON d.id=c.department_id
         LEFT JOIN complaint_categories cc ON cc.id=c.category_id
@@ -163,6 +169,12 @@ include __DIR__ . '/../includes/employee-header.php';
                           <?php endif; ?>
                           <?php if(!empty($row['last_escalated_at'])): ?>
                             <small class="d-block text-muted">Transferred: <?php echo e(date('d M Y, h:i A',strtotime($row['last_escalated_at']))); ?></small>
+                          <?php endif; ?>
+                          <?php if(!empty($row['assignment_chain']) && str_starts_with((string)$row['reference_no'],'TCMC-2026-')): ?>
+                            <div class="small mt-1 text-secondary" title="Recorded officer handover sequence">
+                              <i class="bi bi-arrow-left-right me-1" aria-hidden="true"></i>
+                              <strong>All assignments:</strong> <?php echo e($row['assignment_chain']); ?>
+                            </div>
                           <?php endif; ?>
                         </td>
                         <td><span class="badge text-bg-<?php echo e(status_badge_class($row['status'])); ?>"><?php echo e($row['status']); ?></span></td>
