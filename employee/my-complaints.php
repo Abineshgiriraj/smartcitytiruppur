@@ -82,7 +82,7 @@ $countsStmt = db()->prepare('
         SUM(CASE WHEN status = "Closed" THEN 1 ELSE 0 END) as closed_count,
         SUM(CASE WHEN status = "Reopened" THEN 1 ELSE 0 END) as reopened_count,
         SUM(CASE WHEN status IN ("Assigned", "Acknowledged", "In Progress", "Reopened") AND due_at IS NOT NULL AND due_at < NOW() THEN 1 ELSE 0 END) as overdue_count,
-        SUM(CASE WHEN c.reference_no LIKE 'TCMC-2026-%' AND EXISTS (
+        SUM(CASE WHEN c.reference_no LIKE \'TCMC-2026-%\' AND EXISTS (
             SELECT 1 FROM complaint_escalations ce
             WHERE ce.complaint_id=c.id AND ce.officer_id=c.assigned_officer_id AND ce.level_no>1
         ) THEN 1 ELSE 0 END) AS transferred_to_me_count
