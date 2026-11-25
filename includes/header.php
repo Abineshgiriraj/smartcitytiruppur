@@ -40,11 +40,11 @@ try {
     <link href="<?php echo e(url('assets/css/citizen-refresh.css?v=20261121b')); ?>" rel="stylesheet">
     <link href="<?php echo e(url('assets/css/civic-modern.css?v=20261124')); ?>" rel="stylesheet">
     <link href="<?php echo e(url('assets/css/neo-civic-experience.css?v=20261124')); ?>" rel="stylesheet">
-    <?php if (!empty($homepageDesignDemo)): ?>
-    <link href="<?php echo e(url('assets/css/portal-design-demo.css?v=20261125')); ?>" rel="stylesheet">
+    <?php if ($activePage === 'home'): ?>
+    <link href="<?php echo e(url('assets/css/photo-led-hero.css?v=20261125b')); ?>" rel="stylesheet">
     <?php endif; ?>
 </head>
-<body class="public-body<?php echo !empty($homepageDesignDemo) ? ' homepage-demo' : ''; ?>">
+<body class="public-body">
 <header class="public-header">
     <div class="utility-strip">
         <div class="container-xxl d-flex flex-wrap justify-content-between align-items-center gap-2">
