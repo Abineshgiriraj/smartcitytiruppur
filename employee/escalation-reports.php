@@ -8,6 +8,7 @@ declare(strict_types=1);
  */
 require_once __DIR__ . '/../includes/bootstrap.php';
 require_once __DIR__ . '/../includes/officer-authority.php';
+require_once __DIR__ . '/../includes/escalation-report-checks.php';
 
 $user = require_roles(['Super Admin', 'Admin', 'Commissioner', 'Department Head']);
 require_permission('escalation.view');
@@ -198,6 +199,7 @@ $summary=$summaryStmt->fetch(PDO::FETCH_ASSOC)?:['total'=>0,'overdue'=>0,'unassi
 
 $selected=null;$events=[];$assignments=[];$stageRows=[];$policy=null;$currentLevel=1;$stagePeople=[];
 $stageIssue='';$nextPreview=['label'=>'No complaint selected','candidate'=>null];
+$stageOfficerPreviews=[];$routingReadiness=null;
 $complaintId=max(0,(int)($_GET['complaint_id']??0));
 $referenceSearch=trim((string)($_GET['reference_no']??''));
 $referenceSearch=substr($referenceSearch,0,45);
@@ -290,7 +292,30 @@ if ($tab==='journey' && $complaintId>0) {
                 }
             }
         }
-        if($policy) $nextPreview=er_next_preview($pdo,$selected,$policy,$currentLevel,$consistent);
+        if($policy) {
+            $nextPreview=er_next_preview($pdo,$selected,$policy,$currentLevel,$consistent);
+            // Preview every remaining PDF stage, not only the immediate successor.
+            // Predictions are recomputed; no future recipient is already assigned.
+            $previousCandidate=(int)$selected['assigned_officer_id'];
+            foreach($stageRows as $step){
+                $futureLevel=(int)$step['stage_no'];
+                if($futureLevel<=$currentLevel)continue;
+                $preview=er_stage_officer_preview(
+                    $pdo,$selected,$policy,$futureLevel,$previousCandidate
+                );
+                $stageOfficerPreviews[$futureLevel]=$preview;
+                if($preview['candidate'])$previousCandidate=(int)$preview['candidate']['id'];
+            }
+            // Use same validated immediate-next preview as the routing worker.
+            // This may differ from speculative later-stage candidates.
+            if(isset($stageOfficerPreviews[$currentLevel+1]) && $consistent) {
+                $nextPreview=$stageOfficerPreviews[$currentLevel+1];
+            }
+        }
+        $routingReadiness=er_escalation_readiness(
+            $pdo,$selected,$policy,$currentLevel,$events,$assignments,
+            $stageOfficerPreviews[$currentLevel+1]??$nextPreview
+        );
     }
 }
 
@@ -410,6 +435,13 @@ include __DIR__.'/../includes/employee-header.php';
         <div><span class="er-state"><?php echo e($selected['status']); ?></span><div class="mt-2"><a class="btn btn-sm btn-outline-primary" href="<?php echo e(url('employee/complaint-view.php?id='.(int)$selected['id'])); ?>">Open complaint</a></div></div>
       </div>
       <?php if($stageIssue!==''): ?><div class="alert alert-warning mt-3"><i class="bi bi-exclamation-triangle me-1"></i><?php echo e($stageIssue); ?></div><?php endif; ?>
+      <?php if($routingReadiness): ?>
+      <div class="er-readiness er-readiness-<?php echo e($routingReadiness['state']); ?>" role="status">
+        <div class="er-readiness-title"><i class="bi bi-clipboard2-pulse" aria-hidden="true"></i><strong>Escalation readiness check</strong><span class="er-readiness-state"><?php echo e($routingReadiness['title']); ?></span></div>
+        <p><?php echo e($routingReadiness['detail']); ?></p>
+        <p class="er-readiness-foot"><i class="bi bi-shield-lock me-1"></i>This diagnostic only reads the database. It does not check job scheduling or execute escalation.</p>
+      </div>
+      <?php endif; ?>
       <div class="er-journey-layout">
         <div class="er-card">
           <div class="er-card-head"><div><h2>Full escalation ladder</h2><p>Stages are specific to this complaint category.</p></div><span class="er-state"><?php echo count($stageRows); ?> stages</span></div>
@@ -422,7 +454,24 @@ include __DIR__.'/../includes/employee-header.php';
                 <div class="er-timeline-content">
                   <div class="er-timeline-heading"><strong>Stage <?php echo $n; ?> — <?php echo e($step['role_label']); ?></strong><span class="er-state"><?php echo $active?'Current stage':($past?($person?'Recorded earlier':'Missing historical record'):'Upcoming'); ?></span></div>
                   <p>PDF stage SLA: <strong><?php echo (int)$step['period_days']; ?> day(s)</strong></p>
-                  <p><?php if($active): ?>Current assigned officer: <strong><?php echo e($selected['current_officer_name']?:'Unassigned'); ?></strong><?php elseif($person): ?>Recorded recipient: <strong><?php echo e($person['officer_name']?:('#'.$person['officer_id'])); ?></strong><?php else: ?>Officer not assigned to this stage<?php endif; ?></p>
+                  <?php $preview=$stageOfficerPreviews[$n]??null; ?>
+                  <?php if($active): ?>
+                    <p>Current assigned officer: <strong><?php echo e($selected['current_officer_name']?:'Unassigned'); ?></strong></p>
+                    <small class="er-officer-label er-officer-recorded">Assigned now</small>
+                  <?php elseif($person): ?>
+                    <p>Recorded recipient: <strong><?php echo e($person['officer_name']?:('#'.$person['officer_id'])); ?></strong></p>
+                    <small class="er-officer-label er-officer-recorded">Actual historical assignment</small>
+                  <?php elseif($preview && $preview['candidate']): ?>
+                    <p>Eligible officer: <strong><?php echo e($preview['candidate']['officer_name']); ?></strong>
+                    <span class="text-secondary">(<?php echo e($preview['candidate']['designation']); ?>)</span></p>
+                    <small class="er-officer-label er-officer-preview">Future candidate — not assigned</small>
+                    <small class="d-block text-secondary mt-1"><?php echo e($preview['label']); ?></small>
+                  <?php elseif($preview): ?>
+                    <p class="er-officer-missing">Officer not confirmed: <?php echo e($preview['label']); ?></p>
+                    <small class="er-officer-label er-officer-unavailable">Stage mapping needs review</small>
+                  <?php else: ?>
+                    <p>Officer not assigned to this stage</p>
+                  <?php endif; ?>
                   <?php if($person): ?><small class="text-secondary">Recorded at: <?php echo e(er_date($person['escalated_at']??$person['assigned_at']??null)); ?></small><?php endif; ?>
                   <?php if($active): ?><small class="d-block text-secondary">Current recorded deadline: <?php echo e(er_date($selected['due_at'])); ?></small><?php endif; ?>
                 </div>
@@ -439,6 +488,7 @@ include __DIR__.'/../includes/employee-header.php';
             <?php else: ?><div class="er-next-role">No confirmed next stage</div><?php endif; ?>
             <?php if($nextPreview['candidate']): ?><p><strong><?php echo e($nextPreview['candidate']['officer_name']); ?></strong><br><span class="text-secondary"><?php echo e($nextPreview['candidate']['designation']); ?></span></p><?php endif; ?>
             <div class="er-next-note"><?php echo e($nextPreview['label']); ?></div>
+            <p class="small text-secondary mt-3 mb-0">All later-stage candidate names are shown in the escalation ladder. Only recorded transfers represent actual assignments.</p>
           </div>
           <div class="er-card"><div class="er-card-head"><h2>Actual officer movements</h2></div>
             <?php if(!$assignments): ?><p class="text-secondary">No assignment history found.</p><?php endif; ?>
