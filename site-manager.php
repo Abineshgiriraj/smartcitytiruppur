@@ -20,7 +20,7 @@ include __DIR__ . '/includes/header.php';
     <div class="row justify-content-center">
         <div class="col-lg-7">
             <div class="card content-card p-5 text-center">
-                <div class="service-icon mx-auto mb-3">SM</div>
+                <div class="service-icon mx-auto mb-3"></div>
                 <h2 class="h3 fw-bold"><?php echo e($manager['name']); ?></h2>
                 <p class="text-muted"><?php echo e($manager['designation']); ?></p>
                 <?php if ($manager['email']): ?><p><strong>Email:</strong> <?php echo e($manager['email']); ?></p><?php endif; ?>
