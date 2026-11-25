@@ -59,6 +59,7 @@ jobs:
           php -l employee/user-mapping-details.php
           php -l employee/complaint-view.php
           php -l employee/escalation-reports.php
+          php -l employee/officer-complaint-report.php
           php -l includes/escalation-report-checks.php
           php -l employee/officer-approvals.php
           php -l employee/pdf-policy-review.php
