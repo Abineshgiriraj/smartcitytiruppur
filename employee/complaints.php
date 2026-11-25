@@ -90,7 +90,15 @@ $pageUrl = static function (int $number) use ($paginationQuery): string {
 $sql = "SELECT c.id,c.reference_no,c.citizen_name,c.mobile_no,c.status,c.created_at,c.due_at,
                COALESCE(d.department_name,'Unmapped') AS department_name,
                COALESCE(cc.category_name,'Unmapped') AS category_name,
-               z.zone_no,w.ward_no,o.officer_name
+               z.zone_no,w.ward_no,o.officer_name,
+               (SELECT previous.officer_name FROM complaint_assignments former
+                JOIN officers previous ON previous.id=former.officer_id
+                WHERE former.complaint_id=c.id AND former.is_current=0
+                ORDER BY former.unassigned_at DESC,former.id DESC LIMIT 1) previous_officer_name,
+               (SELECT MAX(ce.level_no) FROM complaint_escalations ce
+                WHERE ce.complaint_id=c.id AND ce.officer_id=c.assigned_officer_id) current_transfer_level,
+               (SELECT MAX(ce.escalated_at) FROM complaint_escalations ce
+                WHERE ce.complaint_id=c.id AND ce.officer_id=c.assigned_officer_id) last_escalated_at
         FROM complaints c
         LEFT JOIN departments d ON d.id=c.department_id
         LEFT JOIN complaint_categories cc ON cc.id=c.category_id
@@ -131,7 +139,7 @@ include __DIR__ . '/../includes/employee-header.php';
 <div class="card content-card p-4">
     <div class="table-responsive">
         <table class="table table-bordered table-hover align-middle mb-0">
-            <thead class="table-dark"><tr><th>Reference</th><th>Date</th><th>Citizen</th><th>Mobile</th><th>Department</th><th>Category</th><th>Zone</th><th>Ward</th><th>Officer</th><th>Status</th><th>Due</th><th>Action</th></tr></thead>
+            <thead class="table-dark"><tr><th>Reference</th><th>Date</th><th>Citizen</th><th>Mobile</th><th>Department</th><th>Category</th><th>Zone</th><th>Ward</th><th>Current officer / Handover</th><th>Status</th><th>Due</th><th>Action</th></tr></thead>
             <tbody>
                 <?php if (!$rows): ?><tr><td colspan="12" class="text-center text-muted py-4">No complaints found.</td></tr><?php endif; ?>
                 <?php foreach ($rows as $row): ?>
@@ -145,7 +153,18 @@ include __DIR__ . '/../includes/employee-header.php';
                         <td><?php echo e($row['category_name']); ?></td>
                         <td><?php echo e($row['zone_no']); ?></td>
                         <td><?php echo e($row['ward_no']); ?></td>
-                        <td><?php echo e($row['officer_name'] ?: '-'); ?></td>
+                        <td>
+                          <strong><?php echo e($row['officer_name'] ?: 'Unassigned'); ?></strong>
+                          <?php if((int)($row['current_transfer_level']??0)>1): ?>
+                            <div><span class="badge bg-info text-dark">Escalated · Stage <?php echo (int)$row['current_transfer_level']; ?></span></div>
+                          <?php endif; ?>
+                          <?php if(!empty($row['previous_officer_name'])): ?>
+                            <small class="d-block text-muted">From: <?php echo e($row['previous_officer_name']); ?></small>
+                          <?php endif; ?>
+                          <?php if(!empty($row['last_escalated_at'])): ?>
+                            <small class="d-block text-muted">Transferred: <?php echo e(date('d M Y, h:i A',strtotime($row['last_escalated_at']))); ?></small>
+                          <?php endif; ?>
+                        </td>
                         <td><span class="badge text-bg-<?php echo e(status_badge_class($row['status'])); ?>"><?php echo e($row['status']); ?></span></td>
                         <td><?php echo e($row['due_at'] ? date('d-m-Y', strtotime($row['due_at'])) : '-'); ?></td>
                         <td><a class="btn btn-sm btn-outline-primary" href="<?php echo e(url('employee/complaint-view.php?id=' . (int)$row['id'])); ?>">Open</a></td>
