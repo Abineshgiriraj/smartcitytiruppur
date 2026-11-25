@@ -6,6 +6,7 @@ require_once __DIR__ . '/../includes/officer-authority.php';
 $user = require_login();
 $isOfficerPortal = in_array($user['role'], ['Field Officer','Officer'], true);
 $officerPortalId = 0;
+$previousOfficerAccess = false;
 if ($isOfficerPortal) {
     $auth = require_officer();
     $officerPortalId = (int)$auth['officer']['id'];
@@ -45,6 +46,17 @@ if (!can_manage_all_complaints($user)) {
 
     if ($isOfficerPortal) {
         $allowed = $officerPortalId > 0 && $officerPortalId === (int)$complaint['assigned_officer_id'];
+        if (!$allowed && $officerPortalId > 0 && str_starts_with((string)$complaint['reference_no'], 'TCMC-2026-')) {
+            // Earlier officers may consult the complaint and its recorded history.
+            // Their former assignment never grants status or reassignment permissions.
+            $historicStmt = db()->prepare(
+                'SELECT 1 FROM complaint_assignments
+                 WHERE complaint_id=? AND officer_id=? AND is_current=0 LIMIT 1'
+            );
+            $historicStmt->execute([$complaintId,$officerPortalId]);
+            $previousOfficerAccess = (bool)$historicStmt->fetchColumn();
+            $allowed = $previousOfficerAccess;
+        }
     }
 
     if (!$allowed) {
@@ -53,7 +65,8 @@ if (!can_manage_all_complaints($user)) {
     }
 }
 
-$canUpdate = $isOfficerPortal || can_access_permission($user, 'complaints.update');
+$canUpdate = ($isOfficerPortal && !$previousOfficerAccess)
+    || (!$isOfficerPortal && can_access_permission($user, 'complaints.update'));
 
 // Officers may close/reject active cases and reopen completed/rejected ones.
 // Registered remains an intake state. Officer-initiated reopens do not
@@ -340,6 +353,15 @@ $attachments = $attachmentStmt->fetchAll();
 
 include __DIR__ . '/../includes/employee-header.php';
 ?>
+<?php if($previousOfficerAccess): ?>
+<div class="alert alert-info d-flex gap-2 align-items-start" role="status">
+    <i class="bi bi-eye mt-1" aria-hidden="true"></i>
+    <div><strong>Previously assigned complaint — read-only access.</strong>
+      This complaint has been transferred to another officer. You may review its details,
+      attachments, status and activity history, but only the current responsible officer
+      may update the complaint.</div>
+</div>
+<?php endif; ?>
 <div class="complaint-reference-page">
     <div class="complaint-reference-brand">
         <img src="<?php echo e(url('assets/images/trippurlogo.png')); ?>" alt="Tiruppur Corporation">
