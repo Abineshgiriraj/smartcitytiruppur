@@ -51,9 +51,9 @@ try {
                     <span class="support-label">Customer Support:</span>
                     <strong>155304</strong>
                 </a>
-                <a href="mailto:<?php echo e(setting('support_email', 'commr.Tiruppur@tn.gov.in')); ?>">
+                <a href="mailto:<?php echo e(setting('support_email', 'commr.tiruppur@tn.gov.in')); ?>">
                     <i class="bi bi-envelope"></i>
-                    <?php echo e(setting('support_email', 'commr.Tiruppur@tn.gov.in')); ?>
+                    <?php echo e(setting('support_email', 'commr.tiruppur@tn.gov.in')); ?>
                 </a>
             </div>
             <div class="utility-right d-flex align-items-center gap-3">

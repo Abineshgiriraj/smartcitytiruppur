@@ -66,10 +66,29 @@
 .scd .scd-file{display:flex;align-items:center;gap:11px;padding:13px;border:1px solid #d9e8f1;border-radius:12px;background:#fcfeff;color:#244b6b;transition:background .2s,border-color .2s}
 .scd .scd-file:hover{background:#eff8fd;border-color:#98c6e2;color:#185e8f}
 .scd .scd-file-icon{width:39px;height:41px;display:grid;place-items:center;flex:0 0 39px;border-radius:10px;background:#e4f2fb;font-size:20px;color:#2381ac}
+.scd .scd-file-preview-wrap{position:relative;width:52px;height:52px;flex:0 0 52px;border-radius:10px;overflow:hidden;border:1px solid #c7e1f1;background:#f3f9fd;cursor:pointer}
+.scd .scd-file-thumb{width:100%;height:100%;object-fit:cover;display:block;transition:transform .2s ease}
+.scd .scd-file-preview-wrap:hover .scd-file-thumb{transform:scale(1.08)}
+.scd .scd-file-zoom-btn{position:absolute;inset:0;background:rgba(15,35,55,0.45);color:#fff;border:none;display:grid;place-items:center;font-size:14px;opacity:0;transition:opacity .2s ease;cursor:pointer}
+.scd .scd-file-preview-wrap:hover .scd-file-zoom-btn{opacity:1}
+.scd .scd-file-clickable{cursor:pointer;color:#185e8f}
+.scd .scd-file-clickable:hover{text-decoration:underline}
 .scd .scd-file-text{flex:1;min-width:0}
 .scd .scd-file-text strong{font-size:12px;display:block;overflow-wrap:anywhere}
 .scd .scd-file-text small{display:block;color:#7a90a3;font-size:10px;margin-top:4px}
-.scd .scd-file-download{font-size:14px;color:#2783b3}
+.scd .scd-file-download{font-size:16px;color:#2783b3;padding:6px;border-radius:8px;transition:background .15s,color .15s}
+.scd .scd-file-download:hover{background:#dcedf7;color:#0e5884}
+
+/* Image Lightbox Modal */
+.scd-image-modal{display:none;position:fixed;inset:0;z-index:99999;background:rgba(10,25,40,0.88);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px;opacity:0;transition:opacity .25s ease}
+.scd-image-modal.active{display:flex;opacity:1}
+.scd-image-modal-content{position:relative;max-width:92vw;max-height:92vh;display:flex;flex-direction:column;background:#182836;border:1px solid #2d4559;border-radius:16px;box-shadow:0 25px 60px rgba(0,0,0,0.6);overflow:hidden;animation:scdModalZoom .25s ease-out}
+@keyframes scdModalZoom{from{transform:scale(0.92);opacity:0}to{transform:scale(1);opacity:1}}
+.scd-image-modal-header{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:#111e2a;border-bottom:1px solid #233748;color:#e8f1f7}
+.scd-image-modal-title{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw}
+.scd-image-modal-actions{display:flex;align-items:center}
+.scd-image-modal-body{display:grid;place-items:center;padding:12px;overflow:auto;max-height:calc(92vh - 60px);background:#0d1822}
+.scd-image-modal-body img{max-width:100%;max-height:80vh;object-fit:contain;border-radius:8px;box-shadow:0 8px 30px rgba(0,0,0,0.5)}
 .scd .scd-officer-profile{display:flex;align-items:center;gap:12px;border-radius:13px;background:linear-gradient(135deg,#e8f6fd,#f7fbff);border:1px solid #dbedf8;padding:15px;margin-bottom:19px}
 .scd .scd-officer-avatar{width:45px;height:45px;border-radius:13px;background:#d1ebfa;color:#216c9b;display:grid;place-items:center;font-size:23px;flex:0 0 45px}
 .scd .scd-officer-profile strong{font-size:14px;font-weight:850;display:block;color:#183d5d}

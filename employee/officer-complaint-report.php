@@ -347,9 +347,16 @@ include __DIR__.'/../includes/employee-header.php';
       <a class="btn btn-primary" href="<?php echo e(ocr_link()); ?><?php echo strpos(ocr_link(),'?')!==false?'&':'?'; ?>export=csv"><i class="bi bi-download me-1"></i>Export CSV</a>
     </div>
   </div>
-  <div class="ocr-note no-print"><i class="bi bi-shield-check me-2"></i><strong>Read-only.</strong>
-    Current workload is counted by the complaint's current officer. Historical handling is counted from actual assignment records.
-    Future escalation candidates are not counted as assigned.
+  <div class="ocr-note no-print d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <div>
+      <i class="bi bi-shield-check me-2"></i><strong>Read-only.</strong>
+      Current workload is counted by the complaint's current officer. Historical handling is counted from actual assignment records.
+    </div>
+    <div>
+      <a href="routing-analysis.php" class="btn btn-sm btn-outline-primary">
+        <i class="bi bi-diagram-3 me-1"></i>View Routing & Reassignment Analysis (24,592 Unassigned)
+      </a>
+    </div>
   </div>
   <div class="ocr-kpi-grid">
     <?php

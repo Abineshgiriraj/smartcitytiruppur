@@ -118,8 +118,8 @@ include __DIR__ . '/includes/header.php';
             </div>
             <div class="neo-journey-steps">
                 <div class="neo-step"><span class="neo-step-num">01</span><span class="neo-step-icon"><i class="bi bi-chat-left-dots"></i></span><div><h3>Register a Complaint</h3><p>Enter complaint details, select your locality and attach supporting documents.</p></div></div>
-                <div class="neo-step"><span class="neo-step-num">02</span><span class="neo-step-icon"><i class="bi bi-person-check"></i></span><div><h3>Automatic Allocation</h3><p>The complaint is routed to a responsible municipal officer.</p></div></div>
-                <div class="neo-step"><span class="neo-step-num">03</span><span class="neo-step-icon"><i class="bi bi-activity"></i></span><div><h3>Track Complaint Status</h3><p>Use your reference number to check updates and resolution status.</p></div></div>
+                <!-- <div class="neo-step"><span class="neo-step-num">02</span><span class="neo-step-icon"><i class="bi bi-person-check"></i></span><div><h3>Automatic Allocation</h3><p>The complaint is routed to a responsible municipal officer.</p></div></div> -->
+                <div class="neo-step"><span class="neo-step-num">02</span><span class="neo-step-icon"><i class="bi bi-activity"></i></span><div><h3>Track Complaint Status</h3><p>Use your reference number to check updates and resolution status.</p></div></div>
             </div>
         </div>
     </section>

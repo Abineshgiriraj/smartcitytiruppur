@@ -116,8 +116,16 @@ if (!$complaint) {
     exit('Complaint not found.');
 }
 
-// Public page intentionally does not retrieve or expose internal staff activity.
-$history = [];
+// Retrieve complaint status history and remarks (accessible to citizens and staff)
+$historyStmt = $pdo->prepare(
+    'SELECT h.*, u.full_name
+     FROM complaint_status_history h
+     LEFT JOIN users u ON u.id = h.changed_by
+     WHERE h.complaint_id = ?
+     ORDER BY h.changed_at ASC, h.id ASC'
+);
+$historyStmt->execute([$complaint['id']]);
+$history = $historyStmt->fetchAll();
 
 $attachmentStmt = $pdo->prepare('SELECT id, original_name, mime_type, file_size FROM complaint_attachments WHERE complaint_id = ? ORDER BY id');
 $attachmentStmt->execute([$complaint['id']]);
@@ -139,7 +147,7 @@ $canReopen = in_array($complaint['status'], ['Resolved','Closed'], true) && (int
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
   <link href="<?php echo e(url('assets/css/style.css?v=20261125')); ?>" rel="stylesheet">
-  <link href="<?php echo e(url('assets/css/complaint-detail-modern.css?v=20261125a')); ?>" rel="stylesheet">
+  <link href="<?php echo e(url('assets/css/complaint-detail-modern.css?v=20261126_remarks')); ?>" rel="stylesheet">
 </head>
 <body style="background:#f2f7fc">
 <main class="container-xxl py-4 py-lg-5">

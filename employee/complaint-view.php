@@ -353,6 +353,17 @@ $attachmentStmt = db()->prepare('SELECT id, original_name, mime_type, file_size 
 $attachmentStmt->execute([$complaintId]);
 $attachments = $attachmentStmt->fetchAll();
 
+// Fetch calculated historical routing if available
+$calcRoutingStmt = db()->prepare('
+    SELECT ccr.*, o.officer_name, o.designation
+    FROM complaint_calculated_routing ccr
+    LEFT JOIN officers o ON o.id = ccr.officer_id
+    WHERE ccr.complaint_id = ?
+    ORDER BY ccr.stage_no ASC
+');
+$calcRoutingStmt->execute([$complaintId]);
+$calculatedRouting = $calcRoutingStmt->fetchAll(PDO::FETCH_ASSOC);
+
 include __DIR__ . '/../includes/employee-header.php';
 ?>
 <?php
@@ -362,6 +373,67 @@ if ($previousOfficerAccess) {
 $detailAudience='staff';
 include __DIR__ . '/../includes/complaint-detail-layout.php';
 ?>
+
+<?php if (!empty($calculatedRouting)): ?>
+<section class="card border-0 shadow-sm mb-4 mx-3 mx-lg-4">
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+        <div>
+            <h5 class="fw-bold mb-0 text-dark"><i class="bi bi-diagram-3-fill text-primary me-2"></i>Calculated Historical Routing & Escalation Timeline</h5>
+            <small class="text-muted">Reconstructed theoretical stage milestones based on category escalation policy and verified original lifecycle records.</small>
+        </div>
+        <span class="badge bg-light text-primary border px-3 py-2 fw-semibold">Calculated Historical Routing</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Stage</th>
+                        <th>Role / Designation</th>
+                        <th>Eligible / Historical Officer</th>
+                        <th>SLA (Days)</th>
+                        <th>Start Milestone</th>
+                        <th>Due Milestone</th>
+                        <th>Status</th>
+                        <th>Source / Evidence</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($calculatedRouting as $stage): ?>
+                        <tr>
+                            <td><span class="badge bg-primary-subtle text-primary fw-bold">Stage <?php echo $stage['stage_no']; ?></span></td>
+                            <td class="fw-semibold text-dark"><?php echo e($stage['role_label']); ?></td>
+                            <td>
+                                <?php if ($stage['officer_id']): ?>
+                                    <div class="fw-semibold text-dark"><?php echo e($stage['officer_name'] ?: 'Officer #' . $stage['officer_id']); ?></div>
+                                    <small class="text-muted"><?php echo e($stage['designation'] ?? ''); ?></small>
+                                <?php else: ?>
+                                    <span class="text-muted small">Pending Allocation</span>
+                                <?php endif; ?>
+                            </td>
+                            <td><?php echo (int)$stage['period_days']; ?> day(s)</td>
+                            <td><small class="text-dark"><?php echo date('d-m-Y H:i', strtotime($stage['stage_start_at'])); ?></small></td>
+                            <td><small class="text-dark"><?php echo date('d-m-Y H:i', strtotime($stage['stage_due_at'])); ?></small></td>
+                            <td>
+                                <?php if ($stage['is_completed']): ?>
+                                    <span class="badge bg-success-subtle text-success"><i class="bi bi-check-lg me-1"></i>Completed</span>
+                                    <?php if ($stage['completed_at']): ?><div class="small text-muted"><?php echo date('d-m-Y H:i', strtotime($stage['completed_at'])); ?></div><?php endif; ?>
+                                <?php else: ?>
+                                    <span class="badge bg-warning-subtle text-warning">Current / In Progress</span>
+                                <?php endif; ?>
+                            </td>
+                            <td>
+                                <span class="badge bg-light text-dark border"><?php echo e(str_replace('_', ' ', $stage['routing_type'])); ?></span>
+                                <?php if ($stage['notes']): ?><div class="small text-muted" style="max-width: 250px;"><?php echo e($stage['notes']); ?></div><?php endif; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
 <section class="scd-staff-actions" aria-label="Complaint update controls">
   <div class="complaint-reference-actions">
     <?php if ($needsRoutingReview): ?>

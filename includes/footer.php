@@ -49,7 +49,7 @@
 <div class="modal fade public-modal" id="emailModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered"><div class="modal-content">
         <div class="modal-header"><h2 class="modal-title h5"><i class="bi bi-envelope me-2"></i>Email Complaint</h2><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
-        <div class="modal-body"><ol><li>Write the grievance and area details.</li><li>Attach a photograph when required.</li><li>Email <strong><?php echo e(setting('support_email', 'commr.Tiruppur@tn.gov.in')); ?></strong>.</li></ol></div>
+        <div class="modal-body"><ol><li>Write the grievance and area details.</li><li>Attach a photograph when required.</li><li>Email <strong><?php echo e(setting('support_email', 'commr.tiruppur@tn.gov.in')); ?></strong>.</li></ol></div>
     </div></div>
 </div>
 

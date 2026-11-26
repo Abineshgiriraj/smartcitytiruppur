@@ -124,17 +124,92 @@ $detailFileSize = static function ($bytes): string {
               $isImage=str_starts_with((string)($attachment['mime_type']??''),'image/');
               $isPdf=(string)($attachment['mime_type']??'')==='application/pdf';
               $fileIcon=$isImage?'bi-file-earmark-image':($isPdf?'bi-file-earmark-pdf':'bi-file-earmark-text');
+              $downloadUrl=url($detailAttachmentUrl.'?id='.(int)$attachment['id']);
+              $inlineUrl=url($detailAttachmentUrl.'?id='.(int)$attachment['id'].'&view=inline');
+              $fileName=$detailDash($attachment['original_name']??null);
             ?>
-              <a class="scd-file" href="<?php echo e(url($detailAttachmentUrl.'?id='.(int)$attachment['id'])); ?>">
-                <span class="scd-file-icon"><i class="bi <?php echo $fileIcon; ?>" aria-hidden="true"></i></span>
-                <span class="scd-file-text"><strong><?php echo e($detailDash($attachment['original_name']??null)); ?></strong>
-                  <small><?php echo e(strtoupper((string)($attachment['mime_type']??'File'))); ?> · <?php echo e($detailFileSize($attachment['file_size']??0)); ?></small></span>
-                <i class="bi bi-download scd-file-download" aria-hidden="true"></i>
-              </a>
+              <div class="scd-file <?php echo $isImage ? 'scd-file-with-image' : ''; ?>">
+                <?php if ($isImage): ?>
+                  <div class="scd-file-preview-wrap">
+                    <img src="<?php echo e($inlineUrl); ?>" alt="<?php echo e($fileName); ?>" class="scd-file-thumb" loading="lazy" onclick="openComplaintImageModal('<?php echo e($inlineUrl); ?>', '<?php echo e(addslashes($fileName)); ?>', '<?php echo e($downloadUrl); ?>')">
+                    <button type="button" class="scd-file-zoom-btn" title="View large size" onclick="openComplaintImageModal('<?php echo e($inlineUrl); ?>', '<?php echo e(addslashes($fileName)); ?>', '<?php echo e($downloadUrl); ?>')">
+                      <i class="bi bi-arrows-fullscreen"></i>
+                    </button>
+                  </div>
+                <?php else: ?>
+                  <span class="scd-file-icon"><i class="bi <?php echo $fileIcon; ?>" aria-hidden="true"></i></span>
+                <?php endif; ?>
+                <div class="scd-file-text">
+                  <?php if ($isImage): ?>
+                    <strong class="scd-file-clickable" onclick="openComplaintImageModal('<?php echo e($inlineUrl); ?>', '<?php echo e(addslashes($fileName)); ?>', '<?php echo e($downloadUrl); ?>')"><?php echo e($fileName); ?></strong>
+                  <?php else: ?>
+                    <a href="<?php echo e($downloadUrl); ?>" class="text-decoration-none text-dark"><strong><?php echo e($fileName); ?></strong></a>
+                  <?php endif; ?>
+                  <small><?php echo e(strtoupper((string)($attachment['mime_type']??'File'))); ?> · <?php echo e($detailFileSize($attachment['file_size']??0)); ?></small>
+                </div>
+                <a href="<?php echo e($downloadUrl); ?>" class="scd-file-download" title="Download attachment" download>
+                  <i class="bi bi-download" aria-hidden="true"></i>
+                </a>
+              </div>
             <?php endforeach; ?>
           </div>
         <?php endif; ?>
       </section>
+
+      <!-- Lightbox / Modal for Large Image View -->
+      <div id="complaintImageModal" class="scd-image-modal" style="display:none;" onclick="closeComplaintImageModal(event)">
+        <div class="scd-image-modal-content">
+          <div class="scd-image-modal-header">
+            <span id="complaintImageModalTitle" class="scd-image-modal-title"></span>
+            <div class="scd-image-modal-actions">
+              <a id="complaintImageModalDownload" href="#" class="btn btn-sm btn-outline-light me-2" download>
+                <i class="bi bi-download me-1"></i> Download
+              </a>
+              <button type="button" class="btn btn-sm btn-light" onclick="closeComplaintImageModalDirect()">
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </div>
+          </div>
+          <div class="scd-image-modal-body">
+            <img id="complaintImageModalImg" src="" alt="" style="display:none;">
+          </div>
+        </div>
+      </div>
+
+      <script>
+      function openComplaintImageModal(url, title, downloadUrl) {
+        var modal = document.getElementById('complaintImageModal');
+        var img = document.getElementById('complaintImageModalImg');
+        img.src = url;
+        img.style.display = 'block';
+        document.getElementById('complaintImageModalTitle').textContent = title;
+        document.getElementById('complaintImageModalDownload').href = downloadUrl;
+        modal.style.display = 'flex';
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeComplaintImageModal(e) {
+        if (e.target.id === 'complaintImageModal' || e.target.closest('.btn-light')) {
+          closeComplaintImageModalDirect();
+        }
+      }
+      function closeComplaintImageModalDirect() {
+        var modal = document.getElementById('complaintImageModal');
+        var img = document.getElementById('complaintImageModalImg');
+        if (modal) {
+          modal.classList.remove('active');
+          modal.style.display = 'none';
+          if (img) {
+            img.src = '';
+            img.style.display = 'none';
+          }
+          document.body.style.overflow = '';
+        }
+      }
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeComplaintImageModalDirect();
+      });
+      </script>
 
       <?php if ($detailIsStaff): ?>
       <section class="scd-panel scd-timeline-panel" aria-labelledby="scd-timeline-title">
@@ -220,9 +295,18 @@ $detailFileSize = static function ($bytes): string {
           <div><dt>Street / locality</dt><dd><?php echo e($detailDash($complaint['street_name']??null)); ?></dd></div>
           <div><dt>Location</dt><dd><?php echo e($detailDash($complaint['location_address']??null)); ?></dd></div>
           <div><dt>Door number</dt><dd><?php echo e($detailDash($complaint['door_no']??null)); ?></dd></div>
-          <div><dt>Latest remarks</dt><dd><?php echo $detailIsStaff
-            ? nl2br(e($history?($history[count($history)-1]['remarks']?:'—'):'—'))
-            : 'Internal staff notes are not shown publicly.'; ?></dd></div>
+          <div><dt>Latest remarks</dt><dd><?php
+            $latestRemark = '';
+            if (!empty($history)) {
+              for ($ri = count($history) - 1; $ri >= 0; $ri--) {
+                if (isset($history[$ri]['remarks']) && trim((string)$history[$ri]['remarks']) !== '') {
+                  $latestRemark = (string)$history[$ri]['remarks'];
+                  break;
+                }
+              }
+            }
+            echo $latestRemark !== '' ? nl2br(e($latestRemark)) : '—';
+          ?></dd></div>
         </dl>
       </section>
       <div class="scd-support no-print"><i class="bi bi-info-circle"></i><span>For help with this grievance, contact <a href="<?php echo e(url('contact.php')); ?>">municipal support</a>.</span></div>

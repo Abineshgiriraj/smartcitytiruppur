@@ -54,8 +54,10 @@ if (!$path || !$storageRoot || !str_starts_with($path, $storageRoot) || !is_file
     exit('Attachment file not found.');
 }
 
+$disposition = (isset($_GET['view']) && $_GET['view'] === 'inline' && str_starts_with((string)$attachment['mime_type'], 'image/')) ? 'inline' : 'attachment';
+
 header('Content-Type: ' . $attachment['mime_type']);
 header('Content-Length: ' . filesize($path));
-header('Content-Disposition: attachment; filename="' . basename($attachment['original_name']) . '"');
+header('Content-Disposition: ' . $disposition . '; filename="' . basename($attachment['original_name']) . '"');
 readfile($path);
 exit;
