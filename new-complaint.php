@@ -244,7 +244,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 );
             }
 
-            $reference = generate_reference_number($complaintId);
+            $reference = allocate_complaint_reference($pdo);
 
             $pdo->prepare('UPDATE complaints SET reference_no = ? WHERE id = ?')
                 ->execute([$reference, $complaintId]);

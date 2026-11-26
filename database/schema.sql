@@ -368,6 +368,13 @@ CREATE TABLE `system_settings` (
   UNIQUE KEY `uk_setting_key` (`setting_key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `complaint_reference_sequence` (
+  `id` TINYINT UNSIGNED NOT NULL,
+  `last_reference` BIGINT UNSIGNED NOT NULL,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 CREATE TABLE `password_reset_tokens` (
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,

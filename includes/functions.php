@@ -106,9 +106,96 @@ function valid_date(string $date): bool
     return $object && $object->format('Y-m-d') === $date;
 }
 
-function generate_reference_number(int $complaintId): string
+/**
+ * Determine the floor for the five-digit complaint reference counter.
+ * It is the higher of the largest existing numeric reference in the database
+ * and 9999, so the very first number issued is at least five digits (10000).
+ */
+function reference_sequence_floor(PDO $pdo): int
 {
-    return sprintf('TCMC-%s-%06d', date('Y'), $complaintId);
+    $max = $pdo->query(
+        "SELECT COALESCE(MAX(CAST(reference_no AS UNSIGNED)), 0)
+         FROM complaints WHERE reference_no REGEXP '^[0-9]+$'"
+    )->fetchColumn();
+
+    return max((int) $max, 9999);
+}
+
+/**
+ * Allocate the next five-digit numeric complaint reference.
+ *
+ * MUST be called inside an active transaction: it uses SELECT ... FOR UPDATE
+ * on the single-row complaint_reference_sequence counter so that two
+ * simultaneous registrations can never receive the same number.
+ *
+ * - Continues from the highest existing numeric reference in the database.
+ * - Skips any reference that already exists in the complaints table.
+ * - Refuses to exceed 99999 (throws instead of silently emitting six digits).
+ * - Does NOT modify, convert or delete any existing reference number.
+ */
+function allocate_complaint_reference(PDO $pdo): string
+{
+    if (!$pdo->inTransaction()) {
+        throw new RuntimeException('Complaint reference allocation requires an active transaction.');
+    }
+
+    $row = $pdo->query(
+        'SELECT last_reference FROM complaint_reference_sequence WHERE id = 1 FOR UPDATE'
+    )->fetchColumn();
+
+    if ($row === false) {
+        $pdo->prepare('INSERT INTO complaint_reference_sequence (id, last_reference) VALUES (1, ?)')
+            ->execute([reference_sequence_floor($pdo)]);
+        $row = $pdo->query(
+            'SELECT last_reference FROM complaint_reference_sequence WHERE id = 1 FOR UPDATE'
+        )->fetchColumn();
+    }
+
+    $candidate = (int) $row + 1;
+    $exists = $pdo->prepare('SELECT 1 FROM complaints WHERE reference_no = ? LIMIT 1');
+
+    while (true) {
+        if ($candidate > 99999) {
+            throw new RuntimeException(
+                'Complaint reference numbers have reached the maximum of 99999. '
+                . 'Contact the system administrator to extend the reference series.'
+            );
+        }
+        $exists->execute([(string) $candidate]);
+        if ($exists->fetchColumn() === false) {
+            break;
+        }
+        $candidate++;
+    }
+
+    $pdo->prepare('UPDATE complaint_reference_sequence SET last_reference = ? WHERE id = 1')
+        ->execute([$candidate]);
+
+    return (string) $candidate;
+}
+
+/**
+ * Compatibility wrapper for complaint reference generation.
+ * Always allocates the next unique continuous 5-digit number.
+ */
+function generate_reference_number(?int $complaintId = null, ?PDO $pdo = null): string
+{
+    $pdo = $pdo ?? db();
+    if ($pdo->inTransaction()) {
+        return allocate_complaint_reference($pdo);
+    }
+
+    $pdo->beginTransaction();
+    try {
+        $ref = allocate_complaint_reference($pdo);
+        $pdo->commit();
+        return $ref;
+    } catch (Throwable $e) {
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
+        throw $e;
+    }
 }
 
 function log_message(string $message): void

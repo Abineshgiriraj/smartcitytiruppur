@@ -25,10 +25,13 @@ $conditions = ['c.is_deleted = 0'];
 $params = [];
 if ($showPrevious) {
     $conditions[] = "c.reference_no LIKE 'TCMC-2026-%'";
-    $conditions[] = 'EXISTS (SELECT 1 FROM complaint_assignments old
-        WHERE old.complaint_id=c.id AND old.officer_id=? AND old.is_current=0)';
+    $conditions[] = '(EXISTS (SELECT 1 FROM complaint_assignments old
+        WHERE old.complaint_id=c.id AND old.officer_id=?)
+        OR EXISTS (SELECT 1 FROM complaint_escalations prior
+        WHERE prior.complaint_id=c.id AND prior.officer_id=?
+          AND prior.level_no BETWEEN 2 AND 6))';
     $conditions[] = '(c.assigned_officer_id IS NULL OR c.assigned_officer_id<>?)';
-    array_push($params, $officerId, $officerId);
+    array_push($params, $officerId, $officerId, $officerId);
 } else {
     $conditions[] = 'c.assigned_officer_id = ?';
     $params[] = $officerId;
@@ -96,13 +99,16 @@ $tabCounts = $countsStmt->fetch() ?: [
 ];
 // Previous assignments count separately; historical complaints never inflate
 // current-owner workload totals.
-$previousStmt = db()->prepare("SELECT COUNT(DISTINCT c.id)
-    FROM complaint_assignments h
-    JOIN complaints c ON c.id=h.complaint_id
-    WHERE h.officer_id=? AND h.is_current=0
-      AND c.is_deleted=0 AND c.reference_no LIKE 'TCMC-2026-%'
-      AND (c.assigned_officer_id IS NULL OR c.assigned_officer_id<>?)");
-$previousStmt->execute([$officerId,$officerId]);
+$previousStmt = db()->prepare("SELECT COUNT(*)
+    FROM complaints c
+    WHERE c.is_deleted=0 AND c.reference_no LIKE 'TCMC-2026-%'
+      AND (c.assigned_officer_id IS NULL OR c.assigned_officer_id<>?)
+      AND (EXISTS(SELECT 1 FROM complaint_assignments h
+                  WHERE h.complaint_id=c.id AND h.officer_id=?)
+        OR EXISTS(SELECT 1 FROM complaint_escalations ce
+                  WHERE ce.complaint_id=c.id AND ce.officer_id=?
+                    AND ce.level_no BETWEEN 2 AND 6))");
+$previousStmt->execute([$officerId,$officerId,$officerId]);
 $previousCount=(int)$previousStmt->fetchColumn();
 
 // 2. Count for current filter
