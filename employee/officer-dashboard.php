@@ -109,6 +109,14 @@ include __DIR__ . '/../includes/employee-header.php';
     </div>
 </div>
 
+<?php require_once __DIR__.'/../includes/legacy-complaint-history.php'; $legacyCounts=legacy_history_counts(db(),$officerId,(int)$user['id']); ?>
+<?php if ($legacyCounts!==null): ?>
+<div class="card content-card p-3 mb-4"><div class="d-flex flex-wrap justify-content-between align-items-center gap-2"><div>
+<div class="text-muted">Current + approved historical complaints (unique)</div>
+<div class="h3 mb-1"><?=number_format((int)$legacyCounts['lifetime_total'])?></div>
+<div class="small text-muted"><?=number_format((int)$legacyCounts['additional_history'])?> additional historical complaints, not active tasks</div></div>
+<a class="btn btn-outline-primary" href="<?=e(url('employee/legacy-complaint-history.php'))?>">Historical complaints</a></div></div>
+<?php endif; ?>
 <!-- KPI Stat Cards -->
 <div class="row g-3 mb-4">
     <div class="col-6 col-lg-3">

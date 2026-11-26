@@ -341,6 +341,7 @@ include __DIR__.'/../includes/employee-header.php';
       <p class="text-muted mb-0">Actual officer workloads and recorded complaint history, from your municipal database.</p>
     </div>
     <div class="ocr-heading-actions no-print">
+      <?php if ($scopeDepartment===null): ?><a class="btn btn-outline-primary" href="<?=e(url('employee/legacy-officer-report.php'))?>">Historical officer report</a><?php endif; ?>
       <?php if($selected): ?><a class="btn btn-outline-primary" href="<?php echo e(ocr_link(['officer_id'=>null,'view'=>null,'page'=>1])); ?>"><i class="bi bi-arrow-left me-1"></i>All Officers</a><?php endif; ?>
       <a class="btn btn-outline-secondary" href="<?php echo e(ocr_link()); ?>" onclick="window.print();return false;"><i class="bi bi-printer me-1"></i>Print / Save PDF</a>
       <a class="btn btn-primary" href="<?php echo e(ocr_link()); ?><?php echo strpos(ocr_link(),'?')!==false?'&':'?'; ?>export=csv"><i class="bi bi-download me-1"></i>Export CSV</a>

@@ -1,0 +1,30 @@
+name: Legacy history checks
+on:
+  push:
+    branches: ['feature/legacy-complaint-history-recovery-*']
+  pull_request:
+    paths:
+      - 'includes/legacy-complaint-history.php'
+      - 'employee/legacy-*.php'
+      - 'tools/import_verified_legacy_history.php'
+      - 'database/migrations/2026_11_legacy_complaint_history.sql'
+      - '.github/workflows/legacy-history-checks.yml'
+permissions:
+  contents: read
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+      - run: |
+          php -l includes/legacy-complaint-history.php
+          php -l tools/import_verified_legacy_history.php
+          php -l employee/legacy-complaint-history.php
+          php -l employee/legacy-officer-report.php
+          php -l employee/officer-dashboard.php
+          php -l employee/my-complaints.php
+          php -l employee/officer-complaint-report.php

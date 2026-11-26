@@ -162,6 +162,8 @@ include __DIR__ . '/../includes/employee-header.php';
     </div>
 </div>
 
+<?php require_once __DIR__.'/../includes/legacy-complaint-history.php'; ?>
+<?php if (legacy_history_available(db())): ?><div class="mb-3"><a class="btn btn-outline-primary" href="<?=e(url('employee/legacy-complaint-history.php'))?>">Verified historical complaints (read-only)</a></div><?php endif; ?>
 <!-- Status Tabs -->
 <div class="card content-card border-0 shadow-sm mb-4">
     <div class="card-body p-2">
