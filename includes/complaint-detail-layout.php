@@ -93,10 +93,6 @@ $detailFileSize = static function ($bytes): string {
       <section class="scd-panel" aria-labelledby="scd-description-title">
         <div class="scd-section-title"><span class="scd-section-icon"><i class="bi bi-chat-square-text"></i></span><div><small>COMPLAINT OVERVIEW</small><h2 id="scd-description-title">Complaint Description</h2></div></div>
         <div class="scd-description"><?php echo nl2br(e($detailDash($complaint['description_english']??null))); ?></div>
-        <div class="scd-subsection">
-          <h3>தமிழ் விளக்கம் · Description in Tamil</h3>
-          <div class="scd-description scd-description-secondary" lang="ta"><?php echo nl2br(e($detailDash($complaint['description_tamil']??null))); ?></div>
-        </div>
       </section>
 
       <section class="scd-panel" aria-labelledby="scd-citizen-title">

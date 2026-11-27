@@ -526,11 +526,7 @@ include __DIR__ . '/includes/header.php';
                         <input class="form-control" id="door_no" name="door_no" value="<?php echo e($old['door_no'] ?? ''); ?>" placeholder="e.g. Door No. 14-B, 2nd Floor">
                     </div>
 
-                    <!-- Assessment No -->
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold">Property Assessment No <span class="text-muted fw-normal">(Optional)</span></label>
-                        <input class="form-control" name="assessment_no" value="<?php echo e($old['assessment_no'] ?? ''); ?>" placeholder="Enter assessment / tax number if available">
-                    </div>
+                    
                 </div>
             </div>
         </section>
@@ -593,6 +589,11 @@ include __DIR__ . '/includes/header.php';
                                   placeholder="Describe findings, observations, and issues noted during inspection or grievance..." required><?php echo e($old['description'] ?? ($old['description_english'] ?? '')); ?></textarea>
                         <div class="form-text small">Type your complaint or click <strong>Voice Input</strong> to speak in English or Tamil.</div>
                     </div>
+                   <!-- Assessment No -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Assessment No <span class="text-muted fw-normal">(Optional)</span></label>
+                        <input class="form-control" name="assessment_no" value="<?php echo e($old['assessment_no'] ?? ''); ?>" placeholder="Enter assessment / tax number if available">
+                    </div> 
                 </div>
             </div>
         </section>
