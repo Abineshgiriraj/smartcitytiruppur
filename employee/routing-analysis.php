@@ -5,14 +5,24 @@ require_once __DIR__ . '/../includes/bootstrap.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/complaint-routing-engine.php';
 
-require_login();
-require_admin();
+$user = require_roles(['Super Admin', 'Admin']);
+require_permission('masters.view');
+require_permission('complaints.view');
+$canManageRouting = can_access_permission($user, 'masters.manage') && can_access_permission($user, 'complaints.update');
 
 $pageTitle = 'Complaint Routing Analysis & Reassignment';
 $activePage = 'routing-analysis';
 
 $pdo = db();
 $engine = new ComplaintRoutingEngine($pdo);
+$schemaCheck = $pdo->query("SELECT COUNT(*) FROM information_schema.TABLES
+    WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME IN ('complaint_reassignment_plans','complaint_calculated_routing')");
+if ((int)$schemaCheck->fetchColumn() !== 2) {
+    include __DIR__ . '/../includes/employee-header.php';
+    echo '<div class="alert alert-warning">Routing tables are not installed. Ask an administrator to review and run the additive routing migration before using this module.</div>';
+    include __DIR__ . '/../includes/employee-footer.php';
+    exit;
+}
 
 // Filters
 $departmentId = (int)($_GET['department_id'] ?? 0);
@@ -31,6 +41,8 @@ $flashMessage = null;
 $flashType = 'success';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    require_permission('masters.manage');
+    require_permission('complaints.update');
     verify_csrf();
     $action = $_POST['action'] ?? '';
 
@@ -85,10 +97,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Global Counts
 $totalComplaints = (int)$pdo->query("SELECT COUNT(*) FROM complaints WHERE is_deleted = 0")->fetchColumn();
 $closedComplaints = (int)$pdo->query("SELECT COUNT(*) FROM complaints WHERE is_deleted = 0 AND status IN ('Closed', 'Resolved')")->fetchColumn();
-$openComplaints = (int)$pdo->query("SELECT COUNT(*) FROM complaints WHERE is_deleted = 0 AND status NOT IN ('Closed', 'Resolved')")->fetchColumn();
-$unassignedOpen = (int)$pdo->query("SELECT COUNT(*) FROM complaints WHERE is_deleted = 0 AND status NOT IN ('Closed', 'Resolved') AND (assigned_officer_id IS NULL OR assigned_officer_id = 0)")->fetchColumn();
-$inactiveAssignedOpen = (int)$pdo->query("SELECT COUNT(*) FROM complaints c JOIN officers o ON o.id = c.assigned_officer_id WHERE c.is_deleted = 0 AND c.status NOT IN ('Closed', 'Resolved') AND o.is_active = 0")->fetchColumn();
-$activeAssignedOpen = (int)$pdo->query("SELECT COUNT(*) FROM complaints c JOIN officers o ON o.id = c.assigned_officer_id WHERE c.is_deleted = 0 AND c.status NOT IN ('Closed', 'Resolved') AND o.is_active = 1")->fetchColumn();
+$openComplaints = (int)$pdo->query("SELECT COUNT(*) FROM complaints WHERE is_deleted = 0 AND status NOT IN ('Closed', 'Resolved', 'Rejected')")->fetchColumn();
+$unassignedOpen = (int)$pdo->query("SELECT COUNT(*) FROM complaints WHERE is_deleted = 0 AND status NOT IN ('Closed', 'Resolved', 'Rejected') AND (assigned_officer_id IS NULL OR assigned_officer_id = 0)")->fetchColumn();
+$inactiveAssignedOpen = (int)$pdo->query("SELECT COUNT(*) FROM complaints c JOIN officers o ON o.id = c.assigned_officer_id WHERE c.is_deleted = 0 AND c.status NOT IN ('Closed', 'Resolved', 'Rejected') AND o.is_active = 0")->fetchColumn();
+$activeAssignedOpen = (int)$pdo->query("SELECT COUNT(*) FROM complaints c JOIN officers o ON o.id = c.assigned_officer_id WHERE c.is_deleted = 0 AND c.status NOT IN ('Closed', 'Resolved', 'Rejected') AND o.is_active = 1")->fetchColumn();
 
 $plansProposedCount = (int)$pdo->query("SELECT COUNT(*) FROM complaint_reassignment_plans WHERE plan_status = 'proposed'")->fetchColumn();
 $plansAppliedCount = (int)$pdo->query("SELECT COUNT(*) FROM complaint_reassignment_plans WHERE plan_status = 'applied'")->fetchColumn();
@@ -147,7 +159,7 @@ $listSql = "
     SELECT c.id, c.reference_no, c.citizen_name, c.mobile_no, c.created_at, c.status, c.due_at,
            c.department_id, d.department_name,
            c.category_id, cc.category_name,
-           c.ward_id, w.ward_no, c.zone_id,
+           c.ward_id, w.ward_no, c.zone_id, z.zone_no,
            c.assigned_officer_id,
            curr_o.officer_name AS current_officer_name,
            curr_o.designation AS current_officer_designation,
@@ -162,6 +174,7 @@ $listSql = "
     LEFT JOIN departments d ON d.id = c.department_id
     LEFT JOIN complaint_categories cc ON cc.id = c.category_id
     LEFT JOIN wards w ON w.id = c.ward_id
+    LEFT JOIN zones z ON z.id = c.zone_id
     LEFT JOIN officers curr_o ON curr_o.id = c.assigned_officer_id
     LEFT JOIN complaint_reassignment_plans crp ON crp.complaint_id = c.id
     LEFT JOIN officers prop_o ON prop_o.id = crp.proposed_officer_id
@@ -185,6 +198,7 @@ include __DIR__ . '/../includes/employee-header.php';
             </h1>
             <p class="text-muted mb-0">Reconstruct historical routing, preview intelligent officer allocations, and manage 6-stage escalations.</p>
         </div>
+        <?php if ($canManageRouting): ?>
         <div class="d-flex gap-2">
             <form method="post" class="d-inline">
                 <?php echo csrf_field(); ?>
@@ -201,6 +215,7 @@ include __DIR__ . '/../includes/employee-header.php';
                 </button>
             </form>
         </div>
+        <?php endif; ?>
     </div>
 
     <?php if ($flashMessage): ?>
@@ -381,7 +396,7 @@ include __DIR__ . '/../includes/employee-header.php';
                                 <td>
                                     <span class="badge bg-light text-dark border">Ward <?php echo e($row['ward_no'] ?? 'N/A'); ?></span>
                                     <?php if ($row['zone_id']): ?>
-                                        <span class="badge bg-light text-dark border">Zone <?php echo e($row['zone_id']); ?></span>
+                                        <span class="badge bg-light text-dark border">Zone <?php echo e($row['zone_no'] ?? 'N/A'); ?></span>
                                     <?php endif; ?>
                                 </td>
                                 <td>
@@ -443,11 +458,11 @@ include __DIR__ . '/../includes/employee-header.php';
                 <nav aria-label="Page navigation">
                     <ul class="pagination pagination-sm justify-content-center mb-0">
                         <li class="page-item <?php echo $page <= 1 ? 'disabled' : ''; ?>">
-                            <a class="page-link" href="?<?php echo http_build_query(array_merge($_GET, ['page' => $page - 1])); ?>">Previous</a>
+                            <a class="page-link" href="?<?php echo e(http_build_query(array_merge($_GET, ['page' => max(1, $page - 1)]))); ?>">Previous</a>
                         </li>
                         <li class="page-item active"><span class="page-link"><?php echo $page; ?></span></li>
                         <li class="page-item <?php echo $page >= $totalPages ? 'disabled' : ''; ?>">
-                            <a class="page-link" href="?<?php echo http_build_query(array_merge($_GET, ['page' => $page + 1])); ?>">Next</a>
+                            <a class="page-link" href="?<?php echo http_build_query(array_merge($_GET, ['page' => min($totalPages, $page + 1)]))); ?>">Next</a>
                         </li>
                     </ul>
                 </nav>
