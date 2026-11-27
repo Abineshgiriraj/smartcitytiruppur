@@ -213,18 +213,18 @@ $detailFileSize = static function ($bytes): string {
       </script>
 
       <section class="scd-panel scd-timeline-panel" aria-labelledby="scd-timeline-title">
-        <div class="scd-section-title"><span class="scd-section-icon"><i class="bi bi-clock-history"></i></span><div><small><?= $detailIsStaff ? 'AUTHORIZED STAFF ONLY' : 'COMPLAINT UPDATES' ?></small><h2 id="scd-timeline-title"><?= $detailIsStaff ? 'Activity Timeline' : 'Officer Remarks' ?></h2></div>
-          <span class="scd-count"><?php echo count($history); ?> <?= $detailIsStaff ? 'events' : 'remarks' ?></span>
+        <div class="scd-section-title"><span class="scd-section-icon"><i class="bi bi-clock-history"></i></span><div><small><?= $detailIsStaff ? 'AUTHORIZED STAFF ONLY' : 'COMPLAINT UPDATES' ?></small><h2 id="scd-timeline-title"><?= $detailIsStaff ? 'Activity Timeline' : 'Officer Remarks & Status History' ?></h2></div>
+          <span class="scd-count"><?php echo count($history); ?> <?= $detailIsStaff ? 'events' : 'updates' ?></span>
         </div>
         <?php if (!$history): ?>
-          <div class="scd-empty"><i class="bi bi-clock"></i><strong><?= $detailIsStaff ? 'No recorded activity' : 'No citizen-facing remarks available yet' ?></strong><span><?= $detailIsStaff ? 'Status updates will appear here as they are recorded.' : 'Published officer updates will appear here.' ?></span></div>
+          <div class="scd-empty"><i class="bi bi-clock"></i><strong><?= $detailIsStaff ? 'No recorded activity' : 'No recorded complaint updates yet' ?></strong><span><?= $detailIsStaff ? 'Status updates will appear here as they are recorded.' : 'Recorded status updates and published officer remarks will appear here.' ?></span></div>
         <?php else: ?>
           <ol class="scd-timeline">
             <?php foreach (array_reverse($history) as $item): ?>
               <li class="scd-event">
                 <span class="scd-event-dot" aria-hidden="true"></span>
                 <div class="scd-event-top"><strong><?php echo e($detailDash($item['new_status']??null)); ?></strong><time datetime="<?php echo e($item['changed_at']??''); ?>"><?php echo e($detailDate($item['changed_at']??null)); ?></time></div>
-                <span class="scd-event-actor"><i class="bi bi-person-circle" aria-hidden="true"></i><?= e($detailIsStaff ? (($item['full_name']??'')?:'System') : 'Municipal staff update') ?></span>
+                <span class="scd-event-actor"><i class="bi bi-person-circle" aria-hidden="true"></i><?= e($detailIsStaff ? (($item['full_name']??'')?:'System') : ($item['event_label']??'Recorded status update')) ?></span>
                 <?php if (trim((string)($item['remarks']??''))!==''): ?><p class="scd-event-remarks"><?= nl2br(e($item['remarks'])) ?></p><?php endif; ?>
                  <?php if ($detailIsStaff && !empty($item['changed_by']) && trim((string)($item['remarks']??''))!==''): ?>
                    <?php $remarkPublished = ($item['remark_visibility']??'')==='citizen_remark_published'; ?>
@@ -319,7 +319,7 @@ $detailFileSize = static function ($bytes): string {
                 break;
               }
             }
-            echo $latestRemark !== '' ? nl2br(e($latestRemark)) : ($detailIsStaff ? '—' : 'No citizen-facing remarks available yet.');
+            echo $latestRemark !== '' ? nl2br(e($latestRemark)) : ($detailIsStaff ? '—' : 'No recorded complaint updates yet.');
            ?></dd></div>
         </dl>
       </section>
