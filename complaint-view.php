@@ -117,9 +117,8 @@ if (!$complaint) {
     exit('Complaint not found.');
 }
 
-$verifiedMobile = (string)($_SESSION['otp_verified_mobile']['tracking'] ?? '');
-$verifiedRemarkOwner = $verifiedMobile !== '' && hash_equals((string)$complaint['mobile_no'], $verifiedMobile);
-$history = citizen_remarks($pdo,(int)$complaint['id'],$verifiedRemarkOwner);
+require_once __DIR__ . '/includes/citizen-remarks.php';
+$history = get_complaint_public_timeline($pdo, (int)$complaint['id']);
 header('Cache-Control: no-store, private');
 
 $attachmentStmt = $pdo->prepare('SELECT id, original_name, mime_type, file_size FROM complaint_attachments WHERE complaint_id = ? ORDER BY id');

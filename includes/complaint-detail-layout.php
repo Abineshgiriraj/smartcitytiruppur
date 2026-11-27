@@ -213,18 +213,36 @@ $detailFileSize = static function ($bytes): string {
       </script>
 
       <section class="scd-panel scd-timeline-panel" aria-labelledby="scd-timeline-title">
-        <div class="scd-section-title"><span class="scd-section-icon"><i class="bi bi-clock-history"></i></span><div><small><?= $detailIsStaff ? 'AUTHORIZED STAFF ONLY' : 'COMPLAINT UPDATES' ?></small><h2 id="scd-timeline-title"><?= $detailIsStaff ? 'Activity Timeline' : 'Officer Remarks & Status History' ?></h2></div>
+        <div class="scd-section-title"><span class="scd-section-icon"><i class="bi bi-clock-history"></i></span><div><small><?= $detailIsStaff ? 'AUTHORIZED STAFF ONLY' : 'ACTION TAKEN & PROGRESS' ?></small><h2 id="scd-timeline-title"><?= $detailIsStaff ? 'Activity Timeline' : 'Officer Remarks & Status History' ?></h2></div>
           <span class="scd-count"><?php echo count($history); ?> <?= $detailIsStaff ? 'events' : 'updates' ?></span>
         </div>
         <?php if (!$history): ?>
-          <div class="scd-empty"><i class="bi bi-clock"></i><strong><?= $detailIsStaff ? 'No recorded activity' : 'No recorded complaint updates yet' ?></strong><span><?= $detailIsStaff ? 'Status updates will appear here as they are recorded.' : 'Recorded status updates and published officer remarks will appear here.' ?></span></div>
+          <div class="scd-empty"><i class="bi bi-clock"></i><strong><?= $detailIsStaff ? 'No recorded activity' : 'No recorded complaint updates yet' ?></strong><span><?= $detailIsStaff ? 'Status updates will appear here as they are recorded.' : 'Official action taken and officer remarks will appear here.' ?></span></div>
         <?php else: ?>
           <ol class="scd-timeline">
             <?php foreach (array_reverse($history) as $item): ?>
+              <?php
+                $actorLabel = '';
+                if ($detailIsStaff) {
+                  $actorLabel = ($item['full_name'] ?? '') ?: 'System';
+                } else {
+                  $offName = $item['officer_name'] ?? '';
+                  $offDesig = $item['designation'] ?? '';
+                  if ($offName !== '' && $offDesig !== '') {
+                    $actorLabel = $offName . ' (' . $offDesig . ')';
+                  } elseif ($offName !== '') {
+                    $actorLabel = $offName;
+                  } elseif ($offDesig !== '') {
+                    $actorLabel = $offDesig;
+                  } else {
+                    $actorLabel = $item['event_label'] ?? 'Municipal Officer';
+                  }
+                }
+              ?>
               <li class="scd-event">
                 <span class="scd-event-dot" aria-hidden="true"></span>
                 <div class="scd-event-top"><strong><?php echo e($detailDash($item['new_status']??null)); ?></strong><time datetime="<?php echo e($item['changed_at']??''); ?>"><?php echo e($detailDate($item['changed_at']??null)); ?></time></div>
-                <span class="scd-event-actor"><i class="bi bi-person-circle" aria-hidden="true"></i><?= e($detailIsStaff ? (($item['full_name']??'')?:'System') : ($item['event_label']??'Recorded status update')) ?></span>
+                <span class="scd-event-actor"><i class="bi bi-person-circle" aria-hidden="true"></i><?= e($actorLabel) ?></span>
                 <?php if (trim((string)($item['remarks']??''))!==''): ?><p class="scd-event-remarks"><?= nl2br(e($item['remarks'])) ?></p><?php endif; ?>
                  <?php if ($detailIsStaff && !empty($item['changed_by']) && trim((string)($item['remarks']??''))!==''): ?>
                    <?php $remarkPublished = ($item['remark_visibility']??'')==='citizen_remark_published'; ?>
@@ -243,9 +261,6 @@ $detailFileSize = static function ($bytes): string {
               </li>
             <?php endforeach; ?>
           </ol>
-        <?php endif; ?>
-        <?php if (!$detailIsStaff && !$detailOwnerVerified): ?>
-          <p class="small text-muted mt-3 mb-0">For older verified officer updates, <a href="<?= e(url('complaint-status.php')) ?>">verify your registered mobile number through complaint tracking</a>.</p>
         <?php endif; ?>
       </section>
 
