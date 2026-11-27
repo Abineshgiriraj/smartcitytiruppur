@@ -1,7 +1,9 @@
 <?php
 declare(strict_types=1);
+
+// Includes share their caller's scope; isolate all header rendering variables.
+(static function (string $pageTitle): void {
 $user = require_login();
-$pageTitle = $pageTitle ?? 'Administration';
 $flashes = consume_flashes();
 $isAdmin = in_array($user['role'], ['Super Admin', 'Admin'], true);
 $isManager = in_array($user['role'], ['Super Admin', 'Admin', 'Commissioner', 'Department Head'], true);
@@ -89,3 +91,6 @@ $activeNavigation = employee_navigation_active($navigation, $currentPage, $_GET)
           <?php endforeach; ?>
         </nav>
       <?php endif; ?>
+<?php
+})((string)($pageTitle ?? 'Administration'));
+?>

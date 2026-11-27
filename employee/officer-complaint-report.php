@@ -180,7 +180,7 @@ $stats=ocr_query($pdo,"SELECT COUNT(*) officers,
     COALESCE(SUM(hist.escalated_out),0) escalated_total".$joins,$args)->fetch(PDO::FETCH_ASSOC);
 $totalOfficers=(int)($stats['officers']??0);
 $pages=max(1,(int)ceil($totalOfficers/$perPage));
-$page=min($page,$pages);
+if ($officerId===0) $page=min($page,$pages);
 
 $rosterSelect="SELECT o.id,o.officer_name,o.designation,o.is_active,
     (SELECT GROUP_CONCAT(DISTINCT d.department_name ORDER BY d.department_name SEPARATOR ', ')
@@ -332,12 +332,13 @@ if($officerId>0) {
     $detailRows=ocr_query($pdo,$detailSelect.$detailFrom.$detailOrder.' LIMIT '.$perPage.' OFFSET '.(($page-1)*$perPage),
         array_merge($detailSelectArgs,$detailArgs))->fetchAll(PDO::FETCH_ASSOC);
 }
+if ($selected) $pageTitle = 'Officer Complaints — '.$selected['officer_name'];
 include __DIR__.'/../includes/employee-header.php';
 ?>
 <div class="ocr">
   <div class="admin-heading ocr-heading">
     <div><span class="admin-eyebrow">COMPLAINT MANAGEMENT / OFFICER REPORTS</span>
-      <h1 class="fw-bold mb-1">Officer Complaint Report</h1>
+      <h1 class="fw-bold mb-1"><?= e($selected ? $selected['officer_name'].' — Complaints' : 'Officer Complaint Report') ?></h1>
       <p class="text-muted mb-0">Actual officer workloads and recorded complaint history, from your municipal database.</p>
     </div>
     <div class="ocr-heading-actions no-print">
@@ -354,7 +355,7 @@ include __DIR__.'/../includes/employee-header.php';
     </div>
     <div>
       <a href="routing-analysis.php" class="btn btn-sm btn-outline-primary">
-        <i class="bi bi-diagram-3 me-1"></i>View Routing & Reassignment Analysis (24,592 Unassigned)
+        <i class="bi bi-diagram-3 me-1"></i>View Routing & Reassignment Analysis
       </a>
     </div>
   </div>

@@ -85,6 +85,8 @@ jobs:
           php -l tools/reconcile_officer_designation_test.php
           php -l includes/local-pdf-workflow-guard.php
           php -l tools/report_local_pdf_workflow.php
+      - name: Verify shared header preserves report state (no database)
+        run: php tests/test_employee_header_scope.php
       - name: Check PDF policy extraction and role matching (no database)
         run: php tests/test_pdf_escalation_policy.php
       - name: Check officer title and stage guards (no database)
