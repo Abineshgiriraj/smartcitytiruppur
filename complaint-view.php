@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/includes/bootstrap.php';
+require_once __DIR__ . '/includes/citizen-remarks.php';
 
 $pageTitle = 'Complaint Details';
 $referenceNo = trim($_GET['reference_no'] ?? $_POST['reference_no'] ?? '');
@@ -116,16 +117,10 @@ if (!$complaint) {
     exit('Complaint not found.');
 }
 
-// Retrieve complaint status history and remarks (accessible to citizens and staff)
-$historyStmt = $pdo->prepare(
-    'SELECT h.*, u.full_name
-     FROM complaint_status_history h
-     LEFT JOIN users u ON u.id = h.changed_by
-     WHERE h.complaint_id = ?
-     ORDER BY h.changed_at ASC, h.id ASC'
-);
-$historyStmt->execute([$complaint['id']]);
-$history = $historyStmt->fetchAll();
+$verifiedMobile = (string)($_SESSION['otp_verified_mobile']['tracking'] ?? '');
+$verifiedRemarkOwner = $verifiedMobile !== '' && hash_equals((string)$complaint['mobile_no'], $verifiedMobile);
+$history = citizen_remarks($pdo,(int)$complaint['id'],$verifiedRemarkOwner);
+header('Cache-Control: no-store, private');
 
 $attachmentStmt = $pdo->prepare('SELECT id, original_name, mime_type, file_size FROM complaint_attachments WHERE complaint_id = ? ORDER BY id');
 $attachmentStmt->execute([$complaint['id']]);

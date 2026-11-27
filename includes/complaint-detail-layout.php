@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * Shared, strictly read-only complaint details layout.
  * $detailAudience: 'public' or 'staff'. Controllers own authorization and writes.
- * Never expose internal status-history rows/remarks to the public template.
+ * Public controllers supply only citizen-visible remarks.
  */
 $detailAudience = $detailAudience ?? 'public';
 $detailIsStaff = $detailAudience === 'staff';
@@ -26,6 +26,7 @@ $detailDash = static function ($value): string {
 $detailOwnerVerified = $detailIsStaff
     || ((string)($_SESSION['otp_verified_mobile']['tracking'] ?? '') !== ''
         && hash_equals((string)($complaint['mobile_no'] ?? ''),(string)$_SESSION['otp_verified_mobile']['tracking']));
+$detailArea = $detailDash($complaint['zone_no']??null).' · '.$detailDash($complaint['ward_no']??null);
 $detailPhone = $detailOwnerVerified ? $detailDash($complaint['mobile_no']??null)
     : mask_mobile((string)($complaint['mobile_no']??''));
 $detailEmail = $detailIsStaff || $detailOwnerVerified
@@ -73,7 +74,7 @@ $detailFileSize = static function ($bytes): string {
         </div>
         <div class="scd-hero-meta">
           <span><i class="bi bi-calendar3" aria-hidden="true"></i><?php echo e($detailDate($complaint['created_at']??null)); ?></span>
-          <span><i class="bi bi-geo-alt" aria-hidden="true"></i>Zone <?php echo e($detailDash($complaint['zone_no']??null)); ?> / Ward <?php echo e($detailDash($complaint['ward_no']??null)); ?></span>
+          <span><i class="bi bi-geo-alt" aria-hidden="true"></i><?php echo e($detailArea); ?></span>
           <span><i class="bi bi-globe2" aria-hidden="true"></i><?php echo e($detailDash($complaint['source']??null)); ?></span>
         </div>
       </div>
@@ -84,7 +85,7 @@ $detailFileSize = static function ($bytes): string {
     <div class="scd-summary"><span class="scd-summary-icon"><i class="bi bi-clipboard-check"></i></span><div><small>Complaint status</small><strong><?php echo e($detailStatus); ?></strong></div></div>
     <div class="scd-summary"><span class="scd-summary-icon"><i class="bi bi-person-badge"></i></span><div><small>Assigned officer</small><strong><?php echo e($complaint['officer_name']?:'Not assigned'); ?></strong></div></div>
     <div class="scd-summary"><span class="scd-summary-icon"><i class="bi bi-building"></i></span><div><small>Department</small><strong><?php echo e($detailDash($complaint['department_name']??null)); ?></strong></div></div>
-    <div class="scd-summary"><span class="scd-summary-icon"><i class="bi bi-pin-map"></i></span><div><small>Service area</small><strong>Zone <?php echo e($detailDash($complaint['zone_no']??null)); ?> · Ward <?php echo e($detailDash($complaint['ward_no']??null)); ?></strong></div></div>
+    <div class="scd-summary"><span class="scd-summary-icon"><i class="bi bi-pin-map"></i></span><div><small>Service area</small><strong><?php echo e($detailArea); ?></strong></div></div>
   </div>
 
   <div class="scd-grid">
@@ -211,27 +212,42 @@ $detailFileSize = static function ($bytes): string {
       });
       </script>
 
-      <?php if ($detailIsStaff): ?>
       <section class="scd-panel scd-timeline-panel" aria-labelledby="scd-timeline-title">
-        <div class="scd-section-title"><span class="scd-section-icon"><i class="bi bi-clock-history"></i></span><div><small>AUTHORIZED STAFF ONLY</small><h2 id="scd-timeline-title">Activity Timeline</h2></div>
-          <span class="scd-count"><?php echo count($history); ?> events</span>
+        <div class="scd-section-title"><span class="scd-section-icon"><i class="bi bi-clock-history"></i></span><div><small><?= $detailIsStaff ? 'AUTHORIZED STAFF ONLY' : 'COMPLAINT UPDATES' ?></small><h2 id="scd-timeline-title"><?= $detailIsStaff ? 'Activity Timeline' : 'Officer Remarks' ?></h2></div>
+          <span class="scd-count"><?php echo count($history); ?> <?= $detailIsStaff ? 'events' : 'remarks' ?></span>
         </div>
         <?php if (!$history): ?>
-          <div class="scd-empty"><i class="bi bi-clock"></i><strong>No recorded activity</strong><span>Status updates will appear here as they are recorded.</span></div>
+          <div class="scd-empty"><i class="bi bi-clock"></i><strong><?= $detailIsStaff ? 'No recorded activity' : 'No citizen-facing remarks available yet' ?></strong><span><?= $detailIsStaff ? 'Status updates will appear here as they are recorded.' : 'Published officer updates will appear here.' ?></span></div>
         <?php else: ?>
           <ol class="scd-timeline">
             <?php foreach (array_reverse($history) as $item): ?>
               <li class="scd-event">
                 <span class="scd-event-dot" aria-hidden="true"></span>
                 <div class="scd-event-top"><strong><?php echo e($detailDash($item['new_status']??null)); ?></strong><time datetime="<?php echo e($item['changed_at']??''); ?>"><?php echo e($detailDate($item['changed_at']??null)); ?></time></div>
-                <span class="scd-event-actor"><i class="bi bi-person-circle" aria-hidden="true"></i><?php echo e($item['full_name']?:'System'); ?></span>
-                <?php if (!empty($item['remarks'])): ?><p class="scd-event-remarks"><?php echo nl2br(e($item['remarks'])); ?></p><?php endif; ?>
+                <span class="scd-event-actor"><i class="bi bi-person-circle" aria-hidden="true"></i><?= e($detailIsStaff ? (($item['full_name']??'')?:'System') : 'Municipal staff update') ?></span>
+                <?php if (trim((string)($item['remarks']??''))!==''): ?><p class="scd-event-remarks"><?= nl2br(e($item['remarks'])) ?></p><?php endif; ?>
+                 <?php if ($detailIsStaff && !empty($item['changed_by']) && trim((string)($item['remarks']??''))!==''): ?>
+                   <?php $remarkPublished = ($item['remark_visibility']??'')==='citizen_remark_published'; ?>
+                   <small class="text-muted"><?= $remarkPublished ? 'Published to citizens' : (($item['remark_visibility']??'')==='citizen_remark_private' ? 'Internal only' : 'Legacy / not explicitly reviewed') ?></small>
+                   <?php if (!empty($canReviewRemarks)): ?>
+                     <form method="post" class="mt-2 no-print" onsubmit="return confirm('Change remark visibility? Publish only citizen-facing text without confidential details.');">
+                       <?= csrf_field() ?>
+                       <input type="hidden" name="id" value="<?= (int)$complaint['id'] ?>">
+                       <input type="hidden" name="action" value="review_remark_visibility">
+                       <input type="hidden" name="history_id" value="<?= (int)$item['id'] ?>">
+                       <button class="btn btn-sm btn-outline-secondary" name="remark_visibility" value="<?= $remarkPublished ? 'private' : 'publish' ?>" type="submit"><?= $remarkPublished ? 'Make internal' : 'Publish reviewed remark' ?></button>
+                       <?php if (!$remarkPublished && empty($item['remark_visibility'])): ?><button class="btn btn-sm btn-outline-secondary" type="submit" name="remark_visibility" value="private">Keep internal</button><?php endif; ?>
+                     </form>
+                   <?php endif; ?>
+                 <?php endif; ?>
               </li>
             <?php endforeach; ?>
           </ol>
         <?php endif; ?>
+        <?php if (!$detailIsStaff && !$detailOwnerVerified): ?>
+          <p class="small text-muted mt-3 mb-0">For older verified officer updates, <a href="<?= e(url('complaint-status.php')) ?>">verify your registered mobile number through complaint tracking</a>.</p>
+        <?php endif; ?>
       </section>
-      <?php endif; ?>
 
       <?php if (!$detailIsStaff && ($canReopen || in_array($detailStatus,['Resolved','Closed'],true))): ?>
       <section class="scd-panel" aria-labelledby="scd-feedback-title">
@@ -291,26 +307,20 @@ $detailFileSize = static function ($bytes): string {
           <div><dt>Category</dt><dd><?php echo e($detailDash($complaint['category_name']??null)); ?></dd></div>
           <div><dt>Registered on</dt><dd><?php echo e($detailDate($complaint['created_at']??null)); ?></dd></div>
           <div><dt>Closed on</dt><dd><?php echo e($detailDate($complaint['closed_at']??null)); ?></dd></div>
-          <div><dt>Zone / Ward</dt><dd>Zone <?php echo e($detailDash($complaint['zone_no']??null)); ?> · Ward <?php echo e($detailDash($complaint['ward_no']??null)); ?></dd></div>
+          <div><dt>Zone / Ward</dt><dd><?php echo e($detailArea); ?></dd></div>
           <div><dt>Street / locality</dt><dd><?php echo e($detailDash($complaint['street_name']??null)); ?></dd></div>
           <div><dt>Location</dt><dd><?php echo e($detailDash($complaint['location_address']??null)); ?></dd></div>
           <div><dt>Door number</dt><dd><?php echo e($detailDash($complaint['door_no']??null)); ?></dd></div>
           <div><dt>Latest remarks</dt><dd><?php
-            if ($detailIsStaff) {
-              $latestRemark = '';
-              if (!empty($history)) {
-                for ($ri = count($history) - 1; $ri >= 0; $ri--) {
-                  if (isset($history[$ri]['remarks']) && trim((string)$history[$ri]['remarks']) !== '') {
-                    $latestRemark = (string)$history[$ri]['remarks'];
-                    break;
-                  }
-                }
+            $latestRemark = '';
+            foreach (array_reverse($history ?? []) as $remarkRow) {
+              if (trim((string)($remarkRow['remarks']??'')) !== '') {
+                $latestRemark = (string)$remarkRow['remarks'];
+                break;
               }
-              echo $latestRemark !== '' ? nl2br(e($latestRemark)) : '—';
-            } else {
-              echo 'Internal staff notes are not shown publicly.';
             }
-          ?></dd></div>
+            echo $latestRemark !== '' ? nl2br(e($latestRemark)) : ($detailIsStaff ? '—' : 'No citizen-facing remarks available yet.');
+           ?></dd></div>
         </dl>
       </section>
       <div class="scd-support no-print"><i class="bi bi-info-circle"></i><span>For help with this grievance, contact <a href="<?php echo e(url('contact.php')); ?>">municipal support</a>.</span></div>

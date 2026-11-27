@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/../includes/bootstrap.php';
+require_once __DIR__ . '/../includes/citizen-remarks.php';
 require_once __DIR__ . '/../includes/officer-authority.php';
 require_once __DIR__ . '/../includes/complaint-officer-access.php';
 
@@ -70,6 +71,8 @@ if (!can_manage_all_complaints($user)) {
 $canUpdate = ($isOfficerPortal && !$previousOfficerAccess)
     || (!$isOfficerPortal && can_access_permission($user, 'complaints.update'));
 
+$canReviewRemarks = !$isOfficerPortal && $canUpdate && in_array($user['role'], ['Super Admin','Admin'], true);
+
 // Officers may close/reject active cases and reopen completed/rejected ones.
 // Registered remains an intake state. Officer-initiated reopens do not
 // consume citizens' separately limited reopen_count.
@@ -95,6 +98,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     verify_csrf();
+    if (($_POST['action'] ?? '') === 'review_remark_visibility') {
+        if (!$canReviewRemarks) { http_response_code(403); exit('Remark review requires administrator access.'); }
+        $pdo = db();
+        try {
+            $decision = $_POST['remark_visibility'] ?? '';
+            if (!in_array($decision,['publish','private'],true)) throw new RuntimeException('Invalid visibility.');
+            $historyId = (int)($_POST['history_id'] ?? 0);
+            $pdo->beginTransaction();
+            $check = $pdo->prepare("SELECT h.id FROM complaint_status_history h JOIN complaints c ON c.id=h.complaint_id
+                WHERE h.id=? AND h.complaint_id=? AND c.is_deleted=0 AND h.changed_by IS NOT NULL
+                  AND h.remarks IS NOT NULL AND TRIM(h.remarks)<>'' FOR UPDATE");
+            $check->execute([$historyId,$complaintId]);
+            if (!$check->fetchColumn()) throw new RuntimeException('Remark unavailable.');
+            citizen_remark_record_visibility($pdo,$historyId,(int)$user['id'],$decision==='publish');
+            $pdo->commit();
+            flash('success','Remark visibility updated.');
+        } catch (Throwable $exception) {
+            if ($pdo->inTransaction()) $pdo->rollBack();
+            flash('danger','Unable to update remark visibility.');
+        }
+        redirect('employee/complaint-view.php?id='.$complaintId.'#scd-timeline-title');
+    }
 
     if ($isOfficerPortal) {
         $newStatus=trim((string)($_POST['status']??''));
@@ -146,6 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                  (complaint_id,old_status,new_status,remarks,changed_by)
                  VALUES (?,?,?,?,?)'
             )->execute([$complaintId,$old,$newStatus,$remarks,(int)$user['id']]);
+            citizen_remark_record_visibility($pdo,(int)$pdo->lastInsertId(),(int)$user['id'],($_POST['publish_remark'] ?? '')==='1');
             $pdo->commit();
             audit_log((int)$user['id'],'officer_update_complaint','complaint',$complaintId,
                 ['old_status'=>$old,'new_status'=>$newStatus]);
@@ -278,6 +304,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
              VALUES (?, ?, ?, ?, ?)'
         )->execute([$complaintId, $oldStatus, $newStatus, $remarks !== '' ? $remarks : null, (int)$user['id']]);
 
+        if ($remarks !== '') {
+            citizen_remark_record_visibility($pdo,(int)$pdo->lastInsertId(),(int)$user['id'],($_POST['publish_remark'] ?? '')==='1');
+        }
         $pdo->commit();
         audit_log((int)$user['id'], 'complaint_updated', 'complaint', $complaintId, ['old_status' => $oldStatus, 'new_status' => $newStatus]);
         flash('success', 'Complaint updated successfully.');
@@ -340,7 +369,7 @@ $needsRoutingReview=(int)$intakeCheck->fetchColumn()>0
 }
 
 $historyStmt = db()->prepare(
-    'SELECT h.*, u.full_name
+    'SELECT h.*, u.full_name, '.citizen_remark_visibility_sql().' AS remark_visibility
      FROM complaint_status_history h
      LEFT JOIN users u ON u.id = h.changed_by
      WHERE h.complaint_id = ?
@@ -484,6 +513,7 @@ include __DIR__ . '/../includes/complaint-detail-layout.php';
                 <label class="form-label fw-bold" for="officer-remarks">Remarks</label>
                 <textarea class="form-control" id="officer-remarks" name="remarks" rows="3" minlength="5"
                   placeholder="Explain the work performed (at least 5 characters)" required></textarea>
+                 <div class="form-check mt-2"><input class="form-check-input" type="checkbox" id="officer-publish-remark" name="publish_remark" value="1" checked><label class="form-check-label" for="officer-publish-remark">Show this remark on public complaint tracking</label></div><div class="form-text">Do not publish confidential information. Uncheck for internal notes.</div>
               </div>
               <div class="col-md-2 d-flex align-items-end">
                 <button type="submit" class="btn btn-primary w-100">Save Update</button>
@@ -497,7 +527,7 @@ include __DIR__ . '/../includes/complaint-detail-layout.php';
                 <?php echo csrf_field(); ?><input type="hidden" name="id" value="<?php echo $complaintId; ?>">
                 <div class="col-md-4"><label class="form-label">Assigned Officer</label><select class="form-select" name="assigned_officer_id"><option value="">Unassigned</option><?php foreach ($officers as $officer): ?><option value="<?php echo (int)$officer['id']; ?>" <?php echo (int)$complaint['assigned_officer_id'] === (int)$officer['id'] ? 'selected' : ''; ?>><?php echo e($officer['officer_name']); ?></option><?php endforeach; ?></select></div>
                 <div class="col-md-3"><label class="form-label">Status</label><select class="form-select" name="status"><?php foreach (complaint_statuses() as $statusItem): ?><option <?php echo $complaint['status'] === $statusItem ? 'selected' : ''; ?>><?php echo e($statusItem); ?></option><?php endforeach; ?></select></div>
-                <div class="col-md-3"><label class="form-label">Remarks</label><input class="form-control" name="remarks"></div>
+                <div class="col-md-3"><label class="form-label">Remarks</label><input class="form-control" name="remarks"><div class="form-check mt-2"><input class="form-check-input" type="checkbox" id="staff-publish-remark" name="publish_remark" value="1"><label class="form-check-label" for="staff-publish-remark">Show to citizens (no confidential details)</label></div></div>
                 <div class="col-md-2 d-flex align-items-end"><button class="btn btn-primary w-100" type="submit">Save Update</button></div>
             </form>
         <?php else: ?><div class="alert alert-info mb-0">This account has read-only access.</div><?php endif; ?>

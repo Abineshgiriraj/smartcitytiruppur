@@ -58,6 +58,7 @@ jobs:
           php -l employee/routing-analysis.php
           php -l employee/escalation-audit.php
           php -l includes/complaint-detail-layout.php
+          php -l includes/citizen-remarks.php
           php -l ajax/send-otp.php
           php -l employee/allocation-inspector.php
           php -l employee/user-mapping-details.php
