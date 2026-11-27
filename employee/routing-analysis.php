@@ -462,7 +462,7 @@ include __DIR__ . '/../includes/employee-header.php';
                         </li>
                         <li class="page-item active"><span class="page-link"><?php echo $page; ?></span></li>
                         <li class="page-item <?php echo $page >= $totalPages ? 'disabled' : ''; ?>">
-                            <a class="page-link" href="?<?php echo http_build_query(array_merge($_GET, ['page' => min($totalPages, $page + 1)]))); ?>">Next</a>
+                            <a class="page-link" href="?<?php echo e(http_build_query(array_merge($_GET, ['page' => min($totalPages, $page + 1)]))); ?>">Next</a>
                         </li>
                     </ul>
                 </nav>

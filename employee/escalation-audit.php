@@ -9,7 +9,7 @@ $pageTitle = 'Escalation Configuration Audit';
 
 $departmentFilter = max(0, (int)($_GET['department_id'] ?? 0));
 $stageFilter = max(0, (int)($_GET['stage'] ?? 0));
-if ($stageFilter > 4) $stageFilter = 0;
+if ($stageFilter > 6) $stageFilter = 0;
 $issueFilter = (string)($_GET['issue'] ?? 'operational');
 if (!in_array($issueFilter, ['operational','all','designation','mapping','inactive','duplicate','template'], true)) {
     $issueFilter = 'operational';
@@ -198,7 +198,7 @@ include __DIR__ . '/../includes/employee-header.php';
       <label class="form-label small">Stage</label>
       <select class="form-select" name="stage">
         <option value="0">All stages</option>
-        <?php for ($i=1;$i<=4;$i++): ?>
+        <?php for ($i=1;$i<=6;$i++): ?>
           <option value="<?php echo $i; ?>"<?php echo $stageFilter===$i ? ' selected' : ''; ?>>Stage <?php echo $i; ?></option>
         <?php endfor; ?>
       </select>

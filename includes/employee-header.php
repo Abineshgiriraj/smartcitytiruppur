@@ -9,55 +9,10 @@ $isOfficer = in_array($user['role'], ['Field Officer', 'Officer'], true);
 $path = (string)(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?: '');
 $currentPage = basename($path);
 
-if ($isOfficer) {
-    $menuGroups = [
-        'My Workspace' => [
-            ['officer-dashboard.php', 'Dashboard', 'bi-grid-1x2', true],
-            ['my-complaints.php', 'My Complaints', 'bi-inbox', true],
-            ['my-complaints.php?status=TransferredToMe', 'Transferred to Me', 'bi-arrow-left-right', true],
-            ['my-complaints.php?status=PreviouslyHandled', 'Previously Handled', 'bi-clock-history', true],
-            ['my-complaints.php?status=Assigned', 'Needs Action', 'bi-lightning-charge', true],
-            ['officer-feedback.php', 'Citizen Feedback', 'bi-chat-left-heart', true],
-            ['officer-profile.php', 'My Profile', 'bi-person-circle', true],
-        ],
-    ];
-} else {
-    $menuGroups = [
-        'Workspace' => [
-            ['dashboard.php', 'Overview', 'bi-grid-1x2-fill', true],
-            ['reports.php', 'Complaint Data Export', 'bi-file-spreadsheet', true],
-            ['icts-reports.php', 'ICTS Reports', 'bi-bar-chart-line', true],
-            ['feedback.php', 'Citizen Feedback', 'bi-chat-left-text', true],
-        ],
-        'Complaint Management' => [
-            ['../new-complaint.php', 'New Complaint (Public Form)', 'bi-plus-circle', true],
-            ['complaints.php', 'All Complaints', 'bi-inboxes', true],
-            ['escalation-reports.php', 'Escalation Reports', 'bi-diagram-3-fill', $isManager],
-            ['routing-analysis.php', 'Routing & Reassignment', 'bi-shuffle', $isManager],
-            ['officer-complaint-report.php', 'Officer Complaint Report', 'bi-clipboard-data', $isManager],
-            ['complaint-centre.php?view=repeated', 'Potential Repeats', 'bi-files', true],
-            ['complaint-centre.php?view=completed', 'Closed Complaints', 'bi-check2-circle', true],
-            ['complaint-centre.php?view=category', 'Category Dashboard', 'bi-grid-3x3-gap', true],
-            ['complaint-centre.php?view=zone', 'Zone Dashboard', 'bi-building', true],
-            ['complaint-centre.php?view=map', 'Map / Area Coverage', 'bi-geo-alt', true],
-        ],
-        'Management' => [
-            ['officers.php', 'Officer Directory', 'bi-people', $isManager],
-            ['escalation.php', 'Escalation Monitor', 'bi-diagram-3', $isManager],
-            ['masters.php?section=allocations', 'Allocation Rules', 'bi-bezier2', $isAdmin],
-            ['allocation-inspector.php', 'Allocation Inspector', 'bi-search', $isAdmin],
-            ['user-mapping-details.php', 'User Mapping Details', 'bi-person-lines-fill', $isAdmin],
-            ['pdf-policy-review.php', 'PDF Policy Review', 'bi-file-earmark-check', $isAdmin],
-            ['officer-readiness.php', 'Officer Readiness', 'bi-diagram-2', $isAdmin],
-            ['officer-approvals.php', 'Officer Stage Approvals', 'bi-person-check', $isAdmin],
-            ['escalation-audit.php', 'Escalation Audit', 'bi-shield-exclamation', $isAdmin],
-            ['master-control.php', 'Advanced Masters', 'bi-database-check', $isAdmin],
-            ['page-permissions.php', 'Role Page Mapper', 'bi-shield-lock', $isAdmin],
-            ['masters.php', 'Master Data', 'bi-sliders', $isAdmin],
-            ['users.php', 'Users & Roles', 'bi-person-gear', $isAdmin],
-        ],
-    ];
-}
+// Navigation groups reuse existing routes. Each child retains its own permission.
+require_once __DIR__ . '/employee-navigation.php';
+$navigation = employee_navigation($user);
+$activeNavigation = employee_navigation_active($navigation, $currentPage, $_GET);
 ?>
 <!doctype html>
 <html lang="en">
@@ -92,62 +47,12 @@ if ($isOfficer) {
     </a>
     <div class="admin-suite"><span class="admin-suite-dot"></span> <?php echo $isOfficer ? 'Field Officer Portal' : 'Grievance Administration'; ?></div>
     <nav class="admin-menu">
-      <?php foreach ($menuGroups as $groupName => $items): ?>
-        <div class="admin-menu-heading"><?php echo e($groupName); ?></div>
-        <?php foreach ($items as [$target, $label, $icon, $visible]): ?>
-          <?php
-            if (!$visible) continue;
-            if (!$isOfficer) {
-                $routePermissions = [
-                    'dashboard.php' => 'dashboard.view',
-                    'complaints.php' => 'complaints.view',
-                    'escalation-reports.php' => 'escalation.view',
-                    'officer-complaint-report.php' => 'complaints.view',
-                    'complaint-centre.php' => 'complaints.view',
-                    'reports.php' => 'reports.view',
-                    'icts-reports.php' => 'reports.view',
-                    'feedback.php' => 'feedback.view',
-                    'officers.php' => 'officers.view',
-                    'escalation.php' => 'escalation.view',
-                    'masters.php' => 'masters.view',
-                    'allocation-inspector.php' => 'masters.view',
-                    'user-mapping-details.php' => 'masters.view',
-                    'pdf-policy-review.php' => 'masters.view',
-                    'officer-readiness.php' => 'masters.view',
-                    'officer-approvals.php' => 'masters.view',
-                    'escalation-audit.php' => 'masters.view',
-                    'master-control.php' => 'masters.view',
-                    'users.php' => 'users.view',
-                    'page-permissions.php' => 'roles.view',
-                ];
-                $routeFile = basename(explode('?', $target, 2)[0]);
-                if (isset($routePermissions[$routeFile]) && !can_access_permission($user, $routePermissions[$routeFile])) continue;
-            }
-          ?>
-          <?php
-            $baseTarget = basename(explode('?', $target, 2)[0]);
-            $targetQuery = (string)(parse_url($target, PHP_URL_QUERY) ?: '');
-            parse_str($targetQuery, $targetParams);
-            $active = $currentPage === $baseTarget;
-            if ($baseTarget === 'complaint-centre.php') {
-                $active = $active && ($_GET['view'] ?? 'category') === ($targetParams['view'] ?? 'category');
-            } elseif ($baseTarget === 'masters.php') {
-                $active = $active && (
-                    isset($targetParams['section'])
-                    ? ($_GET['section'] ?? '') === $targetParams['section']
-                    : ($_GET['section'] ?? '') !== 'allocations'
-                );
-            } elseif ($baseTarget === 'my-complaints.php') {
-                if (isset($targetParams['status'])) {
-                    $active = $currentPage === 'my-complaints.php' && ($_GET['status'] ?? '') === $targetParams['status'];
-                } else {
-                    $active = $currentPage === 'my-complaints.php' && empty($_GET['status']);
-                }
-            }
-          ?>
-          <a class="admin-menu-link<?php echo $active ? ' is-active' : ''; ?>"
-             href="<?php echo e(url('employee/' . $target)); ?>"<?php echo $active ? ' aria-current="page"' : ''; ?>>
-            <i class="bi <?php echo e($icon); ?>" aria-hidden="true"></i><span><?php echo e($label); ?></span>
+      <?php foreach ($navigation as $groupName => $items): ?>
+        <div class="admin-menu-heading"><?= e($groupName) ?></div>
+        <?php foreach ($items as $item): $active = $activeNavigation !== null && $activeNavigation['key'] === $item['key']; ?>
+          <a class="admin-menu-link<?= $active ? ' is-active' : '' ?>"
+             href="<?= e(url('employee/' . $item['links'][0][0])) ?>"<?= $active ? ' aria-current="page"' : '' ?>>
+            <i class="bi <?= e($item['icon']) ?>" aria-hidden="true"></i><span><?= e($item['label']) ?></span>
           </a>
         <?php endforeach; ?>
       <?php endforeach; ?>
@@ -175,3 +80,12 @@ if ($isOfficer) {
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
       <?php endforeach; ?>
+
+      <?php if ($activeNavigation !== null && count($activeNavigation['links']) > 1): ?>
+        <nav class="d-flex flex-wrap gap-2 mb-3 pb-2 border-bottom" aria-label="<?= e($activeNavigation['label']) ?> sections">
+          <?php foreach ($activeNavigation['links'] as $link): $selected = employee_navigation_matches($link[0], $currentPage, $_GET); ?>
+            <a class="btn btn-sm <?= $selected ? 'btn-primary' : 'btn-outline-primary' ?>"
+               href="<?= e(url('employee/' . $link[0])) ?>"<?= $selected ? ' aria-current="page"' : '' ?>><?= e($link[1]) ?></a>
+          <?php endforeach; ?>
+        </nav>
+      <?php endif; ?>

@@ -54,6 +54,9 @@ jobs:
           php -l employee/download-attachment.php
           php -l includes/auth.php
           php -l includes/employee-header.php
+          php -l includes/employee-navigation.php
+          php -l employee/routing-analysis.php
+          php -l employee/escalation-audit.php
           php -l includes/complaint-detail-layout.php
           php -l ajax/send-otp.php
           php -l employee/allocation-inspector.php
