@@ -296,16 +296,20 @@ $detailFileSize = static function ($bytes): string {
           <div><dt>Location</dt><dd><?php echo e($detailDash($complaint['location_address']??null)); ?></dd></div>
           <div><dt>Door number</dt><dd><?php echo e($detailDash($complaint['door_no']??null)); ?></dd></div>
           <div><dt>Latest remarks</dt><dd><?php
-            $latestRemark = '';
-            if (!empty($history)) {
-              for ($ri = count($history) - 1; $ri >= 0; $ri--) {
-                if (isset($history[$ri]['remarks']) && trim((string)$history[$ri]['remarks']) !== '') {
-                  $latestRemark = (string)$history[$ri]['remarks'];
-                  break;
+            if ($detailIsStaff) {
+              $latestRemark = '';
+              if (!empty($history)) {
+                for ($ri = count($history) - 1; $ri >= 0; $ri--) {
+                  if (isset($history[$ri]['remarks']) && trim((string)$history[$ri]['remarks']) !== '') {
+                    $latestRemark = (string)$history[$ri]['remarks'];
+                    break;
+                  }
                 }
               }
+              echo $latestRemark !== '' ? nl2br(e($latestRemark)) : '—';
+            } else {
+              echo 'Internal staff notes are not shown publicly.';
             }
-            echo $latestRemark !== '' ? nl2br(e($latestRemark)) : '—';
           ?></dd></div>
         </dl>
       </section>

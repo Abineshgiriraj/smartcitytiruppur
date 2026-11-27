@@ -49,7 +49,7 @@ if (!can_manage_all_complaints($user)) {
     if ($isOfficerPortal) {
         $allowed = $officerPortalId > 0 && $officerPortalId === (int)$complaint['assigned_officer_id'];
 
-        if (!$allowed && $officerPortalId > 0 && str_starts_with((string)$complaint['reference_no'], 'TCMC-2026-')) {
+        if (!$allowed && $officerPortalId > 0) {
             $previousOfficerAccess = complaint_officer_was_assigned(
                 db(),
                 $complaintId,

@@ -170,7 +170,7 @@ include __DIR__ . '/../includes/employee-header.php';
                           <?php if(!empty($row['last_escalated_at'])): ?>
                             <small class="d-block text-muted">Transferred: <?php echo e(date('d M Y, h:i A',strtotime($row['last_escalated_at']))); ?></small>
                           <?php endif; ?>
-                          <?php if(!empty($row['assignment_chain']) && str_starts_with((string)$row['reference_no'],'TCMC-2026-')): ?>
+                          <?php if(!empty($row['assignment_chain'])): ?>
                             <div class="small mt-1 text-secondary" title="Recorded officer handover sequence">
                               <i class="bi bi-arrow-left-right me-1" aria-hidden="true"></i>
                               <strong>All assignments:</strong> <?php echo e($row['assignment_chain']); ?>

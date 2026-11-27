@@ -17,7 +17,6 @@ function complaint_officer_was_assigned(
     string $referenceNo
 ): bool {
     if ($complaintId < 1 || $officerId < 1
-        || !str_starts_with($referenceNo, 'TCMC-2026-')
         || $currentOfficerId === $officerId) {
         return false;
     }

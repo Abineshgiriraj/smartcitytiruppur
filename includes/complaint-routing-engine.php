@@ -156,17 +156,22 @@ class ComplaintRoutingEngine
         $wardId = (int)$c['ward_id'];
         $zoneId = (int)($c['zone_id'] ?: resolve_zone_id_for_ward($wardId));
         $currentOfficerId = (int)($c['assigned_officer_id'] ?? 0);
-        $currentOfficerActive = false;
+        $currentOfficerValid = false;
 
-        if ($currentOfficerId > 0) {
-            $stmt = $this->pdo->prepare("SELECT is_active FROM officers WHERE id = ?");
+        if ($currentOfficerId > 0 && !in_array($currentOfficerId, [88882, 67778, 46843, 109335], true)) {
+            $stmt = $this->pdo->prepare("SELECT id, designation, is_active FROM officers WHERE id = ?");
             $stmt->execute([$currentOfficerId]);
-            $currentOfficerActive = (bool)$stmt->fetchColumn();
+            $curr = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($curr && (int)$curr['is_active'] === 1 && $curr['designation'] !== 'Corporation Officer' && !empty($curr['designation'])) {
+                // Verify department or stage authority
+                if (officer_stage_authorized($this->pdo, $categoryId, 1, $currentOfficerId, $departmentId, $wardId)) {
+                    $currentOfficerValid = true;
+                }
+            }
         }
 
-        // If complaint already has an active and valid officer, check if reassignment is needed
-        if ($currentOfficerId > 0 && $currentOfficerActive) {
-            // Valid active assignment, no reassignment needed
+        // If complaint already has an active, authorized officer with valid mapping, preserve it
+        if ($currentOfficerId > 0 && $currentOfficerValid) {
             return null;
         }
 
@@ -177,13 +182,16 @@ class ComplaintRoutingEngine
         $reason = '';
 
         if (!empty($lcEvents)) {
-            // Find the most recent active officer in lifecycle
+            // Find the most recent verified active officer in lifecycle
             for ($i = count($lcEvents) - 1; $i >= 0; $i--) {
-                if ((int)$lcEvents[$i]['is_active'] === 1 && (int)$lcEvents[$i]['officer_id'] > 0) {
-                    $proposedOfficerId = (int)$lcEvents[$i]['officer_id'];
-                    $evidenceSource = 'raw_lifecycle';
-                    $reason = "Recovered verified active officer from original lifecycle history (Officer #{$proposedOfficerId}: {$lcEvents[$i]['officer_name']})";
-                    break;
+                $candId = (int)$lcEvents[$i]['officer_id'];
+                if ($candId > 0 && !in_array($candId, [88882, 67778, 46843, 109335], true) && (int)$lcEvents[$i]['is_active'] === 1) {
+                    if (officer_stage_authorized($this->pdo, $categoryId, 1, $candId, $departmentId, $wardId)) {
+                        $proposedOfficerId = $candId;
+                        $evidenceSource = 'raw_lifecycle';
+                        $reason = "Recovered verified active officer from original lifecycle history (Officer #{$proposedOfficerId}: {$lcEvents[$i]['officer_name']})";
+                        break;
+                    }
                 }
             }
         }
@@ -196,15 +204,6 @@ class ComplaintRoutingEngine
                 $proposedOfficerId = (int)$selected['id'];
                 $evidenceSource = 'pdf_policy_ward';
                 $reason = "Allocated via Stage 1 policy candidate (Ward {$wardId}/Dept {$departmentId}: {$selected['officer_name']})";
-            } else {
-                // Fallback to department intake
-                $intakeCandidates = department_intake_candidates($this->pdo, $departmentId, $categoryId, $wardId);
-                $selectedIntake = pdf_pick_least_loaded_officer($this->pdo, $intakeCandidates) ?: configured_central_intake_officer($this->pdo);
-                if ($selectedIntake) {
-                    $proposedOfficerId = (int)$selectedIntake['id'];
-                    $evidenceSource = 'intake_fallback';
-                    $reason = "Assigned to departmental/central intake officer (Officer #{$proposedOfficerId})";
-                }
             }
         }
 
@@ -223,7 +222,7 @@ class ComplaintRoutingEngine
             'complaint_id' => $complaintId,
             'current_status' => (string)$c['status'],
             'current_officer_id' => $currentOfficerId > 0 ? $currentOfficerId : null,
-            'current_officer_active' => $currentOfficerActive ? 1 : 0,
+            'current_officer_active' => $currentOfficerValid ? 1 : 0,
             'proposed_officer_id' => $proposedOfficerId,
             'proposed_stage_no' => 1,
             'calculated_due_at' => $calculatedDueAt,

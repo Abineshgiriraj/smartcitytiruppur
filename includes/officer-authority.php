@@ -10,9 +10,12 @@ require_once __DIR__.'/pdf-escalation-policy.php';
 function officer_stage_forbidden_title(?string $designation, int $stage, int $officerId): bool
 {
     if ($officerId === 1 || $officerId < 1 || $stage < 1 || $stage > 6) return true;
+    // Known non-officer accounts (operators, test accounts, generic corporation officers)
+    if (in_array($officerId, [88882, 67778, 46843, 109335], true)) return true;
     $title = strtoupper(trim((string)$designation));
     $title = trim(preg_replace('/[^A-Z0-9]+/', ' ', $title) ?? '');
-    if (preg_match('/\b(SUPER ADMIN|SYSTEM ADMINISTRATOR)\b/', $title)) return true;
+    if ($title === 'CORPORATION OFFICER' || $title === '') return true;
+    if (preg_match('/\b(SUPER ADMIN|SYSTEM ADMINISTRATOR|OPERATOR|CALL CENTER)\b/', $title)) return true;
     // Forbid the Municipal Commissioner as a field/intermediate officer.
     $deputy = (bool)preg_match('/\b(DEPUTY|DY)\s+(COMMISSIONER|COMMR)\b/', $title);
     if ($deputy && $stage === 1) return true;

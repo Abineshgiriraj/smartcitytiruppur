@@ -30,7 +30,7 @@ if (!$allowed && $user['role'] === 'Zone Officer') $allowed = (int)$user['zone_i
 if (!$allowed && $user['role'] === 'Ward Officer') $allowed = (int)$user['ward_id'] === (int)$attachment['ward_id'];
 if (!$allowed && $isOfficer) {
     $allowed = $officerId > 0 && $officerId === (int)$attachment['assigned_officer_id'];
-    if (!$allowed && $officerId > 0 && str_starts_with((string)$attachment['reference_no'], 'TCMC-2026-')) {
+    if (!$allowed && $officerId > 0) {
         // Grant historical officers read-only access to attachments for their
         // previously assigned complaints, never to unrelated attachments.
         $allowed = complaint_officer_was_assigned(

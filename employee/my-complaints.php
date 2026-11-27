@@ -24,7 +24,6 @@ $offset = ($page - 1) * $perPage;
 $conditions = ['c.is_deleted = 0'];
 $params = [];
 if ($showPrevious) {
-    $conditions[] = "c.reference_no LIKE 'TCMC-2026-%'";
     $conditions[] = '(EXISTS (SELECT 1 FROM complaint_assignments old
         WHERE old.complaint_id=c.id AND old.officer_id=?)
         OR EXISTS (SELECT 1 FROM complaint_escalations prior
@@ -36,7 +35,6 @@ if ($showPrevious) {
     $conditions[] = 'c.assigned_officer_id = ?';
     $params[] = $officerId;
     if ($showIncoming) {
-        $conditions[] = "c.reference_no LIKE 'TCMC-2026-%'";
         $conditions[] = 'EXISTS (SELECT 1 FROM complaint_escalations ce
             WHERE ce.complaint_id=c.id AND ce.officer_id=? AND ce.level_no>1)';
         $params[] = $officerId;
@@ -85,7 +83,7 @@ $countsStmt = db()->prepare('
         SUM(CASE WHEN status = "Closed" THEN 1 ELSE 0 END) as closed_count,
         SUM(CASE WHEN status = "Reopened" THEN 1 ELSE 0 END) as reopened_count,
         SUM(CASE WHEN status IN ("Assigned", "Acknowledged", "In Progress", "Reopened") AND due_at IS NOT NULL AND due_at < NOW() THEN 1 ELSE 0 END) as overdue_count,
-        SUM(CASE WHEN c.reference_no LIKE \'TCMC-2026-%\' AND EXISTS (
+        SUM(CASE WHEN EXISTS (
             SELECT 1 FROM complaint_escalations ce
             WHERE ce.complaint_id=c.id AND ce.officer_id=c.assigned_officer_id AND ce.level_no>1
         ) THEN 1 ELSE 0 END) AS transferred_to_me_count
@@ -101,7 +99,7 @@ $tabCounts = $countsStmt->fetch() ?: [
 // current-owner workload totals.
 $previousStmt = db()->prepare("SELECT COUNT(*)
     FROM complaints c
-    WHERE c.is_deleted=0 AND c.reference_no LIKE 'TCMC-2026-%'
+    WHERE c.is_deleted=0
       AND (c.assigned_officer_id IS NULL OR c.assigned_officer_id<>?)
       AND (EXISTS(SELECT 1 FROM complaint_assignments h
                   WHERE h.complaint_id=c.id AND h.officer_id=?)
