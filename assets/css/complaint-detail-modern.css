@@ -168,3 +168,15 @@
 .scd .scd-compact-empty{border:1px dashed #d5e4ee;border-radius:10px;padding:12px;color:#536c80;font-size:13px}
 @media(max-width:768px){.scd .scd-hero-meta{grid-template-columns:repeat(2,minmax(0,1fr))}.scd .scd-priority-grid{grid-template-columns:minmax(0,1fr)}}
 @media print{.scd .scd-priority-grid{display:block}.scd .scd-priority-grid>.scd-panel{margin-bottom:12px}.scd .scd-stage-track li,.scd .scd-event{break-inside:avoid}.scd .scd-aside{position:static}}
+
+/* Simplified complaint detail: one reading flow with no duplicated side panel. */
+.scd .scd-simple-grid{display:block}
+.scd .scd-simple-priority{display:block}
+.scd .scd-simple-overview{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.scd .scd-simple-priority .scd-officer-profile{margin-bottom:15px}
+.scd .scd-simple-grid .scd-primary{gap:16px}
+.scd .scd-event-remarks{font-size:14px;line-height:1.65}
+.scd .scd-internal-history summary{cursor:pointer;color:#23587e}
+.scd .scd-brand{margin-bottom:18px}
+.scd .scd-hero-meta{margin-top:20px;padding-top:16px}
+@media(max-width:480px){.scd .scd-simple-overview{grid-template-columns:1fr}.scd .scd-event-top{flex-wrap:wrap}}

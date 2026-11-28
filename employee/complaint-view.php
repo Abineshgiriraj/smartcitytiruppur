@@ -172,7 +172,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                  (complaint_id,old_status,new_status,remarks,changed_by)
                  VALUES (?,?,?,?,?)'
             )->execute([$complaintId,$old,$newStatus,$remarks,(int)$user['id']]);
-            citizen_remark_record_visibility($pdo,(int)$pdo->lastInsertId(),(int)$user['id'],($_POST['publish_remark'] ?? '')==='1');
+            $historyId=(int)$pdo->lastInsertId();
+            citizen_record_responsibility($pdo,$historyId,(int)$user['id'],$officerPortalId);
+            citizen_remark_record_visibility($pdo,$historyId,(int)$user['id'],($_POST['publish_remark'] ?? '')==='1');
             $pdo->commit();
             audit_log((int)$user['id'],'officer_update_complaint','complaint',$complaintId,
                 ['old_status'=>$old,'new_status'=>$newStatus]);
@@ -305,8 +307,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
              VALUES (?, ?, ?, ?, ?)'
         )->execute([$complaintId, $oldStatus, $newStatus, $remarks !== '' ? $remarks : null, (int)$user['id']]);
 
+        $historyId=(int)$pdo->lastInsertId();
+        citizen_record_responsibility($pdo,$historyId,(int)$user['id'],$officerId);
         if ($remarks !== '') {
-            citizen_remark_record_visibility($pdo,(int)$pdo->lastInsertId(),(int)$user['id'],($_POST['publish_remark'] ?? '')==='1');
+            citizen_remark_record_visibility($pdo,$historyId,(int)$user['id'],($_POST['publish_remark'] ?? '')==='1');
         }
         $pdo->commit();
         audit_log((int)$user['id'], 'complaint_updated', 'complaint', $complaintId, ['old_status' => $oldStatus, 'new_status' => $newStatus]);
@@ -383,17 +387,6 @@ $attachmentStmt = db()->prepare('SELECT id, original_name, mime_type, file_size 
 $attachmentStmt->execute([$complaintId]);
 $attachments = $attachmentStmt->fetchAll();
 
-// Fetch calculated historical routing if available
-$calcRoutingStmt = db()->prepare('
-    SELECT ccr.*, o.officer_name, o.designation
-    FROM complaint_calculated_routing ccr
-    LEFT JOIN officers o ON o.id = ccr.officer_id
-    WHERE ccr.complaint_id = ?
-    ORDER BY ccr.stage_no ASC
-');
-$calcRoutingStmt->execute([$complaintId]);
-$calculatedRouting = $calcRoutingStmt->fetchAll(PDO::FETCH_ASSOC);
-
 include __DIR__ . '/../includes/employee-header.php';
 ?>
 <?php
@@ -406,92 +399,7 @@ $detailPublicHistory=get_complaint_public_timeline(db(),(int)$complaint['id']);
 include __DIR__ . '/../includes/complaint-detail-layout.php';
 ?>
 
-<?php if (!empty($calculatedRouting)): ?>
-<section class="card border-0 shadow-sm mb-4 mx-3 mx-lg-4">
-    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-        <div>
-            <h5 class="fw-bold mb-0 text-dark"><i class="bi bi-diagram-3-fill text-primary me-2"></i>Calculated Historical Routing & Escalation Timeline</h5>
-            <small class="text-muted">Reconstructed theoretical stage milestones based on category escalation policy and verified original lifecycle records.</small>
-        </div>
-        <span class="badge bg-light text-primary border px-3 py-2 fw-semibold">Calculated Historical Routing</span>
-    </div>
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th>Stage</th>
-                        <th>Role / Designation</th>
-                        <th>Eligible / Historical Officer</th>
-                        <th>SLA (Days)</th>
-                        <th>Start Milestone</th>
-                        <th>Due Milestone</th>
-                        <th>Status</th>
-                        <th>Source / Evidence</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($calculatedRouting as $stage): ?>
-                        <tr>
-                            <td><span class="badge bg-primary-subtle text-primary fw-bold">Stage <?php echo $stage['stage_no']; ?></span></td>
-                            <td class="fw-semibold text-dark"><?php echo e($stage['role_label']); ?></td>
-                            <td>
-                                <?php if ($stage['officer_id']): ?>
-                                    <div class="fw-semibold text-dark"><?php echo e($stage['officer_name'] ?: 'Officer #' . $stage['officer_id']); ?></div>
-                                    <small class="text-muted"><?php echo e($stage['designation'] ?? ''); ?></small>
-                                <?php else: ?>
-                                    <span class="text-muted small">Pending Allocation</span>
-                                <?php endif; ?>
-                            </td>
-                            <td><?php echo (int)$stage['period_days']; ?> day(s)</td>
-                            <td><small class="text-dark"><?php echo date('d-m-Y H:i', strtotime($stage['stage_start_at'])); ?></small></td>
-                            <td><small class="text-dark"><?php echo date('d-m-Y H:i', strtotime($stage['stage_due_at'])); ?></small></td>
-                            <td>
-                                <?php if ($stage['is_completed']): ?>
-                                    <span class="badge bg-success-subtle text-success"><i class="bi bi-check-lg me-1"></i>Completed</span>
-                                    <?php if ($stage['completed_at']): ?><div class="small text-muted"><?php echo date('d-m-Y H:i', strtotime($stage['completed_at'])); ?></div><?php endif; ?>
-                                <?php else: ?>
-                                    <span class="badge bg-warning-subtle text-warning">Current / In Progress</span>
-                                <?php endif; ?>
-                            </td>
-                            <td>
-                                <span class="badge bg-light text-dark border"><?php echo e(str_replace('_', ' ', $stage['routing_type'])); ?></span>
-                                <?php if ($stage['notes']): ?><div class="small text-muted" style="max-width: 250px;"><?php echo e($stage['notes']); ?></div><?php endif; ?>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</section>
-<?php endif; ?>
-<section class="scd-staff-actions" aria-label="Complaint update controls">
-  <div class="complaint-reference-actions">
-    <?php if ($needsRoutingReview): ?>
-        <div class="alert alert-warning">
-            <strong>Department / Central Intake — Specialist Routing Required.</strong>
-            This employee is the accountable intake recipient, not a verified PDF Stage 1 specialist.
-            An administrator should correct the mapping and reroute the complaint.
-        </div>
-    <?php endif; ?>
-    <div class="complaint-reference-actions">
-        <?php if ($canUpdate && can_manage_all_complaints($user)
-            && $complaint['status'] === 'Registered'
-            && $complaint['assigned_officer_id'] === null): ?>
-            <div class="alert alert-info">
-                This complaint has no assignee yet. Retry will first select a mapped PDF specialist and then an intake officer if specialist routing is unavailable.
-            </div>
-            <form method="post" class="mb-3">
-                <?php echo csrf_field(); ?>
-                <input type="hidden" name="id" value="<?php echo $complaintId; ?>">
-                <input type="hidden" name="action" value="retry_initial_allocation">
-                <button type="submit" class="btn btn-outline-primary">
-                    <i class="bi bi-arrow-clockwise me-1"></i>Retry automatic assignment
-                </button>
-            </form>
-        <?php endif; ?>
-        <?php if ($isOfficerPortal && $canUpdate): ?>
+<?php if ($isOfficerPortal && $canUpdate): ?>
           <h2><i class="bi bi-check2-square me-2"></i>Update My Complaint</h2>
           <?php if(in_array($complaint['status'], ['Closed','Rejected'], true)): ?>
             <div class="alert alert-info small">This case is completed. You may reopen it with remarks. The original PDF deadline is retained.</div>
@@ -530,7 +438,7 @@ include __DIR__ . '/../includes/complaint-detail-layout.php';
                 <?php echo csrf_field(); ?><input type="hidden" name="id" value="<?php echo $complaintId; ?>">
                 <div class="col-md-4"><label class="form-label">Assigned Officer</label><select class="form-select" name="assigned_officer_id"><option value="">Unassigned</option><?php foreach ($officers as $officer): ?><option value="<?php echo (int)$officer['id']; ?>" <?php echo (int)$complaint['assigned_officer_id'] === (int)$officer['id'] ? 'selected' : ''; ?>><?php echo e($officer['officer_name']); ?></option><?php endforeach; ?></select></div>
                 <div class="col-md-3"><label class="form-label">Status</label><select class="form-select" name="status"><?php foreach (complaint_statuses() as $statusItem): ?><option <?php echo $complaint['status'] === $statusItem ? 'selected' : ''; ?>><?php echo e($statusItem); ?></option><?php endforeach; ?></select></div>
-                <div class="col-md-3"><label class="form-label">Remarks</label><input class="form-control" name="remarks"><div class="form-check mt-2"><input class="form-check-input" type="checkbox" id="staff-publish-remark" name="publish_remark" value="1"><label class="form-check-label" for="staff-publish-remark">Show to citizens (no confidential details)</label></div></div>
+                <div class="col-md-3"><label class="form-label">Remarks</label><input class="form-control" name="remarks"><div class="form-check mt-2"><input class="form-check-input" type="checkbox" id="staff-publish-remark" name="publish_remark" value="1" checked><label class="form-check-label" for="staff-publish-remark">Show to citizens (no confidential details)</label></div></div>
                 <div class="col-md-2 d-flex align-items-end"><button class="btn btn-primary w-100" type="submit">Save Update</button></div>
             </form>
         <?php else: ?><div class="alert alert-info mb-0">This account has read-only access.</div><?php endif; ?>

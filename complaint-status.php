@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/includes/bootstrap.php';
+require_once __DIR__ . '/includes/complaint-journey.php';
+header('Cache-Control: no-store, private');
 
 $pageTitle = 'Complaint Status';
 $activePage = 'complaints';
@@ -22,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $stmt = db()->prepare(
                     "SELECT c.*, d.department_name, cc.category_name, w.ward_no, z.zone_no,
-                            o.officer_name, o.designation AS officer_designation, o.mobile_no AS officer_mobile
+                            o.officer_name, o.designation AS officer_designation, o.mobile_no AS officer_mobile, o.email AS officer_email, (o.is_active=1 AND EXISTS (SELECT 1 FROM officer_department_map dm JOIN departments dp ON dp.id=dm.department_id AND dp.is_active=1 WHERE dm.officer_id=o.id)) AS public_contact
                      FROM complaints c
                      JOIN departments d ON d.id = c.department_id
                      JOIN complaint_categories cc ON cc.id = c.category_id
@@ -43,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $stmt = db()->prepare(
                     "SELECT c.*, d.department_name, cc.category_name, w.ward_no, z.zone_no,
-                            o.officer_name, o.designation AS officer_designation, o.mobile_no AS officer_mobile
+                            o.officer_name, o.designation AS officer_designation, o.mobile_no AS officer_mobile, o.email AS officer_email, (o.is_active=1 AND EXISTS (SELECT 1 FROM officer_department_map dm JOIN departments dp ON dp.id=dm.department_id AND dp.is_active=1 WHERE dm.officer_id=o.id)) AS public_contact
                      FROM complaints c
                      JOIN departments d ON d.id = c.department_id
                      JOIN complaint_categories cc ON cc.id = c.category_id
@@ -66,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 elseif ($referenceNo !== '') {
     $stmt = db()->prepare(
         "SELECT c.*, d.department_name, cc.category_name, w.ward_no, z.zone_no,
-                o.officer_name, o.designation AS officer_designation, o.mobile_no AS officer_mobile
+                o.officer_name, o.designation AS officer_designation, o.mobile_no AS officer_mobile, o.email AS officer_email, (o.is_active=1 AND EXISTS (SELECT 1 FROM officer_department_map dm JOIN departments dp ON dp.id=dm.department_id AND dp.is_active=1 WHERE dm.officer_id=o.id)) AS public_contact
          FROM complaints c
          JOIN departments d ON d.id = c.department_id
          JOIN complaint_categories cc ON cc.id = c.category_id
@@ -124,7 +126,11 @@ include __DIR__ . '/includes/header.php';
 
 <div class="container-xxl py-5">
 <?php foreach ($complaints as $complaintIndex => $complaint): ?>
-    <?php $tabId = 'complaint' . (int)$complaint['id']; ?>
+    <?php $tabId = 'complaint' . (int)$complaint['id'];
+    $verified=(string)($_SESSION['otp_verified_mobile']['tracking']??'');
+    $ownerVerified=$verified!=='' && hash_equals((string)$complaint['mobile_no'],$verified);
+    $contacts=complaint_journey_contact(['mobile_no'=>$complaint['officer_mobile'],'email'=>$complaint['officer_email'],'public_contact'=>$complaint['public_contact']],false);
+    ?>
     <article class="status-result-card mb-4">
         <header class="status-result-head d-flex flex-wrap justify-content-between align-items-start gap-3">
             <div><div class="small text-muted">Complaint Reference Number</div><h2 class="h4 fw-bold mb-1"><?php echo e($complaint['reference_no']); ?></h2><div class="small text-muted">Registered: <?php echo e(date('d-m-Y h:i A', strtotime($complaint['created_at']))); ?></div></div>
@@ -142,7 +148,7 @@ include __DIR__ . '/includes/header.php';
                     <div class="col-md-6"><dl class="detail-list">
                         <dt>Complaint Status</dt><dd><?= e($complaint['status']) ?></dd>
                         <dt>Department</dt><dd><?= e($complaint['department_name']) ?></dd>
-                        <dt>Category</dt><dd><?= e($complaint['category_name']) ?></dd>
+                        <dt>Category</dt><dd><?= e($complaint['category_name']) ?></dd><dt>Submission source</dt><dd><?= e($complaint['source']??'—') ?></dd>
                     </dl></div>
                     <div class="col-md-6"><dl class="detail-list">
                         <dt>Assigned Officer</dt><dd><?= e($complaint['officer_name'] ?: 'Awaiting assignment') ?></dd>
@@ -151,8 +157,8 @@ include __DIR__ . '/includes/header.php';
                     </dl></div>
                 </div>
             </div>
-            <div class="tab-pane fade" id="<?php echo $tabId; ?>-personal"><dl class="detail-list"><dt>Name</dt><dd><?php echo e($complaint['citizen_name']); ?></dd><dt>Mobile No</dt><dd><?php echo e(mask_mobile($complaint['mobile_no'])); ?></dd><dt>Communication Address</dt><dd><?php echo nl2br(e($complaint['communication_address'])); ?></dd></dl></div>
-            <div class="tab-pane fade" id="<?php echo $tabId; ?>-officer"><?php if ($complaint['officer_name']): ?><dl class="detail-list"><dt>Name</dt><dd><?php echo e($complaint['officer_name']); ?></dd><dt>Mobile Number</dt><dd><?php echo e(mask_mobile((string)$complaint['officer_mobile'])); ?></dd></dl><?php else: ?><p class="text-muted mb-0">Officer assignment is pending.</p><?php endif; ?></div>
+            <div class="tab-pane fade" id="<?php echo $tabId; ?>-personal"><dl class="detail-list"><dt>Name</dt><dd><?php echo e($complaint['citizen_name']); ?></dd><dt>Mobile No</dt><dd><?php echo e($ownerVerified?$complaint['mobile_no']:mask_mobile($complaint['mobile_no'])); ?></dd><dt>Communication Address</dt><dd><?php echo nl2br(e($ownerVerified?$complaint['communication_address']:'Verify your mobile number to view')); ?></dd></dl></div>
+            <div class="tab-pane fade" id="<?php echo $tabId; ?>-officer"><?php if ($complaint['officer_name']): ?><dl class="detail-list"><dt>Name</dt><dd><?php echo e($complaint['officer_name']); ?></dd><dt>Designation</dt><dd><?= e($complaint['officer_designation']??'—') ?></dd><dt>Official mobile number</dt><dd><?= e($contacts['phone']?:'Not available') ?></dd><dt>Official email</dt><dd><?= e($contacts['email']?:'Not available') ?></dd></dl><?php else: ?><p class="text-muted mb-0">Officer assignment is pending.</p><?php endif; ?></div>
             <div class="tab-pane fade" id="<?php echo $tabId; ?>-location"><dl class="detail-list"><dt>Location Name</dt><dd><?php echo e($complaint['location_address']); ?></dd><dt>Ward No</dt><dd><?php echo e($complaint['ward_no']); ?></dd><dt>Zone</dt><dd><?php echo e($complaint['zone_no']); ?></dd><dt>Door No</dt><dd><?php echo e($complaint['door_no']); ?></dd><dt>Assessment No</dt><dd><?php echo e($complaint['assessment_no'] ?: '-'); ?></dd></dl></div>
         </div>
         <div class="px-3 pb-3">
