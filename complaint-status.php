@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $stmt = db()->prepare(
                     "SELECT c.*, d.department_name, cc.category_name, w.ward_no, z.zone_no,
-                            o.officer_name, o.mobile_no AS officer_mobile
+                            o.officer_name, o.designation AS officer_designation, o.mobile_no AS officer_mobile
                      FROM complaints c
                      JOIN departments d ON d.id = c.department_id
                      JOIN complaint_categories cc ON cc.id = c.category_id
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $stmt = db()->prepare(
                     "SELECT c.*, d.department_name, cc.category_name, w.ward_no, z.zone_no,
-                            o.officer_name, o.mobile_no AS officer_mobile
+                            o.officer_name, o.designation AS officer_designation, o.mobile_no AS officer_mobile
                      FROM complaints c
                      JOIN departments d ON d.id = c.department_id
                      JOIN complaint_categories cc ON cc.id = c.category_id
@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 elseif ($referenceNo !== '') {
     $stmt = db()->prepare(
         "SELECT c.*, d.department_name, cc.category_name, w.ward_no, z.zone_no,
-                o.officer_name, o.mobile_no AS officer_mobile
+                o.officer_name, o.designation AS officer_designation, o.mobile_no AS officer_mobile
          FROM complaints c
          JOIN departments d ON d.id = c.department_id
          JOIN complaint_categories cc ON cc.id = c.category_id
@@ -137,23 +137,26 @@ include __DIR__ . '/includes/header.php';
             <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#<?php echo $tabId; ?>-location" type="button">Location Info</button></li>
         </ul>
         <div class="tab-content status-tab-body">
-            <div class="tab-pane fade show active" id="<?php echo $tabId; ?>-status"><div class="row g-4"><div class="col-lg-6"><dl class="detail-list"><dt>Complaint Status</dt><dd><?php echo e($complaint['status']); ?></dd><dt>Department</dt><dd><?php echo e($complaint['department_name']); ?></dd><dt>Category</dt><dd><?php echo e($complaint['category_name']); ?></dd><dt>Due Date</dt><dd><?php echo e($complaint['due_at'] ? date('d-m-Y', strtotime($complaint['due_at'])) : '-'); ?></dd></dl></div><div class="col-lg-6"><div class="p-3 rounded border bg-light"><h3 class="h6 fw-bold">Current progress & Remarks</h3><?php
-                require_once __DIR__ . '/includes/citizen-remarks.php';
-                $tEvents = get_complaint_public_timeline(db(), (int)$complaint['id']);
-                $latestTxt = '';
-                $latestActor = '';
-                if (!empty($tEvents)) {
-                    $lastEv = end($tEvents);
-                    $latestTxt = $lastEv['remarks'] ?? '';
-                    $latestActor = trim(($lastEv['officer_name'] ?? '') . ' (' . ($lastEv['designation'] ?? '') . ')');
-                }
-            ?><?php if ($latestTxt !== ''): ?><p class="mb-1 text-primary fw-semibold"><?php echo nl2br(e($latestTxt)); ?></p><?php if ($latestActor !== '()'): ?><div class="small text-muted">— <?php echo e($latestActor); ?></div><?php endif; ?><?php else: ?><p class="mb-0">This grievance is currently marked <strong><?php echo e($complaint['status']); ?></strong>.</p><?php endif; ?></div></div></div></div>
+            <div class="tab-pane fade show active" id="<?= e($tabId) ?>-status">
+                <div class="row g-4">
+                    <div class="col-md-6"><dl class="detail-list">
+                        <dt>Complaint Status</dt><dd><?= e($complaint['status']) ?></dd>
+                        <dt>Department</dt><dd><?= e($complaint['department_name']) ?></dd>
+                        <dt>Category</dt><dd><?= e($complaint['category_name']) ?></dd>
+                    </dl></div>
+                    <div class="col-md-6"><dl class="detail-list">
+                        <dt>Assigned Officer</dt><dd><?= e($complaint['officer_name'] ?: 'Awaiting assignment') ?></dd>
+                        <dt>Designation</dt><dd><?= e($complaint['officer_designation'] ?? '—') ?></dd>
+                        <dt>Due Date</dt><dd><?= e($complaint['due_at'] ? date('d-m-Y',strtotime($complaint['due_at'])) : '—') ?></dd>
+                    </dl></div>
+                </div>
+            </div>
             <div class="tab-pane fade" id="<?php echo $tabId; ?>-personal"><dl class="detail-list"><dt>Name</dt><dd><?php echo e($complaint['citizen_name']); ?></dd><dt>Mobile No</dt><dd><?php echo e(mask_mobile($complaint['mobile_no'])); ?></dd><dt>Communication Address</dt><dd><?php echo nl2br(e($complaint['communication_address'])); ?></dd></dl></div>
             <div class="tab-pane fade" id="<?php echo $tabId; ?>-officer"><?php if ($complaint['officer_name']): ?><dl class="detail-list"><dt>Name</dt><dd><?php echo e($complaint['officer_name']); ?></dd><dt>Mobile Number</dt><dd><?php echo e(mask_mobile((string)$complaint['officer_mobile'])); ?></dd></dl><?php else: ?><p class="text-muted mb-0">Officer assignment is pending.</p><?php endif; ?></div>
             <div class="tab-pane fade" id="<?php echo $tabId; ?>-location"><dl class="detail-list"><dt>Location Name</dt><dd><?php echo e($complaint['location_address']); ?></dd><dt>Ward No</dt><dd><?php echo e($complaint['ward_no']); ?></dd><dt>Zone</dt><dd><?php echo e($complaint['zone_no']); ?></dd><dt>Door No</dt><dd><?php echo e($complaint['door_no']); ?></dd><dt>Assessment No</dt><dd><?php echo e($complaint['assessment_no'] ?: '-'); ?></dd></dl></div>
         </div>
         <div class="px-3 pb-3">
-            <a href="<?php echo e(url('complaint-view.php?reference_no=' . urlencode($complaint['reference_no']))); ?>" class="btn btn-info w-100 fw-bold py-2 text-white text-uppercase" style="background-color: #2ca8df; border-color: #2ca8df;">VIEW COMPLAINT INFO</a>
+            <a href="<?php echo e(url('complaint-view.php?reference_no=' . urlencode($complaint['reference_no']))); ?>" class="btn btn-info w-100 fw-bold py-2 text-white text-uppercase" style="background-color: #2ca8df; border-color: #2ca8df;">VIEW COMPLAINT DETAILS</a>
         </div>
     </article>
 <?php endforeach; ?>

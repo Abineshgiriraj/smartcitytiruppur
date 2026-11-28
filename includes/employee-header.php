@@ -30,7 +30,7 @@ $activeNavigation = employee_navigation_active($navigation, $currentPage, $_GET)
   <link href="<?php echo e(url('assets/css/admin-refresh.css?v=20261121b')); ?>" rel="stylesheet">
     <link href="<?php echo e(url('assets/css/civic-modern.css?v=20261124')); ?>" rel="stylesheet">
   <?php if ($currentPage === 'complaint-view.php'): ?>
-  <link href="<?php echo e(url('assets/css/complaint-detail-modern.css?v=20261126_remarks')); ?>" rel="stylesheet">
+  <link href="<?php echo e(url('assets/css/complaint-detail-modern.css?v=20261128_journey')); ?>" rel="stylesheet">
   <?php endif; ?>
   <?php if ($currentPage === 'escalation-reports.php'): ?>
   <link href="<?php echo e(url('assets/css/escalation-reports.css?v=20261125')); ?>" rel="stylesheet">

@@ -19,133 +19,43 @@ function citizen_remark_record_visibility(PDO $pdo, int $historyId, int $userId,
       ->execute([$userId,$publish?'citizen_remark_published':'citizen_remark_private',$historyId]);
 }
 
-/**
- * Filter technical audit traces and present citizen-facing remarks cleanly.
- */
-function sanitize_public_remark(string $rawRemark): string
+function citizen_status_event(array $row): array
 {
-    $text = trim($rawRemark);
-    if ($text === '') {
-        return '';
-    }
-
-    // Convert internal system and batch messages into clean public remarks
-    if (preg_match('/Reassigned to (.*?) \((.*?)\) via Stage 1 PDF Ward-Mapped/i', $text, $m)) {
-        return "Transferred and assigned to {$m[1]} ({$m[2]}) based on ward jurisdiction.";
-    }
-    if (preg_match('/Reassigned to (.*?) \((.*?)\) via (.*?) \(Batch:.*?\)/i', $text, $m)) {
-        return "Assigned to {$m[1]} ({$m[2]}) for resolution.";
-    }
-    if (preg_match('/Intelligent Reassignment applied: Recovered verified active officer from original lifecycle history \(Officer #\d+: (.*?)\)/i', $text, $m)) {
-        return "Assigned to {$m[1]} for field inspection and resolution.";
-    }
-    if (preg_match('/Intelligent Reassignment applied: Allocated via Stage 1 policy candidate \((.*?): (.*?)\)/i', $text, $m)) {
-        return "Assigned to {$m[2]} ({$m[1]}) for resolution.";
-    }
-    if (preg_match('/PDF policy escalation to level (\d+) \((.*?)\)/i', $text, $m)) {
-        return "Escalated to Stage {$m[1]} ({$m[2]}) as per municipal grievance policy.";
-    }
-    if (preg_match('/Automatically allocated to (.*?)\./i', $text, $m)) {
-        return "Assigned to {$m[1]} based on ward jurisdiction.";
-    }
-
-    return $text;
+    $status=(string)($row['new_status']??'Updated');
+    $status=in_array($status,['Registered','Assigned','Acknowledged','In Progress','Resolved','Closed','Rejected','Reopened','Pending'],true)?$status:'Updated';
+    $raw=trim((string)($row['remarks']??''));
+    $published=(int)($row['can_show_text']??0)===1 && ($row['visibility']??'')!=='citizen_remark_private';
+    $text=$published?$raw:'';
+    if ($text==='' && ($row['visibility']??'')!=='citizen_remark_private' && $raw==='Status updated in ICTS system.') $text=$raw;
+    if ($text==='' && ($row['visibility']??'')!=='citizen_remark_private' && $raw==='Complaint registered through the public website.') $text=$raw;
+    if ($text==='') $text=$status==='Updated'?'Complaint status updated.':'Complaint status recorded as '.$status.'.';
+    return ['new_status'=>$status,'changed_at'=>$row['changed_at'],'remarks'=>$text,
+        'event_label'=>$published&&$raw!==''?'Municipal staff update':'Recorded status update',
+        'officer_name'=>$published?(string)($row['actor_name']??''):'',
+        'designation'=>$published?(string)($row['actor_designation']??''):''];
 }
 
-/**
- * Retrieve the complete public remarks timeline for any complaint.
- * Shows status, date, time, officer name, designation, and actual remark.
- */
-function get_complaint_public_timeline(PDO $pdo, int $complaintId): array
+function get_complaint_public_timeline(PDO $pdo,int $complaintId): array
 {
-    $compStmt = $pdo->prepare("
-        SELECT c.*, o.officer_name as current_officer_name, o.designation as current_officer_designation
-        FROM complaints c
-        LEFT JOIN officers o ON o.id = c.assigned_officer_id
-        WHERE c.id = ? LIMIT 1
-    ");
-    $compStmt->execute([$complaintId]);
-    $complaint = $compStmt->fetch(PDO::FETCH_ASSOC);
-    if (!$complaint) return [];
-
-    $sql = "
-        SELECT h.id, h.old_status, h.new_status, h.remarks, h.changed_at,
-               COALESCE(
-                   NULLIF(o_dir.officer_name, ''),
-                   NULLIF(o_usr.officer_name, ''),
-                   NULLIF(u.full_name, ''),
-                   NULLIF(o_lc.officer_name, ''),
-                   NULLIF(o_last_lc.officer_name, ''),
-                   NULLIF(:cur_name, ''),
-                   'Municipal Officer'
-               ) AS officer_name,
-               COALESCE(
-                   NULLIF(o_dir.designation, ''),
-                   NULLIF(o_usr.designation, ''),
-                   NULLIF(o_lc.designation, ''),
-                   NULLIF(o_last_lc.designation, ''),
-                   NULLIF(:cur_desig, ''),
-                   'Corporation Staff'
-               ) AS designation
+    $visibility=citizen_remark_visibility_sql();
+    $stmt=$pdo->prepare("SELECT h.new_status,h.changed_at,h.remarks,
+        COALESCE(NULLIF(o.officer_name,''),NULLIF(u.full_name,''),'') AS actor_name,
+        COALESCE(NULLIF(o.designation,''),u.role,'') AS actor_designation,
+        $visibility AS visibility
         FROM complaint_status_history h
-        LEFT JOIN users u ON u.id = h.changed_by
-        LEFT JOIN officers o_usr ON o_usr.user_id = u.id
-        LEFT JOIN officers o_dir ON o_dir.id = h.changed_by
-        LEFT JOIN (
-            SELECT rcl.ComplaintID, rcl.StatusDate, o.officer_name, o.designation
-            FROM raw_complaintlifecycle rcl
-            JOIN raw_userdesignationmapper udm ON udm.UserDesignationMapperID = rcl.UserDesignationMapperID
-            JOIN officers o ON o.id = udm.UserMasterID
-        ) o_lc ON o_lc.ComplaintID = :cid1 AND ABS(TIMESTAMPDIFF(SECOND, o_lc.StatusDate, h.changed_at)) <= 120
-        LEFT JOIN (
-            SELECT rcl.ComplaintID, o.officer_name, o.designation
-            FROM raw_complaintlifecycle rcl
-            JOIN raw_userdesignationmapper udm ON udm.UserDesignationMapperID = rcl.UserDesignationMapperID
-            JOIN officers o ON o.id = udm.UserMasterID
-            WHERE rcl.ComplaintID = :cid2
-            ORDER BY rcl.StatusDate DESC LIMIT 1
-        ) o_last_lc ON 1=1
-        WHERE h.complaint_id = :cid3
-        ORDER BY h.changed_at ASC, h.id ASC
-    ";
-
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([
-        ':cur_name' => (string)($complaint['current_officer_name'] ?? ''),
-        ':cur_desig' => (string)($complaint['current_officer_designation'] ?? ''),
-        ':cid1' => $complaintId,
-        ':cid2' => $complaintId,
-        ':cid3' => $complaintId
-    ]);
-
-    $timeline = [];
+        JOIN complaints c ON c.id=h.complaint_id AND c.is_deleted=0
+        LEFT JOIN users u ON u.id=h.changed_by
+        LEFT JOIN officers o ON o.user_id=u.id
+        WHERE h.complaint_id=? ORDER BY h.changed_at,h.id");
+    $stmt->execute([$complaintId]);
+    $out=[];
     foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
-        $cleanRemark = sanitize_public_remark((string)($row['remarks'] ?? ''));
-        if ($cleanRemark === '') {
-            $cleanRemark = 'Status recorded as ' . ($row['new_status'] ?? 'Updated');
-        }
-
-        $timeline[] = [
-            'id' => (int)$row['id'],
-            'new_status' => (string)$row['new_status'],
-            'remarks' => $cleanRemark,
-            'officer_name' => (string)$row['officer_name'],
-            'designation' => (string)$row['designation'],
-            'changed_at' => (string)$row['changed_at']
-        ];
+        $row['can_show_text']=$row['visibility']==='citizen_remark_published'?1:0;
+        $out[]=citizen_status_event($row);
     }
-
-    return $timeline;
+    return $out;
 }
-
-/** Legacy compatibility wrapper */
-function citizen_remarks(PDO $pdo, int $complaintId, bool $verifiedOwner): array
+function citizen_remarks(PDO $pdo,int $complaintId,bool $verifiedOwner): array
 {
-    $timeline = get_complaint_public_timeline($pdo, $complaintId);
-    return array_map(static fn($item) => [
-        'new_status' => $item['new_status'],
-        'changed_at' => $item['changed_at'],
-        'remarks' => $item['remarks'],
-        'event_label' => $item['designation'] . ' · ' . $item['officer_name']
-    ], $timeline);
+    return get_complaint_public_timeline($pdo,$complaintId);
 }

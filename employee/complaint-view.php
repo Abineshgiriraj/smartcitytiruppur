@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/../includes/bootstrap.php';
+require_once __DIR__ . '/../includes/complaint-journey.php';
 require_once __DIR__ . '/../includes/citizen-remarks.php';
 require_once __DIR__ . '/../includes/officer-authority.php';
 require_once __DIR__ . '/../includes/complaint-officer-access.php';
@@ -400,6 +401,8 @@ if ($previousOfficerAccess) {
     echo '<div class="alert alert-info mb-3" role="status"><strong>Previously assigned complaint - read-only.</strong> You may review details, attachments and activity history. Only the currently assigned officer can update this complaint.</div>';
 }
 $detailAudience='staff';
+$detailJourney=complaint_journey(db(),$complaint,true);
+$detailPublicHistory=get_complaint_public_timeline(db(),(int)$complaint['id']);
 include __DIR__ . '/../includes/complaint-detail-layout.php';
 ?>
 

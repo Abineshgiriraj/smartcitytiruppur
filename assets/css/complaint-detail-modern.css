@@ -145,3 +145,26 @@
   .scd .scd-panel{box-shadow:none;break-inside:avoid;padding:15px;margin-bottom:15px;border-color:#bbb}
   .scd .scd-footer-note{font-size:10px}
 }
+
+/* Complaint journey: essential information above the fold, responsive and printable. */
+.scd .scd-hero-meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.scd .scd-hero-meta small,.scd .scd-hero-meta strong{display:block;line-height:1.6}
+.scd .scd-hero-meta small{color:#b9d8e9;font-size:11px}
+.scd .scd-hero-meta strong{font-size:15px;color:#fff;overflow-wrap:anywhere}
+.scd .scd-priority-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-bottom:20px}
+.scd .scd-officer-profile strong{font-size:18px}
+.scd .scd-officer-profile span:last-child{font-size:13px}
+.scd .scd-latest-update{border:1px solid #dce9f3;background:#f6faff;border-radius:12px;padding:16px}
+.scd .scd-stage-track{display:grid;grid-template-columns:repeat(auto-fit,minmax(95px,1fr));gap:8px;list-style:none;margin:18px 0;padding:0}
+.scd .scd-stage-track li{min-width:0;display:flex;flex-direction:column;align-items:center;text-align:center;gap:5px;padding:12px 6px;border:1px solid #dce7f0;border-radius:12px;background:#f6f9fc}
+.scd .scd-stage-track strong{font-size:12px;overflow-wrap:anywhere}
+.scd .scd-stage-track small{font-size:10px;color:#536c80}
+.scd .scd-stage-number{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#e4ecf4;color:#28506c;font-weight:800}
+.scd .scd-stage-track .scd-stage-reached{border-color:#b7d8c8;background:#f1faf6}
+.scd .scd-stage-track .scd-stage-current{border-color:#2274a1;background:#e7f5fc}
+.scd .scd-stage-current .scd-stage-number{background:#176a9b;color:#fff}
+.scd .scd-journey-person{display:flex;gap:8px;flex-wrap:wrap;align-items:baseline;margin:7px 0}
+.scd .scd-journey-person span{font-size:12px;color:#536c80}
+.scd .scd-compact-empty{border:1px dashed #d5e4ee;border-radius:10px;padding:12px;color:#536c80;font-size:13px}
+@media(max-width:768px){.scd .scd-hero-meta{grid-template-columns:repeat(2,minmax(0,1fr))}.scd .scd-priority-grid{grid-template-columns:minmax(0,1fr)}}
+@media print{.scd .scd-priority-grid{display:block}.scd .scd-priority-grid>.scd-panel{margin-bottom:12px}.scd .scd-stage-track li,.scd .scd-event{break-inside:avoid}.scd .scd-aside{position:static}}
