@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__ . '/includes/bootstrap.php';
 require_once __DIR__ . '/includes/complaint-journey.php';
+require_once __DIR__ . '/includes/citizen-contact-sharing.php';
 require_once __DIR__ . '/includes/citizen-remarks.php';
 
 $pageTitle = 'Complaint Details';
@@ -15,6 +16,24 @@ $pdo = db();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
+
+    if (isset($_POST['citizen_contact_sharing'])) {
+        $decision=$_POST['citizen_contact_sharing'];
+        if (!in_array($decision,['enable','disable'],true)
+            || ($decision==='enable' && ($_POST['contact_consent']??'')!=='1')) {
+            flash('danger','Explicit consent is required to share contact details.');
+        } else {
+            try {
+                $saved=citizen_contact_save($pdo,$referenceNo,$decision==='enable');
+                if ($saved) flash('success',$decision==='enable'?'Phone and email are now publicly visible.':'Public contact sharing disabled.');
+                else flash('danger','A recent verified mobile session is required to change sharing.');
+            } catch (Throwable $e) {
+                log_message('Contact sharing update failed.');
+                flash('danger','Unable to update contact sharing.');
+            }
+        }
+        redirect('complaint-view.php?reference_no='.urlencode($referenceNo).'#scd-citizen-title');
+    }
 
     if (isset($_POST['reopen_complaint_id'])) {
         $complaintId = (int) $_POST['reopen_complaint_id'];
@@ -123,6 +142,8 @@ $verifiedMobile=(string)($_SESSION['otp_verified_mobile']['tracking']??'');
 $verifiedOwner=$verifiedMobile!=='' && hash_equals((string)$complaint['mobile_no'],$verifiedMobile);
 $history = get_complaint_public_timeline($pdo, (int)$complaint['id'],$verifiedOwner);
 $detailPublicHistory=$history;
+$detailCitizenContactPublic=citizen_contact_is_public($pdo,$complaint);
+$detailCanManageContact=citizen_contact_can_manage($pdo,$complaint);
 $detailJourney=complaint_journey($pdo,$complaint,false);
 header('Cache-Control: no-store, private');
 
