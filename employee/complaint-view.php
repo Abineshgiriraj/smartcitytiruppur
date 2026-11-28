@@ -399,7 +399,9 @@ $detailPublicHistory=get_complaint_public_timeline(db(),(int)$complaint['id']);
 include __DIR__ . '/../includes/complaint-detail-layout.php';
 ?>
 
-<?php if ($isOfficerPortal && $canUpdate): ?>
+<section class="card content-card mt-4" id="complaint-update-panel" aria-label="Complaint management">
+    <div class="card-body p-4">
+        <?php if ($isOfficerPortal && $canUpdate): ?>
           <h2><i class="bi bi-check2-square me-2"></i>Update My Complaint</h2>
           <?php if(in_array($complaint['status'], ['Closed','Rejected'], true)): ?>
             <div class="alert alert-info small">This case is completed. You may reopen it with remarks. The original PDF deadline is retained.</div>

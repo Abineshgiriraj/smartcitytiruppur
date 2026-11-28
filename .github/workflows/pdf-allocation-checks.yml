@@ -90,6 +90,8 @@ jobs:
           php -l tools/reconcile_officer_designation_test.php
           php -l includes/local-pdf-workflow-guard.php
           php -l tools/report_local_pdf_workflow.php
+      - name: Verify complaint management panel structure (no database)
+        run: php tests/test_complaint_management_layout.php
       - name: Verify shared header preserves report state (no database)
         run: php tests/test_employee_header_scope.php
       - name: Verify responsible officer attribution (no database)
