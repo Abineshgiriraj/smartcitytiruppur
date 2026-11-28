@@ -60,6 +60,7 @@ jobs:
           php -l includes/complaint-detail-layout.php
           php -l includes/citizen-remarks.php
           php -l includes/citizen-contact-sharing.php
+          php -l tools/record_public_contact_consent.php
           php -l includes/complaint-journey.php
           php -l includes/complaint-journey-layout.php
           php -l ajax/send-otp.php

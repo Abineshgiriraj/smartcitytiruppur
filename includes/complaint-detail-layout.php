@@ -34,7 +34,7 @@ $detailPhone = $detailShowCitizenContact ? $detailDash($complaint['mobile_no']??
 $detailEmail = $detailShowCitizenContact
     ? $detailDash($complaint['email']??null) : 'Protected · verify your mobile to view';
 $detailAddress = $detailIsStaff || $detailOwnerVerified
-    ? $detailDash($complaint['communication_address']??null) : 'Protected · verify your mobile to view';
+    ? $detailDash($complaint['communication_address']??null) : ($detailCitizenContactPublic?'Private address':'Protected · verify your mobile to view');
 $detailJourney = $detailJourney ?? complaint_journey(db(),$complaint,$detailIsStaff);
 $detailPublicHistory = $detailPublicHistory ?? [];
 $detailLatest = $detailPublicHistory ? end($detailPublicHistory) : null;
@@ -120,7 +120,7 @@ $detailFileSize = static function ($bytes): string {
         <?php if (!$detailIsStaff && $detailCitizenContactPublic): ?>
           <p class="small text-muted mb-0">Phone and email shared by the complainant.</p>
         <?php endif; ?>
-        <?php if (!$detailOwnerVerified && !$detailIsStaff): ?>
+        <?php if (!$detailOwnerVerified && !$detailIsStaff && !$detailCitizenContactPublic): ?>
           <div class="scd-privacy"><i class="bi bi-lock"></i><span><a href="<?= e(url('complaint-status.php?search_type=mobile')) ?>">Verify your mobile number</a> to view <?= $detailCitizenContactPublic?'your private address':'private contact details' ?>.</span></div>
         <?php endif; ?>
         <?php if (!$detailIsStaff && !empty($detailCanManageContact)): ?>
