@@ -119,7 +119,9 @@ if (!$complaint) {
 }
 
 require_once __DIR__ . '/includes/citizen-remarks.php';
-$history = get_complaint_public_timeline($pdo, (int)$complaint['id']);
+$verifiedMobile=(string)($_SESSION['otp_verified_mobile']['tracking']??'');
+$verifiedOwner=$verifiedMobile!=='' && hash_equals((string)$complaint['mobile_no'],$verifiedMobile);
+$history = get_complaint_public_timeline($pdo, (int)$complaint['id'],$verifiedOwner);
 $detailPublicHistory=$history;
 $detailJourney=complaint_journey($pdo,$complaint,false);
 header('Cache-Control: no-store, private');
@@ -144,7 +146,7 @@ $canReopen = in_array($complaint['status'], ['Resolved','Closed'], true) && (int
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
   <link href="<?php echo e(url('assets/css/style.css?v=20261125')); ?>" rel="stylesheet">
-  <link href="<?php echo e(url('assets/css/complaint-detail-modern.css?v=20261128_simple')); ?>" rel="stylesheet">
+  <link href="<?php echo e(url('assets/css/complaint-detail-modern.css?v=20261128_twocolumn')); ?>" rel="stylesheet">
 </head>
 <body style="background:#f2f7fc">
 <main class="container-xxl py-4 py-lg-5">

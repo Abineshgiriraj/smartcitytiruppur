@@ -60,13 +60,38 @@ function citizen_status_event(array $row): array
     return ['new_status'=>$status,'changed_at'=>$row['changed_at'],'remarks'=>$text,
         'event_label'=>$published&&$raw!==''?'Municipal staff update':'Recorded status update',
         'officer_name'=>(string)($row['responsible_name']??''),
-        'designation'=>(string)($row['responsible_designation']??'')];
+        'designation'=>(string)($row['responsible_designation']??''),
+        'is_actual_remark'=>$published&&$raw!==''];
 }
 
-function get_complaint_public_timeline(PDO $pdo,int $complaintId): array
+/** Return the most recent genuine visible free-text remark, not a synthetic status label. */
+function citizen_latest_remark(array $history): ?array
+{
+    foreach (array_reverse($history) as $event) {
+        if (!empty($event['is_actual_remark']) && trim((string)($event['remarks']??''))!=='') return $event;
+    }
+    return null;
+}
+
+function get_complaint_public_timeline(PDO $pdo,int $complaintId,bool $verifiedOwner=false): array
 {
     $visibility=citizen_remark_visibility_sql();
+    // Old manual status updates can be shown to the verified owner when an exact
+    // audit match proves the source. Public access still needs explicit publication.
+    $legacyEvidence = $verifiedOwner ? "(
+        EXISTS (SELECT 1 FROM audit_logs a WHERE a.entity_type='complaint'
+          AND a.entity_id=h.complaint_id AND a.user_id=h.changed_by
+          AND a.action IN ('officer_update_complaint','complaint_updated')
+          AND a.created_at BETWEEN h.changed_at AND DATE_ADD(h.changed_at,INTERVAL 10 SECOND)
+          AND JSON_UNQUOTE(JSON_EXTRACT(IF(JSON_VALID(a.details_json),a.details_json,'{}'),'$.old_status'))=h.old_status
+          AND JSON_UNQUOTE(JSON_EXTRACT(IF(JSON_VALID(a.details_json),a.details_json,'{}'),'$.new_status'))=h.new_status)
+        AND NOT EXISTS (SELECT 1 FROM complaint_status_history h2
+          WHERE h2.complaint_id=h.complaint_id AND h2.changed_by=h.changed_by AND h2.id<>h.id
+            AND h2.old_status=h.old_status AND h2.new_status=h.new_status
+            AND h2.changed_at BETWEEN DATE_SUB(h.changed_at,INTERVAL 10 SECOND) AND DATE_ADD(h.changed_at,INTERVAL 10 SECOND))
+      )" : "0";
     $stmt=$pdo->prepare("SELECT h.id,h.new_status,h.changed_at,h.remarks,
+        $legacyEvidence AS legacy_manual,
         $visibility AS visibility,
         (SELECT a.details_json FROM audit_logs a WHERE a.entity_type='complaint_status_history'
           AND a.entity_id=h.id AND a.action='citizen_responsible_officer' ORDER BY a.id DESC LIMIT 1) AS responsibility
@@ -95,12 +120,13 @@ function get_complaint_public_timeline(PDO $pdo,int $complaintId): array
         if (preg_match('/operator|call.?cent|corporation officer|admin|tester/i',$designation)) $person=null;
         $row['responsible_name']=$person['officer_name']??'';
         $row['responsible_designation']=$person['designation']??'';
-        $row['can_show_text']=$row['visibility']==='citizen_remark_published'?1:0;
+        $row['can_show_text']=($row['visibility']==='citizen_remark_published'
+            || ($verifiedOwner && $row['visibility']===null && (int)$row['legacy_manual']===1))?1:0;
         $out[]=citizen_status_event($row);
     }
     return $out;
 }
 function citizen_remarks(PDO $pdo,int $complaintId,bool $verifiedOwner): array
 {
-    return get_complaint_public_timeline($pdo,$complaintId);
+    return get_complaint_public_timeline($pdo,$complaintId,$verifiedOwner);
 }

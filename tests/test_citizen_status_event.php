@@ -10,4 +10,6 @@ $published = citizen_status_event(array_replace($base,['can_show_text'=>1,'remar
 if ($published['remarks'] !== 'Road repair completed.' || $published['event_label'] !== 'Municipal staff update') throw new RuntimeException('Published remark missing');
 $private = citizen_status_event(array_replace($base,['visibility'=>'citizen_remark_private','remarks'=>'Status updated in ICTS system.']));
 if ($private['remarks'] !== 'Complaint status recorded as Assigned.') throw new RuntimeException('Private note exposed');
+if (citizen_latest_remark([$published,$internal,$private])!==$published) throw new RuntimeException('Latest actual remark replaced by synthetic status');
+if (citizen_latest_remark([$internal,$private])!==null) throw new RuntimeException('Private status selected as remark');
 echo "Citizen status event regression checks passed.\n";

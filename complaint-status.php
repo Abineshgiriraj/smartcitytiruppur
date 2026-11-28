@@ -8,7 +8,7 @@ $pageTitle = 'Complaint Status';
 $activePage = 'complaints';
 $errors = [];
 $complaints = [];
-$searchType = $_POST['search_type'] ?? 'reference';
+$searchType = $_POST['search_type'] ?? (($_GET['search_type']??'')==='mobile'?'mobile':'reference');
 $referenceNo = trim($_POST['reference_no'] ?? ($_GET['reference_no'] ?? ''));
 $mobileNo = normalize_mobile($_POST['mobile_no'] ?? '');
 
@@ -157,7 +157,7 @@ include __DIR__ . '/includes/header.php';
                     </dl></div>
                 </div>
             </div>
-            <div class="tab-pane fade" id="<?php echo $tabId; ?>-personal"><dl class="detail-list"><dt>Name</dt><dd><?php echo e($complaint['citizen_name']); ?></dd><dt>Mobile No</dt><dd><?php echo e($ownerVerified?$complaint['mobile_no']:mask_mobile($complaint['mobile_no'])); ?></dd><dt>Communication Address</dt><dd><?php echo nl2br(e($ownerVerified?$complaint['communication_address']:'Verify your mobile number to view')); ?></dd></dl></div>
+            <div class="tab-pane fade" id="<?php echo $tabId; ?>-personal"><dl class="detail-list"><dt>Name</dt><dd><?php echo e($complaint['citizen_name']); ?></dd><dt>Mobile No</dt><dd><?php echo e($ownerVerified?$complaint['mobile_no']:mask_mobile($complaint['mobile_no'])); ?></dd><dt>Email Address</dt><dd><?= e($ownerVerified?($complaint['email']?:'Not available'):'Verify your mobile number to view') ?></dd><dt>Communication Address</dt><dd><?php echo nl2br(e($ownerVerified?$complaint['communication_address']:'Verify your mobile number to view')); ?></dd></dl><?php if (!$ownerVerified): ?><a class="btn btn-sm btn-outline-primary mt-2" href="<?= e(url('complaint-status.php?search_type=mobile')) ?>">Verify mobile to view full contact details</a><?php endif; ?></div>
             <div class="tab-pane fade" id="<?php echo $tabId; ?>-officer"><?php if ($complaint['officer_name']): ?><dl class="detail-list"><dt>Name</dt><dd><?php echo e($complaint['officer_name']); ?></dd><dt>Designation</dt><dd><?= e($complaint['officer_designation']??'—') ?></dd><dt>Official mobile number</dt><dd><?= e($contacts['phone']?:'Not available') ?></dd><dt>Official email</dt><dd><?= e($contacts['email']?:'Not available') ?></dd></dl><?php else: ?><p class="text-muted mb-0">Officer assignment is pending.</p><?php endif; ?></div>
             <div class="tab-pane fade" id="<?php echo $tabId; ?>-location"><dl class="detail-list"><dt>Location Name</dt><dd><?php echo e($complaint['location_address']); ?></dd><dt>Ward No</dt><dd><?php echo e($complaint['ward_no']); ?></dd><dt>Zone</dt><dd><?php echo e($complaint['zone_no']); ?></dd><dt>Door No</dt><dd><?php echo e($complaint['door_no']); ?></dd><dt>Assessment No</dt><dd><?php echo e($complaint['assessment_no'] ?: '-'); ?></dd></dl></div>
         </div>

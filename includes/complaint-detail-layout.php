@@ -36,6 +36,7 @@ $detailAddress = $detailIsStaff || $detailOwnerVerified
 $detailJourney = $detailJourney ?? complaint_journey(db(),$complaint,$detailIsStaff);
 $detailPublicHistory = $detailPublicHistory ?? [];
 $detailLatest = $detailPublicHistory ? end($detailPublicHistory) : null;
+$detailLatestRemark = citizen_latest_remark($detailPublicHistory);
 $detailLocation = complaint_journey_location($complaint);
 $detailOfficerPhone = $detailJourney['contacts']['phone'];
 $detailOfficerEmail = $detailJourney['contacts']['email'];
@@ -89,38 +90,38 @@ $detailFileSize = static function ($bytes): string {
   </header>
 
   <div class="scd-overview scd-simple-overview">
+    <div class="scd-summary"><span class="scd-summary-icon"><i class="bi bi-clipboard-check"></i></span><div><small>Complaint status</small><strong><?= e($detailStatus) ?></strong></div></div>
+    <div class="scd-summary"><span class="scd-summary-icon"><i class="bi bi-person-check"></i></span><div><small>Assigned officer</small><strong><?= e($complaint['officer_name']?:'Awaiting assignment') ?></strong><small><?= e($complaint['officer_designation']??'') ?></small></div></div>
     <div class="scd-summary"><span class="scd-summary-icon"><i class="bi bi-calendar-event"></i></span><div><small>Due date</small><strong><?= e($detailDate($complaint['due_at']??null)) ?></strong></div></div>
     <div class="scd-summary"><span class="scd-summary-icon"><i class="bi bi-clock-history"></i></span><div><small>Last updated</small><strong><?= e($detailDate($detailLatest['changed_at']??null)) ?></strong></div></div>
     <?php if (!empty($complaint['closed_at'])): ?><div class="scd-summary"><span class="scd-summary-icon"><i class="bi bi-check-circle"></i></span><div><small>Closed on</small><strong><?= e($detailDate($complaint['closed_at'])) ?></strong></div></div><?php endif; ?>
   </div>
 
-  <div class="scd-priority-grid scd-simple-priority">
-    <section class="scd-panel scd-officer-card" aria-labelledby="scd-officer-title">
-      <div class="scd-section-title"><span class="scd-section-icon"><i class="bi bi-person-check"></i></span><div><h2 id="scd-officer-title">Assigned Officer</h2></div></div>
-      <div class="scd-officer-profile"><span class="scd-officer-avatar"><i class="bi bi-person"></i></span><div><strong><?= e($complaint['officer_name']?:'Awaiting assignment') ?></strong><span><?= e($detailDash($complaint['officer_designation']??null)) ?></span></div></div>
-      <dl class="scd-details">
-        <div><dt>Department</dt><dd><?= e($detailDash($complaint['department_name']??null)) ?></dd></div>
-        <div><dt>Service area</dt><dd><?= e($detailArea) ?></dd></div>
-        <div><dt><?= $detailIsStaff?'Phone number':'Official phone number' ?></dt><dd><?php if ($detailOfficerPhone!==''): ?><a href="tel:<?= e($detailContactPhone($detailOfficerPhone)) ?>"><?= e($detailOfficerPhone) ?></a><?php else: ?>Not available<?php endif; ?></dd></div>
-        <div><dt><?= $detailIsStaff?'Email':'Official email' ?></dt><dd><?php if ($detailOfficerEmail!==''): ?><a href="mailto:<?= e($detailOfficerEmail) ?>"><?= e($detailOfficerEmail) ?></a><?php else: ?>Not available<?php endif; ?></dd></div>
-      </dl>
-      <?php if (!$detailIsStaff && $detailOfficerPhone===''): ?><p class="small text-muted mt-3 mb-0"><a href="<?= e(url('department-contacts.php')) ?>">Municipal department contacts</a></p><?php endif; ?>
-    </section>
-  </div>
-
-  <div class="scd-grid scd-simple-grid">
+  <div class="scd-grid scd-restored-grid">
     <div class="scd-primary">
       <section class="scd-panel" aria-labelledby="scd-description-title">
         <div class="scd-section-title"><span class="scd-section-icon"><i class="bi bi-chat-square-text"></i></span><div><small>COMPLAINT OVERVIEW</small><h2 id="scd-description-title">Complaint Description</h2></div></div>
         <div class="scd-description"><?= nl2br(e($detailDash($complaint['description_english']??null))) ?></div>
-        <div class="scd-subsection"><h3>Location</h3><p class="mb-1"><?= e($detailDash($detailLocation['location'])) ?></p><?php if ($detailLocation['street']!==''): ?><p class="small mb-1"><?= e($detailLocation['street']) ?></p><?php endif; ?><p class="small text-muted mb-0"><?= e($detailArea) ?></p></div>
         <?php if (trim((string)($complaint['description_tamil']??''))!=='' && trim((string)$complaint['description_tamil'])!==trim((string)($complaint['description_english']??''))): ?>
           <div class="scd-subsection"><h3>தமிழ் விளக்கம் · Description in Tamil</h3><div class="scd-description"><?= nl2br(e($complaint['description_tamil'])) ?></div></div>
         <?php endif; ?>
       </section>
 
+      <section class="scd-panel" aria-labelledby="scd-citizen-title">
+        <div class="scd-section-title"><span class="scd-section-icon"><i class="bi bi-person-vcard"></i></span><div><small>CITIZEN DETAILS</small><h2 id="scd-citizen-title">Citizen Information</h2></div></div>
+        <dl class="scd-details">
+          <div><dt>Full name</dt><dd><?php echo e($detailDash($complaint['citizen_name']??null)); ?></dd></div>
+          <div><dt>Mobile number</dt><dd><?php echo e($detailPhone); ?></dd></div>
+          <div><dt>Email address</dt><dd><?php echo e($detailEmail); ?></dd></div>
+          <div class="scd-detail-wide"><dt>Communication address</dt><dd><?php echo nl2br(e($detailAddress)); ?></dd></div>
+        </dl>
+        <?php if (!$detailOwnerVerified && !$detailIsStaff): ?>
+          <div class="scd-privacy"><i class="bi bi-lock"></i><span><a href="<?= e(url('complaint-status.php?search_type=mobile')) ?>">Verify your mobile number</a> to view your personal contact details.</span></div>
+        <?php endif; ?>
+      </section>
+
       <section class="scd-panel scd-timeline-panel" aria-labelledby="scd-timeline-title">
-        <div class="scd-section-title"><span class="scd-section-icon"><i class="bi bi-clock-history"></i></span><div><small><?= 'COMPLAINT UPDATES' ?></small><h2 id="scd-timeline-title"><?= 'Complaint Progress' ?></h2></div>
+        <div class="scd-section-title"><span class="scd-section-icon"><i class="bi bi-clock-history"></i></span><div><small><?= 'COMPLAINT UPDATES' ?></small><h2 id="scd-timeline-title">Officer Remarks &amp; Progress</h2></div>
           <span class="scd-count"><?= count($detailPublicHistory) ?> updates</span>
         </div>
         <?php if (!$detailPublicHistory): ?>
@@ -143,10 +144,10 @@ $detailFileSize = static function ($bytes): string {
         <?php endif; ?>
       </section>
 
-      <?php include __DIR__.'/complaint-journey-layout.php'; ?>
       <?php if ($detailIsStaff): ?>
         <details class="scd-panel scd-internal-history">
           <summary class="fw-bold">Internal activity &amp; remark review</summary>
+          <?php if (!empty($canReviewRemarks)): ?><p class="small text-muted mt-2">Review older officer remarks here. Publish only the actual updates intended for citizens.</p><?php endif; ?>
           <ol class="scd-timeline mt-3">
           <?php foreach (array_reverse($history) as $item): ?>
             <li class="scd-event"><span class="scd-event-dot"></span><div class="scd-event-top"><strong><?= e($item['new_status']??'Updated') ?></strong><time><?= e($detailDate($item['changed_at']??null)) ?></time></div>
@@ -272,19 +273,6 @@ $detailFileSize = static function ($bytes): string {
       });
       </script>
 
-      <section class="scd-panel" aria-labelledby="scd-citizen-title">
-        <div class="scd-section-title"><span class="scd-section-icon"><i class="bi bi-person-vcard"></i></span><div><small>CITIZEN DETAILS</small><h2 id="scd-citizen-title">Citizen Information</h2></div></div>
-        <dl class="scd-details">
-          <div><dt>Full name</dt><dd><?php echo e($detailDash($complaint['citizen_name']??null)); ?></dd></div>
-          <div><dt>Mobile number</dt><dd><?php echo e($detailPhone); ?></dd></div>
-          <div><dt>Email address</dt><dd><?php echo e($detailEmail); ?></dd></div>
-          <div class="scd-detail-wide"><dt>Communication address</dt><dd><?php echo nl2br(e($detailAddress)); ?></dd></div>
-        </dl>
-        <?php if (!$detailOwnerVerified && !$detailIsStaff): ?>
-          <div class="scd-privacy"><i class="bi bi-lock"></i><span><a href="<?= e(url('complaint-status.php')) ?>">Verify your mobile number</a> to view your personal contact details.</span></div>
-        <?php endif; ?>
-      </section>
-
       <?php if (!$detailIsStaff && ($canReopen || in_array($detailStatus,['Resolved','Closed'],true))): ?>
       <section class="scd-panel" aria-labelledby="scd-feedback-title">
         <div class="scd-section-title"><span class="scd-section-icon"><i class="bi bi-star"></i></span><div><small>YOUR EXPERIENCE</small><h2 id="scd-feedback-title">Citizen Feedback</h2></div></div>
@@ -322,7 +310,44 @@ $detailFileSize = static function ($bytes): string {
       </section>
       <?php endif; ?>
     </div>
+    <aside class="scd-aside" aria-label="Officer and complaint information">
+    <section class="scd-panel scd-officer-card" aria-labelledby="scd-officer-title">
+      <div class="scd-section-title"><span class="scd-section-icon"><i class="bi bi-person-check"></i></span><div><h2 id="scd-officer-title">Assigned Officer</h2></div></div>
+      <div class="scd-officer-profile"><span class="scd-officer-avatar"><i class="bi bi-person"></i></span><div><strong><?= e($complaint['officer_name']?:'Awaiting assignment') ?></strong><span><?= e($detailDash($complaint['officer_designation']??null)) ?></span></div></div>
+      <dl class="scd-details">
+        <div><dt>Department</dt><dd><?= e($detailDash($complaint['department_name']??null)) ?></dd></div>
+        <div><dt>Service area</dt><dd><?= e($detailArea) ?></dd></div>
+        <div><dt><?= $detailIsStaff?'Phone number':'Official phone number' ?></dt><dd><?php if ($detailOfficerPhone!==''): ?><a href="tel:<?= e($detailContactPhone($detailOfficerPhone)) ?>"><?= e($detailOfficerPhone) ?></a><?php else: ?>Not available<?php endif; ?></dd></div>
+        <div><dt><?= $detailIsStaff?'Email':'Official email' ?></dt><dd><?php if ($detailOfficerEmail!==''): ?><a href="mailto:<?= e($detailOfficerEmail) ?>"><?= e($detailOfficerEmail) ?></a><?php else: ?>Not available<?php endif; ?></dd></div>
+        <?php foreach (array_reverse($detailJourney['assignments']) as $currentAssignment): if ((int)$currentAssignment['is_current']===1 && (int)$currentAssignment['officer_id']===(int)($complaint['assigned_officer_id']??0)): ?>
+        <div><dt>Assigned on</dt><dd><?= e($detailDate($currentAssignment['assigned_at'])) ?></dd></div>
+        <?php break; endif; endforeach; ?>
+      </dl>
+      <?php if (!$detailIsStaff && $detailOfficerPhone===''): ?><p class="small text-muted mt-3 mb-0"><a href="<?= e(url('department-contacts.php')) ?>">Municipal department contacts</a></p><?php endif; ?>
+    </section>
 
+      <?php include __DIR__.'/complaint-journey-layout.php'; ?>
+      <section class="scd-panel" aria-labelledby="scd-info-title">
+        <div class="scd-section-title"><span class="scd-section-icon"><i class="bi bi-clipboard"></i></span><div><h2 id="scd-info-title">Complaint Information</h2></div></div>
+        <dl class="scd-details">
+          <div><dt>Reference ID</dt><dd><?= e($complaint['reference_no']) ?></dd></div>
+          <div><dt>Registered on</dt><dd><?= e($detailDate($complaint['created_at']??null)) ?></dd></div>
+          <div><dt>Category</dt><dd><?= e($detailDash($complaint['category_name']??null)) ?></dd></div>
+          <div><dt>Zone / Ward</dt><dd><?= e($detailArea) ?></dd></div>
+          <?php if ($detailLocation['street']!==''): ?><div><dt>Street / locality</dt><dd><?= e($detailLocation['street']) ?></dd></div><?php endif; ?>
+          <div><dt>Location</dt><dd><?= e($detailDash($detailLocation['location'])) ?></dd></div>
+          <?php if (!empty($complaint['closed_at'])): ?><div><dt>Closed on</dt><dd><?= e($detailDate($complaint['closed_at'])) ?></dd></div><?php endif; ?>
+        </dl>
+      </section>
+      <section class="scd-panel" aria-labelledby="scd-latest-remark-title">
+        <div class="scd-section-title"><span class="scd-section-icon"><i class="bi bi-chat-left-text"></i></span><div><h2 id="scd-latest-remark-title">Latest Remark</h2></div></div>
+        <?php if ($detailLatestRemark): ?>
+          <p class="scd-event-remarks"><?= nl2br(e($detailLatestRemark['remarks'])) ?></p>
+          <?php if (!empty($detailLatestRemark['officer_name'])): ?><strong><?= e($detailLatestRemark['officer_name']) ?></strong><p class="small text-muted mb-1"><?= e($detailLatestRemark['designation']??'') ?></p><?php endif; ?>
+          <p class="small text-muted mb-0"><?= e($detailDate($detailLatestRemark['changed_at'])) ?></p>
+        <?php else: ?><p class="small text-muted mb-0">No published officer remark yet.</p><?php endif; ?>
+      </section>
+    </aside>
   </div>
   <p class="small text-center no-print">Need help? <a href="<?= e(url('contact.php')) ?>">Contact municipal support</a></p>
   <p class="scd-footer-note"><i class="bi bi-shield-lock" aria-hidden="true"></i> Tiruppur City Municipal Corporation · Official grievance information</p>

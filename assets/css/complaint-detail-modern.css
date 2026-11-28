@@ -180,3 +180,11 @@
 .scd .scd-brand{margin-bottom:18px}
 .scd .scd-hero-meta{margin-top:20px;padding-top:16px}
 @media(max-width:480px){.scd .scd-simple-overview{grid-template-columns:1fr}.scd .scd-event-top{flex-wrap:wrap}}
+
+/* Restored two-column detail view; source order remains readable on small screens. */
+.scd .scd-restored-grid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(280px,1fr);align-items:start;gap:20px}
+.scd .scd-restored-grid .scd-aside{position:static;min-width:0}
+.scd .scd-restored-grid .scd-event-remarks{overflow-wrap:anywhere}
+.scd .scd-restored-grid .scd-details dd{overflow-wrap:anywhere}
+@media(max-width:820px){.scd .scd-restored-grid{grid-template-columns:minmax(0,1fr)}}
+@media print{.scd .scd-restored-grid{display:block}.scd .scd-restored-grid .scd-aside{display:block}.scd .scd-restored-grid .scd-aside>.scd-panel{margin-top:12px}}
