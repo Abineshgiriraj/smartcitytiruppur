@@ -28,13 +28,9 @@ $detailOwnerVerified = $detailIsStaff
         && hash_equals((string)($complaint['mobile_no'] ?? ''),(string)$_SESSION['otp_verified_mobile']['tracking']));
 $detailArea = $detailDash($complaint['zone_no']??null).' · '.$detailDash($complaint['ward_no']??null);
 $detailCitizenContactPublic = (bool)($detailCitizenContactPublic??false);
-$detailShowCitizenContact = $detailOwnerVerified || $detailCitizenContactPublic;
-$detailPhone = $detailShowCitizenContact ? $detailDash($complaint['mobile_no']??null)
-    : mask_mobile((string)($complaint['mobile_no']??''));
-$detailEmail = $detailShowCitizenContact
-    ? $detailDash($complaint['email']??null) : 'Protected · verify your mobile to view';
-$detailAddress = $detailIsStaff || $detailOwnerVerified
-    ? $detailDash($complaint['communication_address']??null) : ($detailCitizenContactPublic?'Private address':'Protected · verify your mobile to view');
+$detailPhone = $detailDash($complaint['mobile_no']??null);
+$detailEmail = $detailDash($complaint['email']??null);
+$detailAddress = $detailDash($complaint['communication_address']??null);
 $detailJourney = $detailJourney ?? complaint_journey(db(),$complaint,$detailIsStaff);
 $detailPublicHistory = $detailPublicHistory ?? [];
 $detailLatest = $detailPublicHistory ? end($detailPublicHistory) : null;
@@ -117,24 +113,6 @@ $detailFileSize = static function ($bytes): string {
           <div><dt>Email address</dt><dd><?php echo e($detailEmail); ?></dd></div>
           <div class="scd-detail-wide"><dt>Communication address</dt><dd><?php echo nl2br(e($detailAddress)); ?></dd></div>
         </dl>
-        <?php if (!$detailIsStaff && $detailCitizenContactPublic): ?>
-          <p class="small text-muted mb-0">Phone and email shared by the complainant.</p>
-        <?php endif; ?>
-        <?php if (!$detailOwnerVerified && !$detailIsStaff && !$detailCitizenContactPublic): ?>
-          <div class="scd-privacy"><i class="bi bi-lock"></i><span><a href="<?= e(url('complaint-status.php?search_type=mobile')) ?>">Verify your mobile number</a> to view <?= $detailCitizenContactPublic?'your private address':'private contact details' ?>.</span></div>
-        <?php endif; ?>
-        <?php if (!$detailIsStaff && !empty($detailCanManageContact)): ?>
-          <form method="post" class="mt-3 no-print">
-            <?= csrf_field() ?>
-            <input type="hidden" name="reference_no" value="<?= e($complaint['reference_no']) ?>">
-            <?php if ($detailCitizenContactPublic): ?>
-              <button type="submit" name="citizen_contact_sharing" value="disable" class="btn btn-sm btn-outline-secondary">Stop sharing phone and email publicly</button>
-            <?php else: ?>
-              <div class="form-check mb-2"><input type="checkbox" class="form-check-input" name="contact_consent" value="1" id="contactConsent" required><label for="contactConsent" class="form-check-label">I confirm that these are my contact details and agree that anyone viewing this complaint can see my full phone number and email. I can withdraw consent later.</label></div>
-              <button type="submit" name="citizen_contact_sharing" value="enable" class="btn btn-sm btn-outline-primary">Share my phone and email publicly</button>
-            <?php endif; ?>
-          </form>
-        <?php endif; ?>
       </section>
 
       <section class="scd-panel scd-timeline-panel" aria-labelledby="scd-timeline-title">
